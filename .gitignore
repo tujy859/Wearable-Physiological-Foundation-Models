@@ -1,0 +1,42 @@
+# Python / Virtual Environment
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Large Datasets & Raw Files (Never commit raw data to survey repo)
+/datasets/
+/data/
+*.csv
+*.parquet
+*.h5
+*.hdf5
+*.dat
+*.hea
+
+# Pretrained Model Weights & Checkpoints (Host on Hugging Face / Zenodo instead)
+/models/checkpoints/
+*.pth
+*.pt
+*.bin
+*.safetensors
+*.onnx
+*.ckpt
+
+# Local Paper PDFs (Avoid repository bloat & copyright issues, link arXiv/DOI instead)
+/papers/
+*.pdf
+
+# Scratch & Logs
+/logs/
+/scratch/
+/runs/
