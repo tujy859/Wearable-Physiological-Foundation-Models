@@ -70,6 +70,7 @@ Wearable Physiological Foundation Models
 | **Apple WBM** | Apple Health | 2024-2026 | Watch PPG+ACC+ECG | Multi-task Trans | - | 百万级 Apple Watch 数据 | 🔴 | 🔴 |
 | **PaPaGei** | Nokia Bell Labs | ICLR 2025 | PPG (光电脉搏) | ResNet1D-MoE | ~1.5M | 5.7万小时 (10个公开库) | 🟢 | 🟢 (Zenodo) |
 | **Pulse-PPG** | UIUC / Memphis | UbiComp 2025 | 腕部野外高噪 PPG | 1D-ResNet (RelCon) | ~2M | 5.5万小时 (真实自由生活) | 🟢 | 🟢 (Zenodo) |
+| **UniCardio** | 清华大学 / 安贞医院 | Nature MI 2025 | PPG+ECG+BP | 统一多模态扩散 DiT | 增量0.3M/模态| 339小时三模态全时程 | 🟢 | 🟢 (论文公开) |
 | **Samsung xMAE** | Samsung Research | ICML 2024 | PPG $\to$ 虚拟 ECG | 跨模态 MAE | 端侧优化 | 9,400 小时配对数据 | 🔴 | 🔴 |
 | **Samsung HiMAE** | Samsung Research | ICLR 2025 | 腕部多尺度生理 | 分层多尺度编码器 | <1ms延迟 | 真实手表自由生活数据 | 🔴 | 🔴 |
 | **GlucoFM** | Google / UNSW | arXiv 2026 | CGM (5min 血糖) | 双流 JEPA 预测 | **0.72M** | 10.9万小时 (477人) | 🟡 (承诺开源) | 🔴 |
@@ -89,8 +90,9 @@ Wearable Physiological Foundation Models
 
 详细分析与网络细节请查阅：📖 [docs/models/smartwatch_models.md](docs/models/smartwatch_models.md)
 
-### 工业级全模态巨座
+### 工业级与旗舰全能多模态巨座
 - **Google SensorFM** (2026): 可穿戴健康领域的万亿分钟里程碑。基于动态重采样解决 PPG/ACC/EDA 采样率异构问题，在 35 个健康与行为基准中大幅超越专用模型。
+- **清华大学 UniCardio** (Nature MI 2025/2026): 清华大学朱军教授、王立元教授团队联合北京安贞医院研发的**统一心血管多模态扩散基础模型**。首创统一扩散 Transformer (DiT) 框架融合去噪、插补与 PPG $\to$ 诊断级 ECG / 连续血压 BP 的跨模态生成，并引入持续学习范式以极低增量参数（0.3M/模态）支持端侧传感器的动态热插拔与终身防遗忘。
 - **Apple WBM & PPG/ECG FMs**: 深入探索日常无感监测与心律失常预警，通过海量真实世界日常佩戴数据学习个体基线与行为动力学。
 - **Samsung xMAE & HiMAE** (ICML 24 / ICLR 25): 专为智能手表端侧计算优化。xMAE 利用连续 PPG 虚拟重构偶发高精度 ECG；HiMAE 提出多尺度分层时间架构，延迟小于 1ms。
 
