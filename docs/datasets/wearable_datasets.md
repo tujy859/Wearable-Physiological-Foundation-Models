@@ -9,8 +9,9 @@
 - [1. 智能手表与腕部生理数据集 (PPG, ACC, EDA, ECG)](#1-智能手表与腕部生理数据集-ppg-acc-eda-ecg)
 - [2. 连续血糖监测数据集 (Continuous Glucose Monitoring, CGM)](#2-连续血糖监测数据集-continuous-glucose-monitoring-cgm)
 - [3. 常用临床多模态参考基准库 (Clinical High-Precision Waveforms)](#3-常用临床多模态参考基准库-clinical-high-precision-waveforms)
-- [4. 数据集全景汇总与获取指引一览表](#4-数据集全景汇总与获取指引一览表)
-- [5. 数据清洗与标准化工具链 (Harmonization Tools)](#5-数据清洗与标准化工具链-harmonization-tools)
+- [4. 睡眠与心肺多导生理监测数据集 (Polysomnography & Sleep Dynamics)](#4-睡眠与心肺多导生理监测数据集-polysomnography--sleep-dynamics)
+- [5. 数据集全景汇总与获取指引一览表](#5-数据集全景汇总与获取指引一览表)
+- [6. 数据清洗与标准化工具链 (Harmonization Tools)](#6-数据清洗与标准化工具链-harmonization-tools)
 
 ---
 
@@ -92,7 +93,18 @@
 - **规模与模态**: 12 名 1 型糖尿病患者为期 8 周的高密集数据（Dexcom 5分钟 CGM + 胰岛素基础率/大剂量泵注 + 碳水摄入估计 + 自报运动）。
 - **地位**: 评估 30/60/120 分钟血糖实时自回归预测（Forecasting）的国际公认基准。
 
-### 2.7 受控大型研究队列（需正式伦理审查申请）
+### 2.7 Weinstock et al. 2016 (T1D Exchange 老年长程连续监测队列)
+- **来源与引用**: Weinstock et al., *The Journal of Clinical Endocrinology & Metabolism* (2016) / JAEB 临床研究中心
+- **获取入口**: [T1D Exchange / JAEB Center 公开申请通道](https://public.jaeb.org/) (或经由 GlucoBench 预处理工具链获取，本地 CSV 约 124MB)
+- **受试者规模**: 226 名高龄（$\ge 60$ 岁）1 型糖尿病患者，长达 26 周的日常佩戴记录，累计有效数据量超 **1.2 亿个采样点**。
+- **核心价值**: 针对老年糖尿病患者最凶险的“无症状夜间严重低血糖（Nocturnal Hypoglycemia）”提供规模最大的真实世界连续基准，也是 GlucoBench 评测模型长期抗漂移能力的核心测试集。
+
+### 2.8 GlucoBench (ICLR 2024 连续血糖基准套件与数据集合)
+- **来源与代码**: Texas A&M 大学 Irina Gaynanova 教授团队 ([GitHub: IrinaStatsLab/GlucoBench](https://github.com/IrinaStatsLab/GlucoBench))
+- **发表会议**: **ICLR 2024**
+- **核心贡献**: 首次系统性清洗、对齐并汇总了国际上主要的公开 CGM 数据集，提出了标准化的时序外推（Forecasting）评测协议，消除了传统算法在不同私有子集上各自为战、无法公平对比的行业痛点。
+
+### 2.9 受控大型研究队列（需正式伦理审查申请）
 - **AI-READI**: NIH 旗舰项目，针对 2,280 名 2 型糖尿病、前驱糖尿病与健康人的长程 CGM + 视网膜影像 + 全基因组多模态队列（申请入口: `ai-readi.org`）。
 - **T1DEXI & T1DEXIP**: JAEB 临床研究中心，针对 497 名患者在自由生活与运动条件下的 CGM 连续记录（申请入口: `jaeb.org`）。
 
@@ -119,28 +131,54 @@
 
 ---
 
-## 4. 数据集全景汇总与获取指引一览表
+## 4. 睡眠与心肺多导生理监测数据集 (Polysomnography & Sleep Dynamics)
 
-| 领域 / 模态 | 数据集名称 | 机构 / 团队 | 核心传感器与采样率 | 样本规模 | 获取难度 | 适用研究任务 |
-| :--- | :--- | :--- | :--- | :--- | :---: | :--- |
-| **手腕多模态** | **PhysioNet Wrist** | PhysioNet | PPG 256Hz, ACC 256Hz, ECG | 8人 (走跑骑) | 🟢 开放直下 | 运动伪影消除、心率回归 |
-| **手腕多模态** | **PPG-DaLiA** | Fraunhofer / UCI | PPG 64Hz, ACC 32Hz, EDA | 15人 (自由生活) | 🟢 开放直下 | 日常真实心率监测、去噪 |
-| **手腕多模态** | **WESAD** | UCI / Bosch | PPG, ACC, EDA, EMG, Temp | 15人 (受控压力) | 🟢 开放直下 | 心理压力检测、情绪分类 |
-| **手腕多模态** | **TROIKA** | IEEE TBME | 双通道 PPG, 3轴 ACC | 12人 (跑步机) | 🟢 开放直下 | 运动心率追踪算法经典基准 |
-| **CGM 血糖** | **ShanghaiT1/T2DM**| 上海六院 (包玉倩组) | 瞬感 Libre (15min 连续间质液) | 112人 (14天) | 🟢 开放直下 | 缺失重构、生化表型探针 |
-| **CGM 血糖** | **Hall Glucotypes** | Stanford (Snyder组) | Dexcom (5min 网格) | 57人 (10.5万点)| 🟢 开放直下 | 血糖波动分型、无监督聚类 |
-| **CGM 血糖** | **BIG IDEAs** | Duke (Dunson组) | Dexcom 5min + 手环 E4 | 16人 (双设备) | 🟢 开放直下 | 穿戴光电-皮下间质跨模态 |
-| **CGM 血糖** | **CGMacros** | PhysioNet | 双 CGM (5/15min) + 食物相片 | 45人 (带生化血检)| 🟢 开放直下 | 饮食营养响应、代谢多任务 |
-| **CGM 血糖** | **Colas DFA** | PLOS ONE | CGM 5min 自由生活 | 208人 (>9500h) | 🟢 开放直下 | 基础模型大规模自监督预训练 |
-| **CGM 血糖** | **OhioT1DM** | 俄亥俄大学 | Dexcom 5min + 胰岛素/碳水 | 12人 (8周时程) | 🟡 学术申请 | 30～120min 血糖自回归预测 |
-| **CGM 血糖** | **AI-READI** | NIH 旗舰 | 2280人 CGM + 基因组 + 影像 | 2,280人 | 🟡 机构审批 | 大规模人群多样性预训练 |
-| **临床生理基准**| **VitalDB** | 首尔大学医院 | 动脉波 500Hz, PPG, ECG | >10,000 例手术 | 🟢 开放 API | 血管弹性、连续血压金标准 |
-| **临床生理基准**| **MC-MED** | 北京大学 (洪申达组) | PPG 100Hz+, ECG, 呼吸等 | 11.8万人 (>1000万对) | 🟡 凭证申请 | 跨模态生成、急诊心血管筛查 |
-| **临床生理基准**| **BIDMC PPG** | 哈佛医学院 BIDMC | PPG 125Hz, ECG 125Hz, Resp | 53人 (8分钟高精记录) | 🟢 开放直下 | 呼吸率估计、脉搏波形态基准 |
+睡眠时序是评测脑-心-肺跨器官耦合、自主神经调节及远期慢性疾病生存风险的核心金标准：
+
+1. **SHHS (Sleep Heart Health Study)**:
+   - **主导机构**: 美国国立卫生研究院 (NIH / NHLBI) 资助的多中心流行病学队列；
+   - **样本与规模**: 5,804 名中老年受试者，包含长达数十年的心脑血管疾病发病随访；
+   - **传感器模态**: 全套未压缩科研级夜间 PSG（脑电 C3/C4、眼电 EOG、下颌肌电 EMG、心电 ECG、胸腹电阻抗呼吸带、口鼻热敏气流及透射脉搏血氧）；
+   - **获取方式**: [美国国家睡眠研究资源库 (NSRR, sleepdata.org)](https://sleepdata.org/datasets/shhs) 签署学术协议后免费开放直下。
+2. **MESA (Multi-Ethnic Study of Atherosclerosis) Sleep**:
+   - **主导机构**: 美国 NHLBI 多族裔动脉硬化长程队列；
+   - **样本与规模**: 2,237 名来自白人、非裔、西语裔与亚裔的多族裔受试者；
+   - **模态特色**: 完整夜间 PSG 同步配对为期 7 天的手腕体动记录（Actigraphy），具备连接临床 PSG 金标准与可穿戴日常活动的高价值桥梁；
+   - **获取方式**: [NSRR 开放获取](https://sleepdata.org/datasets/mesa)。
+3. **PhysioNet Sleep-EDF (Expanded)**:
+   - **主导机构**: 荷兰神经研究所 / PhysioNet；
+   - **规模**: 197 份整夜 PSG 记录（涵盖健康受试者与助眠药物使用者）；
+   - **模态**: 双通道脑电（Fpz-Cz / Pz-Oz）、水平眼电、下颌肌电与口鼻呼吸；
+   - **获取方式**: [PhysioNet 开放直下](https://physionet.org/content/sleep-edfx/1.0.0/)（完全公开，算法快速基准验证首选）。
 
 ---
 
-## 5. 数据清洗与标准化工具链 (Harmonization Tools)
+## 5. 数据集全景汇总与获取指引一览表
+
+| 领域 / 模态 | 数据集名称 | 机构 / 团队 | 核心传感器与采样率 | 样本规模 | 获取难度 | 适用研究任务 |
+| :--- | :--- | :--- | :--- | :--- | :---: | :--- |
+| **手腕多模态** | **PhysioNet Wrist** | PhysioNet | PPG 256Hz, ACC 256Hz, ECG | 8人 (走跑骑) | 🟢 开放直下 | 运动伪影消除、心率连续回归 |
+| **手腕多模态** | **PPG-DaLiA** | Fraunhofer / UCI | PPG 64Hz, ACC 32Hz, EDA | 15人 (自由生活) | 🟢 开放直下 | 日常真实心率监测、去噪 |
+| **手腕多模态** | **WESAD** | UCI / Bosch | PPG, ACC, EDA, EMG, Temp | 15人 (受控压力) | 🟢 开放直下 | 心理压力检测、情绪分类 |
+| **手腕多模态** | **TROIKA** | IEEE TBME | 双通道 PPG, 3轴 ACC | 12人 (跑步机) | 🟢 开放直下 | 运动心率追踪算法经典基准 |
+| **CGM 血糖** | **CGMacros** | PhysioNet (2024) | 双 CGM (5/15min) + 高清餐食照 | 45人 (带生化血检)| 🟢 开放直下 | 饮食营养摄入响应、生化指标探针 |
+| **CGM 血糖** | **ShanghaiT1/T2DM**| 上海六院 (包玉倩组) | 瞬感 Libre (15min 连续间质液) | 112人 (14天) | 🟢 开放直下 | 缺失重构、生化表型探针 |
+| **CGM 血糖** | **Hall Glucotypes** | Stanford (Snyder组) | Dexcom (5min 网格) | 57人 (10.5万点)| 🟢 开放直下 | 血糖波动分型、无监督聚类 |
+| **CGM 血糖** | **BIG IDEAs** | Duke (Dunson组) | Dexcom 5min + 手环 E4 | 16人 (双设备) | 🟢 开放直下 | 穿戴光电-皮下间质跨模态 |
+| **CGM 血糖** | **Colas DFA** | PLOS ONE | CGM 5min 自由生活 | 208人 (>9500h) | 🟢 开放直下 | 基础模型大规模自监督预训练 |
+| **CGM 血糖** | **OhioT1DM** | 俄亥俄大学 | Dexcom 5min + 胰岛素/碳水 | 12人 (8周时程) | 🟡 学术申请 | 30～120min 血糖自回归预测 |
+| **CGM 血糖** | **Weinstock 2016** | T1D Exchange / JAEB | Dexcom G4 (5min) 长期监测 | 226人 (>1.2亿读数) | 🟡 学术申请 | 老年高危人群夜间无症状低血糖筛查 |
+| **CGM 血糖** | **Glucose-ML** | Augmented Health Lab | 自动化集成 20+ 个公开数据集 | 4,300+人 (44.9M点) | 🟢 GitHub 开源 | 20+ 数据集一键下载与标准化集合 |
+| **临床生理基准**| **VitalDB** | 首尔大学医院 | 动脉波 500Hz, PPG, ECG | >10,000 例手术 | 🟢 开放 API | 血管弹性、连续血压金标准 |
+| **临床生理基准**| **MC-MED** | 北京大学 (洪申达组) | PPG 100Hz+, ECG, 呼吸等 | 11.8万人 (>1000万对) | 🟡 凭证申请 | 跨模态生成、急诊心血管筛查 |
+| **临床生理基准**| **BIDMC PPG** | 哈佛医学院 BIDMC | PPG 125Hz, ECG 125Hz, Resp | 53人 (8分钟高精记录) | 🟢 开放直下 | 呼吸率估计、脉搏波形态基准 |
+| **睡眠多导 PSG**| **SHHS** | 美国 NIH / NHLBI | 完整 PSG (EEG/ECG/Resp/EMG) | 5,804人 (多年随访) | 🟢 NSRR 申请 | 跨器官耦合、慢病死亡长期随访 |
+| **睡眠多导 PSG**| **MESA** | 美国 NHLBI / 多中心 | 完整 PSG + 7天手腕体动仪 | 2,237人 (多族裔) | 🟢 NSRR 申请 | 多族裔睡眠结构、动脉硬化风险 |
+| **睡眠多导 PSG**| **Sleep-EDF** | 荷兰神经所 / PhysioNet | 双通道 EEG, EOG, EMG, 呼吸 | 197人整夜记录 | 🟢 开放直下 | 快速原型验证、跨域分期对比 |
+
+---
+
+## 6. 数据清洗与标准化工具链 (Harmonization Tools)
 
 ### 5.1 连续血糖标准化自动化套件：Glucose-ML Project
 - **项目仓库**: [GitHub: Augmented-Health-Lab/Glucose-ML-Project](https://github.com/Augmented-Health-Lab/Glucose-ML-Project) (Emory 大学 Prioleau 组，MIT 协议)

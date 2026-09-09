@@ -79,6 +79,8 @@ Wearable Physiological Foundation Models
 | **GluFormer** | Pheno.AI / Weizmann | Nature 2026 | CGM (15min 血糖) | GPT 式自回归 | 135M | >1000万读数 (10,812人) | 🟢 | 🔴 (HPP受限) |
 | **CGMformer** | 中科院 / 上海六院 | NSR 2025 | CGM (5min 血糖) | BERT 式 MLM | 0.85M～10M | 131万天 (5.9万人) | 🟢 | 🟢 (GitHub) |
 | **CGM-LSM** | JHU CDHAI | arXiv 2024 | CGM 血糖 | GPT-2 自回归 | \~124M | 1600万读数 (592人) | 🟢 (无数据) | 🔴 |
+| **CGM-JEPA** | CRUISE Lab | 2025 | CGM (5min 血糖) | 潜空间 JEPA 预测 | ~0.5M | 228人 (开源重训基座) | 🟢 | 🟢 (HF) |
+| **PPG-Distill** | Emory University | 2025 | 腕戴 PPG (脉搏) | 跨尺度知识蒸馏 | 极轻量 (<0.5M) | 多中心穿戴基准 | 🟢 | 🟢 (GitHub) |
 | **SleepFM** | Stanford Medicine | Nat Med 2024-2026 | EEG+ECG+PPG+Resp | 留一对比学习 (LOO) | 基础模型 | 60万小时 (6.5万人) | 🟢 | 🟡 (受限开放) |
 | **SleepMaMi** | 首尔大学 (SNU) | ICML 2026 | PSG (EEG+ECG+Resp) | 宏微观双编码器 (MAE+CL) | ~15M | 15.8万小时 (2万人) | 🟢 | 🟢 (GitHub) |
 | **LIMU-BERT** | 厦门大学等 | UbiComp 2021 | 3轴 ACC + Gyro | Sensor-BERT | 轻量级 | 多源 IMU 无标注数据 | 🟢 | 🟢 |
@@ -104,6 +106,8 @@ Wearable Physiological Foundation Models
 - **北京大学 AnyPPG** (KDD 2026): 北大洪申达团队推出的通用光电脉搏基座大模型。基于超 10 万小时同步脉搏-心电数据进行跨模态对比预训练，突破传统单一心血管任务，首次实现对慢性肾病（CKD）、帕金森病等全身多器官复杂表型的无创筛查。
 - **PaPaGei** (ICLR 2025): Nokia Bell Labs 与剑桥联合发布，首个开源通用光电生理基础模型。采用 ResNet1D-MoE 架构，参数量仅 1.5M，在心率、血压、血管年龄等 20 个下游任务表现卓越。
 - **Pulse-PPG** (UbiComp 2025): UIUC 主导，针对真实野外高噪手腕 PPG 提出相对对比学习（RelCon），有效克服真实生活中的剧烈运动伪影。
+- **PPG-Distill** (Emory University, 2025): 针对穿戴设备端侧资源受限难题，首创面向光电脉搏大模型的三级知识蒸馏框架（预测/特征/波形形态蒸馏），在保持心率与房颤高精度判别的同时实现 7 倍推理加速与 19 倍内存节省。
+- **Apple PpgAge & WBM** (Nature Medicine 2025/2026): 基于 21 万人 Apple Health Study 真实世界手腕脉搏波，验证了 PPG 潜表征独立于日历年龄评估血管老化程度（Vascular Age）与心血管发病风险（HR = 1.46）的临床有效性。
 - **LIMU-BERT** (UbiComp): 针对 IMU/加速度计的传感器表征模型，实现与个体身份解耦的高阶步态和运动模式提取。
 
 ---
@@ -121,6 +125,10 @@ Wearable Physiological Foundation Models
   - 基于 BERT 掩码重构架构，依托 5.9 万人真实世界数据，全面覆盖糖尿病筛查、分型及并发症管理。
 - **CGM-LSM** (JHU CDHAI, 2024):
   - 聚焦短程血糖自回归预测（30min～2h），在 OhioT1DM 上大幅降低均方根误差。
+- **CGM-JEPA** (CRUISE Research Group, 2025):
+  - **GlucoFM 同门开源基准**：在 Hugging Face 完整开源模型权重与预训练数据集，验证了 JEPA 潜表征在 24h 血糖网格下的高迁移能力，是复现非生成式血糖基座的开源基石。
+- **GlucoBench** (Texas A&M Irina Gaynanova Lab, **ICLR 2024**):
+  - 首个系统的连续血糖预测基准套件与公开数据集聚合库，规范了多中心标准化评价协议。
 
 ---
 
@@ -154,13 +162,25 @@ Wearable Physiological Foundation Models
 
 详细数据集下载指引与预处理代码请查阅：📖 [docs/datasets/wearable_datasets.md](docs/datasets/wearable_datasets.md)
 
-| 数据集名称 | 采集设备 / 方式 | 核心模态 | 规模 / 受试者 | 适用任务 | 获取方式 |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **PhysioNet Wrist PPG** | 手腕光电 + 胸部心电 | 64Hz PPG + 32Hz ACC + ECG | 步行、跑步、骑行运动 | 运动心率探测、去噪 | PhysioNet 公开 |
-| **PPG-DaLiA** | Empatica E4 手环 | PPG, ACC, EDA, Temp | 15名受试者自由生活 | 日常活动心率回归 | UCI 开放下载 |
-| **WESAD** | 手腕 E4 + 胸戴 RespiBAN | PPG, EDA, EMG, Temp, ACC | 15名受试者压力诱发实验 | 情绪压力检测 | UCI 开放下载 |
-| **Shanghai T2DM** | 雅培瞬感 CGM (15min) | 连续皮下间质血糖 | 110名患者 | CGM 重建、代谢表型 | 公开申请 |
-| **OhioT1DM** | Medtronic CGM (5min) | CGM + 胰岛素剂量 + 碳水 | 12名 T1D 患者连续监测 | 实时血糖预测 | 申请许可 |
+| 领域 / 模态 | 数据集名称 | 采集设备 / 团队 | 核心传感器与采样率 | 样本规模 | 适用任务与特色 | 获取方式 |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **⌚ 手腕多模态** | **PhysioNet Wrist** | PhysioNet | PPG 256Hz, ACC 256Hz, ECG | 8人 (走跑骑运动) | 运动伪影消除、心率连续回归金标准 | 🟢 开放直下 |
+| **⌚ 手腕多模态** | **PPG-DaLiA** | Fraunhofer / UCI | 手腕 E4 (PPG 64Hz, ACC 32Hz, EDA) | 15人 (真实自由生活) | 日常非受限活动心率监测、动态去噪 | 🟢 开放直下 |
+| **⌚ 手腕多模态** | **WESAD** | UCI / Bosch | 手腕 E4 + 胸戴 RespiBAN | 15人 (受控压力诱发) | 情绪识别、心理压力 (Stress) 状态分类 | 🟢 开放直下 |
+| **⌚ 手腕多模态** | **TROIKA** | IEEE TBME 2015 | 双通道手腕 PPG + 3轴 ACC | 12人 (跑步机高动态) | 运动伪影频域碰撞与心率追踪经典开山集 | 🟢 开放直下 |
+| **⌚ 手腕多模态** | **BIDMC PPG** | 哈佛医学院 BIDMC | 手指 PPG 125Hz, ECG, 阻抗呼吸 | 53人 (8分钟高精波形) | 脉搏微形态分析、呼吸率 (RR) 估计基准 | 🟢 开放直下 |
+| **🩸 CGM 连续血糖**| **CGMacros** | PhysioNet (2024) | 双 CGM (5/15min) + 高清餐食照 | 45人 (带生化血检) | 饮食营养摄入响应、生化探针多任务 | 🟢 开放直下 |
+| **🩸 CGM 连续血糖**| **ShanghaiT1/T2DM**| 上海六院 (包玉倩团队) | 雅培瞬感 Libre (15min 连续间质液) | 112人 (14天连续) | 缺失值插补、糖尿病分型与并发症探针 | 🟢 开放直下 |
+| **🩸 CGM 连续血糖**| **Hall Glucotypes** | 斯坦福大学 (Snyder组)| Dexcom G4 (5min 密集网格) | 57人 (10.5万读数) | 血糖波动分型 (Glucotype)、无监督表征 | 🟢 开放直下 |
+| **🩸 CGM 连续血糖**| **BIG IDEAs** | 杜克大学 (PhysioNet) | Dexcom G6 (5min) + 手环 E4 | 16人 (双设备佩戴) | 穿戴光电-皮下间质血糖跨模态关联 | 🟢 开放直下 |
+| **🩸 CGM 连续血糖**| **Colas DFA** | PLOS ONE (2019) | 微创 CGM (5min 网格) | 208人 (>9,500小时) | 自由生活大规模预训练、长程稳定性 | 🟢 开放直下 |
+| **🩸 CGM 连续血糖**| **OhioT1DM** | 俄亥俄大学 / BGLP | Dexcom 5min + 胰岛素/碳水记录 | 12人 (8周连续时程) | 30～120min 短程血糖自回归预测标准集 | 🟡 学术申请 |
+| **🩸 CGM 连续血糖**| **Weinstock 2016** | T1D Exchange / JAEB | Dexcom G4 (5min) 长期监测 | 226人 (>1.2亿读数) | 老年高危人群夜间无症状低血糖筛查 | 🟡 学术申请 |
+| **🩸 CGM 连续血糖**| **Glucose-ML** | Augmented Health Lab | 自动化集成 20+ 个公开数据集 | 4,300+人 (44.9M点) | 一键下载、单位自动对齐与标准化集合库 | 🟢 GitHub 开源 |
+| **🏥 临床高精基准**| **MC-MED** | 北京大学 (洪申达团队) | 急诊监护 PPG 100Hz+, ECG, 呼吸 | 11.8万人 (>1000万对) | PPG $\to$ ECG 跨模态生成、急诊重症筛查 | 🟡 凭证申请 |
+| **🏥 临床高精基准**| **VitalDB** | 首尔大学医院 | 500Hz 动脉血压波, PPG, ECG | >10,000 例手术患者 | 血管弹性、连续无创血压金标准映射 | 🟢 开放 API |
+| **💤 睡眠多导 PSG**| **SHHS** | 美国 NIH / NHLBI | 全套临床 PSG (EEG/ECG/Resp/EMG) | 5,804人 (多年随访) | 睡眠呼吸暂停、心脑血管死亡长期队列 | 🟢 NSRR 申请 |
+| **💤 睡眠多导 PSG**| **MESA** | 美国 NHLBI / 多中心 | 完整 PSG + 7天手腕体动仪 | 2,237人 (多族裔) | 多族裔睡眠结构、动脉粥样硬化结局 | 🟢 NSRR 申请 |
 
 ---
 

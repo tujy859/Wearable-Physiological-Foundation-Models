@@ -16,8 +16,9 @@
 - [8. 清华大学 UniCardio (Nature MI) —— 统一心血管多模态扩散基础模型](#8-清华大学-unicardio-nature-mi--统一心血管多模态扩散基础模型)
 - [9. 北京大学 PPGFlowECG (2025/2026) —— 潜空间整流流 PPG 转 ECG 跨模态生成框架](#9-北京大学-ppgflowecg-20252026--潜空间整流流-ppg-转-ecg-跨模态生成框架)
 - [10. 北京大学 AnyPPG (KDD 2026) —— 心电引导预训练的光电多器官基座大模型](#10-北京大学-anyppg-kdd-2026--心电引导预训练的光电多器官基座大模型)
-- [11. 核心基础模型横向对比矩阵](#11-核心基础模型横向对比矩阵)
-- [12. 对自建手表大模型 (Watch-LSM) 的工程架构启示](#12-对自建手表大模型-watch-lsm-的工程架构启示)
+- [11. 端侧轻量化与生物年龄前沿：PPG-Distill 与 Apple PpgAge](#11-端侧轻量化与生物年龄前沿ppg-distill-与-apple-ppgage)
+- [12. 核心基础模型横向对比矩阵](#12-核心基础模型横向对比矩阵)
+- [13. 对自建手表大模型 (Watch-LSM) 的工程架构启示](#13-对自建手表大模型-watch-lsm-的工程架构启示)
 
 ---
 
@@ -311,27 +312,50 @@ AnyPPG 经冻结表征（Frozen Representation）与极简线性探针（Linear 
    - 心力衰竭（Heart Failure）、原发性高血压（Hypertension）、心律失常等分类指标全面刷新 SOTA。
 2. **突破心血管界限的非心血管系统表型**:
    - **慢性肾脏病 (Chronic Kidney Disease, CKD)**: 敏锐捕捉到微血管重塑、硬化与水钠潴留对外周脉搏微形态的微弱时域调制；
-   - **帕金森病 (Parkinson's Disease)**: 识别由于中枢神经退行导致的自主神经功能紊乱（Autonomic Dysregulation）在末梢血管舒缩节律中的特异性反映；
+- **帕金森病 (Parkinson's Disease)**: 识别由于中枢神经退行导致的自主神经功能紊乱（Autonomic Dysregulation）在末梢血管舒缩节律中的特异性反映；
    - 强力证明了智能手表光电脉搏波在日常慢病长程管理与神经退行性疾病早筛中的颠覆性科研与应用价值。
 
 ---
 
-## 11. 核心基础模型横向对比矩阵
+## 11. 端侧轻量化与生物年龄前沿：PPG-Distill 与 Apple PpgAge
 
-| 维度 / 特征 | **SensorFM** | **PaPaGei** | **Pulse-PPG** | **UniCardio** | **PPGFlowECG** | **AnyPPG** | **Samsung xMAE/HiMAE** | **SleepFM** | **Huawei Mantis** |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **机构团队** | Google Research | Nokia Bell Labs | UIUC / Memphis | **清华大学 / 安贞医院** | **北京大学 (PKU Health)** | **北京大学 (PKU Health)** | Samsung Research | Stanford Medicine | 华为诺亚方舟实验室 |
-| **核心模态** | PPG+ACC+EDA+Temp | PPG (单通道) | 腕部高噪 PPG | **PPG + ECG + BP** | **PPG $\to$ 诊断级 ECG** | **PPG (心电引导)** | PPG $\to$ 虚拟 ECG | EEG+ECG+PPG+Resp | 多变量 (ACC / 生理) |
-| **预训练规模** | 1万亿分钟 (500万人) | 5.7万小时 (10个公开集)| 5.5万小时 (野外100天)| **339小时三模态全时程**| **千万级配对 (MC-MED 11.8万人)** | **>100,000 小时同步数据** | 9,400小时同步数据 | 60万小时 (6.5万人) | 多领域通用分类语料 |
-| **网络骨干** | Patch Transformer | ResNet1D-MoE | 12层 1D-ResNet | **多模态扩散 DiT** | **CardioAlign + Rectified Flow** | **Net1D 1D-ResNet 双分支** | 分层 Hierarchical Trans | 多模态对比 Transformer | 8M ViT-1D + TGU |
-| **自监督目标** | 掩码建模 + 跨模态填补 | 形态引导对比学习 | 连续相对对比 (RelCon) | **条件扩散去噪+持续学习**| **潜空间分布对齐+整流流生成** | **跨模态深层 InfoNCE 对比** | 跨模态掩码重构 | 留一对比学习 (LOO) | 几何自监督对比学习 |
-| **抗伪影机制** | 万亿级数据 Scaling | 形态过滤配对 | 结合运动强度的软对比 | **多模态互信息互补生成**| **参数绑定潜空间生理不变量** | **中枢心电无伪影电信号锚定** | 跨模态先验约束 | 多器官互信息补偿 | 多尺度差分局部卷积 |
-| **部署延迟** | 云端基座 | 端侧轻量 (~1.5M) | 端侧中等 (~2M) | **极低增量 (~0.3M/模态)**| **1～4步极速ODE (<0.1s)** | **端侧单分支 (~5.85M)** | **极低 (<1ms)** | 云端专业分析 | 端侧极低 (~19.8ms) |
-| **开源状态** | 🔴 仅论文 | 🟢 代码+Zenodo权重 | 🟢 代码+Zenodo权重 | 🟢 论文公开 / 代码开源中 | 🟢 代码开源 (GitHub) | 🟢 代码开源 (GitHub) | 🔴 工业闭源 | 🟢 代码开源 | 🟢 Hugging Face 开源 |
+### 11.1 Emory University PPG-Distill (2025) —— 脉搏大模型多层次端侧知识蒸馏
+- **论文**: *PPG-DISTILL: Efficient Photoplethysmography Signals Analysis via Foundation Model Distillation*
+- **研发团队**: Emory University (Juntong Ni, Wei Jin 教授团队) 联合医学院
+- **开源代码**: [GitHub: LingFengGold/PPG-Distill](https://github.com/LingFengGold/PPG-Distill)
+- **技术突破**:
+  - 针对大型脉搏基础模型（如 PaPaGei、Pulse-PPG）难以常驻端侧嵌入式 MCU 的瓶颈，首创**三级多尺度知识蒸馏体系**：
+    1. **预测级蒸馏 (Prediction-Level)**: 迁移下游多任务软标签分布；
+    2. **特征级蒸馏 (Feature-Level)**: 在潜空间拉近紧凑学生网络与大模型教师网络的表示距离；
+    3. **形态与节律蒸馏 (Morphology & Rhythm Distillation)**: 专门保留局部脉搏收缩峰微形态与长程心拍周期性结构。
+  - **实测表现**: 在心率估计与心房颤动分类中，学生模型推理加速 **7 倍**，内存开销骤降 **19 倍**，性能较直接训练提升达 **21.8%**。
+
+### 11.2 Apple PpgAge 与血管生物年龄 (Nature Medicine 2025/2026)
+- **研发团队**: Apple Health 团队
+- **数据规模**: 依托 **213,593 名 Apple Health Study** 真实世界佩戴者手腕 PPG。
+- **临床核心发现**:
+  - 训练深度模型从手表日常 PPG 预测受试者实际年龄（MAE = 2.43 年）；
+  - **血管年龄差 (PPG Age Gap)**：若模型预测年龄显著高于受试者生理年龄（提示微血管弹性硬化与内皮衰退），其未来罹患重大心脑血管事件的风险显著激增（**风险比 Hazard Ratio = 1.46**）。
+  - 确立了可穿戴光电脉搏大模型作为**全生命周期血管老化数字标志物**的黄金地位。
 
 ---
 
-## 12. 对自建手表大模型 (Watch-LSM) 的工程架构启示
+## 12. 核心基础模型横向对比矩阵
+
+| 维度 / 特征 | **SensorFM** | **PaPaGei** | **Pulse-PPG** | **PPG-Distill** | **UniCardio** | **PPGFlowECG** | **AnyPPG** | **Samsung xMAE/HiMAE** | **SleepFM** | **Huawei Mantis** |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **机构团队** | Google Research | Nokia Bell Labs | UIUC / Memphis | **Emory Univ** | **清华大学 / 安贞医院** | **北京大学 (PKU Health)** | **北京大学 (PKU Health)** | Samsung Research | Stanford Medicine | 华为诺亚方舟实验室 |
+| **核心模态** | PPG+ACC+EDA+Temp | PPG (单通道) | 腕部高噪 PPG | **腕戴 PPG** | **PPG + ECG + BP** | **PPG $\to$ 诊断级 ECG** | **PPG (心电引导)** | PPG $\to$ 虚拟 ECG | EEG+ECG+PPG+Resp | 多变量 (ACC / 生理) |
+| **预训练规模** | 1万亿分钟 (500万人) | 5.7万小时 (10个公开集)| 5.5万小时 (野外100天)| 多任务穿戴语料 | **339小时三模态全时程**| **千万级配对 (MC-MED 11.8万人)** | **>100,000 小时同步数据** | 9,400小时同步数据 | 60万小时 (6.5万人) | 多领域通用分类语料 |
+| **网络骨干** | Patch Transformer | ResNet1D-MoE | 12层 1D-ResNet | **极紧凑 1D 学生网络**| **多模态扩散 DiT** | **CardioAlign + Rectified Flow** | **Net1D 1D-ResNet 双分支** | 分层 Hierarchical Trans | 多模态对比 Transformer | 8M ViT-1D + TGU |
+| **自监督目标** | 掩码建模 + 跨模态填补 | 形态引导对比学习 | 连续相对对比 (RelCon) | **多尺度三级知识蒸馏**| **条件扩散去噪+持续学习**| **潜空间分布对齐+整流流生成** | **跨模态深层 InfoNCE 对比** | 跨模态掩码重构 | 留一对比学习 (LOO) | 几何自监督对比学习 |
+| **抗伪影机制** | 万亿级数据 Scaling | 形态过滤配对 | 结合运动强度的软对比 | 结构化节律形态迁移 | **多模态互信息互补生成**| **参数绑定潜空间生理不变量** | **中枢心电无伪影电信号锚定** | 跨模态先验约束 | 多器官互信息补偿 | 多尺度差分局部卷积 |
+| **部署延迟** | 云端基座 | 端侧轻量 (~1.5M) | 端侧中等 (~2M) | **极低 (内存降19x)** | **极低增量 (~0.3M/模态)**| **1～4步极速ODE (<0.1s)** | **端侧单分支 (~5.85M)** | **极低 (<1ms)** | 云端专业分析 | 端侧极低 (~19.8ms) |
+| **开源状态** | 🔴 仅论文 | 🟢 代码+Zenodo权重 | 🟢 代码+Zenodo权重 | 🟢 代码开源 (GitHub) | 🟢 论文公开 / 代码开源中 | 🟢 代码开源 (GitHub) | 🟢 代码开源 (GitHub) | 🔴 工业闭源 | 🟢 代码开源 | 🟢 Hugging Face 开源 |
+
+---
+
+## 13. 对自建手表大模型 (Watch-LSM) 的工程架构启示
 
 > 💡 本文提炼的端侧生理表征架构与抗伪影工程实现已完整落地于开源实验子仓库：[**Watch_LSM**](https://github.com/tujy859/Watch_LSM)
 
