@@ -5,7 +5,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Tracking](https://img.shields.io/badge/Status-Actively%20Maintained-blue.svg)]()
 
-> 精选追踪学术界与工业界关于**智能手表、连续血糖监测（CGM）及可穿戴生理信号基础模型（Foundation Models）**的前沿论文、开源代码、预训练权重、基准数据集与实战解析。
+> 精选追踪学术界与工业界关于 **智能手表、连续血糖监测（CGM）及可穿戴生理信号基础模型（Foundation Models）** 的前沿论文、开源代码、预训练权重、基准数据集与实战解析。
 
 ---
 
@@ -28,8 +28,8 @@
 
 通用时序大模型（如 TimesFM、Chronos）多将时序视为抽象的数值序列。然而，智能手表、手环、CGM 传感器等设备产生的生理信号具有极强的物理学与生物医学特异性：
 
-1. **异构采样率与多模态物理对齐**：原始 PPG（25~100Hz）、ACC（25~50Hz）、ECG（250~1000Hz）、CGM（5分钟/点）以及派生指标（心率 1Hz、睡眠 30s）。通用模型难以直接处理如此大跨度的物理时间窗口。
-2. **严重的运动伪影与频域碰撞**：手腕日常挥动或剧烈跑步产生的步频谐波（1~3.5 Hz）与心率脉搏波频段高度重叠。
+1. **异构采样率与多模态物理对齐**：原始 PPG（25～100Hz）、ACC（25～50Hz）、ECG（250～1000Hz）、CGM（5分钟/点）以及派生指标（心率 1Hz、睡眠 30s）。通用模型难以直接处理如此大跨度的物理时间窗口。
+2. **严重的运动伪影与频域碰撞**：手腕日常挥动或剧烈跑步产生的步频谐波（1～3.5 Hz）与心率脉搏波频段高度重叠。
 3. **生物非平稳性与昼夜节律**：血糖的餐后突变漂移与 24 小时昼夜波动具有明确的生理因果机制。
 
 **可穿戴生理信号基础模型的核心目标**：通过自监督预训练（SSL），从海量无标注生理时序中学习泛化的生理表征，从而仅用轻量级线性探针（Linear Probe）或极少微调即可服务于心率追踪、心律失常筛查、糖尿病与代谢风险预测、睡眠分期等数十种下游健康任务。
@@ -68,19 +68,19 @@ Wearable Physiological Foundation Models
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :---: | :---: |
 | **SensorFM** | Google Research | arXiv 2026 | PPG+ACC+EDA+Temp | Patch-Transformer | 大规模 | 1万亿分钟 (>500万人) | 🔴 | 🔴 |
 | **Apple WBM** | Apple Health | 2024-2026 | Watch PPG+ACC+ECG | Multi-task Trans | - | 百万级 Apple Watch 数据 | 🔴 | 🔴 |
-| **PaPaGei** | Nokia Bell Labs | ICLR 2025 | PPG (光电脉搏) | ResNet1D-MoE | ~1.5M | 5.7万小时 (10个公开库) | 🟢 | 🟢 (Zenodo) |
-| **Pulse-PPG** | UIUC / Memphis | UbiComp 2025 | 腕部野外高噪 PPG | 1D-ResNet (RelCon) | ~2M | 5.5万小时 (真实自由生活) | 🟢 | 🟢 (Zenodo) |
+| **PaPaGei** | Nokia Bell Labs | ICLR 2025 | PPG (光电脉搏) | ResNet1D-MoE | \~1.5M | 5.7万小时 (10个公开库) | 🟢 | 🟢 (Zenodo) |
+| **Pulse-PPG** | UIUC / Memphis | UbiComp 2025 | 腕部野外高噪 PPG | 1D-ResNet (RelCon) | \~2M | 5.5万小时 (真实自由生活) | 🟢 | 🟢 (Zenodo) |
 | **UniCardio** | 清华大学 / 安贞医院 | Nature MI 2025 | PPG+ECG+BP | 统一多模态扩散 DiT | 增量0.3M/模态| 339小时三模态全时程 | 🟢 | 🟢 (论文公开) |
 | **Samsung xMAE** | Samsung Research | ICML 2024 | PPG $\to$ 虚拟 ECG | 跨模态 MAE | 端侧优化 | 9,400 小时配对数据 | 🔴 | 🔴 |
 | **Samsung HiMAE** | Samsung Research | ICLR 2025 | 腕部多尺度生理 | 分层多尺度编码器 | <1ms延迟 | 真实手表自由生活数据 | 🔴 | 🔴 |
 | **GlucoFM** | Google / UNSW | arXiv 2026 | CGM (5min 血糖) | 双流 JEPA 预测 | **0.72M** | 10.9万小时 (477人) | 🟡 (承诺开源) | 🔴 |
 | **GluFormer** | Pheno.AI / Weizmann | Nature 2026 | CGM (15min 血糖) | GPT 式自回归 | 135M | >1000万读数 (10,812人) | 🟢 | 🔴 (HPP受限) |
-| **CGMformer** | 中科院 / 上海六院 | NSR 2025 | CGM (5min 血糖) | BERT 式 MLM | 0.85M~10M | 131万天 (5.9万人) | 🟢 | 🟢 (GitHub) |
-| **CGM-LSM** | JHU CDHAI | arXiv 2024 | CGM 血糖 | GPT-2 自回归 | ~124M | 1600万读数 (592人) | 🟢 (无数据) | 🔴 |
+| **CGMformer** | 中科院 / 上海六院 | NSR 2025 | CGM (5min 血糖) | BERT 式 MLM | 0.85M～10M | 131万天 (5.9万人) | 🟢 | 🟢 (GitHub) |
+| **CGM-LSM** | JHU CDHAI | arXiv 2024 | CGM 血糖 | GPT-2 自回归 | \~124M | 1600万读数 (592人) | 🟢 (无数据) | 🔴 |
 | **SleepFM** | Stanford Medicine | Nat Med 2024-2026 | EEG+ECG+PPG+Resp | 留一对比学习 (LOO) | 基础模型 | 60万小时 (6.5万人) | 🟢 | 🟡 (受限开放) |
 | **LIMU-BERT** | 厦门大学等 | UbiComp 2021 | 3轴 ACC + Gyro | Sensor-BERT | 轻量级 | 多源 IMU 无标注数据 | 🟢 | 🟢 |
 | **TimesFM** | Google Research | ICML 2024 / v2.0 | 通用单变量时序 | 解码器自回归 | 200M | 1000亿点 | 🟢 | 🟢 (HF) |
-| **Chronos** | Amazon Research | ICML 2024 / Bolt | 通用单变量时序 | 离散分箱 T5/Encoder | 20M~710M | 泛领域时序语料 | 🟢 | 🟢 (HF) |
+| **Chronos** | Amazon Research | ICML 2024 / Bolt | 通用单变量时序 | 离散分箱 T5/Encoder | 20M～710M | 泛领域时序语料 | 🟢 | 🟢 (HF) |
 | **MOMENT** | CMU Auton Lab | ICML 2024 | 通用多变量时序 | Patch-MAE | 385M | Time-series Pile (含生理) | 🟢 | 🟢 (HF) |
 | **MANTIS** | CMU | 2024-2025 | 通用时序多任务 | 统一潜表征 | 多规格 | 跨领域时序 | 🟢 | 🟢 (HF) |
 
@@ -115,7 +115,7 @@ Wearable Physiological Foundation Models
 - **CGMformer** (中科院 / 上海六院, NSR 2025):
   - 基于 BERT 掩码重构架构，依托 5.9 万人真实世界数据，全面覆盖糖尿病筛查、分型及并发症管理。
 - **CGM-LSM** (JHU CDHAI, 2024):
-  - 聚焦短程血糖自回归预测（30min~2h），在 OhioT1DM 上大幅降低均方根误差。
+  - 聚焦短程血糖自回归预测（30min～2h），在 OhioT1DM 上大幅降低均方根误差。
 
 ---
 
