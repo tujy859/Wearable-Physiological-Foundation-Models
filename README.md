@@ -80,6 +80,7 @@ Wearable Physiological Foundation Models
 | **CGMformer** | 中科院 / 上海六院 | NSR 2025 | CGM (5min 血糖) | BERT 式 MLM | 0.85M～10M | 131万天 (5.9万人) | 🟢 | 🟢 (GitHub) |
 | **CGM-LSM** | JHU CDHAI | arXiv 2024 | CGM 血糖 | GPT-2 自回归 | \~124M | 1600万读数 (592人) | 🟢 (无数据) | 🔴 |
 | **SleepFM** | Stanford Medicine | Nat Med 2024-2026 | EEG+ECG+PPG+Resp | 留一对比学习 (LOO) | 基础模型 | 60万小时 (6.5万人) | 🟢 | 🟡 (受限开放) |
+| **SleepMaMi** | 首尔大学 (SNU) | ICML 2026 | PSG (EEG+ECG+Resp) | 宏微观双编码器 (MAE+CL) | ~15M | 15.8万小时 (2万人) | 🟢 | 🟢 (GitHub) |
 | **LIMU-BERT** | 厦门大学等 | UbiComp 2021 | 3轴 ACC + Gyro | Sensor-BERT | 轻量级 | 多源 IMU 无标注数据 | 🟢 | 🟢 |
 | **TimesFM** | Google Research | ICML 2024 / v2.0 | 通用单变量时序 | 解码器自回归 | 200M | 1000亿点 | 🟢 | 🟢 (HF) |
 | **Chronos** | Amazon Research | ICML 2024 / Bolt | 通用单变量时序 | 离散分箱 T5/Encoder | 20M～710M | 泛领域时序语料 | 🟢 | 🟢 (HF) |
@@ -133,6 +134,22 @@ Wearable Physiological Foundation Models
 
 ---
 
+## 💤 4. 睡眠与心肺多模态模型 (Sleep & Cardiopulmonary)
+
+详细分析与网络细节请查阅：📖 [docs/models/sleep_models.md](docs/models/sleep_models.md)
+
+- **Stanford Medicine SleepFM** (Nature Medicine 2024-2026):
+  - **首个多器官耦合睡眠基座**：依托 6.5 万名受试者、近 60 万小时夜间多导睡眠监测 (PSG) 数据，联合建模脑神经（EEG）、心血管（ECG/PPG）、呼吸力学（腹胸呼吸带/气流）与肌电（EMG）。
+  - **留一对比学习 (LOO-CL)**：在 30 秒窗口内随机遮蔽某一器官模态，拉近该模态表征与剩余多模态联合表征的距离，迫使网络捕获大脑-心脏-肺部之间的深层生物物理耦合与生理共振。
+  - **单夜预测远期疾病**：不仅实现高精度的睡眠分期与呼吸暂停筛查，更凭单夜生理表征即可预测 130+ 种未来重大慢性疾病（阿尔茨海默/痴呆症 C-index 0.85、全因死亡率 0.84、心肌梗死 0.81、心房颤动 0.78）。
+- **SleepMaMi** (首尔大学, ICML 2026):
+  - **宏观-微观层级双编码器架构**：针对整夜宏观睡眠时序与局部微观瞬变波形尺度断层的痛点，提出 Macro-Encoder（结合年龄/性别/BMI 人口统计学先验建模全夜周期节律）与 Micro-Encoder（局部 MAE 重构与多模态对比学习）。
+  - **少样本多中心迁移**：在 20,000+ 份 PSG 记录（约 15.8 万小时）上预训练，仅需 1% 标注即可匹敌全监督模型。
+- **U-Sleep & 开源基准网络** (Nature npj Digital Medicine):
+  - 基于全卷积 1D U-Net 的端到端多通道睡眠分期架构，具备极强的跨传感器配置与动态导联适应能力。
+
+---
+
 ## 📦 5. 开源数据集与评测基准 (Datasets & Benchmarks)
 
 详细数据集下载指引与预处理代码请查阅：📖 [docs/datasets/wearable_datasets.md](docs/datasets/wearable_datasets.md)
@@ -151,10 +168,10 @@ Wearable Physiological Foundation Models
 
 本项目与核心实验复现子工程联动，提供端到端真实世界实操代码：
 
-- ⌚ **智能手表工程实践自建库**: [`Watch_LSM`](../Watch_LSM)
+- ⌚ **智能手表工程实践自建库**: [**Watch_LSM**](https://github.com/tujy859/Watch_LSM)
   - 包含真实智能手表运动伪影碰撞分析（跑步场景心率 MAE 从 51 BPM 降至 7.5 BPM）；
   - 包含生产级双流跨模态自监督训练框架 `watch_lsm`。
-- 🩸 **CGM 基础模型横评与复现**: [`cgm_fm`](../cgm_fm)
+- 🩸 **CGM 基础模型横评与复现**: [**CGM_FM**](https://github.com/tujy859/CGM_FM)
   - 深入评测 GlucoFM、GluFormer 与 CGM-JEPA 的表征迁移能力。
 - 💻 **极简 Demo 脚本**（开箱即用体验）：
   - 详见 `notebooks/`（使用已公开开源权重进行 10 行代码特征提取与预测）。

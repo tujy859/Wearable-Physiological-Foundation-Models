@@ -14,8 +14,8 @@
   ├── 极简代码: notebooks/ (公开开源权重 10 行开箱即用极简 Demo)
   └── 静态图表: assets/ (高清架构图、分类树、雷达图)
          │
-         ├── 链接到子实验仓 1: Watch_LSM (手表端到端自建模型、多模态融合、真实野外伪影实证)
-         └── 链接到子实验仓 2: cgm_fm (CGM 血糖模型对比、GlucoFM/GluFormer 复现分析)
+         ├── 链接到子实验仓 1: [Watch_LSM](https://github.com/tujy859/Watch_LSM) (手表端到端自建模型、多模态融合、真实野外伪影实证)
+         └── 链接到子实验仓 2: [CGM_FM](https://github.com/tujy859/CGM_FM) (CGM 血糖模型对比、GlucoFM/GluFormer 复现分析)
 ```
 
 ---
@@ -36,6 +36,7 @@
 - [x] **手表专题整理**：将 `Watch_LSM` 中的 7 篇核心模型分析（SensorFM, PaPaGei, Pulse-PPG, xMAE, HiMAE, SleepFM, LIMU-BERT, Mantis）格式化整理至 `docs/models/smartwatch_models.md`
 - [x] **CGM 专题整理**：将 `cgm_fm` 中的成果（GlucoFM, GluFormer, CGMformer, CGM-LSM 对比及实证设计空间）整理至 `docs/models/cgm_models.md`
 - [x] **通用时序模型专题**：整理 TimesFM, Chronos, MOMENT, MANTIS, MOIRAI 的技术演变逻辑与域鸿沟至 `docs/models/general_tsfm.md`
+- [x] **睡眠心肺专题整理**：解构 SleepFM、SleepMaMi、U-Sleep 跨模态耦合与 NSRR 数据集至 `docs/models/sleep_models.md`
 - [x] **公开数据集专题**：补全智能手表与连续血糖公开数据集的获取与授权指引至 `docs/datasets/wearable_datasets.md`
 - [ ] **核心技术纵向对比**：撰写《穿戴时序特定归纳偏置：多采样率对齐、频域碰撞消除与潜空间预测》至 `docs/principles/`
 

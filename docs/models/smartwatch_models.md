@@ -138,6 +138,8 @@
 
 ## 6. Stanford Medicine SleepFM (Nature Medicine) —— 多器官耦合睡眠基座
 
+> 💡 完整睡眠与心肺多模态基础模型专题（含 SleepFM 详细原理、SleepMaMi、U-Sleep 及临床 NSRR 数据集）请查阅：📖 [docs/models/sleep_models.md](sleep_models.md)
+
 - **论文**: *SleepFM: A Multi-modal Foundation Model for Sleep Analysis*
 - **发表期刊**: Nature Medicine (2024-2026)
 - **团队**: Stanford Medicine (Emmanuel Mignot, James Zou 教授团队)
@@ -330,6 +332,8 @@ AnyPPG 经冻结表征（Frozen Representation）与极简线性探针（Linear 
 ---
 
 ## 12. 对自建手表大模型 (Watch-LSM) 的工程架构启示
+
+> 💡 本文提炼的端侧生理表征架构与抗伪影工程实现已完整落地于开源实验子仓库：[**Watch_LSM**](https://github.com/tujy859/Watch_LSM)
 
 基于上述顶会与工业界成果，构建生产级智能手表生理基础模型应坚决遵循以下五条准则：
 

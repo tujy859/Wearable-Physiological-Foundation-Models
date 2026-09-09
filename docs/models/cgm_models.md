@@ -137,7 +137,7 @@ GlucoFM 摒弃了重建像素/原值的 MAE 路线，转向非生成式的联合
 
 ## 7. CGM 基础模型设计空间实证洞察 (Empirical Design Space)
 
-在本项目（`CGM_FM` 子工程）进行的 3 目标（JEPA vs 重建 vs 因果）$\times$ 3 架构（普通 Transformer vs 双流 GlucoFM vs 纯卷积）全因子矩阵（30 组预训练、三轨综合评测）中，我们获得了以下核心结论：
+在本项目（[`CGM_FM`](https://github.com/tujy859/CGM_FM) 子工程）进行的 3 目标（JEPA vs 重建 vs 因果）$\times$ 3 架构（普通 Transformer vs 双流 GlucoFM vs 纯卷积）全因子矩阵（30 组预训练、三轨综合评测）中，我们获得了以下核心结论：
 
 ### 洞察 1：目标函数决定表征天花板（Q1）
 - **连续值掩码重建 (Recon) 在高阶下游最差**: 单纯迫使 Decoder 像素级拟合数值，模型会过度学习局部的“数值平滑先验”，而丢失全局生理突变特征。
