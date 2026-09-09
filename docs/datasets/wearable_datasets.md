@@ -106,8 +106,16 @@
    - 包含首尔大学医院 10,000 余例非心脏手术患者在手术室内的超高精度多通道监测数据（500Hz 动脉侵入血压波、指尖 PPG、高导联心电、脑电双频指数）。
    - 获取方式: [VitalDB 开放数据平台](https://vitaldb.net/)，支持 Python API `pip install vitaldb`。
 2. **MIMIC-III / MIMIC-IV Waveform Database**:
-   - 麻省理工学院 (MIT) 与贝斯以色列女修道院医学中心 (BIDMC) 联合建立的重症监护多模态数据库，包含数万名 ICU 患者的高频脉搏与心电波形。
+   - 麻省理工学院 (MIT) 与贝斯以色列女伯爵医学中心 (BIDMC) 联合建立的重症监护多模态数据库，包含数万名 ICU 患者的高频脉搏与心电波形。
    - 获取方式: PhysioNet 凭证访问（需完成 CITI 临床研究伦理认证）。
+3. **MC-MED (Multimodal Clinical Monitoring in the Emergency Department)**:
+   - 由北京大学洪申达团队整理并发布在 PhysioNet，采集自大型学术医学中心急诊科（ED）2020～2022 年间 118,385 例急诊就诊记录；
+   - 提取了超过 **1000 万对严格同步配对** 的高频 PPG 与 ECG 信号，且融合了人口统计学、病史用药、化验血检、影像诊断以及经医生标注的心血管疾病（CVD）明确标签；
+   - 获取方式: [PhysioNet 凭证访问](https://physionet.org/content/mc-med/)（需完成 CITI 伦理认证并签署 DUA）。
+4. **BIDMC PPG and Respiration Dataset**:
+   - 源自哈佛医学院附属贝斯以色列女伯爵医学中心（BIDMC）重症监护数据库（从 MIMIC-II 抽取的生理基准子集）；
+   - 包含 53 位重症患者、每段 8 分钟的高采样率（125Hz）严格同步的 PPG、ECG 及阻抗呼吸波形，配有人工呼吸周期精细标注；
+   - 获取方式: [PhysioNet 开放直接下载](https://physionet.org/content/bidmc/1.0.0/)（完全公开，遵循 ODC-BY 协议）。
 
 ---
 
@@ -127,6 +135,8 @@
 | **CGM 血糖** | **OhioT1DM** | 俄亥俄大学 | Dexcom 5min + 胰岛素/碳水 | 12人 (8周时程) | 🟡 学术申请 | 30～120min 血糖自回归预测 |
 | **CGM 血糖** | **AI-READI** | NIH 旗舰 | 2280人 CGM + 基因组 + 影像 | 2,280人 | 🟡 机构审批 | 大规模人群多样性预训练 |
 | **临床生理基准**| **VitalDB** | 首尔大学医院 | 动脉波 500Hz, PPG, ECG | >10,000 例手术 | 🟢 开放 API | 血管弹性、连续血压金标准 |
+| **临床生理基准**| **MC-MED** | 北京大学 (洪申达组) | PPG 100Hz+, ECG, 呼吸等 | 11.8万人 (>1000万对) | 🟡 凭证申请 | 跨模态生成、急诊心血管筛查 |
+| **临床生理基准**| **BIDMC PPG** | 哈佛医学院 BIDMC | PPG 125Hz, ECG 125Hz, Resp | 53人 (8分钟高精记录) | 🟢 开放直下 | 呼吸率估计、脉搏波形态基准 |
 
 ---
 

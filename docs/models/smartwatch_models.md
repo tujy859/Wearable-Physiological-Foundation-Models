@@ -14,8 +14,10 @@
 - [6. Stanford Medicine SleepFM (Nature Medicine) —— 多器官耦合睡眠基座](#6-stanford-medicine-sleepfm-nature-medicine--多器官耦合睡眠基座)
 - [7. 空间与运动判别基座：LIMU-BERT 与 Huawei Mantis](#7-空间与运动判别基座limu-bert-与-huawei-mantis)
 - [8. 清华大学 UniCardio (Nature MI) —— 统一心血管多模态扩散基础模型](#8-清华大学-unicardio-nature-mi--统一心血管多模态扩散基础模型)
-- [9. 核心基础模型横向对比矩阵](#9-核心基础模型横向对比矩阵)
-- [10. 对自建手表大模型 (Watch-LSM) 的工程架构启示](#10-对自建手表大模型-watch-lsm-的工程架构启示)
+- [9. 北京大学 PPGFlowECG (2025/2026) —— 潜空间整流流 PPG 转 ECG 跨模态生成框架](#9-北京大学-ppgflowecg-20252026--潜空间整流流-ppg-转-ecg-跨模态生成框架)
+- [10. 北京大学 AnyPPG (KDD 2026) —— 心电引导预训练的光电多器官基座大模型](#10-北京大学-anyppg-kdd-2026--心电引导预训练的光电多器官基座大模型)
+- [11. 核心基础模型横向对比矩阵](#11-核心基础模型横向对比矩阵)
+- [12. 对自建手表大模型 (Watch-LSM) 的工程架构启示](#12-对自建手表大模型-watch-lsm-的工程架构启示)
 
 ---
 
@@ -213,22 +215,121 @@ SleepFM 不仅实现了高精度自动化睡眠分期（Wake, N1, N2, N3, REM）
 
 ---
 
-## 9. 核心基础模型横向对比矩阵
+## 9. 北京大学 PPGFlowECG (2025/2026) —— 潜空间整流流 PPG 转 ECG 跨模态生成框架
 
-| 维度 / 特征 | **SensorFM** | **PaPaGei** | **Pulse-PPG** | **UniCardio** | **Samsung xMAE/HiMAE** | **SleepFM** | **Huawei Mantis** |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **机构团队** | Google Research | Nokia Bell Labs | UIUC / Memphis | **清华大学 / 安贞医院** | Samsung Research | Stanford Medicine | 华为诺亚方舟实验室 |
-| **核心模态** | PPG+ACC+EDA+Temp | PPG (单通道) | 腕部高噪 PPG | **PPG + ECG + BP** | PPG $\to$ 虚拟 ECG | EEG+ECG+PPG+Resp | 多变量 (ACC / 生理) |
-| **预训练规模** | 1万亿分钟 (500万人) | 5.7万小时 (10个公开集)| 5.5万小时 (野外100天)| **339小时三模态全时程**| 9,400小时同步数据 | 60万小时 (6.5万人) | 多领域通用分类语料 |
-| **网络骨干** | Patch Transformer | ResNet1D-MoE | 12层 1D-ResNet | **多模态扩散 DiT** | 分层 Hierarchical Trans | 多模态对比 Transformer | 8M ViT-1D + TGU |
-| **自监督目标** | 掩码建模 + 跨模态填补 | 形态引导对比学习 | 连续相对对比 (RelCon) | **条件扩散去噪+持续学习**| 跨模态掩码重构 | 留一对比学习 (LOO) | 几何自监督对比学习 |
-| **抗伪影机制** | 万亿级数据 Scaling | 形态过滤配对 | 结合运动强度的软对比 | **多模态互信息互补生成**| 跨模态先验约束 | 多器官互信息补偿 | 多尺度差分局部卷积 |
-| **部署延迟** | 云端基座 | 端侧轻量 (~1.5M) | 端侧中等 (~2M) | **极低增量 (~0.3M/模态)**| **极低 (<1ms)** | 云端专业分析 | 端侧极低 (~19.8ms) |
-| **开源状态** | 🔴 仅论文 | 🟢 代码+Zenodo权重 | 🟢 代码+Zenodo权重 | 🟢 论文公开 / 代码开源中 | 🔴 工业闭源 | 🟢 代码开源 | 🟢 Hugging Face 开源 |
+- **论文**: *PPGFlowECG: Latent Rectified Flow with Cross-Modal Encoding for PPG-Guided ECG Generation and Cardiovascular Disease Detection*
+- **发表状态**: arXiv:2502.14856 / OpenReview (2025/2026)
+- **研发团队**: 北京大学健康医疗大数据国家研究院 / 人工智能研究院数字健康实验室（PKUDigitalHealth, 洪申达教授团队）
+- **开源资源**: [GitHub: PKUDigitalHealth/PPGFlowECG](https://github.com/PKUDigitalHealth/PPGFlowECG)
+
+### 9.1 临床背景与核心痛点
+- **可穿戴健康监测的“模态鸿沟”**：智能手表等腕戴设备普及了光电容积脉搏波（PPG）的日常全天候采集，但临床心血管疾病（CVD）的确诊金标准依然是体表心电图（ECG）。
+- **PPG $\to$ ECG 跨模态翻译的两大核心壁垒**：
+  1. **跨模态物理与语义未对齐**：PPG 测量末梢血管容积波动阻抗，ECG 记录心肌除极与复极的电生理向量传导，二者物理起源异质，传统时序转换模型易产生严重的语义错位与相位伪影；
+  2. **高维时序细粒度保真度难以兼顾**：传统 GAN 模型极易发生模式崩溃（Mode Collapse），而常规像素/信号级扩散模型（DDPM）反向去噪采样步数过多（数十至上百步），无法满足端侧与近线实时生成需求。
+
+### 9.2 两阶段生成架构设计 (CardioAlign + Latent Rectified Flow)
+
+```text
+[Stage 1: 跨模态对齐]
+PPG Waveform ──► [ CardioAlign Encoder ] ──► 变分参数 (μ_p, σ_p) ──► 潜向量 z_ppg
+ECG Waveform ──► [ CardioAlign Encoder ] ──► 变分参数 (μ_e, σ_e) ──► 潜向量 z_ecg
+                        ▲                           │
+                        └────── 潜空间分布对齐 ──────┘ (L2 + KL 对齐损失)
+
+[Stage 2: 潜空间整流流生成]
+标准高斯噪声 X_0 ~ N(0, I) ────────────────────────────────────────┐
+                                                                   ▼
+条件引导 z_ppg ──────────────────────► [ Latent Rectified Flow (ODE 直线传输) ]
+                                                                   │
+                                                                   ▼
+                                                          生成心电潜向量 z_ecg*
+                                                                   │
+                                                                   ▼
+                                                          [ 1D-CNN ECG 解码器 ]
+                                                                   │
+                                                                   ▼
+                                                          高保真诊断级 ECG 波形
+```
+
+1. **Stage 1: CardioAlign 编码器与潜空间生理对齐**:
+   - 采用参数绑定（Parameter-Tied）的双分支 Encoder-Decoder 结构，将 PPG 与 ECG 统一映射至低维紧凑的生理潜空间 $\mathcal{Z}$ 中；
+   - 编码器输出变分高斯参数 $\mu$ 与 $\sigma$，通过重参数化采样潜向量 $z = \mu + \sigma \odot \epsilon$；
+   - **潜空间分布对齐损失 ($\mathcal{L}_{\text{align}}$)**：同时联合最小化均值欧氏距离 $||\mu_{\text{PPG}} - \mu_{\text{ECG}}||_2^2$ 与潜分布对称 KL 散度 $\mathcal{D}_{\text{KL}}$，促使潜空间过滤掉外周光电伪影，仅保留纯净的心肌电动力学生理不变量。
+2. **Stage 2: Latent Rectified Flow（潜空间整流流/流匹配）**:
+   - 摒弃了传统扩散模型曲折反向 SDE 路径，Rectified Flow 学习沿**直线轨迹（Straight-line Trajectory）**将标准高斯噪声分布 $X_0 \sim \mathcal{N}(0, I)$ 传输至目标 ECG 潜分布 $X_1 \sim q(z_{\text{ECG}})$：
+     $$\frac{\mathrm{d}X_t}{\mathrm{d}t} = v_\theta(X_t, t, z_{\text{PPG}})$$
+   - 以 PPG 潜向量 $z_{\text{PPG}}$ 作为强条件引导速度场网络；
+   - **常微分方程（ODE）极速采样**：得益于直线矢量场，模型仅需 **1～4 步**数值积分（Euler 或 RK45 求解器）即可完成确定性潜表征生成，推理速度相比多步扩散模型提升一个数量级以上。
+3. **高保真 ECG 波形还原**:
+   - 生成的潜向量 $z_{\text{ECG}}^*$ 输入专用 1D 卷积心电解码器，还原出连续的诊断级体表心电波形。
+
+### 9.3 评测体系与临床 CVD 筛查实证
+- **超大规模急诊级真实评测集**:
+  - **MC-MED 数据集**：洪申达团队首次在该任务中引入涵盖 **11.8 万名急诊患者、超 1000 万对真实 PPG-ECG 配对样本** 的临床急诊库，具有明确的专家 CVD 确诊标签；
+  - **VitalDB / MIMIC-AFib / BIDMC**：跨中心、多硬件域的泛化性能全面领跑。
+- **基于心电基座模型 ECGFounder 的高阶特征评估**:
+  - 引入心电基座模型 **ECGFounder** 作为特征提取器，计算生成波形的 Fréchet Inception Distance (FID)，在特征保真度与形态结构指标（Pearson 峰值相关系数 $r$、SNR、RMSE）上显著超越现有基线。
+- **临床医生双盲图灵测试与疾病辅助筛查**:
+  - 联合心内科临床医生进行波形盲测，生成的 ECG 在 P 波、QRS 波群宽度及 ST-T 改变上具备极高可读性；
+  - 在房颤（AFib）、房性/室性期前收缩（APC/PVC）、室上性心动过速（SVT）等急性心律失常与心肌缺血检测中，下游分类 AUC 逼近临床真实 ECG 上限。
 
 ---
 
-## 10. 对自建手表大模型 (Watch-LSM) 的工程架构启示
+## 10. 北京大学 AnyPPG (KDD 2026) —— 心电引导预训练的光电多器官基座大模型
+
+- **论文**: *AnyPPG: A PPG Foundation Model*
+- **发表会议**: **ACM SIGKDD 2026** / arXiv:2511.01747
+- **研发团队**: 北京大学健康医疗大数据国家研究院 / 计算机学院 / 人工智能研究院（Guangkun Nie, Xiaocheng Fang, 洪申达教授等）
+- **开源资源**: [GitHub: Ngk03/AnyPPG](https://github.com/Ngk03/AnyPPG)
+
+### 10.1 核心定位与范式跃升：从“心率脉搏”迈向“全身画像”
+- 过去的穿戴脉搏基座模型（如 PaPaGei、Pulse-PPG）大多局限于单一心血管下游任务（如心率追踪、血压回归、血管弹性年龄）；
+- **AnyPPG 首次系统性论证了：PPG 可以作为多器官整体健康画像（Holistic Multi-Organ Health Profiling）的通用数字生物标志物**。通过深度跨模态预训练，使单模态手腕 PPG 具备了对心血管系统以外的全身系统性慢性疾病进行早期无创筛查的能力。
+
+### 10.2 心电引导的跨模态对比预训练 (ECG-Guided Pretraining)
+- **数据资产规模**:
+  - 聚合了超 **100,000 小时** 的高精度同步 PPG-ECG 配对时序数据，涵盖 MC-MED、MIMIC、VitalDB 等多中心临床与生理波形库。
+- **为什么必须由 ECG 引导对比学习？**
+  - 单模态自监督（如纯粹的 PPG 掩码重建 MAE 或数据增强对比学习）极易走入局部极小值——模型会倾向于拟合受试者的皮肤静态色泽、探头接触压力或手臂运动高频伪影；
+  - 同步采集的 ECG 是反映心脏中枢电生理活动的绝对金标准，不存在外周光吸收伪影。AnyPPG 采用**深层对比学习（Contrastive Learning）**，强制拉近时间同步的 PPG 与 ECG 在高维潜表征空间中的距离，迫使 PPG 编码器学会过滤表面运动噪声，自适应提取与心室除极、血管顺应性及自主神经中枢调控相关的深层生理动力学本质。
+
+### 10.3 核心网络架构
+- **Net1D 1D-ResNet 双分支编码器**:
+  - 为 PPG 与 ECG 模态分别配置专用的 1D-ResNet 骨干网络（单模态分支参数量约 **5.85M**）；
+  - 包含 7 个卷积阶段（Convolutional Stages），层层抽取微血管收缩峰、重搏切迹及脉冲波传导时间（PWTT）多尺度特征；
+  - 经过全局平均池化（Global Mean Pooling）后输出 **1024 维** 的高阶特征向量。
+- **轻量投影头与对比表征**:
+  - 采用双层 MLP 投影头：$\text{Linear}(1024 \to 512) \to \text{GELU} \to \text{Linear}(512 \to 256)$；
+  - 输出 $\ell_2$ 归一化的 256 维潜表征用于跨模态 InfoNCE 对比损失计算。在端侧推理时仅需保留 PPG 单分支（~5.85M），即插即用。
+
+### 10.4 突破性多器官表型评测 (Beyond Cardiovascular)
+AnyPPG 经冻结表征（Frozen Representation）与极简线性探针（Linear Probe）微调，展现出惊人的全身多器官疾病跨域泛化能力：
+1. **心血管中枢核心任务**:
+   - 心力衰竭（Heart Failure）、原发性高血压（Hypertension）、心律失常等分类指标全面刷新 SOTA。
+2. **突破心血管界限的非心血管系统表型**:
+   - **慢性肾脏病 (Chronic Kidney Disease, CKD)**: 敏锐捕捉到微血管重塑、硬化与水钠潴留对外周脉搏微形态的微弱时域调制；
+   - **帕金森病 (Parkinson's Disease)**: 识别由于中枢神经退行导致的自主神经功能紊乱（Autonomic Dysregulation）在末梢血管舒缩节律中的特异性反映；
+   - 强力证明了智能手表光电脉搏波在日常慢病长程管理与神经退行性疾病早筛中的颠覆性科研与应用价值。
+
+---
+
+## 11. 核心基础模型横向对比矩阵
+
+| 维度 / 特征 | **SensorFM** | **PaPaGei** | **Pulse-PPG** | **UniCardio** | **PPGFlowECG** | **AnyPPG** | **Samsung xMAE/HiMAE** | **SleepFM** | **Huawei Mantis** |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **机构团队** | Google Research | Nokia Bell Labs | UIUC / Memphis | **清华大学 / 安贞医院** | **北京大学 (PKU Health)** | **北京大学 (PKU Health)** | Samsung Research | Stanford Medicine | 华为诺亚方舟实验室 |
+| **核心模态** | PPG+ACC+EDA+Temp | PPG (单通道) | 腕部高噪 PPG | **PPG + ECG + BP** | **PPG $\to$ 诊断级 ECG** | **PPG (心电引导)** | PPG $\to$ 虚拟 ECG | EEG+ECG+PPG+Resp | 多变量 (ACC / 生理) |
+| **预训练规模** | 1万亿分钟 (500万人) | 5.7万小时 (10个公开集)| 5.5万小时 (野外100天)| **339小时三模态全时程**| **千万级配对 (MC-MED 11.8万人)** | **>100,000 小时同步数据** | 9,400小时同步数据 | 60万小时 (6.5万人) | 多领域通用分类语料 |
+| **网络骨干** | Patch Transformer | ResNet1D-MoE | 12层 1D-ResNet | **多模态扩散 DiT** | **CardioAlign + Rectified Flow** | **Net1D 1D-ResNet 双分支** | 分层 Hierarchical Trans | 多模态对比 Transformer | 8M ViT-1D + TGU |
+| **自监督目标** | 掩码建模 + 跨模态填补 | 形态引导对比学习 | 连续相对对比 (RelCon) | **条件扩散去噪+持续学习**| **潜空间分布对齐+整流流生成** | **跨模态深层 InfoNCE 对比** | 跨模态掩码重构 | 留一对比学习 (LOO) | 几何自监督对比学习 |
+| **抗伪影机制** | 万亿级数据 Scaling | 形态过滤配对 | 结合运动强度的软对比 | **多模态互信息互补生成**| **参数绑定潜空间生理不变量** | **中枢心电无伪影电信号锚定** | 跨模态先验约束 | 多器官互信息补偿 | 多尺度差分局部卷积 |
+| **部署延迟** | 云端基座 | 端侧轻量 (~1.5M) | 端侧中等 (~2M) | **极低增量 (~0.3M/模态)**| **1～4步极速ODE (<0.1s)** | **端侧单分支 (~5.85M)** | **极低 (<1ms)** | 云端专业分析 | 端侧极低 (~19.8ms) |
+| **开源状态** | 🔴 仅论文 | 🟢 代码+Zenodo权重 | 🟢 代码+Zenodo权重 | 🟢 论文公开 / 代码开源中 | 🟢 代码开源 (GitHub) | 🟢 代码开源 (GitHub) | 🔴 工业闭源 | 🟢 代码开源 | 🟢 Hugging Face 开源 |
+
+---
+
+## 12. 对自建手表大模型 (Watch-LSM) 的工程架构启示
 
 基于上述顶会与工业界成果，构建生产级智能手表生理基础模型应坚决遵循以下五条准则：
 

@@ -71,6 +71,8 @@ Wearable Physiological Foundation Models
 | **PaPaGei** | Nokia Bell Labs | ICLR 2025 | PPG (光电脉搏) | ResNet1D-MoE | \~1.5M | 5.7万小时 (10个公开库) | 🟢 | 🟢 (Zenodo) |
 | **Pulse-PPG** | UIUC / Memphis | UbiComp 2025 | 腕部野外高噪 PPG | 1D-ResNet (RelCon) | \~2M | 5.5万小时 (真实自由生活) | 🟢 | 🟢 (Zenodo) |
 | **UniCardio** | 清华大学 / 安贞医院 | Nature MI 2025 | PPG+ECG+BP | 统一多模态扩散 DiT | 增量0.3M/模态| 339小时三模态全时程 | 🟢 | 🟢 (论文公开) |
+| **PPGFlowECG** | 北京大学 (PKU Health) | arXiv 2025/2026 | PPG $\to$ 诊断级 ECG | 潜空间整流流 (Rectified Flow) | 紧凑级 | 千万级配对 (MC-MED 11.8万人) | 🟢 | 🟢 (GitHub) |
+| **AnyPPG** | 北京大学 (PKU Health) | KDD 2026 | 腕戴 PPG (心电引导) | Net1D 双分支 ResNet | 5.85M/分支 | >10万小时同步数据 | 🟢 | 🟢 (GitHub) |
 | **Samsung xMAE** | Samsung Research | ICML 2024 | PPG $\to$ 虚拟 ECG | 跨模态 MAE | 端侧优化 | 9,400 小时配对数据 | 🔴 | 🔴 |
 | **Samsung HiMAE** | Samsung Research | ICLR 2025 | 腕部多尺度生理 | 分层多尺度编码器 | <1ms延迟 | 真实手表自由生活数据 | 🔴 | 🔴 |
 | **GlucoFM** | Google / UNSW | arXiv 2026 | CGM (5min 血糖) | 双流 JEPA 预测 | **0.72M** | 10.9万小时 (477人) | 🟡 (承诺开源) | 🔴 |
@@ -97,6 +99,8 @@ Wearable Physiological Foundation Models
 - **Samsung xMAE & HiMAE** (ICML 24 / ICLR 25): 专为智能手表端侧计算优化。xMAE 利用连续 PPG 虚拟重构偶发高精度 ECG；HiMAE 提出多尺度分层时间架构，延迟小于 1ms。
 
 ### 开源先锋代表
+- **北京大学 PPGFlowECG** (2025/2026): 北大洪申达团队研发的 PPG 转 ECG 跨模态生成框架。首创 CardioAlign 编码器与潜空间整流流（Latent Rectified Flow），仅需 1～4 步 ODE 直线传输即可从可穿戴 PPG 极速合成高保真诊断级心电波形，依托千万级急诊数据集 MC-MED 在房颤、心梗等疾病筛查与医生盲测中表现优异。
+- **北京大学 AnyPPG** (KDD 2026): 北大洪申达团队推出的通用光电脉搏基座大模型。基于超 10 万小时同步脉搏-心电数据进行跨模态对比预训练，突破传统单一心血管任务，首次实现对慢性肾病（CKD）、帕金森病等全身多器官复杂表型的无创筛查。
 - **PaPaGei** (ICLR 2025): Nokia Bell Labs 与剑桥联合发布，首个开源通用光电生理基础模型。采用 ResNet1D-MoE 架构，参数量仅 1.5M，在心率、血压、血管年龄等 20 个下游任务表现卓越。
 - **Pulse-PPG** (UbiComp 2025): UIUC 主导，针对真实野外高噪手腕 PPG 提出相对对比学习（RelCon），有效克服真实生活中的剧烈运动伪影。
 - **LIMU-BERT** (UbiComp): 针对 IMU/加速度计的传感器表征模型，实现与个体身份解耦的高阶步态和运动模式提取。
