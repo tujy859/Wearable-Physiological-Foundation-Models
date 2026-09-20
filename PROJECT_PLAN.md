@@ -33,11 +33,13 @@
 - [x] 编写开源协作与收录规范（`CONTRIBUTING.md`）
 
 ### 阶段 2：资产聚合与专题精读整理（核心文档就绪）
-- [x] **手表专题整理**：将 `Watch_LSM` 中的 7 篇核心模型分析（SensorFM, PaPaGei, Pulse-PPG, xMAE, HiMAE, SleepFM, LIMU-BERT, Mantis）格式化整理至 `docs/models/smartwatch_models.md`
+- [x] **手表专题整理**：将 `Watch_LSM` 中的 7 篇核心模型分析（SensorFM, PaPaGei, Pulse-PPG, xMAE, HiMAE, SleepFM, LIMU-BERT, Mantis）格式化整理至 `docs/models/smartwatch_models.md`，并增补 **Stanford OpenMHC** 与 **My Heart Counts (2015) vs. Apple Heart Study (2017)** 临床沿革拆解
 - [x] **CGM 专题整理**：将 `cgm_fm` 中的成果（GlucoFM, GluFormer, CGMformer, CGM-LSM 对比及实证设计空间）整理至 `docs/models/cgm_models.md`
 - [x] **通用时序模型专题**：整理 TimesFM, Chronos, MOMENT, MANTIS, MOIRAI 的技术演变逻辑与域鸿沟至 `docs/models/general_tsfm.md`
-- [x] **睡眠心肺专题整理**：解构 SleepFM、SleepMaMi、U-Sleep 跨模态耦合与 NSRR 数据集至 `docs/models/sleep_models.md`
-- [x] **公开数据集专题**：补全智能手表与连续血糖公开数据集的获取与授权指引至 `docs/datasets/wearable_datasets.md`
+- [x] **睡眠心肺专题整理**：解构 SleepFM 1.0、**SleepFM-2 (2026.09, 200万小时/双流LOO+MAE/穿戴物理代理桥)**、SleepMaMi、U-Sleep 跨模态耦合与 NSRR 数据集至 `docs/models/sleep_models.md`
+- [x] **系统级多模态健康世界模型专题**：系统拆解 TUM / Helmholtz **RisQ** (2026) 75万人跨疾病共享潜在结构、自然语言提示词推演及医学缩放定律至 `docs/models/universal_health_models.md`
+- [x] **可穿戴健康推理与生理大模型专题**：系统梳理 Meta WearableQA、Yang AI Lab HEARTS 及三层 Agent 协作范式至 `docs/models/health_reasoning_llms.md`
+- [x] **公开数据集专题**：补全智能手表（含 OpenMHC 1.9GB/38GB获取指引）、连续血糖及系统级全景队列（UK Biobank, All of Us）至 `docs/datasets/wearable_datasets.md`
 - [ ] **核心技术纵向对比**：撰写《穿戴时序特定归纳偏置：多采样率对齐、频域碰撞消除与潜空间预测》至 `docs/principles/`
 
 ### 阶段 3：实操体验增强（极简 Notebooks）

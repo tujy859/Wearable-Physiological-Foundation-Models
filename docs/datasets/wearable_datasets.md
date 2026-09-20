@@ -17,9 +17,27 @@
 
 ## 1. 智能手表与腕部生理数据集 (PPG, ACC, EDA, ECG)
 
-腕戴数据集的核心挑战在于**真实运动伪影（Motion Artifacts, MA）**。以下精选数据集兼顾了受控实验与真实非受限野外场景：
+腕戴数据集的核心挑战在于**真实运动伪影（Motion Artifacts, MA）** 与海量真实生活自由佩戴（Free-living）数据的缺乏。以下精选数据集兼顾了超大规模开源基准、真实非受限野外场景与受控实验：
 
-### 1.1 PhysioNet Wrist PPG Exercise Dataset
+### 1.1 Stanford OpenMHC (Open MyHeartCounts, 2026) —— 全球最大开源穿戴基础模型基准
+- **提供团队**: 斯坦福大学医学院 (Euan Ashley 实验室) 联合帝国理工学院、柏林夏里特医学院
+- **发表情况**: arXiv:2607.16235 (2026) | [GitHub: AshleyLab/OpenMHC](https://github.com/AshleyLab/OpenMHC)
+- **数据规模**: **11,894 名**真实受试者，记录超过 **6,700 万佩戴小时（282 万人·天）**，时间跨度达 13 年。
+- **传感器与通道 (19 维)**:
+  - 智能手机与 Apple Watch 分钟级时序：步数、心率（HR）、心率变异性（HRV）、静息心率、睡眠分期（浅睡/深睡/REM）、运动能量消耗、环境光等；
+  - 关联 **169 维临床与生活方式变量**（问卷调查、健康感知、焦虑抑郁量表、心血管慢病史、HealthKit 档案）。
+- **实战获取方式 (极低门槛，完全免费)**:
+  - **途径 A: `OpenMHC-XS` (极轻量子集，约 1.9 GB)**：
+    无需审核，官方提供 Python API 本地一键下载解压：
+    ```python
+    import openmhc
+    openmhc.download_dataset(version="xs", dest="~/.cache/openmhc/data-xs")
+    ```
+  - **途径 B: `OpenMHC-Full` (完整科研集，约 38 GB)**：
+    托管于 **Harvard Dataverse (哈佛学术数据网盘)**。在 `dataverse.harvard.edu` 注册账号并在线签署标准数据使用协议（DUA），生成 API Token 后即可直接批量下载至本地个人电脑或服务器。
+- **评测赛道**: 规范化了 Track 1（32项下游健康预测）、Track 2A（多变量生成式插补）、Track 2B（未来时序自回归预测）。
+
+### 1.2 PhysioNet Wrist PPG Exercise Dataset
 - **提供机构**: PhysioNet (CCALab)
 - **获取方式**: [PhysioNet 开放获取](https://physionet.org/content/wrist/) (无需伦理申请)
 - **受试者与运动协议**: 8 名健康受试者在跑步机或阻力自行车上进行走路、跑步（最高 15 km/h）、低/高阻力骑行。
@@ -30,7 +48,7 @@
   - 胸部佩戴实验室金标准心电 ECG (256 Hz)
 - **典型应用**: 算法对抗严重运动伪影的黄金评测基准；心率（HR）连续回归与去噪。
 
-### 1.2 PPG-DaLiA (Daily Life Activities)
+### 1.3 PPG-DaLiA (Daily Life Activities)
 - **提供机构**: 德国弗劳恩霍夫应用信息技术研究所 (Fraunhofer FIT) / UCI 机器学习知识库
 - **获取方式**: [UCI Machine Learning Repository 开放下载](https://archive.ics.uci.edu/dataset/495/ppg+dalia)
 - **数据规模**: 15 名受试者，单人采集时长约 2.5 小时，总计时长超 36 小时。
@@ -39,14 +57,14 @@
   - 手腕端: Empatica E4 手环（PPG 64Hz, ACC 32Hz, EDA 4Hz, 皮肤温度 4Hz）。
   - 参考金标准: 胸带 RespiBAN（高精 ECG 700Hz，用于计算真实心率基准）。
 
-### 1.3 WESAD (Wearable Stress and Affect Detection)
+### 1.4 WESAD (Wearable Stress and Affect Detection)
 - **提供机构**: UCI 机器学习库 / 德国博世与乌尔姆大学
 - **获取方式**: [UCI 开放下载](https://archive.ics.uci.edu/dataset/465/wesad+wearable+stress+and+affect+detection)
 - **数据内容**: 15 名受试者在受控实验室压力诱发实验（特里尔社会压力测试 TSST、观看有趣/悲伤视频片段）中的多模态生理记录。
 - **传感器**: 手腕 Empatica E4 + 胸戴 RespiBAN（涵盖 PPG, 3-轴 ACC, EDA, 肌电 EMG, 体温 Temp, 呼吸气流 Resp）。
 - **典型应用**: 情绪状态识别、生理心理压力剧增（Stress Detection）分类基准。
 
-### 1.4 TROIKA
+### 1.5 TROIKA
 - **核心定位**: 运动伪影消除与跑步心率跟踪的开山基准（IEEE TBME 2015）。
 - **特点**: 包含 12 名受试者在跑步机从 1～2 km/h 加速到 12～15 km/h 的双通道手腕 PPG 与三轴 ACC 信号，配对胸部心电。
 
@@ -128,6 +146,15 @@
    - 源自哈佛医学院附属贝斯以色列女伯爵医学中心（BIDMC）重症监护数据库（从 MIMIC-II 抽取的生理基准子集）；
    - 包含 53 位重症患者、每段 8 分钟的高采样率（125Hz）严格同步的 PPG、ECG 及阻抗呼吸波形，配有人工呼吸周期精细标注；
    - 获取方式: [PhysioNet 开放直接下载](https://physionet.org/content/bidmc/1.0.0/)（完全公开，遵循 ODC-BY 协议）。
+5. **UK Biobank (UKB) 穿戴体动与全景多组学队列**:
+   - 包含 10 万名受试者连续 7 天佩戴手腕研究级高频三轴加速度计（Axivity AX3, 100Hz）的真实生活记录，且深度链接了 50 万人的全基因组测序（WGS）、30 余项临床血液生化指标以及全生命周期 NHS 电子病历；
+   - **获取方式与准入红线 (严格受控)**:
+     - 必须由大学/科研机构全职学者（PI）通过 [UKB Access Management System (AMS)](https://www.ukbiobank.ac.uk/enable-your-research/apply-for-access) 提交正式课题提案；
+     - 需由所在大学科研院/法务部门正式签署 Material Transfer Agreement (MTA) 法律协议，并缴纳 £2,000～£9,000+ 英镑（折合数万至近十万元人民币）的数据准入管理费；
+     - **强制云端封闭计算**: 自 2024 年起，超大规模时序与组学数据禁止下载至本地，强制在 **UKB Research Analysis Platform (RAP, 基于 AWS / DNAnexus)** 云端环境中租赁计算实例运行，严禁私自分发扩散。
+6. **All of Us (美国国立卫生研究院多族裔精准医学队列)**:
+   - 超过 25 万名受试者的跨族裔生物样本、长程电子健康档案与生活方式追踪，为系统级健康模型（如 RisQ）提供零微调外部验证金标准；
+   - 获取方式: 通过 [All of Us Research Program Workbench](https://www.researchallofus.org/) 注册认证后在云端工作台访问。
 
 ---
 
@@ -157,6 +184,7 @@
 
 | 领域 / 模态 | 数据集名称 | 机构 / 团队 | 核心传感器与采样率 | 样本规模 | 获取难度 | 适用研究任务 |
 | :--- | :--- | :--- | :--- | :--- | :---: | :--- |
+| **手腕多模态** | **OpenMHC** | Stanford (Ashley组) | 19维连续通道+169维变量 | 11,894人 (>6700万h) | 🟢 开放免费 (Dataverse) | 基础模型预训练、多变量插补与预测 |
 | **手腕多模态** | **PhysioNet Wrist** | PhysioNet | PPG 256Hz, ACC 256Hz, ECG | 8人 (走跑骑) | 🟢 开放直下 | 运动伪影消除、心率连续回归 |
 | **手腕多模态** | **PPG-DaLiA** | Fraunhofer / UCI | PPG 64Hz, ACC 32Hz, EDA | 15人 (自由生活) | 🟢 开放直下 | 日常真实心率监测、去噪 |
 | **手腕多模态** | **WESAD** | UCI / Bosch | PPG, ACC, EDA, EMG, Temp | 15人 (受控压力) | 🟢 开放直下 | 心理压力检测、情绪分类 |
@@ -175,6 +203,8 @@
 | **睡眠多导 PSG**| **SHHS** | 美国 NIH / NHLBI | 完整 PSG (EEG/ECG/Resp/EMG) | 5,804人 (多年随访) | 🟢 NSRR 申请 | 跨器官耦合、慢病死亡长期随访 |
 | **睡眠多导 PSG**| **MESA** | 美国 NHLBI / 多中心 | 完整 PSG + 7天手腕体动仪 | 2,237人 (多族裔) | 🟢 NSRR 申请 | 多族裔睡眠结构、动脉硬化风险 |
 | **睡眠多导 PSG**| **Sleep-EDF** | 荷兰神经所 / PhysioNet | 双通道 EEG, EOG, EMG, 呼吸 | 197人整夜记录 | 🟢 开放直下 | 快速原型验证、跨域分期对比 |
+| **系统级全景队列**| **UK Biobank** | 英国 MRC / Wellcome | 手腕高频体动 100Hz + WGS + EHR | 10万人体动/50万人全景 | 🔴 严格申请 (AMS/RAP) | 系统级健康世界模型、远期发病风险 |
+| **系统级全景队列**| **All of Us** | 美国 NIH | 电子健康档案 + 多组学 + 穿戴 | 25万+人 (多族裔) | 🟡 平台认证 (Workbench)| 跨族裔通用健康模型外推基准 |
 
 ---
 

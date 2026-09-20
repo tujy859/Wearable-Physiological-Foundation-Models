@@ -18,9 +18,12 @@
 - [🩸 2. 连续血糖监测基础模型 (Continuous Glucose Monitoring, CGM)](#-2-连续血糖监测基础模型-continuous-glucose-monitoring-cgm)
 - [📈 3. 通用时间序列基础模型 (General Time-Series FM)](#-3-通用时间序列基础模型-general-time-series-fm)
 - [💤 4. 睡眠与心肺多模态模型 (Sleep & Cardiopulmonary)](#-4-睡眠与心肺多模态模型-sleep--cardiopulmonary)
-- [📦 5. 开源数据集与评测基准 (Datasets & Benchmarks)](#-5-开源数据集与评测基准-datasets--benchmarks)
-- [🛠️ 6. 动手实战与子工程关联 (Hands-on Labs)](#️-6-动手实战与子工程关联-hands-on-labs)
+- [🧠 5. 可穿戴健康推理与系统级生理大模型 (Wearable Health Reasoning & Universal Health FMs)](#-5-可穿戴健康推理与系统级生理大模型-wearable-health-reasoning--universal-health-fms)
+- [📦 6. 开源数据集与评测基准 (Datasets & Benchmarks)](#-6-开源数据集与评测基准-datasets--benchmarks)
+- [🛠️ 7. 动手实战与子工程关联 (Hands-on Labs)](#️-7-动手实战与子工程关联-hands-on-labs)
 - [🤝 参与贡献 (Contributing)](#-参与贡献-contributing)
+
+
 
 ---
 
@@ -52,10 +55,11 @@ Wearable Physiological Foundation Models
 │   ├── 潜空间联合预测 (Latent Prediction / JEPA): GlucoFM
 │   └── 离散分箱自回归 (Next-Token Autoregression): Chronos, GluFormer, CGM-LSM
 │
-└── 按模型定位与计算层级
-    ├── 云端通用超大模型 (Cloud Scale): Google SensorFM (>1 Trillion min), SleepFM
-    ├── 工业界专用生态模型 (Industry Ecosystem): Apple WBM, Samsung xMAE/HiMAE
-    └── 端侧超轻量模型 (Edge / On-Device): PaPaGei, GlucoFM (0.72M)
+└── 按认知与计算层级 (Cognitive & Computational Hierarchy)
+    ├── Layer 3 认知推理与智能体 (Reasoning & Agent Systems): WearableQA, HEARTS
+    ├── Layer 2 系统级全景健康模型 (Universal Health World Models): RisQ
+    ├── Layer 1 端侧物理波形表征 (Signal Representation & Edge FMs): SensorFM, UniCardio, PaPaGei
+    └── Layer 0 开放数据与生态基底 (Open Data & Infrastructure): Stanford OpenMHC
 ```
 
 ---
@@ -81,15 +85,19 @@ Wearable Physiological Foundation Models
 | **CGM-LSM** | JHU CDHAI | arXiv 2024 | CGM 血糖 | GPT-2 自回归 | \~124M | 1600万读数 (592人) | 🟢 (无数据) | 🔴 |
 | **CGM-JEPA** | CRUISE Lab | 2025 | CGM (5min 血糖) | 潜空间 JEPA 预测 | ~0.5M | 228人 (开源重训基座) | 🟢 | 🟢 (HF) |
 | **PPG-Distill** | Emory University | 2025 | 腕戴 PPG (脉搏) | 跨尺度知识蒸馏 | 极轻量 (<0.5M) | 多中心穿戴基准 | 🟢 | 🟢 (GitHub) |
-| **SleepFM** | Stanford Medicine | Nat Med 2024-2026 | EEG+ECG+PPG+Resp | 留一对比学习 (LOO) | 基础模型 | 60万小时 (6.5万人) | 🟢 | 🟡 (受限开放) |
+| **SleepFM-1 / 2** | Stanford Medicine | Nat Med 24 / arXiv 26 | EEG+ECG+PPG+Resp+ACC | LOO-CL + 局部 MAE | **2.57M** (LLaMA) | **200万小时 (23.5万人)** | 🟢 | 🟢 (GitHub) |
 | **SleepMaMi** | 首尔大学 (SNU) | ICML 2026 | PSG (EEG+ECG+Resp) | 宏微观双编码器 (MAE+CL) | ~15M | 15.8万小时 (2万人) | 🟢 | 🟢 (GitHub) |
 | **LIMU-BERT** | 厦门大学等 | UbiComp 2021 | 3轴 ACC + Gyro | Sensor-BERT | 轻量级 | 多源 IMU 无标注数据 | 🟢 | 🟢 |
 | **TimesFM** | Google Research | ICML 2024 / v2.0 | 通用单变量时序 | 解码器自回归 | 200M | 1000亿点 | 🟢 | 🟢 (HF) |
 | **Chronos** | Amazon Research | ICML 2024 / Bolt | 通用单变量时序 | 离散分箱 T5/Encoder | 20M～710M | 泛领域时序语料 | 🟢 | 🟢 (HF) |
 | **MOMENT** | CMU Auton Lab | ICML 2024 | 通用多变量时序 | Patch-MAE | 385M | Time-series Pile (含生理) | 🟢 | 🟢 (HF) |
-| **MANTIS** | CMU | 2024-2025 | 通用时序多任务 | 统一潜表征 | 多规格 | 跨领域时序 | 🟢 | 🟢 (HF) |
+| **OpenMHC** | Stanford / Imperial | arXiv 2026 | 19维腕戴时序+169维变量 | 开源基础模型生态基座 | WBM / LSM-2 | >6,700万小时 (11,894人) | 🟢 | 🟢 (Dataverse/HF) |
+| **RisQ** | TUM / Helmholtz | 2026 | 全基因组+生化+EHR+穿戴 | 全景健康世界模型 | 统一跨模态表征 | 74.5万人 (UKB+All of Us)| 🟢 (论文公开) | 🔴 (顶刊在审) |
+| **WearableQA** | Meta AI | arXiv 2026.09 | 500天日常16维指标+血检 | 纵向健康推理基准 | 14大主流LLM | 200人真实长程 (4,084题) | 🟢 (论文公开) | 🔴 (基准数据) |
+| **HEARTS** | Yang AI Lab | ICML 2026 | 20种生理模态(ECG/PPG/CGM等) | 四层认知推理金字塔 | 多架构+CodeAct | 16大开源库 (20,226样本) | 🟢 | 🟢 (HF/Web) |
 
 ---
+
 
 ## ⌚ 1. 智能手表与腕戴生理模型 (Smartwatch & Wrist)
 
@@ -102,6 +110,9 @@ Wearable Physiological Foundation Models
 - **Samsung xMAE & HiMAE** (ICML 24 / ICLR 25): 专为智能手表端侧计算优化。xMAE 利用连续 PPG 虚拟重构偶发高精度 ECG；HiMAE 提出多尺度分层时间架构，延迟小于 1ms。
 
 ### 开源先锋代表
+- **Stanford OpenMHC** (arXiv 2026): 斯坦福医学院 Euan Ashley 团队联合帝国理工发布的**首个超大规模开源可穿戴基础模型基座与生态**。依托 10 余年真实世界生活时序（>6700 万佩戴小时、11,894 名受试者、19 维连续传感器通道及 169 维 HealthKit 变量），不仅打破了 Google SensorFM 与 Apple WBM 的数据垄断，更在统一基准下开源复现了工业级 WBM、LSM-2 及 Chronos-2 等基础模型，规范化了下游判别、生成式插补与未来预测三大赛道。
+  > [!NOTE]
+  > **先驱临床沿革**：OpenMHC 的数据底座源自 2015 年苹果发布 ResearchKit 时的首批先驱应用 **My Heart Counts (MHC)**；而同期苹果官方开展的 41.9 万人 **Apple Heart Study (AHS, 2017)** 则通过严格远程心电贴片闭环促成 Apple Watch 房颤预警算法获得美国 FDA 认证。两项研究共同奠定了穿戴设备迈向严肃医学基础模型的基石。
 - **北京大学 PPGFlowECG** (2025/2026): 北大洪申达团队研发的 PPG 转 ECG 跨模态生成框架。首创 CardioAlign 编码器与潜空间整流流（Latent Rectified Flow），仅需 1～4 步 ODE 直线传输即可从可穿戴 PPG 极速合成高保真诊断级心电波形，依托千万级急诊数据集 MC-MED 在房颤、心梗等疾病筛查与医生盲测中表现优异。
 - **北京大学 AnyPPG** (KDD 2026): 北大洪申达团队推出的通用光电脉搏基座大模型。基于超 10 万小时同步脉搏-心电数据进行跨模态对比预训练，突破传统单一心血管任务，首次实现对慢性肾病（CKD）、帕金森病等全身多器官复杂表型的无创筛查。
 - **PaPaGei** (ICLR 2025): Nokia Bell Labs 与剑桥联合发布，首个开源通用光电生理基础模型。采用 ResNet1D-MoE 架构，参数量仅 1.5M，在心率、血压、血管年龄等 20 个下游任务表现卓越。
@@ -117,24 +128,22 @@ Wearable Physiological Foundation Models
 详细分析与基准横评请查阅：📖 [docs/models/cgm_models.md](docs/models/cgm_models.md)
 
 - **Google GlucoFM** (arXiv 2605.30865, 2026):
-  - 架构创新：**双流动力学分解**（慢速生理状态流 + 快速事件突变流）。
-  - 学习范式：非生成式 JEPA 潜空间预测，参数量仅 **0.72M**，以小博大超越百兆级模型。
-- **GluFormer** (Pheno.AI / Weizmann / NVIDIA, **Nature 2026**):
-  - 采用自回归 Next-token 预测（1200 token 上下文 ≈ 12.5 天），擅长长程代谢结局与心血管远期风险预测。
-- **CGMformer** (中科院 / 上海六院, NSR 2025):
-  - 基于 BERT 掩码重构架构，依托 5.9 万人真实世界数据，全面覆盖糖尿病筛查、分型及并发症管理。
-- **CGM-LSM** (JHU CDHAI, 2024):
-  - 聚焦短程血糖自回归预测（30min～2h），在 OhioT1DM 上大幅降低均方根误差。
-- **CGM-JEPA** (CRUISE Research Group, 2025):
-  - **GlucoFM 同门开源基准**：在 Hugging Face 完整开源模型权重与预训练数据集，验证了 JEPA 潜表征在 24h 血糖网格下的高迁移能力，是复现非生成式血糖基座的开源基石。
-- **GlucoBench** (Texas A&M Irina Gaynanova Lab, **ICLR 2024**):
-  - 首个系统的连续血糖预测基准套件与公开数据集聚合库，规范了多中心标准化评价协议。
+  - 针对 CGM 专有的 5 分钟离散网格与间质液延迟物理特性，首创双流联合预测架构（Dual-Stream JEPA），参数量仅 **0.72M**。
+  - 巧妙融合全局自注意力（捕获全天昼夜节律动力学）与局部卷积（捕捉餐后血糖陡峭尖峰），在 22 个少样本/跨设备临床血糖任务中超越多变量模型。
+- **GluFormer** (Nature 2026, Pheno.AI / Weizmann Institute):
+  - 基于 GPT 式因果自回归架构（1.35 亿参数），在大规模真实世界人类表型计划 (HPP) 10,812 人连续 15 分钟 CGM 数据上完成预训练。
+  - 不仅能实现极高精度的 24 小时血糖轨迹生成与低血糖预警，更能直接从血糖波动潜表征中零样本推断内脏脂肪、肝脂肪变性及未来糖尿病发展风险。
+- **CGMformer** (中科院 / 上海六院, National Science Review 2025):
+  - 依托中国人群超大规模动态血糖队列（131 万天监测记录、59,000+ 受试者），构建了覆盖正常糖耐量、糖尿病前期及 1/2 型糖尿病全谱系语料库。
+  - 采用 BERT 式掩码语言模型（MLM）预训练，在多中心验证中显著提升了隐匿性糖尿病视网膜病变与微血管并发症的早筛灵敏度。
+- **CGM-JEPA** (2025):
+  - 首个完全基于开源血糖数据重训的非生成式 JEPA 基础模型，证明潜空间预测比像素级还原更能抵御传感器漂移噪声。
 
 ---
 
-## 📈 3. 通用时间序列基础模型 (General Time-Series FM)
+## 📈 3. 通用时序基础模型 (General Time-Series FMs)
 
-详细分析请查阅：📖 [docs/models/general_tsfm.md](docs/models/general_tsfm.md)
+详细分析与适用性评估请查阅：📖 [docs/models/general_tsfm.md](docs/models/general_tsfm.md)
 
 - **TimesFM** (Google): 采用分块解码器架构，在巨量时序数据上预训练，提供强大的零样本点预测与概率区间预测。
 - **Chronos & Chronos-Bolt** (Amazon): 将连续时间序列离散化为词元（Tokenization via Bins），利用语言模型（T5 骨干）进行自回归时间序列预测。
@@ -146,10 +155,13 @@ Wearable Physiological Foundation Models
 
 详细分析与网络细节请查阅：📖 [docs/models/sleep_models.md](docs/models/sleep_models.md)
 
-- **Stanford Medicine SleepFM** (Nature Medicine 2024-2026):
-  - **首个多器官耦合睡眠基座**：依托 6.5 万名受试者、近 60 万小时夜间多导睡眠监测 (PSG) 数据，联合建模脑神经（EEG）、心血管（ECG/PPG）、呼吸力学（腹胸呼吸带/气流）与肌电（EMG）。
-  - **留一对比学习 (LOO-CL)**：在 30 秒窗口内随机遮蔽某一器官模态，拉近该模态表征与剩余多模态联合表征的距离，迫使网络捕获大脑-心脏-肺部之间的深层生物物理耦合与生理共振。
-  - **单夜预测远期疾病**：不仅实现高精度的睡眠分期与呼吸暂停筛查，更凭单夜生理表征即可预测 130+ 种未来重大慢性疾病（阿尔茨海默/痴呆症 C-index 0.85、全因死亡率 0.84、心肌梗死 0.81、心房颤动 0.78）。
+- **Stanford Medicine SleepFM & SleepFM-2** (Nature Medicine 2024 / arXiv 2609.06849, 2026.09):
+  - **从 60 万到 200 万小时多器官生理基座**：依托 26 个独立队列、282,511 份完整夜间 PSG 记录（预训练 23.5 万份），联合建模脑电（EEG）、眼电（EOG）、心电（ECG/PPG）、肌电（EMG）与呼吸气流/胸腹阻抗，在完全保留的 Harvard HSP 独立医疗中心盲测中验证了强大的真实泛化力。
+  - **LLaMA 现代架构与双流联合自监督 (LOO-CL + MAE)**：骨干采用 RMSNorm、SwiGLU 与 RoPE，编码器参数量精简至 **2.57M**（减重 47%），Token 时间步长细化至 **1 秒**；对比分支对齐全局多器官互补性，掩码自编码分支重构局部微观波形形态。
+  - **四大临床事件打分闭环**：在微觉醒（Arousals, F1 0.60）、周期性肢体运动（PLMS, F1 0.60）及呼吸事件（Apnea/Hypopnea）上打分达到甚至超越人类资深睡眠技师水平。
+  - **PheWAS 215 种新发疾病预测与通用生理风险轴 (PC1)**：联合年龄/性别/BMI 预测 215 种长期疾病（C-index $\ge 0.75$），全面超越涵盖 480 维专业工程特征全家桶；提取出解释 58% 方差的通用生理风险轴，关联全脑 Sigma 波空间失谐与催眠密度熵增。
+  - **消费级穿戴迁移神级突破**：手腕 PPG 零样本微调睡眠分期 Macro-F1 达 **0.531**；手腕加速度计首创“物理生理代理通道桥”（0.1~0.6Hz 提取呼吸，3.5~14Hz 提取心动冲击 SCG），在 **UK Biobank 10 万人 390 种疾病预测**中直接打平专有加速度计模型！
+  - **开源代码**：[github.com/zou-group/sleepfm-v2-public](https://github.com/zou-group/sleepfm-v2-public)
 - **SleepMaMi** (首尔大学, ICML 2026):
   - **宏观-微观层级双编码器架构**：针对整夜宏观睡眠时序与局部微观瞬变波形尺度断层的痛点，提出 Macro-Encoder（结合年龄/性别/BMI 人口统计学先验建模全夜周期节律）与 Micro-Encoder（局部 MAE 重构与多模态对比学习）。
   - **少样本多中心迁移**：在 20,000+ 份 PSG 记录（约 15.8 万小时）上预训练，仅需 1% 标注即可匹敌全监督模型。
@@ -158,12 +170,48 @@ Wearable Physiological Foundation Models
 
 ---
 
-## 📦 5. 开源数据集与评测基准 (Datasets & Benchmarks)
+## 🧠 5. 可穿戴健康推理与系统级生理大模型 (Wearable Health Reasoning & Universal Health FMs)
+
+### 5.1 系统级多模态健康世界模型 (Universal Health & Cross-Disease Risk FMs)
+
+详细技术深度解构与架构剖析请查阅：📖 [docs/models/universal_health_models.md](docs/models/universal_health_models.md)
+
+长期以来，临床流行病学陷于“单一疾病孤岛（Disease Silos）”的局限（如 Framingham 仅算心梗、SCORE2 仅算中风、FINDRISC 仅算糖尿病）。2026 年，慕尼黑工业大学（TUM）、亥姆霍兹慕尼黑中心（Helmholtz Munich）、哈佛大学及斯坦福医学 AIMI 团队提出了革命性的**人体健康世界模型**范式：
+
+- **TUM / Helmholtz RisQ** (medRxiv / Research Square 2026):
+  - **75 万人双中心零样本验证**：依托英国生物样本库（UK Biobank 48.8 万人）与美国国立卫生研究院（All of Us 25.7 万人跨族裔多中心），首次证实了**“人类健康全景跨疾病共享潜在结构（Shared Structure of Human Health）”**的客观存在。
+  - **自然语言提示词驱动 (Promptable Risk Query)**：打破固定输出分类头，支持临床医生以自然语言 Prompt 自由定义查询——在 1 年、5 年或 10 年等任意时间跨度下，对全生命周期上百种 ICD-10 疾病进行零样本发病风险推演。
+  - **医学风险预测领域的缩放定律 (Scaling Law)**：首次在医学领域严格证明了类似大语言模型的 Scaling Law——预训练覆盖的疾病谱系越宽，模型对未知疾病的零样本表征迁移能力与判别精度越高。
+  - **微观单基因功能缺失突变 (LoF) 的跨系统病理锚定**：即便在没有任何临床生化化验的极端场景下，仅凭 *LDLR*（家族性高胆固醇血症）或 *HBB*（地中海贫血）等单基因变异，模型即可在潜在空间自发推演并映射至心血管与血液系统的全谱系并发症。
+  - **穿戴动态遥测的未来中枢**：系统阐明了静态基因组（先天底色）、临床血液生化（稳态快照）与智能手表/体动仪（动态遥测探针）的共生关系，将可穿戴设备正式升级为通用医学大模型的高频动态感知中枢。
+
+---
+
+### 5.2 认知推理与智能体评测基准 (Longitudinal Health Reasoning Benchmarks)
+
+详细技术深度解构与架构剖析请查阅：📖 [docs/models/health_reasoning_llms.md](docs/models/health_reasoning_llms.md)
+
+随着穿戴设备从“偶发读数”走向“全生命周期纵向监测”，学术界与工业界（Meta、MIT、Yang AI Lab 等）于 2025–2026 年迎来了**从“信号级单点预测与表征提取”向“认知级多模态健康因果推理”**的重大范式跃迁：
+
+- **Meta WearableQA** (arXiv:2609.05405, 2026):
+  - **首个真实世界长程健康推理基准**：基于 200 名真实用户最长 500 天的连续穿戴记录（16 维每日心肺、运动、睡眠指标）、17 项临床化验血液面板及大样本群体分位数先验，构建 4,084 道 10 选 1 深度推理选择题。
+  - **$2 \times 2$ 解耦评测与双重锚定**：严密分离纯数据计算推理（Data Reasoning）与临床病理机制推理（Health Reasoning）；采用“顶级医学指南文献”与“超大规模人群统计显著（$p<0.001$）”双重锚定真实标签。
+  - **实证揭示**：顶级大模型（Gemini 3.1 Pro、GPT-5）准确率在 60%～72% 之间，中小开源模型甚至不足 40%（随机基线 10%），揭示了 LLM 在长程连续数字计算与微弱生理异常捕捉上的严重短板。
+- **Yang AI Lab HEARTS** (ICML 2026 / arXiv:2603.06638):
+  - **首个覆盖全谱系健康时序的大模型评测体系**：涵盖 16 个开源数据集、12 个健康领域、20 种生理模态（ECG、EEG、PPG、EMG、CGM、呼吸音等），采样率跨越每日聚合到 48 kHz 高频，包含 110 项任务与 20,226 个评测样本。
+  - **四层认知阶梯 (Hierarchical Spectrum)**：首次将健康时序评测系统化抽象为 $\text{Perception (底层感知)} \to \text{Inference (状态推断)} \to \text{Generation (波形生成)} \to \text{Deduction (纵向因果演化)}$。
+  - **关键“解毒”洞察**：纯 LLM 在多数健康时序任务上明显落后于专用轻量时序基础模型（如 PaPaGei、MOMENT），且在高频长序列上倾向于采用“低复杂度启发式作弊（复制/简单插值）”。
+  - **CodeAct 神经符号协作**：验证了 LLM 必须借助 CodeAct 范式，作为中枢调度 Python 科学计算库（SciPy、NeuroKit2、BioSPPy）执行精确数值运算，才能真正实现高可靠健康时序分析。
+
+---
+
+## 📦 6. 开源数据集与评测基准 (Datasets & Benchmarks)
 
 详细数据集下载指引与预处理代码请查阅：📖 [docs/datasets/wearable_datasets.md](docs/datasets/wearable_datasets.md)
 
 | 领域 / 模态 | 数据集名称 | 采集设备 / 团队 | 核心传感器与采样率 | 样本规模 | 适用任务与特色 | 获取方式 |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **⌚ 手腕多模态** | **OpenMHC** | Stanford (Ashley组) / 帝国理工 | 19维腕戴连续时序 + 169维变量 | 11,894人 (>6700万h, 13年) | 首个超大规模开源穿戴基础模型生态基座 (插补/预测/评估) | 🟢 开放免费 (Dataverse/HF) |
 | **⌚ 手腕多模态** | **PhysioNet Wrist** | PhysioNet | PPG 256Hz, ACC 256Hz, ECG | 8人 (走跑骑运动) | 运动伪影消除、心率连续回归金标准 | 🟢 开放直下 |
 | **⌚ 手腕多模态** | **PPG-DaLiA** | Fraunhofer / UCI | 手腕 E4 (PPG 64Hz, ACC 32Hz, EDA) | 15人 (真实自由生活) | 日常非受限活动心率监测、动态去噪 | 🟢 开放直下 |
 | **⌚ 手腕多模态** | **WESAD** | UCI / Bosch | 手腕 E4 + 胸戴 RespiBAN | 15人 (受控压力诱发) | 情绪识别、心理压力 (Stress) 状态分类 | 🟢 开放直下 |
@@ -181,10 +229,14 @@ Wearable Physiological Foundation Models
 | **🏥 临床高精基准**| **VitalDB** | 首尔大学医院 | 500Hz 动脉血压波, PPG, ECG | >10,000 例手术患者 | 血管弹性、连续无创血压金标准映射 | 🟢 开放 API |
 | **💤 睡眠多导 PSG**| **SHHS** | 美国 NIH / NHLBI | 全套临床 PSG (EEG/ECG/Resp/EMG) | 5,804人 (多年随访) | 睡眠呼吸暂停、心脑血管死亡长期队列 | 🟢 NSRR 申请 |
 | **💤 睡眠多导 PSG**| **MESA** | 美国 NHLBI / 多中心 | 完整 PSG + 7天手腕体动仪 | 2,237人 (多族裔) | 多族裔睡眠结构、动脉粥样硬化结局 | 🟢 NSRR 申请 |
+| **🌐 系统级全景队列**| **UK Biobank** | 英国 MRC / Wellcome | 手腕高频体动 100Hz + WGS + EHR | 10万人体动 / 50万人全景 | 系统级健康世界模型 (RisQ基石)、全生命周期疾病风险 | 🔴 严格申请 (AMS/RAP云端) |
+| **🌐 系统级全景队列**| **All of Us** | 美国 NIH | 电子健康档案 + 多组学 + 穿戴体动 | 25万+人 (多族裔) | 多族裔系统健康模型零微调外推验证金标准 | 🟡 平台认证 (Workbench) |
+| **🧠 健康推理基准**| **WearableQA** | Meta AI (2026) | 16维每日聚合指标 + 17项血检面板 | 200人 (500天轨迹, 4,084题) | 真实用户长程健康推理、因果归因与临床指南对齐 | 📄 [arXiv:2609.05405](https://arxiv.org/abs/2609.05405) |
+| **🧠 健康推理基准**| **HEARTS** | Yang AI Lab (ICML 2026) | 20种生理模态(ECG/PPG/EEG/CGM等) | 16大开源库 (20,226样本) | 全谱系生理时序四层认知推理阶梯、CodeAct Agent 协同 | 🟢 [GitHub](https://github.com/yang-ai-lab/HEARTS) / [Web](https://yang-ai-lab.github.io/HEARTS/) |
 
 ---
 
-## 🛠️ 6. 动手实战与子工程关联 (Hands-on Labs)
+## 🛠️ 7. 动手实战与子工程关联 (Hands-on Labs)
 
 本项目与核心实验复现子工程联动，提供端到端真实世界实操代码：
 
