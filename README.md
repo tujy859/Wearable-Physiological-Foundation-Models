@@ -83,10 +83,10 @@ Wearable Physiological Foundation Models
 | **GluFormer** | Pheno.AI / Weizmann | Nature 2026 | CGM (15min 血糖) | GPT 式自回归 | 135M | >1000万读数 (10,812人) | 🟢 | 🔴 (HPP受限) |
 | **CGMformer** | 中科院 / 上海六院 | NSR 2025 | CGM (5min 血糖) | BERT 式 MLM | 0.85M～10M | 131万天 (5.9万人) | 🟢 | 🟢 (GitHub) |
 | **CGM-LSM** | JHU CDHAI | arXiv 2024 | CGM 血糖 | GPT-2 自回归 | \~124M | 1600万读数 (592人) | 🟢 (无数据) | 🔴 |
-| **CGM-JEPA** | CRUISE Lab | 2025 | CGM (5min 血糖) | 潜空间 JEPA 预测 | ~0.5M | 228人 (开源重训基座) | 🟢 | 🟢 (HF) |
+| **CGM-JEPA** | CRUISE Lab | 2025 | CGM (5min 血糖) | 潜空间 JEPA 预测 | \~0.5M | 228人 (开源重训基座) | 🟢 | 🟢 (HF) |
 | **PPG-Distill** | Emory University | 2025 | 腕戴 PPG (脉搏) | 跨尺度知识蒸馏 | 极轻量 (<0.5M) | 多中心穿戴基准 | 🟢 | 🟢 (GitHub) |
 | **SleepFM-1 / 2** | Stanford Medicine | Nat Med 24 / arXiv 26 | EEG+ECG+PPG+Resp+ACC | LOO-CL + 局部 MAE | **2.57M** (LLaMA) | **200万小时 (23.5万人)** | 🟢 | 🟢 (GitHub) |
-| **SleepMaMi** | 首尔大学 (SNU) | ICML 2026 | PSG (EEG+ECG+Resp) | 宏微观双编码器 (MAE+CL) | ~15M | 15.8万小时 (2万人) | 🟢 | 🟢 (GitHub) |
+| **SleepMaMi** | 首尔大学 (SNU) | ICML 2026 | PSG (EEG+ECG+Resp) | 宏微观双编码器 (MAE+CL) | \~15M | 15.8万小时 (2万人) | 🟢 | 🟢 (GitHub) |
 | **LIMU-BERT** | 厦门大学等 | UbiComp 2021 | 3轴 ACC + Gyro | Sensor-BERT | 轻量级 | 多源 IMU 无标注数据 | 🟢 | 🟢 |
 | **TimesFM** | Google Research | ICML 2024 / v2.0 | 通用单变量时序 | 解码器自回归 | 200M | 1000亿点 | 🟢 | 🟢 (HF) |
 | **Chronos** | Amazon Research | ICML 2024 / Bolt | 通用单变量时序 | 离散分箱 T5/Encoder | 20M～710M | 泛领域时序语料 | 🟢 | 🟢 (HF) |
@@ -160,7 +160,7 @@ Wearable Physiological Foundation Models
   - **LLaMA 现代架构与双流联合自监督 (LOO-CL + MAE)**：骨干采用 RMSNorm、SwiGLU 与 RoPE，编码器参数量精简至 **2.57M**（减重 47%），Token 时间步长细化至 **1 秒**；对比分支对齐全局多器官互补性，掩码自编码分支重构局部微观波形形态。
   - **四大临床事件打分闭环**：在微觉醒（Arousals, F1 0.60）、周期性肢体运动（PLMS, F1 0.60）及呼吸事件（Apnea/Hypopnea）上打分达到甚至超越人类资深睡眠技师水平。
   - **PheWAS 215 种新发疾病预测与通用生理风险轴 (PC1)**：联合年龄/性别/BMI 预测 215 种长期疾病（C-index $\ge 0.75$），全面超越涵盖 480 维专业工程特征全家桶；提取出解释 58% 方差的通用生理风险轴，关联全脑 Sigma 波空间失谐与催眠密度熵增。
-  - **消费级穿戴迁移神级突破**：手腕 PPG 零样本微调睡眠分期 Macro-F1 达 **0.531**；手腕加速度计首创“物理生理代理通道桥”（0.1~0.6Hz 提取呼吸，3.5~14Hz 提取心动冲击 SCG），在 **UK Biobank 10 万人 390 种疾病预测**中直接打平专有加速度计模型！
+  - **消费级穿戴迁移神级突破**：手腕 PPG 零样本微调睡眠分期 Macro-F1 达 **0.531**；手腕加速度计首创“物理生理代理通道桥”（0.1～0.6 Hz 提取呼吸，3.5～14 Hz 提取心动冲击 SCG），在 **UK Biobank 10 万人 390 种疾病预测**中直接打平专有加速度计模型！
   - **开源代码**：[github.com/zou-group/sleepfm-v2-public](https://github.com/zou-group/sleepfm-v2-public)
 - **SleepMaMi** (首尔大学, ICML 2026):
   - **宏观-微观层级双编码器架构**：针对整夜宏观睡眠时序与局部微观瞬变波形尺度断层的痛点，提出 Macro-Encoder（结合年龄/性别/BMI 人口统计学先验建模全夜周期节律）与 Micro-Encoder（局部 MAE 重构与多模态对比学习）。
