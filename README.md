@@ -161,6 +161,7 @@ Wearable Physiological Foundation Models
   - **四大临床事件打分闭环**：在微觉醒（Arousals, F1 0.60）、周期性肢体运动（PLMS, F1 0.60）及呼吸事件（Apnea/Hypopnea）上打分达到甚至超越人类资深睡眠技师水平。
   - **PheWAS 215 种新发疾病预测与通用生理风险轴 (PC1)**：联合年龄/性别/BMI 预测 215 种长期疾病（C-index $\ge 0.75$），全面超越涵盖 480 维专业工程特征全家桶；提取出解释 58% 方差的通用生理风险轴，关联全脑 Sigma 波空间失谐与催眠密度熵增。
   - **消费级穿戴迁移神级突破**：手腕 PPG 零样本微调睡眠分期 Macro-F1 达 **0.531**；手腕加速度计首创“物理生理代理通道桥”（0.1～0.6 Hz 提取呼吸，3.5～14 Hz 提取心动冲击 SCG），在 **UK Biobank 10 万人 390 种疾病预测**中直接打平专有加速度计模型！
+  - **核心思辨与穿戴微觉醒解答**：详见专题解析中的 [SleepFM-2 与 SleepFM-1 本质区别深度思辨](docs/models/sleep_models.md#24-深度思辨sleepfm-2-与-sleepfm-1-最本质的区别是什么) 及 [穿戴式 ACC 基模能否用来识别微觉醒深度辩析](docs/models/sleep_models.md#72-核心前沿问答穿戴式-acc-基模能否用来识别微觉醒-cortical-arousals)（澄清 AASM 脑电金标准冲突、Sub-movement Arousals 假阴性与手腕 PPG+ACC 自主神经微觉醒工程方案）。
   - **开源代码**：[github.com/zou-group/sleepfm-v2-public](https://github.com/zou-group/sleepfm-v2-public)
 - **SleepMaMi** (首尔大学, ICML 2026):
   - **宏观-微观层级双编码器架构**：针对整夜宏观睡眠时序与局部微观瞬变波形尺度断层的痛点，提出 Macro-Encoder（结合年龄/性别/BMI 人口统计学先验建模全夜周期节律）与 Micro-Encoder（局部 MAE 重构与多模态对比学习）。
