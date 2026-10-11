@@ -78,7 +78,7 @@ Wearable Physiological Foundation Models
 | **PPGFlowECG** | 北京大学 (PKU Health) | arXiv 2025/2026 | PPG $\to$ 诊断级 ECG | 潜空间整流流 (Rectified Flow) | 紧凑级 | 千万级配对 (MC-MED 11.8万人) | 🟢 | 🟢 (GitHub) |
 | **AnyPPG** | 北京大学 (PKU Health) | KDD 2026 | 腕戴 PPG (心电引导) | Net1D 双分支 ResNet | 5.85M/分支 | >10万小时同步数据 | 🟢 | 🟢 (GitHub) |
 | **Samsung xMAE** | Samsung Research | ICML 2024 | PPG $\to$ 虚拟 ECG | 跨模态 MAE | 端侧优化 | 9,400 小时配对数据 | 🔴 | 🔴 |
-| **Samsung HiMAE** | Samsung Research | ICLR 2025 | 腕部多尺度生理 | 分层多尺度编码器 | <1ms延迟 | 真实手表自由生活数据 | 🔴 | 🔴 |
+| **Samsung HiMAE** | Samsung Research / UCLA | ICLR 2026 | 腕部绿光 PPG (可扩 ECG) | 1D-CNN U-Net (MAE) | 编码器 0.31M (全网1.2M) | 8万小时 (4.7万人, 7款手表) | 🟢 (GitHub) | 🔴 |
 | **GlucoFM** | Google / UNSW | arXiv 2026 | CGM (5min 血糖) | 双流 JEPA 预测 | **0.72M** | 10.9万小时 (477人) | 🟡 (承诺开源) | 🔴 |
 | **GluFormer** | Pheno.AI / Weizmann | Nature 2026 | CGM (15min 血糖) | GPT 式自回归 | 135M | >1000万读数 (10,812人) | 🟢 | 🔴 (HPP受限) |
 | **CGMformer** | 中科院 / 上海六院 | NSR 2025 | CGM (5min 血糖) | BERT 式 MLM | 0.85M～10M | 131万天 (5.9万人) | 🟢 | 🟢 (GitHub) |
@@ -107,7 +107,7 @@ Wearable Physiological Foundation Models
 - **Google SensorFM** (2026): 可穿戴健康领域的万亿分钟里程碑。基于动态重采样解决 PPG/ACC/EDA 采样率异构问题，在 35 个健康与行为基准中大幅超越专用模型。
 - **清华大学 UniCardio** (Nature MI 2025/2026): 清华大学朱军教授、王立元教授团队联合北京安贞医院研发的**统一心血管多模态扩散基础模型**。首创统一扩散 Transformer (DiT) 框架融合去噪、插补与 PPG $\to$ 诊断级 ECG / 连续血压 BP 的跨模态生成，并引入持续学习范式以极低增量参数（0.3M/模态）支持端侧传感器的动态热插拔与终身防遗忘。
 - **Apple WBM & PPG/ECG FMs**: 深入探索日常无感监测与心律失常预警，通过海量真实世界日常佩戴数据学习个体基线与行为动力学。
-- **Samsung xMAE & HiMAE** (ICML 24 / ICLR 25): 专为智能手表端侧计算优化。xMAE 利用连续 PPG 虚拟重构偶发高精度 ECG；HiMAE 提出多尺度分层时间架构，延迟小于 1ms。
+- **Samsung xMAE & HiMAE** (ICML 24 / ICLR 26): 专为智能手表端侧计算优化。xMAE 利用连续 PPG 虚拟重构偶发高精度 ECG；HiMAE 提出多尺度分层时间架构与“分辨率假说”，编码器仅 0.31M 参数，在 Galaxy Watch 8 (Exynos W1000 CPU) 上实现 0.99ms 亚毫秒级纯端侧推理（已开源：[Simonlee711/HiMAE](https://github.com/Simonlee711/HiMAE)）。
 
 ### 开源先锋代表
 - **Stanford OpenMHC** (arXiv 2026): 斯坦福医学院 Euan Ashley 团队联合帝国理工发布的**首个超大规模开源可穿戴基础模型基座与生态**。依托 10 余年真实世界生活时序（>6700 万佩戴小时、11,894 名受试者、19 维连续传感器通道及 169 维 HealthKit 变量），不仅打破了 Google SensorFM 与 Apple WBM 的数据垄断，更在统一基准下开源复现了工业级 WBM、LSM-2 及 Chronos-2 等基础模型，规范化了下游判别、生成式插补与未来预测三大赛道。
