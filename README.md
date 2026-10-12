@@ -53,7 +53,8 @@ Wearable Physiological Foundation Models
 │   ├── 掩码时序重建 (Masked Autoencoding, MAE): MOMENT, LIMU-BERT, xMAE
 │   ├── 相对对比学习 (Relative Contrastive Learning): PaPaGei, Pulse-PPG
 │   ├── 潜空间联合预测 (Latent Prediction / JEPA): GlucoFM
-│   └── 离散分箱自回归 (Next-Token Autoregression): Chronos, GluFormer, CGM-LSM
+│   ├── 离散分箱自回归 (Next-Token Autoregression): Chronos, GluFormer, CGM-LSM
+│   └── 多模态深层交错编织 (Interleaved Multimodal Fusion): TimeBraid
 │
 └── 按认知与计算层级 (Cognitive & Computational Hierarchy)
     ├── Layer 3 认知推理与智能体 (Reasoning & Agent Systems): WearableQA, HEARTS
@@ -71,6 +72,7 @@ Wearable Physiological Foundation Models
 | 模型名称 | 机构 / 团队 | 发表时间 / 会议期刊 | 主要模态 | 架构类型 | 参数量 | 预训练数据规模 | 代码状态 | 权重状态 |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :---: | :---: |
 | **SensorFM** | Google Research | arXiv 2026 | PPG+ACC+EDA+Temp | Patch-Transformer | 大规模 | 1万亿分钟 (>500万人) | 🔴 | 🔴 |
+| **SensorLM** | Google Research / DeepMind | NeurIPS 2025 | PPG+ACC+EDA+Temp+气压 | ViT-2D + CoCa 解码器 | 亿级 | 5,970万小时 (10.3万人) | 🟢 (GitHub) | 📄 [arXiv:2506.09108](https://arxiv.org/abs/2506.09108) |
 | **Apple WBM** | Apple Health | 2024-2026 | Watch PPG+ACC+ECG | Multi-task Trans | - | 百万级 Apple Watch 数据 | 🔴 | 🔴 |
 | **PaPaGei** | Nokia Bell Labs | ICLR 2025 | PPG (光电脉搏) | ResNet1D-MoE | \~1.5M | 5.7万小时 (10个公开库) | 🟢 | 🟢 (Zenodo) |
 | **Pulse-PPG** | UIUC / Memphis | UbiComp 2025 | 腕部野外高噪 PPG | 1D-ResNet (RelCon) | \~2M | 5.5万小时 (真实自由生活) | 🟢 | 🟢 (Zenodo) |
@@ -92,6 +94,7 @@ Wearable Physiological Foundation Models
 | **TimesFM** | Google Research | ICML 2024 / v2.0 | 通用单变量时序 | 解码器自回归 | 200M | 1000亿点 | 🟢 | 🟢 (HF) |
 | **Chronos** | Amazon Research | ICML 2024 / Bolt | 通用单变量时序 | 离散分箱 T5/Encoder | 20M～710M | 泛领域时序语料 | 🟢 | 🟢 (HF) |
 | **MOMENT** | CMU Auton Lab | ICML 2024 | 通用多变量时序 | Patch-MAE | 385M | Time-series Pile (含生理) | 🟢 | 🟢 (HF) |
+| **TimeBraid** | UCSD / USC | arXiv 2026.09 | 通用时序 + 自然语言 | 双塔交错全局注意力 (MoT) | 1.2B～6.7B | 2.2M对齐 + 4.9M SFT | 🟡 (承诺开源) | 📄 [arXiv:2609.29792](https://arxiv.org/abs/2609.29792) |
 | **OpenMHC** | Stanford / Imperial | arXiv 2026 | 19维腕戴时序+169维变量 | 开源基础模型生态基座 | WBM / LSM-2 | >6,700万小时 (11,894人) | 🟢 | 🟢 (Dataverse/HF) |
 | **RisQ** | TUM / Helmholtz | 2026 | 全基因组+生化+EHR+穿戴 | 全景健康世界模型 | 统一跨模态表征 | 74.5万人 (UKB+All of Us)| 🟢 (论文公开) | 🔴 (顶刊在审) |
 | **WearableQA** | Meta AI | arXiv 2026.09 | 500天日常16维指标+血检 | 纵向健康推理基准 | 14大主流LLM | 200人真实长程 (4,084题) | 🟢 (论文公开) | 🔴 (基准数据) |
@@ -114,6 +117,7 @@ Wearable Physiological Foundation Models
 - **Stanford OpenMHC** (arXiv 2026): 斯坦福医学院 Euan Ashley 团队联合帝国理工发布的**首个超大规模开源可穿戴基础模型基座与生态**。依托 10 余年真实世界生活时序（>6700 万佩戴小时、11,894 名受试者、19 维连续传感器通道及 169 维 HealthKit 变量），不仅打破了 Google SensorFM 与 Apple WBM 的数据垄断，更在统一基准下开源复现了工业级 WBM、LSM-2 及 Chronos-2 等基础模型，规范化了下游判别、生成式插补与未来预测三大赛道。
   > [!NOTE]
   > **先驱临床沿革**：OpenMHC 的数据底座源自 2015 年苹果发布 ResearchKit 时的首批先驱应用 **My Heart Counts (MHC)**；而同期苹果官方开展的 41.9 万人 **Apple Heart Study (AHS, 2017)** 则通过严格远程心电贴片闭环促成 Apple Watch 房颤预警算法获得美国 FDA 认证。两项研究共同奠定了穿戴设备迈向严肃医学基础模型的基石。
+- **Google SensorLM** (NeurIPS 2025): Google 官方开源的传感器-语言多模态基础模型。基于 5,970 万小时（10.3 万真实用户）Fitbit/Pixel Watch 真实野外多传感器时序（PPG+ACC+EDA+Temp+气压），采用 ViT-CoCa 统一框架与自底向上三层分层语料生成流水线，首次打通穿戴硬件波形与人类自然语言的语义映射（开源代码：[Google-Health/sensorlm](https://github.com/Google-Health/consumer-health-research/tree/main/sensorlm)）。
 - **Emory / UCLA / Google PPG-LM** (arXiv 2026.09): 埃默里大学、UCLA 联合 Google、斯坦福发布的**首个多尺度临床对齐脉搏-语言基础模型**。基于 Stanford MC-MED 急诊队列 73,700 小时连续 PPG 波形，首创贯通 30 秒片段形态、急危重症给药事件与长程整场就诊的三层级对齐体系；利用轻量级 12.7M 波形编码器与连续时间 RoPE 锚点聚合，实现心率等生理数值的高保真零样本测算（心率 MAE 3.9 bpm）、双向跨模态语义检索，在 32 项临床预测任务中全面超越现有纯波形基础模型。
 - **北京大学 PPGFlowECG** (2025/2026): 北大洪申达团队研发的 PPG 转 ECG 跨模态生成框架。首创 CardioAlign 编码器与潜空间整流流（Latent Rectified Flow），仅需 1～4 步 ODE 直线传输即可从可穿戴 PPG 极速合成高保真诊断级心电波形，依托千万级急诊数据集 MC-MED 在房颤、心梗等疾病筛查与医生盲测中表现优异。
 - **北京大学 AnyPPG** (KDD 2026): 北大洪申达团队推出的通用光电脉搏基座大模型。基于超 10 万小时同步脉搏-心电数据进行跨模态对比预训练，突破传统单一心血管任务，首次实现对慢性肾病（CKD）、帕金森病等全身多器官复杂表型的无创筛查。
@@ -150,6 +154,7 @@ Wearable Physiological Foundation Models
 - **TimesFM** (Google): 采用分块解码器架构，在巨量时序数据上预训练，提供强大的零样本点预测与概率区间预测。
 - **Chronos & Chronos-Bolt** (Amazon): 将连续时间序列离散化为词元（Tokenization via Bins），利用语言模型（T5 骨干）进行自回归时间序列预测。
 - **CMU MOMENT & MANTIS**: 基于 Patch-MAE 理念，覆盖多变量重建、异常检测与分类，预训练数据 Time-series Pile 包含大量生理信号。
+- **TimeBraid** (UCSD / USC, 2026.09): 首创时序基础模型（TimesFM 2.5）与大语言模型（Qwen）深层交错全局残差注意力架构，统一时序感知、文本推理、纯时序预测与受控反事实情景推演（Ctrl-F）。
 
 ---
 

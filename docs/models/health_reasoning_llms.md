@@ -249,6 +249,19 @@ flowchart TB
 2. **符号与精确计算执行 (Layer 2)**：当用户发起深层健康问询或系统触发异常预警时，中层计算引擎利用 CodeAct 或工具调用协议，严格计算统计显著性检验（$p$ 值）、多变量时延互相关与特征分布漂移，保证数据层面百分之百的数值正确性。
 3. **云端跨模态长程推理 (Layer 3)**：顶层大语言模型接收由中层和底层沉淀下的结构化健康画像（类似于 WearableQA 中的 500 天多模态档案），融合用户的电子病历、生化血检指标与全球权威临床指南，以温暖、严谨且富有同理心的自然语言输出深度的健康因果分析与前瞻性行动方案。
 
+### 5.2 演进分支思辨：模块化 Agent 体系 vs. 原生多模态交错融合派
+
+除了上述三层分工的 Agent 栈之外，学术界与工业界正并行演化出另一条**端到端原生多模态融合路线**，其核心理念是通过预训练实现“波形与语言的深层物理对齐”，代表作包括：
+
+1. **Google SensorLM (NeurIPS 2025)**: 基于 5970 万小时 Fitbit/Pixel Watch 多模态数据，通过 CoCa 架构实现传感器波形向自然语言活动/生理状态的单向自回归翻译（Sensor $\to$ Caption）。
+2. **Emory / Google PPG-LM (2026.09)**: 面向严肃临床脉搏波，拒绝使用易产生数字幻觉的通用大模型，通过 12.7M 波形编码器与轻量因果 Transformer（CLIP词表从零初始化），实现事实准确率达 92.3% 的零样本生理指标测算与双向跨模态临床检索。
+3. **UCSD / USC TimeBraid (2026.09)**: 首创时序基础模型（TimesFM 2.5）与大语言模型（Qwen）的**深层交错全局残差注意力架构**。打破了以往只能“波形 $\to$ 文本”的单向限制，实现了**双向全通（Text $\leftrightarrow$ Time Series）**，首次在统一多模态大模型中原生支持**基于自然语言假设的反事实生理推演（What-If / Controlled Forecasting）**。
+
+| 路线分支 | 代表工作 | 核心优势 | 潜在瓶颈与适用场景 |
+| :--- | :--- | :--- | :--- |
+| **模块化 Agent 技术栈** | WearableQA, HEARTS (CodeAct) | 计算 100% 准确、可解释性极高、严格遵循循证指南。 | 链路较长，对底层波形的隐式非线性几何特征利用率有限。适合长程纵向健康档案慢病管理。 |
+| **原生多模态交错融合派** | SensorLM, PPG-LM, TimeBraid | 端到端感知微观形态波形，支持富语义问答与反事实曲线推演。 | 对多模态训练数据与对齐技巧要求高。适合高频波形实时诊断与未来前瞻生理干预推演。 |
+
 ---
 
 ## 6. 核心论文与开源资源导航
@@ -257,5 +270,8 @@ flowchart TB
 | :--- | :--- | :--- | :--- | :--- |
 | **WearableQA** | Meta AI | arXiv 2026.09 | 首个基于 200 名真实用户 500 天纵向记录的健康推理基准（4,084 题） | 📄 [arXiv:2609.05405](https://arxiv.org/abs/2609.05405) |
 | **HEARTS** | Yang AI Lab | ICML 2026 | 全谱系 20 种模态、四层认知金字塔的生理时序大模型评测体系 | 📄 [arXiv:2603.06638](https://arxiv.org/abs/2603.06638) <br> 🌐 [Website](https://yang-ai-lab.github.io/HEARTS/) <br> 💻 [GitHub](https://github.com/yang-ai-lab/HEARTS) <br> 🤗 [Hugging Face](https://huggingface.co/datasets/yang-ai-lab/HEARTS) |
+| **TimeBraid** | UCSD / USC | arXiv 2026.09 | 通用时序与大模型深层交错全能基座，原生支持 What-If 反事实预测与时序问答 | 📄 [arXiv:2609.29792](https://arxiv.org/abs/2609.29792) <br> 🤗 [HF Papers](https://huggingface.co/papers/2609.29792) |
+| **PPG-LM** | Emory / UCLA / Google | arXiv 2026.09 | 7.37万小时急诊多尺度临床对齐脉搏语言基座（事实准确率 92.3%） | 📄 [arXiv:2609.33516](https://arxiv.org/abs/2609.33516) |
+| **SensorLM** | Google Research | NeurIPS 2025 | 5970万小时 Fitbit/Pixel Watch 真实穿戴多模态传感器-语言基础模型 | 📄 [arXiv:2506.09108](https://arxiv.org/abs/2506.09108) <br> 💻 [GitHub](https://github.com/Google-Health/consumer-health-research/tree/main/sensorlm) |
 | **Mental-LLM** | 华盛顿大学 / 微软 | ACM IMWUT 2024 | 探索大语言模型基于智能手机与手环多源传感器时序预测心理健康与抑郁表型 | 📄 [DOI:10.1145/3643540](https://doi.org/10.1145/3643540) |
 | **CodeAct** | UIUC | ICML 2024 | 驱动大模型通过自主编写与执行 Python 代码进行科学计算的核心 Agent 范式 | 💻 [GitHub CodeAct](https://github.com/xingyaoww/code-act) |
