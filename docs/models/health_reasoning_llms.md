@@ -20,6 +20,8 @@
   - [4.2 四层分层认知推理阶梯 (Hierarchical Capabilities)](#42-四层分层认知推理阶梯-hierarchical-capabilities)
   - [4.3 关键实证发现与“解毒”结论](#43-关键实证发现与解毒结论)
   - [4.4 CodeAct Agent 与神经符号协同范式](#44-codeact-agent-与神经符号协同范式)
+  - [4.5 中科院/港理工 CBPM-LLaMA (ACM-BCB '24) —— 生理动力学先验解耦的 Prompt 微调范式](#45-中科院港理工-cbpm-llama-acm-bcb-24--生理动力学先验解耦的-prompt-微调范式)
+  - [4.6 北大/NUS GEM (NeurIPS 2025) —— 走向波形物理锚定的 Grounded ECG 多模态大模型](#46-北danus-gem-neurips-2025--走向波形物理锚定的-grounded-ecg-多模态大模型)
 - [5. 终局架构：三层可穿戴健康 AI 技术栈 (Hierarchical AI Stack)](#5-终局架构三层可穿戴健康-ai-技术栈-hierarchical-ai-stack)
 - [6. 核心论文与开源资源导航](#6-核心论文与开源资源导航)
 
@@ -210,6 +212,35 @@ HEARTS 进行了详尽的大规模实证对照实验，给出了数条颠覆盲�
   - 调用 `pandas` 执行移动窗口分位数统计与双变量格兰杰因果检验。
 - **效果飞跃**：在引入 CodeAct 机制后，大模型在复杂 Data Reasoning 和 Perception 任务上的达标率平均提升了 **38.6%**，彻底克服了浮点数乘除法和时序积分运算的幻觉问题。
 
+### 4.5 中科院/港理工 CBPM-LLaMA (ACM-BCB '24) —— 生理动力学先验解耦的 Prompt 微调范式
+- **论文**: *Large Language Models for Cuffless Blood Pressure Measurement From Wearable Biosignals* (ACM-BCB '24 / arXiv:2406.18069)
+- **研发团队**: 中国科学院深圳先进技术研究院 (SIAT) 联合香港理工大学 (PolyU)
+- **开源资源**: [GitHub: zdzdliu/CAS-BP](https://github.com/zdzdliu/CAS-BP) (微调权重 CBPM-LLaMA 开源)
+
+#### 核心机制与生理先验解耦
+在可穿戴无袖带血压（Cuffless BP）预测中，传统深度模型通常直接端到端拟合收缩压（SBP）与舒张压（DBP）。CBPM-LLaMA 首次系统性探索了 10 款开源 LLM（LLaMA3-8B, Qwen2-7B, MedAlpaca 等）在手腕多模态生理特征上的指令微调，其关键突破在于**血流动力学先验重构**：
+1. **三大生理机制特征抽取**：从 1000 Hz 同步 ECG 与 PPG 中提取 31 维具有明确生理意义的特征，严密对应**心输出量（CO）**、**外周血管阻力（PR）**与**大动脉硬度（Arterial Stiffness / PTT）**。
+2. **目标变量机制降解**：
+   - 生理学上，平均动脉压 $\text{MAP} = (\text{SBP} + 2\text{DBP})/3$ 主要由 CO 和 PR 决定；
+   - 脉压差 $\text{PP} = \text{SBP} - \text{DBP}$ 主要受大动脉硬度（PTT）决定。
+   - 提示词显式引导大模型利用机制特征预测 MAP 与 PP，再通过精确公式反解出 SBP 与 DBP，使 SBP MAE 相对基础 Prompt 下降 **8.90%**。
+3. **极高数据利用效率**：基于 1,272 人 CAS-BP 队列实测，LLaMA3-8B **仅用 30% 训练数据微调，即可超越使用 80% 全量数据充分训练的传统 AdaBoost 基线**。
+
+### 4.6 北大/NUS GEM (NeurIPS 2025) —— 走向波形物理锚定的 Grounded ECG 多模态大模型
+- **论文**: *GEM: Empowering MLLM for Grounded ECG Understanding with Time Series and Images* (NeurIPS 2025 / arXiv:2503.06073)
+- **研发团队**: 北京大学 (洪申达团队) 联合新加坡国立大学 (NUS 冯梦凌团队)
+- **开源资源**: [GitHub: lanxiang1017/GEM](https://github.com/lanxiang1017/GEM) | Hugging Face 权重与数据开放
+
+#### 核心痛点与 Grounding 范式破局
+现有的医疗多模态大模型在诊断心电图时，普遍存在“根据全局印象直接吐出诊断名词”的黑盒弊病，缺乏临床因果解释链，幻觉率居高不下。GEM 首次提出了**“可锚定心电理解（Grounded ECG Understanding）”**的全新范式：
+1. **时序-视觉统一双编码器 (Dual-Encoder Framework)**：
+   - 结合 1D ECG 原始高频时序编码器与 2D 12-导联心电打印图像视觉编码器，使大模型既能感知微观高频波形细节，又能对齐临床医生阅读标准化心电纸质图纸的视觉空间习惯。
+2. **知识引导的波形参数物理锚定 (ECG-Grounding)**：
+   - 彻底摒弃粗暴猜测。在给出心肌梗死、房室传导阻滞等诊断前，**模型必须强制测量并输出精准波形量纲参数**（如 PR 间期数值、QRS 波群宽度、QT/QTc 间期、ST 段抬高/压低毫米数、T 波对称性）。
+   - 将诊断结论严格绑定到临床指南阈值判定逻辑上（例如：$\text{PR 间期} > 200\text{ ms} \implies \text{一度房室传导阻滞}$）。
+3. **性能飞跃**：
+   - 相比无锚定的基线多模态大模型，GEM 在心血管疾病预测准确率上提升 **7.4%**，临床可解释性提升 **22.7%**，病理依据锚定准确率提升 **25.3%**，为生理时序大模型走向临床可信解释树立了标杆。
+
 ---
 
 ## 5. 终局架构：三层可穿戴健康 AI 技术栈 (Hierarchical AI Stack)
@@ -273,5 +304,7 @@ flowchart TB
 | **TimeBraid** | UCSD / USC | arXiv 2026.09 | 通用时序与大模型深层交错全能基座，原生支持 What-If 反事实预测与时序问答 | 📄 [arXiv:2609.29792](https://arxiv.org/abs/2609.29792) <br> 🤗 [HF Papers](https://huggingface.co/papers/2609.29792) |
 | **PPG-LM** | Emory / UCLA / Google | arXiv 2026.09 | 7.37万小时急诊多尺度临床对齐脉搏语言基座（事实准确率 92.3%） | 📄 [arXiv:2609.33516](https://arxiv.org/abs/2609.33516) |
 | **SensorLM** | Google Research | NeurIPS 2025 | 5970万小时 Fitbit/Pixel Watch 真实穿戴多模态传感器-语言基础模型 | 📄 [arXiv:2506.09108](https://arxiv.org/abs/2506.09108) <br> 💻 [GitHub](https://github.com/Google-Health/consumer-health-research/tree/main/sensorlm) |
+| **GEM** | 北京大学 (洪申达组) / NUS | NeurIPS 2025 | 首个将 12-导联 ECG 时序与视觉图谱对齐，并将诊断因果链物理锚定至微观波形参数（PR/QRS/QT/ST）的多模态大模型 | 📄 [arXiv:2503.06073](https://arxiv.org/abs/2503.06073) <br> 💻 [GitHub: lanxiang1017/GEM](https://github.com/lanxiang1017/GEM) |
+| **CBPM-LLaMA** | 中科院深圳先进院 / 港理工 | ACM-BCB '24 | 首个探索开源 LLM 用于可穿戴无袖带血压估计的微调模型，提出基于 CO/PR/Stiffness 机制解耦的 Prompt 工程 | 📄 [arXiv:2406.18069](https://arxiv.org/abs/2406.18069) <br> 💻 [GitHub: zdzdliu/CAS-BP](https://github.com/zdzdliu/CAS-BP) |
 | **Mental-LLM** | 华盛顿大学 / 微软 | ACM IMWUT 2024 | 探索大语言模型基于智能手机与手环多源传感器时序预测心理健康与抑郁表型 | 📄 [DOI:10.1145/3643540](https://doi.org/10.1145/3643540) |
 | **CodeAct** | UIUC | ICML 2024 | 驱动大模型通过自主编写与执行 Python 代码进行科学计算的核心 Agent 范式 | 💻 [GitHub CodeAct](https://github.com/xingyaoww/code-act) |

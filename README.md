@@ -94,11 +94,14 @@ Wearable Physiological Foundation Models
 | **TimesFM** | Google Research | ICML 2024 / v2.0 | 通用单变量时序 | 解码器自回归 | 200M | 1000亿点 | 🟢 | 🟢 (HF) |
 | **Chronos** | Amazon Research | ICML 2024 / Bolt | 通用单变量时序 | 离散分箱 T5/Encoder | 20M～710M | 泛领域时序语料 | 🟢 | 🟢 (HF) |
 | **MOMENT** | CMU Auton Lab | ICML 2024 | 通用多变量时序 | Patch-MAE | 385M | Time-series Pile (含生理) | 🟢 | 🟢 (HF) |
+| **Time-LLM** | Monash / 蚂蚁集团 | ICLR 2024 | 通用数值时序 | 跨模态原型重编程 (Reprogramming) | 冻结 7B (微调 <1%) | 泛领域时序基准 (少样本) | 🟢 | 🟢 (GitHub) |
 | **TimeBraid** | UCSD / USC | arXiv 2026.09 | 通用时序 + 自然语言 | 双塔交错全局注意力 (MoT) | 1.2B～6.7B | 2.2M对齐 + 4.9M SFT | 🟡 (承诺开源) | 📄 [arXiv:2609.29792](https://arxiv.org/abs/2609.29792) |
 | **OpenMHC** | Stanford / Imperial | arXiv 2026 | 19维腕戴时序+169维变量 | 开源基础模型生态基座 | WBM / LSM-2 | >6,700万小时 (11,894人) | 🟢 | 🟢 (Dataverse/HF) |
 | **RisQ** | TUM / Helmholtz | 2026 | 全基因组+生化+EHR+穿戴 | 全景健康世界模型 | 统一跨模态表征 | 74.5万人 (UKB+All of Us)| 🟢 (论文公开) | 🔴 (顶刊在审) |
 | **WearableQA** | Meta AI | arXiv 2026.09 | 500天日常16维指标+血检 | 纵向健康推理基准 | 14大主流LLM | 200人真实长程 (4,084题) | 🟢 (论文公开) | 🔴 (基准数据) |
 | **HEARTS** | Yang AI Lab | ICML 2026 | 20种生理模态(ECG/PPG/CGM等) | 四层认知推理金字塔 | 多架构+CodeAct | 16大开源库 (20,226样本) | 🟢 | 🟢 (HF/Web) |
+| **GEM** | 北京大学 (洪申达组) / NUS | NeurIPS 2025 | 12-导联 ECG 时序 + 图像 | Grounded 多模态 MLLM | 7B～8B 级 | 知识引导心电图谱语料 | 🟢 | 🟢 (GitHub) |
+| **CBPM-LLaMA** | 中科院深圳先进院 / 港理工 | ACM-BCB '24 | 手腕 PPG+ECG 机制特征 | 生理先验解耦 Prompt 微调 | 7B～8B 级 | 1,272人 (CAS-BP 1.26万对) | 🟢 | 🟢 (GitHub) |
 
 ---
 
@@ -210,6 +213,10 @@ Wearable Physiological Foundation Models
   - **四层认知阶梯 (Hierarchical Spectrum)**：首次将健康时序评测系统化抽象为 $\text{Perception (底层感知)} \to \text{Inference (状态推断)} \to \text{Generation (波形生成)} \to \text{Deduction (纵向因果演化)}$。
   - **关键“解毒”洞察**：纯 LLM 在多数健康时序任务上明显落后于专用轻量时序基础模型（如 PaPaGei、MOMENT），且在高频长序列上倾向于采用“低复杂度启发式作弊（复制/简单插值）”。
   - **CodeAct 神经符号协作**：验证了 LLM 必须借助 CodeAct 范式，作为中枢调度 Python 科学计算库（SciPy、NeuroKit2、BioSPPy）执行精确数值运算，才能真正实现高可靠健康时序分析。
+- **北京大学 / NUS GEM** (NeurIPS 2025 / arXiv:2503.06073):
+  - **首个 Grounded ECG 跨模态大模型**：结合 12-导联心电 1D 连续时序与 2D 图纸视觉双编码器，首次将诊断输出强制绑定至微观波形参数（PR 间期、QRS 波宽、QT/QTc、ST 段抬高/压低毫米数），以波形证据链消除医学幻觉，可解释性提升 22.7%。
+- **中科院深圳先进院 / 港理工 CBPM-LLaMA** (ACM-BCB '24 / arXiv:2406.18069):
+  - **首个可穿戴无袖带血压微调大模型**：从 1000 Hz 同步 ECG+PPG 提取 31 维特征，通过心血管血流动力学先验将预测目标解耦为平均动脉压 MAP（心输出量 CO + 外周阻力 PR）与脉压差 PP（大动脉硬度 PTT），仅用 30% 样本微调即可超越传统 AdaBoost 基线。
 
 ---
 
@@ -224,6 +231,7 @@ Wearable Physiological Foundation Models
 | **⌚ 手腕多模态** | **PPG-DaLiA** | Fraunhofer / UCI | 手腕 E4 (PPG 64Hz, ACC 32Hz, EDA) | 15人 (真实自由生活) | 日常非受限活动心率监测、动态去噪 | 🟢 开放直下 |
 | **⌚ 手腕多模态** | **WESAD** | UCI / Bosch | 手腕 E4 + 胸戴 RespiBAN | 15人 (受控压力诱发) | 情绪识别、心理压力 (Stress) 状态分类 | 🟢 开放直下 |
 | **⌚ 手腕多模态** | **TROIKA** | IEEE TBME 2015 | 双通道手腕 PPG + 3轴 ACC | 12人 (跑步机高动态) | 运动伪影频域碰撞与心率追踪经典开山集 | 🟢 开放直下 |
+| **⌚ 手腕多模态** | **CAS-BP** | 中科院深圳先进院 (SIAT) | 手腕 PPG 1000Hz, ECG 1000Hz | 1,272人 (4周随访, 12.6k对) | 无袖带连续血压、脉搏动力学、大模型微调基准 | 🟢 GitHub 开源 |
 | **⌚ 手腕多模态** | **BIDMC PPG** | 哈佛医学院 BIDMC | 手指 PPG 125Hz, ECG, 阻抗呼吸 | 53人 (8分钟高精波形) | 脉搏微形态分析、呼吸率 (RR) 估计基准 | 🟢 开放直下 |
 | **🩸 CGM 连续血糖**| **CGMacros** | PhysioNet (2024) | 双 CGM (5/15min) + 高清餐食照 | 45人 (带生化血检) | 饮食营养摄入响应、生化探针多任务 | 🟢 开放直下 |
 | **🩸 CGM 连续血糖**| **ShanghaiT1/T2DM**| 上海六院 (包玉倩团队) | 雅培瞬感 Libre (15min 连续间质液) | 112人 (14天连续) | 缺失值插补、糖尿病分型与并发症探针 | 🟢 开放直下 |
