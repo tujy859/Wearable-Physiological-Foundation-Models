@@ -139,9 +139,10 @@
    - 麻省理工学院 (MIT) 与贝斯以色列女伯爵医学中心 (BIDMC) 联合建立的重症监护多模态数据库，包含数万名 ICU 患者的高频脉搏与心电波形。
    - 获取方式: PhysioNet 凭证访问（需完成 CITI 临床研究伦理认证）。
 3. **MC-MED (Multimodal Clinical Monitoring in the Emergency Department)**:
-   - 由北京大学洪申达团队整理并发布在 PhysioNet，采集自大型学术医学中心急诊科（ED）2020～2022 年间 118,385 例急诊就诊记录；
-   - 提取了超过 **1000 万对严格同步配对** 的高频 PPG 与 ECG 信号，且融合了人口统计学、病史用药、化验血检、影像诊断以及经医生标注的心血管疾病（CVD）明确标签；
-   - 获取方式: [PhysioNet 凭证访问](https://physionet.org/content/mc-med/)（需完成 CITI 伦理认证并签署 DUA）。
+   - 由斯坦福大学医学院 (Pranav Rajpurkar & David Kim 团队，Kansal et al., *Nature Scientific Data* 2025) 整理并发布在 PhysioNet，采集自大型学术医学中心成人急诊科（ED）53,473 例就诊记录；
+   - 提取了超过 **1000 万对严格同步配对** 的高频 PPG (125Hz) 与 ECG 信号，且深度融合了急诊分诊危重度 (ESI)、护士给药时间戳、生命体征、化验血检、既往病史 ICD-10 及转归；
+   - **核心基座价值**：作为前沿脉搏-语言基础模型 **PPG-LM (Emory/UCLA/Google 2026, 73,700小时预训练)**、PPG转心电整流流模型 **PPGFlowECG** 及北大 **AnyPPG** 的关键预训练与评测基座；
+   - 获取方式: [PhysioNet 凭证访问](https://physionet.org/content/mc-med/)（Level 3 Credentialed Access，需完成 CITI 伦理认证并签署 DUA）。
 4. **BIDMC PPG and Respiration Dataset**:
    - 源自哈佛医学院附属贝斯以色列女伯爵医学中心（BIDMC）重症监护数据库（从 MIMIC-II 抽取的生理基准子集）；
    - 包含 53 位重症患者、每段 8 分钟的高采样率（125Hz）严格同步的 PPG、ECG 及阻抗呼吸波形，配有人工呼吸周期精细标注；

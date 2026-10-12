@@ -84,7 +84,8 @@ Wearable Physiological Foundation Models
 | **CGMformer** | 中科院 / 上海六院 | NSR 2025 | CGM (5min 血糖) | BERT 式 MLM | 0.85M～10M | 131万天 (5.9万人) | 🟢 | 🟢 (GitHub) |
 | **CGM-LSM** | JHU CDHAI | arXiv 2024 | CGM 血糖 | GPT-2 自回归 | \~124M | 1600万读数 (592人) | 🟢 (无数据) | 🔴 |
 | **CGM-JEPA** | CRUISE Lab | 2025 | CGM (5min 血糖) | 潜空间 JEPA 预测 | \~0.5M | 228人 (开源重训基座) | 🟢 | 🟢 (HF) |
-| **PPG-Distill** | Emory University | 2025 | 腕戴 PPG (脉搏) | 跨尺度知识蒸馏 | 极轻量 (<0.5M) | 多中心穿戴基准 | 🟢 | 🟢 (GitHub) |
+| **PPG-Distill** | Emory University | 2025 | 腕戴 PPG (脉搏) | 跨尺度知识蒸馏 | 极轻量 (<0.5M) | 多任务穿戴语料 | 🟢 | 🟢 (GitHub) |
+| **PPG-LM** | Emory / UCLA / Google | arXiv 2026.09 | PPG + 结构化临床语言 | CoCa + 连续时间 RoPE | 12.7M (波形塔) | 73,700小时 (Stanford MC-MED) | 🟢 (论文公开) | 📄 [arXiv:2609.33516](https://arxiv.org/abs/2609.33516) |
 | **SleepFM-1 / 2** | Stanford Medicine | Nat Med 24 / arXiv 26 | EEG+ECG+PPG+Resp+ACC | LOO-CL + 局部 MAE | **2.57M** (LLaMA) | **200万小时 (23.5万人)** | 🟢 | 🟢 (GitHub) |
 | **SleepMaMi** | 首尔大学 (SNU) | ICML 2026 | PSG (EEG+ECG+Resp) | 宏微观双编码器 (MAE+CL) | \~15M | 15.8万小时 (2万人) | 🟢 | 🟢 (GitHub) |
 | **LIMU-BERT** | 厦门大学等 | UbiComp 2021 | 3轴 ACC + Gyro | Sensor-BERT | 轻量级 | 多源 IMU 无标注数据 | 🟢 | 🟢 |
@@ -113,6 +114,7 @@ Wearable Physiological Foundation Models
 - **Stanford OpenMHC** (arXiv 2026): 斯坦福医学院 Euan Ashley 团队联合帝国理工发布的**首个超大规模开源可穿戴基础模型基座与生态**。依托 10 余年真实世界生活时序（>6700 万佩戴小时、11,894 名受试者、19 维连续传感器通道及 169 维 HealthKit 变量），不仅打破了 Google SensorFM 与 Apple WBM 的数据垄断，更在统一基准下开源复现了工业级 WBM、LSM-2 及 Chronos-2 等基础模型，规范化了下游判别、生成式插补与未来预测三大赛道。
   > [!NOTE]
   > **先驱临床沿革**：OpenMHC 的数据底座源自 2015 年苹果发布 ResearchKit 时的首批先驱应用 **My Heart Counts (MHC)**；而同期苹果官方开展的 41.9 万人 **Apple Heart Study (AHS, 2017)** 则通过严格远程心电贴片闭环促成 Apple Watch 房颤预警算法获得美国 FDA 认证。两项研究共同奠定了穿戴设备迈向严肃医学基础模型的基石。
+- **Emory / UCLA / Google PPG-LM** (arXiv 2026.09): 埃默里大学、UCLA 联合 Google、斯坦福发布的**首个多尺度临床对齐脉搏-语言基础模型**。基于 Stanford MC-MED 急诊队列 73,700 小时连续 PPG 波形，首创贯通 30 秒片段形态、急危重症给药事件与长程整场就诊的三层级对齐体系；利用轻量级 12.7M 波形编码器与连续时间 RoPE 锚点聚合，实现心率等生理数值的高保真零样本测算（心率 MAE 3.9 bpm）、双向跨模态语义检索，在 32 项临床预测任务中全面超越现有纯波形基础模型。
 - **北京大学 PPGFlowECG** (2025/2026): 北大洪申达团队研发的 PPG 转 ECG 跨模态生成框架。首创 CardioAlign 编码器与潜空间整流流（Latent Rectified Flow），仅需 1～4 步 ODE 直线传输即可从可穿戴 PPG 极速合成高保真诊断级心电波形，依托千万级急诊数据集 MC-MED 在房颤、心梗等疾病筛查与医生盲测中表现优异。
 - **北京大学 AnyPPG** (KDD 2026): 北大洪申达团队推出的通用光电脉搏基座大模型。基于超 10 万小时同步脉搏-心电数据进行跨模态对比预训练，突破传统单一心血管任务，首次实现对慢性肾病（CKD）、帕金森病等全身多器官复杂表型的无创筛查。
 - **PaPaGei** (ICLR 2025): Nokia Bell Labs 与剑桥联合发布，首个开源通用光电生理基础模型。采用 ResNet1D-MoE 架构，参数量仅 1.5M，在心率、血压、血管年龄等 20 个下游任务表现卓越。
