@@ -39,7 +39,8 @@
 - [x] **睡眠心肺专题整理**：解构 SleepFM 1.0、**SleepFM-2 (2026.09, 200万小时/双流LOO+MAE/穿戴物理代理桥)**、SleepMaMi、U-Sleep 跨模态耦合与 NSRR 数据集至 `docs/models/sleep_models.md`
 - [x] **系统级多模态健康世界模型专题**：系统拆解 TUM / Helmholtz **RisQ** (2026) 75万人跨疾病共享潜在结构、自然语言提示词推演及医学缩放定律至 `docs/models/universal_health_models.md`
 - [x] **可穿戴健康推理与生理大模型专题**：系统梳理 Meta WearableQA、Yang AI Lab HEARTS 及三层 Agent 协作范式至 `docs/models/health_reasoning_llms.md`
-- [x] **公开数据集专题**：补全智能手表（含 OpenMHC 1.9GB/38GB获取指引）、连续血糖及系统级全景队列（UK Biobank, All of Us）至 `docs/datasets/wearable_datasets.md`
+- [x] **心电与心血管电生理专题整理**：依托 ***npj Digital Medicine* (2026, IF 18.0)** 旗舰综述（MIT Celi 团队），系统拆解多导联自监督心电基座（ECG-FM, ST-MEM, HeartBEiT, CLOCS）、PPG $\longleftrightarrow$ ECG 跨模态生成桥梁及四大国际临床心电黄金基准（MIMIC-IV-ECG, PTB-XL, CODE-15%, Chapman）至 `docs/models/ecg_models.md` 与 `docs/datasets/wearable_datasets.md`
+- [x] **公开数据集专题**：补全智能手表（含 OpenMHC 1.9GB/38GB获取指引）、连续血糖、临床心电四大基准及系统级全景队列（UK Biobank, All of Us）至 `docs/datasets/wearable_datasets.md`
 - [ ] **核心技术纵向对比**：撰写《穿戴时序特定归纳偏置：多采样率对齐、频域碰撞消除与潜空间预测》至 `docs/principles/`
 
 ### 阶段 3：实操体验增强（极简 Notebooks）

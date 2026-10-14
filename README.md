@@ -13,14 +13,16 @@
 
 - [📌 为什么需要可穿戴生理基础模型？](#-为什么需要可穿戴生理基础模型)
 - [🗺️ 技术分类全景图 (Taxonomy)](#️-技术分类全景图-taxonomy)
+- [📖 权威顶刊综述与前沿全景 (Surveys & Reviews)](#-权威顶刊综述与前沿全景-surveys--reviews)
 - [📊 核心基础模型全景横评表](#-核心基础模型全景横评表)
 - [⌚ 1. 智能手表与腕戴生理模型 (Smartwatch & Wrist)](#-1-智能手表与腕戴生理模型-smartwatch--wrist)
-- [🩸 2. 连续血糖监测基础模型 (Continuous Glucose Monitoring, CGM)](#-2-连续血糖监测基础模型-continuous-glucose-monitoring-cgm)
-- [📈 3. 通用时间序列基础模型 (General Time-Series FM)](#-3-通用时间序列基础模型-general-time-series-fm)
-- [💤 4. 睡眠与心肺多模态模型 (Sleep & Cardiopulmonary)](#-4-睡眠与心肺多模态模型-sleep--cardiopulmonary)
-- [🧠 5. 可穿戴健康推理与系统级生理大模型 (Wearable Health Reasoning & Universal Health FMs)](#-5-可穿戴健康推理与系统级生理大模型-wearable-health-reasoning--universal-health-fms)
-- [📦 6. 开源数据集与评测基准 (Datasets & Benchmarks)](#-6-开源数据集与评测基准-datasets--benchmarks)
-- [🛠️ 7. 动手实战与子工程关联 (Hands-on Labs)](#️-7-动手实战与子工程关联-hands-on-labs)
+- [❤️ 2. 心电与心血管电生理基础模型 (ECG & Electrophysiology)](#-2-心电与心血管电生理基础模型-ecg--electrophysiology)
+- [🩸 3. 连续血糖监测基础模型 (Continuous Glucose Monitoring, CGM)](#-3-连续血糖监测基础模型-continuous-glucose-monitoring-cgm)
+- [📈 4. 通用时间序列基础模型 (General Time-Series FM)](#-4-通用时间序列基础模型-general-time-series-fm)
+- [💤 5. 睡眠与心肺多模态模型 (Sleep & Cardiopulmonary)](#-5-睡眠与心肺多模态模型-sleep--cardiopulmonary)
+- [🧠 6. 可穿戴健康推理与系统级生理大模型 (Wearable Health Reasoning & Universal Health FMs)](#-6-可穿戴健康推理与系统级生理大模型-wearable-health-reasoning--universal-health-fms)
+- [📦 7. 开源数据集与评测基准 (Datasets & Benchmarks)](#-7-开源数据集与评测基准-datasets--benchmarks)
+- [🛠️ 8. 动手实战与子工程关联 (Hands-on Labs)](#️-8-动手实战与子工程关联-hands-on-labs)
 - [🤝 参与贡献 (Contributing)](#-参与贡献-contributing)
 
 
@@ -65,12 +67,29 @@ Wearable Physiological Foundation Models
 
 ---
 
+## 📖 权威顶刊综述与前沿全景 (Surveys & Reviews)
+
+- **npj Digital Medicine 2026 旗舰综述：心电与脉搏波开源基础模型与数据集全景**
+  - **论文题目**：*Review of open foundation models and datasets for ECG and PPG waveforms*
+  - **发表期刊**：*npj Digital Medicine* (2026, Nature 旗下旗舰数字医疗期刊，**IF 18.0**，中科院医学一区 Top)
+  - **作者团队**：Ahram Han, Takeshi Tohyama, Dukyong Yoon, Kenneth Paik, Brian Gow, **Leo Anthony Celi (通讯作者, MIT 计算生理学实验室主任 / MIMIC 开创者)**, Hyeonhoon Lee, Hyung-Chul Lee (首尔大学医学院)
+  - **DOI 链接**：[10.1038/s41746-026-03101-7](https://doi.org/10.1038/s41746-026-03101-7)
+  - **核心定位与学术价值**：
+    1. **范式转变**：系统总结了从传统“高成本专家标注的专用窄模型”向“通用时序生理表征大模型”的跃迁，深入剖析了数据效率（Few-shot / Linear Probe）与跨设备迁移性的底层机理；
+    2. **开源生态拓扑**：首次全景式绘制了全球公开的心电（ECG）与光电脉搏波（PPG）开源基础模型（如 ECG-FM, ST-MEM, HeartBEiT, CardioFM 等）及其训练数据基座（MIMIC-IV-ECG, PTB-XL, CODE-15%, VitalDB 等）；
+    3. **五大结构性挑战**：深入针砭了当前领域“预训练数据种族与人群偏倚（Homogeneity & Bias）”、“评估划分混乱与缺乏标准化基准（切分泄漏）”、“真实穿戴高噪运动伪影”、“黑盒表征缺乏电生理波形可解释性”以及“端侧微控制器轻量化部署壁垒”，为本知识库提供了扎实的理论顶层设计；
+    4. **专题深度拆解**：查阅心电基础模型与跨模态生成专篇：📖 [docs/models/ecg_models.md](docs/models/ecg_models.md)。
+
+---
+
 ## 📊 核心基础模型全景横评表
 
 > 状态标记说明：🟢 官方公开开源 | 🟡 申请开放 / 部分代码 | 🔴 闭源未公开
 
 | 模型名称 | 机构 / 团队 | 发表时间 / 会议期刊 | 主要模态 | 架构类型 | 参数量 | 预训练数据规模 | 代码状态 | 权重状态 |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :---: | :---: |
+| **ECG-FM** | MIT / Stanford / Harvard | Nat Commun / arXiv | 12-导联 ECG | 1D-ViT (MAE+Contrastive) | ~100M | 114万条心电 (MIMIC-IV+CODE) | 🟢 (GitHub) | 🟢 (HF/开源) |
+| **ST-MEM** | 清华 / 伯克利等 | NeurIPS 2023/2024 | 12-导联 ECG | 时空解耦 Patch-MAE | 紧凑级 | 80万例 12-导联心电 | 🟢 | 🟢 (GitHub) |
 | **SensorFM** | Google Research | arXiv 2026 | PPG+ACC+EDA+Temp | Patch-Transformer | 大规模 | 1万亿分钟 (>500万人) | 🔴 | 🔴 |
 | **SensorLM** | Google Research / DeepMind | NeurIPS 2025 | PPG+ACC+EDA+Temp+气压 | ViT-2D + CoCa 解码器 | 亿级 | 5,970万小时 (10.3万人) | 🟢 (GitHub) | 📄 [arXiv:2506.09108](https://arxiv.org/abs/2506.09108) |
 | **Apple WBM** | Apple Health | 2024-2026 | Watch PPG+ACC+ECG | Multi-task Trans | - | 百万级 Apple Watch 数据 | 🔴 | 🔴 |
@@ -132,7 +151,25 @@ Wearable Physiological Foundation Models
 
 ---
 
-## 🩸 2. 连续血糖监测基础模型 (Continuous Glucose Monitoring, CGM)
+## ❤️ 2. 心电与心血管电生理基础模型 (ECG & Electrophysiology)
+
+详细分析与网络细节请查阅：📖 [docs/models/ecg_models.md](docs/models/ecg_models.md)
+
+- **MIT / Stanford / Harvard ECG-FM** (Nature Communications / arXiv):
+  - 全球首个针对 12-导联临床心电的大规模开源基础模型。在 MIMIC-IV-ECG 与 CODE-15% 超过 114 万条真实临床心电上完成预训练。
+  - 采用 Patch-Transformer 骨干，创新性融合**时序掩码重建（MAE）与患者间对比学习**，即使在仅有 1% 极微量下游标注样本时，也能在心肌梗死、左室射血分数降低（LVEF $\le 40\%$）及 20 余种复杂心律失常分类中显著超越传统监督模型。
+- **ST-MEM (时空解耦掩码心电建模)** (NeurIPS):
+  - 首次将计算机视觉中的 MAE 拓展到解剖多导联空间，设计了“空间导联掩码（模拟穿戴单导联推断全导联）”与“时间片段掩码”，通过非对称双向自注意力编码器极大提升了空间几何与心室去极化先验的学习效率。
+- **HeartBEiT** (Vision Transformer for ECG):
+  - 引入离散标记（Discrete Codebook Tokenization）机制，将连续电压波形量化为有限字典标记，有效克服了传统均方误差（MSE）损失易受高频白噪声和基线漂移干扰的痛点。
+- **北京大学 / NUS GEM** (NeurIPS 2025):
+  - 首个 Grounded ECG 跨模态大模型，强制将心电时序与 2D 图纸视觉诊断输出绑定至微观波形物理指标（PR间期、QRS波宽、ST段抬高），以证据链彻底消除模型幻觉。
+- **跨模态电生理重建前沿**：
+  - **北京大学 PPGFlowECG** 与 **清华大学 UniCardio**：利用潜空间整流流（Rectified Flow）与统一扩散 Transformer（DiT），实现从消费级智能手表连续光电脉搏（PPG）极速生成诊断级 12-导联心电波形。
+
+---
+
+## 🩸 3. 连续血糖监测基础模型 (Continuous Glucose Monitoring, CGM)
 
 详细分析与基准横评请查阅：📖 [docs/models/cgm_models.md](docs/models/cgm_models.md)
 
@@ -150,7 +187,7 @@ Wearable Physiological Foundation Models
 
 ---
 
-## 📈 3. 通用时序基础模型 (General Time-Series FMs)
+## 📈 4. 通用时序基础模型 (General Time-Series FMs)
 
 详细分析与适用性评估请查阅：📖 [docs/models/general_tsfm.md](docs/models/general_tsfm.md)
 
@@ -161,7 +198,7 @@ Wearable Physiological Foundation Models
 
 ---
 
-## 💤 4. 睡眠与心肺多模态模型 (Sleep & Cardiopulmonary)
+## 💤 5. 睡眠与心肺多模态模型 (Sleep & Cardiopulmonary)
 
 详细分析与网络细节请查阅：📖 [docs/models/sleep_models.md](docs/models/sleep_models.md)
 
@@ -181,9 +218,9 @@ Wearable Physiological Foundation Models
 
 ---
 
-## 🧠 5. 可穿戴健康推理与系统级生理大模型 (Wearable Health Reasoning & Universal Health FMs)
+## 🧠 6. 可穿戴健康推理与系统级生理大模型 (Wearable Health Reasoning & Universal Health FMs)
 
-### 5.1 系统级多模态健康世界模型 (Universal Health & Cross-Disease Risk FMs)
+### 6.1 系统级多模态健康世界模型 (Universal Health & Cross-Disease Risk FMs)
 
 详细技术深度解构与架构剖析请查阅：📖 [docs/models/universal_health_models.md](docs/models/universal_health_models.md)
 
@@ -198,7 +235,7 @@ Wearable Physiological Foundation Models
 
 ---
 
-### 5.2 认知推理与智能体评测基准 (Longitudinal Health Reasoning Benchmarks)
+### 6.2 认知推理与智能体评测基准 (Longitudinal Health Reasoning Benchmarks)
 
 详细技术深度解构与架构剖析请查阅：📖 [docs/models/health_reasoning_llms.md](docs/models/health_reasoning_llms.md)
 
@@ -220,7 +257,7 @@ Wearable Physiological Foundation Models
 
 ---
 
-## 📦 6. 开源数据集与评测基准 (Datasets & Benchmarks)
+## 📦 7. 开源数据集与评测基准 (Datasets & Benchmarks)
 
 详细数据集下载指引与预处理代码请查阅：📖 [docs/datasets/wearable_datasets.md](docs/datasets/wearable_datasets.md)
 
@@ -243,6 +280,10 @@ Wearable Physiological Foundation Models
 | **🩸 CGM 连续血糖**| **Glucose-ML** | Augmented Health Lab | 自动化集成 20+ 个公开数据集 | 4,300+人 (44.9M点) | 一键下载、单位自动对齐与标准化集合库 | 🟢 GitHub 开源 |
 | **🏥 临床高精基准**| **MC-MED** | 北京大学 (洪申达团队) | 急诊监护 PPG 100Hz+, ECG, 呼吸 | 11.8万人 (>1000万对) | PPG $\to$ ECG 跨模态生成、急诊重症筛查 | 🟡 凭证申请 |
 | **🏥 临床高精基准**| **VitalDB** | 首尔大学医院 | 500Hz 动脉血压波, PPG, ECG | >10,000 例手术患者 | 血管弹性、连续无创血压金标准映射 | 🟢 开放 API |
+| **🏥 临床心电基准**| **MIMIC-IV-ECG** | MIT (Celi团队) / PhysioNet | 12-导联诊断级 ECG 500Hz + EHR | 80万+条记录 (16万人) | 心电基础模型预训练黄金底座、EHR互联多任务 | 🟡 凭证申请 (PhysioNet) |
+| **🏥 临床心电基准**| **PTB-XL** | 德国 PTB / PhysioNet | 12-导联临床 ECG 500Hz (SCP-ECG) | 21,837 条 (18,885人) | 多标签心电诊断评测世界公认金标准、受试者级划分 | 🟢 开放直下 (PhysioNet) |
+| **🏥 临床心电基准**| **CODE-15%** | 巴西米纳斯吉拉斯远程心电网 | 12-导联 ECG 300～400Hz | 34.5万条开源 (总库230万) | 大规模自监督缩放定律验证、远期全因死亡率预测 | 🟢 开放直下 (Zenodo) |
+| **🏥 临床心电基准**| **Chapman / Ningbo**| 绍兴/宁波医院 / PhysioNet | 12-导联 ECG 500Hz (10秒波形) | 45,152 条记录 | 亚洲人群心律失常与心肌缺血多中心基准 | 🟢 开放直下 (PhysioNet) |
 | **💤 睡眠多导 PSG**| **SHHS** | 美国 NIH / NHLBI | 全套临床 PSG (EEG/ECG/Resp/EMG) | 5,804人 (多年随访) | 睡眠呼吸暂停、心脑血管死亡长期队列 | 🟢 NSRR 申请 |
 | **💤 睡眠多导 PSG**| **MESA** | 美国 NHLBI / 多中心 | 完整 PSG + 7天手腕体动仪 | 2,237人 (多族裔) | 多族裔睡眠结构、动脉粥样硬化结局 | 🟢 NSRR 申请 |
 | **🌐 系统级全景队列**| **UK Biobank** | 英国 MRC / Wellcome | 手腕高频体动 100Hz + WGS + EHR | 10万人体动 / 50万人全景 | 系统级健康世界模型 (RisQ基石)、全生命周期疾病风险 | 🔴 严格申请 (AMS/RAP云端) |
@@ -252,7 +293,7 @@ Wearable Physiological Foundation Models
 
 ---
 
-## 🛠️ 7. 动手实战与子工程关联 (Hands-on Labs)
+## 🛠️ 8. 动手实战与子工程关联 (Hands-on Labs)
 
 本项目与核心实验复现子工程联动，提供端到端真实世界实操代码：
 

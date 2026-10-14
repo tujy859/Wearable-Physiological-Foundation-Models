@@ -141,6 +141,8 @@
 
 用于对穿戴模型进行预训练（如 PaPaGei 初始预训练）或提取高精度形态基准：
 
+### 3.1 临床重症与多模态生理监测基准库
+
 1. **VitalDB**:
    - 包含首尔大学医院 10,000 余例非心脏手术患者在手术室内的超高精度多通道监测数据（500Hz 动脉侵入血压波、指尖 PPG、高导联心电、脑电双频指数）。
    - 获取方式: [VitalDB 开放数据平台](https://vitaldb.net/)，支持 Python API `pip install vitaldb`。
@@ -165,6 +167,35 @@
 6. **All of Us (美国国立卫生研究院多族裔精准医学队列)**:
    - 超过 25 万名受试者的跨族裔生物样本、长程电子健康档案与生活方式追踪，为系统级健康模型（如 RisQ）提供零微调外部验证金标准；
    - 获取方式: 通过 [All of Us Research Program Workbench](https://www.researchallofus.org/) 注册认证后在云端工作台访问。
+
+### 3.2 国际临床心电（ECG）四大黄金基准库（基于 *npj Digital Medicine* 2026 综述推荐）
+
+> [!NOTE]
+> 依据 2026 年 *npj Digital Medicine* 综述（*Review of open foundation models and datasets for ECG and PPG waveforms*, Han et al.），以下四大临床心电库是当前训练和评估通用电生理基础模型（如 ECG-FM, ST-MEM, HeartBEiT）的全球通用底座：
+
+1. **MIMIC-IV-ECG (麻省理工学院 / PhysioNet 临床心电王牌库)**:
+   - **机构与来源**: 麻省理工学院计算生理学实验室 (MIT LCP) 与 Beth Israel Deaconess Medical Center (BIDMC)
+   - **获取入口**: [PhysioNet: MIMIC-IV-ECG Module](https://physionet.org/content/mimic-iv-ecg/) (需要 CITI 伦理认证与 PhysioNet 凭证访问)
+   - **数据规模**: **800,000+ 份标准 12-导联诊断级心电记录**，覆盖超过 160,000 名独立患者，采样频率为 500 Hz，时长通常为 10 秒。
+   - **核心基底价值**: 全球范围内与超大规模去标识化电子病历（EHR，包括用药、重症事件、超声心动图、死亡转归）深度互联的最大心电波形库，是现代自监督掩码（MAE）与跨模态心电基础模型最主流的预训练基底。
+
+2. **PTB-XL (德国联邦物理技术研究院 / 心电诊断与评测黄金标准)**:
+   - **机构与来源**: PhysioNet / Wagner et al., *Scientific Data* (2020)
+   - **获取入口**: [PhysioNet: PTB-XL](https://physionet.org/content/ptb-xl/1.0.3/) (完全开源直下，遵循 CC BY 4.0 协议)
+   - **数据规模**: 来自 18,885 名受试者的 **21,837 条临床 12-导联 ECG 记录**（包含 500 Hz 与 100 Hz 两个标准版本，统一 10 秒时长）。
+   - **核心基底价值**: 标签质量极其权威且完备，严格遵循 SCP-ECG 国际临床诊断标准体系，划分为 5 大超类（正常、心肌梗死 MI、心律失常 NORM/CD、心肌缺血/肥厚 STTC/HYP）与 71 种细粒度亚类。官方提供了严格的建议受试者级划分（`strat_fold` 1～10），是全球多标签心电分类模型评测的公认基准。
+
+3. **CODE-15% (巴西米纳斯吉拉斯远程心电系统队列)**:
+   - **机构与来源**: Ribeiro et al., *Nature Communications* (2020) / Telehealth Network of Minas Gerais (TNMG)
+   - **获取入口**: [Zenodo: CODE-15% Record 3765717](https://zenodo.org/records/3765717) (完全开放直接下载)
+   - **数据规模**: 从全巴西远程医疗系统超过 230 万例心电记录中抽取的具有极高代表性的开源子集，包含 **345,401 条标准 12-导联 ECG 波形**（采样率 300～400 Hz），附带患者年龄、性别及长期随访死亡率标签。
+   - **核心基底价值**: 拥有数百万例真实医疗系统的超大样本量，为探究心电大模型的缩放定律（Scaling Laws）以及长期全因死亡率生存预测（Survival Analysis）提供了绝佳载体。
+
+4. **Chapman-Shaoxing & Ningbo Database (绍兴与宁波心律失常大队列)**:
+   - **机构与来源**: 绍兴人民医院、宁波市第一医院联合查普曼大学，发布于 *PhysioNet / Scientific Data* (2021)
+   - **获取入口**: [PhysioNet: Chapman-Shaoxing](https://physionet.org/content/ecg-arrhythmia/1.0.0/) (完全开放获取)
+   - **数据规模**: **45,152 条 12-导联 10 秒心电波形**（500 Hz 高精度记录），涵盖窦性心律、房颤房扑、房室传导阻滞、室上性心动过速等数十种典型心律失常。
+   - **核心基底价值**: 弥补了西方白人人群心电数据的单一性，提供了东亚人群大规模的心血管电生理病理波形样本，常用于跨国家、跨种族的外部泛化性验证。
 
 ---
 
@@ -211,6 +242,10 @@
 | **临床生理基准**| **VitalDB** | 首尔大学医院 | 动脉波 500Hz, PPG, ECG | >10,000 例手术 | 🟢 开放 API | 血管弹性、连续血压金标准 |
 | **临床生理基准**| **MC-MED** | 北京大学 (洪申达组) | PPG 100Hz+, ECG, 呼吸等 | 11.8万人 (>1000万对) | 🟡 凭证申请 | 跨模态生成、急诊心血管筛查 |
 | **临床生理基准**| **BIDMC PPG** | 哈佛医学院 BIDMC | PPG 125Hz, ECG 125Hz, Resp | 53人 (8分钟高精记录) | 🟢 开放直下 | 呼吸率估计、脉搏波形态基准 |
+| **临床心电基准**| **MIMIC-IV-ECG** | MIT / BIDMC | 12-导联 ECG 500Hz + EHR | >80万条记录 (16万人) | 🟡 凭证申请 (PhysioNet)| ECG 基础模型大规模预训练王牌底座 |
+| **临床心电基准**| **PTB-XL** | 德国 PTB / PhysioNet | 12-导联 ECG 500Hz (SCP-ECG) | 21,837 条 (18,885人) | 🟢 开放直下 (PhysioNet)| 下游诊断评测与多标签分类黄金基准 |
+| **临床心电基准**| **CODE-15%** | 巴西米纳斯吉拉斯远程心电网 | 12-导联 ECG 300～400Hz | 34.5万条公开 (总库230万) | 🟢 开放直下 (Zenodo) | 大规模自监督预训练与死亡率生存分析 |
+| **临床心电基准**| **Chapman / Ningbo**| 绍兴/宁波医院 / PhysioNet | 12-导联 ECG 500Hz (10秒) | 45,152 条记录 | 🟢 开放直下 (PhysioNet)| 亚洲人群心律失常与心肌缺血多中心基准 |
 | **睡眠多导 PSG**| **SHHS** | 美国 NIH / NHLBI | 完整 PSG (EEG/ECG/Resp/EMG) | 5,804人 (多年随访) | 🟢 NSRR 申请 | 跨器官耦合、慢病死亡长期随访 |
 | **睡眠多导 PSG**| **MESA** | 美国 NHLBI / 多中心 | 完整 PSG + 7天手腕体动仪 | 2,237人 (多族裔) | 🟢 NSRR 申请 | 多族裔睡眠结构、动脉硬化风险 |
 | **睡眠多导 PSG**| **Sleep-EDF** | 荷兰神经所 / PhysioNet | 双通道 EEG, EOG, EMG, 呼吸 | 197人整夜记录 | 🟢 开放直下 | 快速原型验证、跨域分期对比 |
