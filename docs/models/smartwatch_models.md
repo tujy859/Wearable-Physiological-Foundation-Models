@@ -19,7 +19,10 @@
 - [8. 清华大学 UniCardio (Nature MI) —— 统一心血管多模态扩散基础模型](#8-清华大学-unicardio-nature-mi--统一心血管多模态扩散基础模型)
 - [9. 北京大学 PPGFlowECG (2025/2026) —— 潜空间整流流 PPG 转 ECG 跨模态生成框架](#9-北京大学-ppgflowecg-20252026--潜空间整流流-ppg-转-ecg-跨模态生成框架)
 - [10. 北京大学 AnyPPG (KDD 2026) —— 心电引导预训练的光电多器官基座大模型](#10-北京大学-anyppg-kdd-2026--心电引导预训练的光电多器官基座大模型)
-- [11. 端侧轻量化与生物年龄前沿：PPG-Distill 与 Apple PpgAge](#11-端侧轻量化与生物年龄前沿ppg-distill-与-apple-ppgage)
+- [11. 端侧轻量化与生物年龄前沿：PPG-Distill、Apple PpgAge 与开源基准横评](#11-端侧轻量化与生物年龄前沿ppg-distillapple-ppgage-与开源基准横评)
+  - [11.1 Emory University PPG-Distill (2025) —— 脉搏大模型多层次端侧知识蒸馏](#111-emory-university-ppg-distill-2025--脉搏大模型多层次端侧知识蒸馏)
+  - [11.2 Apple PpgAge 与血管生物年龄 (Nature Medicine 2025/2026)](#112-apple-ppgage-与血管生物年龄-nature-medicine-20252026)
+  - [11.3 开源脉搏基础模型生物年龄独立横评：Pulse-PPG、PaPaGei 对标 Apple PpgAge (arXiv 2026)](#113-开源脉搏基础模型生物年龄独立横评pulse-ppgpapagei-对标-apple-ppgage-arxiv-2026)
 - [12. Stanford OpenMHC (2026) —— 超大规模开源穿戴基础模型生态基座](#12-stanford-openmhc-2026--超大规模开源穿戴基础模型生态基座)
 - [13. Emory/UCLA/Google PPG-LM (2026) —— 首个多尺度临床对齐脉搏语言基座](#13-emoryuclagoogle-ppg-lm-2026--首个多尺度临床对齐脉搏语言基座)
   - [13.1 核心动机：打破纯波形自监督孤岛，迈向多时间尺度临床语言对齐](#131-核心动机打破纯波形自监督孤岛迈向多时间尺度临床语言对齐)
@@ -438,7 +441,7 @@ AnyPPG 经冻结表征（Frozen Representation）与极简线性探针（Linear 
 
 ---
 
-## 11. 端侧轻量化与生物年龄前沿：PPG-Distill 与 Apple PpgAge
+## 11. 端侧轻量化与生物年龄前沿：PPG-Distill、Apple PpgAge 与开源基准横评
 
 ### 11.1 Emory University PPG-Distill (2025) —— 脉搏大模型多层次端侧知识蒸馏
 - **论文**: *PPG-DISTILL: Efficient Photoplethysmography Signals Analysis via Foundation Model Distillation*
@@ -458,6 +461,58 @@ AnyPPG 经冻结表征（Frozen Representation）与极简线性探针（Linear 
   - 训练深度模型从手表日常 PPG 预测受试者实际年龄（MAE = 2.43 年）；
   - **血管年龄差 (PPG Age Gap)**：若模型预测年龄显著高于受试者生理年龄（提示微血管弹性硬化与内皮衰退），其未来罹患重大心脑血管事件的风险显著激增（**风险比 Hazard Ratio = 1.46**）。
   - 确立了可穿戴光电脉搏大模型作为**全生命周期血管老化数字标志物**的黄金地位。
+
+### 11.3 开源脉搏基础模型生物年龄独立横评：Pulse-PPG、PaPaGei 对标 Apple PpgAge (arXiv 2026)
+- **论文**: *Benchmarking Open-Source PPG Foundation Models for Biological Age Prediction* (arXiv:2603.14030)
+- **作者**: Nabil Brag
+- **开源资源**: 💻 [GitHub: Misterbra/ppg-age-benchmark](https://github.com/Misterbra/ppg-age-benchmark) | 📄 [arXiv:2603.14030](https://arxiv.org/abs/2603.14030) | 🤗 [Hugging Face: AI-PPG 权重](https://huggingface.co/Ngks03/PPG-VascularAge)
+- **评测数据集**: PulseDB (VitalDB 临床指端 PPG，906 位手术患者，41,104 个 10 秒片段，125 Hz，受试者年龄跨度 18–92 岁)
+
+#### 11.3.1 核心破局动机：开源大模型能否打破 Apple 闭源壁垒？
+Apple PpgAge（21.3万人）与 UK Biobank AI-PPG（21.2万人）确立了光电脉搏波在心血管与全身衰老评估中的黄金价值。然而，Apple 模型与数据完全闭源，而单中心大队列监督模型又面临泛化瓶颈。**该论文首次系统性评测主流开源通用生理基础模型（Pulse-PPG, PaPaGei-S）在完全未接触过年龄标签的情况下，能否通过潜空间表征实现对血管生物年龄的高精度零样本与线性探测？**
+
+#### 11.3.2 全景实验结果横评表（906 例 VitalDB 患者，5折受试者级分层交叉验证）
+
+| 模型 / 特征配置 | 模态与特征维度 | MAE (年) | $R^2$ | 相关系数 $r$ |
+| :--- | :--- | :---: | :---: | :---: |
+| **Baseline** | 盲猜训练集受试者年龄均值 | 11.91 | - | - |
+| **HR only** | 单一平均心率 (1 维) | 11.83 | - | - |
+| **HR + HRV** | 传统时域心率变异性 (7 维: SDNN, RMSSD, pNN50 等) | 11.49 | - | - |
+| **Demographics** | 全套人口学+血流动力学 (6 维: 性别, 身高, 体重, BMI, SBP, DBP) | 10.04 | - | - |
+| **HR/HRV + Demographics** | 传统特征联合建模 (13 维) | 9.59 | - | - |
+| **AI-PPG Age (Zero-shot)** | 21.2 万人 UKB 监督训练模型直接推理 | **11.50** | 0.043 | 0.313 |
+| **PaPaGei-S (Linear Probe)** | 冻结 512 维潜表征 + 岭回归 | 9.80 ± 0.34 | 0.313 | 0.583 |
+| **AI-PPG Age (Linear Probe)** | 提取倒数第二层 192 维卷积激活 + 岭回归 | 9.72 ± 0.37 | 0.310 | 0.563 |
+| **Pulse-PPG (Linear Probe)** | 冻结 512 维潜表征 + 岭回归 | **9.28 ± 0.44** | **0.388** | **0.645** |
+| **PaPaGei-S + Demographics** | 512 维潜表征 + 6 维人口学特征拼接 | 8.56 ± 0.22 | 0.477 | 0.696 |
+| **AI-PPG Age + Demographics** | 192 维潜表征 + 6 维人口学特征拼接 | 8.58 ± 0.25 | 0.440 | 0.664 |
+| **Pulse-PPG + Demographics (最优)** | 512 维潜表征 + 6 维人口学特征拼接 | **8.22 ± 0.25** | **0.517** | **0.725** |
+
+#### 11.3.3 关键技术洞察与“两大反转”机理解构
+1. **反转一：21 万人专用监督大模型的“跨域预测崩溃（Prediction Collapse）”**
+   - 在 UK Biobank（212,231 人）健康门诊队列上训练的 AI-PPG Age，Zero-shot 迁移至手术室 VitalDB 时出现灾难性崩溃（MAE = 11.50 年）。
+   - **根因剖析**：手术患者在全身麻醉状态下使用了血管活性药（如去甲肾上腺素）、麻醉剂（丙泊酚）及机械通气，外周阻力与脉搏形态严重异于门诊常态。端到端强监督网络遇到分布外（OOD）生理态产生防御性收缩，**全部预测值被死死压缩在 38–67 岁这一狭窄区间**（而受试者实际年龄为 18–92 岁），退化为记忆训练集的先验均值。
+2. **反转二：无监督自监督大模型（Pulse-PPG）线性探测实现全面越级超越**
+   - Pulse-PPG 仅通过相对对比学习（RelCon）预训练，完全无年龄标签监督，线性探测取得 **MAE = 9.28 年**。
+   - 不仅战胜了重训探测头的 AI-PPG Age（9.72 年），**仅凭 10 秒原始脉搏波提取的 512 维形态表征，直接击败了“HR/HRV + 全套人口学(身高/体重/BMI/血压)”组合（9.59 年）**。
+   - 这表明多源高噪预训练赋予了通用基础模型无与伦比的形态不变性（Morphological Invariance），远比单一大队列任务过拟合模型更鲁棒。
+
+#### 11.3.4 心血管物理学思辨：单心拍 100 点重采样 vs 10 秒连续时序
+为什么 AI-PPG Age 在特征提取模式下依然逊于 Pulse-PPG？关键在于两派处理哲学的根本分歧：
+- **AI-PPG 的人工先验假说（借鉴经典脉搏波分析 PWA）**：
+  为避免受试者走动、情绪激动带来的即时心率（HR）干扰，算法将单心拍机械重采样拉伸到固定的 **100 个采样点（0%~100% 相对心动周期）**，并对 10 秒内的所有拍取相干平均（Average Beat）。
+- **付出的沉重代价**：
+  1. **破坏了主动脉脉搏波传导速度（PWV）的物理真实性**：动脉硬化程度由脉搏反射波绝对时延（$\Delta T$, ms）决定。相对百分比拉伸使得慢心率下 1 点代表 10 ms、快心率下 1 点代表 6 ms，彻底扭曲了反射波传播的物理量纲；
+  2. **丢失了自主神经老化核心指标（HRV）**：衰老伴随窦房结衰退与迷走神经张力减弱，心动周期变异性（SDNN/RMSSD）随衰老断崖式下跌。单心拍平均模板将多心拍节律波动全部抹杀；
+  3. **丢失心肺耦合（Cardiorespiratory Coupling）**：连续 10 秒时序（Pulse-PPG 接收的形式）完整保留了呼吸性脉压起伏（PPV）与呼吸性心律不齐（RSA）。
+
+#### 11.3.5 临床有效性复现与 Apple PpgAge 差距归因
+1. **PPG Age Gap 与血管硬化的病理生理映射**：
+   - 论文计算了预测年龄减去实际年龄的残差（PPG Age Gap）。在消除日历年龄混杂后，**PPG 年龄差与舒张压（DBP）呈现极显著负相关（$r = -0.188, p = 1.2 \times 10^{-8}$）**。
+   - **生理学机理**：大动脉管壁弹性纤维退变与胶原增生（动脉硬化）导致血管顺应性降低，脉压差进行性增大（收缩压 SBP 升高、舒张压 DBP 下降）。PPG 预测表征偏“老”的个体，舒张压明显偏低。这强力复现了 Apple 关于 PPG 形态蕴含全身血管衰老表型的医学假说。
+2. **与 Apple 闭源 PpgAge（MAE = 2.43 年）的差距根因**：
+   - **236 倍样本量悬殊**：评测集仅 906 人，而 Apple 达 213,593 人。学习曲线分析显示，在 906 人规模下性能完全没有触及平台期（No Plateau），增加临床数据规模仍有巨大提升空间；
+   - **生理干扰与探针范式**：Apple 采集自由生活静息手表波形，本研究为术中麻醉监护指端波形；且 Apple 为端到端深度调优，本研究仅为冻结特征线性探测（Frozen Linear Probe）。
 
 ---
 

@@ -147,6 +147,7 @@ Wearable Physiological Foundation Models
 - **Pulse-PPG** (UbiComp 2025): UIUC 主导，针对真实野外高噪手腕 PPG 提出相对对比学习（RelCon），有效克服真实生活中的剧烈运动伪影。
 - **PPG-Distill** (Emory University, 2025): 针对穿戴设备端侧资源受限难题，首创面向光电脉搏大模型的三级知识蒸馏框架（预测/特征/波形形态蒸馏），在保持心率与房颤高精度判别的同时实现 7 倍推理加速与 19 倍内存节省。
 - **Apple PpgAge & WBM** (Nature Medicine 2025/2026): 基于 21 万人 Apple Health Study 真实世界手腕脉搏波，验证了 PPG 潜表征独立于日历年龄评估血管老化程度（Vascular Age）与心血管发病风险（HR = 1.46）的临床有效性。
+- **开源脉搏大模型生物年龄基准横评** (arXiv 2026.03): 首个对标 Apple 闭源 PpgAge 的独立开源 Benchmark。证实 Pulse-PPG 仅凭冻结无监督潜表征（融合人口学 MAE 8.22年）即可在跨域临床患者上全面击败 21 万人监督训练的专用大模型与传统 HR/HRV，并成功复现 PPG 年龄差与舒张压（DBP）血管硬化的强负相关（详见 [docs/models/smartwatch_models.md](docs/models/smartwatch_models.md#113-开源脉搏基础模型生物年龄独立横评pulse-ppgpapagei-对标-apple-ppgage-arxiv-2026)）。
 - **LIMU-BERT** (UbiComp): 针对 IMU/加速度计的传感器表征模型，实现与个体身份解耦的高阶步态和运动模式提取。
 
 ---
