@@ -76,7 +76,10 @@
   - 硬件平台采用华为多波长光电脉搏波（PPG）与心电（ECG）同步采集的智能手表实验设备；
   - 1000 Hz 高精度同步手腕 PPG 与 ECG 原始波形（单次测量约 2 分钟）；
   - 配对双人同步柯氏音水银血压计听诊读数（SBP/DBP 临床金标准），严格遵循 IEEE 1708 与 ANSI/AAMI/ISO 81060-2 标准。
-- **典型应用**: 无袖带血压（Cuffless BP）连续回归、脉搏波传导时间（PTT）建模及可穿戴生理大模型（如 CBPM-LLaMA）有监督后训练基准。
+- **两大标准评测协议 (Evaluation Protocols)**:
+  - **协议一：Calibration-free (完全无校准跨受试者评估)**：纯靠模型从 31 维生理特征或时序波形中预测血压绝对值。由于个体间血管刚度与接触阻抗差异，当前 SOTA（传统树模型/深度时序/SFT大模型）的收缩压 MAE 普遍在 **7.5 ~ 11.0 mmHg** 之间，尚未完全达到严苛的 AAMI 医疗标准（$\le 5 \pm 8\text{ mmHg}$）。
+  - **协议二：Calibrated (基线静态后处理校准)**：以随访第 0 天测量的基准袖带值（$\text{BaseSBP}$）为锚点，评估测试阶段通过加权后处理：$\text{SBP}_{cal} = 0.3 \times \text{SBP}_{free} + 0.7 \times \text{BaseSBP}$ 修正输出。在静息平稳队列中，70% 真实基线的强力约束将收缩压与舒张压 MAE 稳定压缩至 **3.0 ~ 4.5 mmHg**，全面通过 AAMI 与 BHS 医疗认证标准。
+- **典型应用**: 无袖带血压（Cuffless BP）连续回归、脉搏波传导时间（PTT）建模及可穿戴生理大模型（如 CBPM-LLaMA）有监督后训练基准。详细算法对比与 MAP/PP 生理机制解耦参见 [docs/models/health_reasoning_llms.md](docs/models/health_reasoning_llms.md#45-中科院港理工-cbpm-llama-acm-bcb-24--生理动力学先验解耦的-prompt-微调范式)。
 
 ---
 

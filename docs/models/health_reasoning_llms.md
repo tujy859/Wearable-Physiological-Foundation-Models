@@ -204,31 +204,56 @@ HEARTS 进行了详尽的大规模实证对照实验，给出了数条颠覆盲�
 3. **模态表示形式的影响仅停留在绝对数值**：
    将时序绘制成折线图（Vision-LLM）、将数值序列转化为原始文本字符串、或者经过 Patch 离散化，只会在绝对分值上产生平移，**不同生理任务之间的相对难易梯度在各种输入形式下高度一致**。
 
-### 4.4 CodeAct Agent 与神经符号协同范式
-针对纯 LLM 计算脆弱的问题，HEARTS 深入探索了 **CodeAct Agent** 范式：
-- **核心机制**：LLM 不再直接输出计算结果或逐点波形，而是担任**指挥中枢（Task Planner）**，通过自主编写并动态执行 Python 代码，调用成熟的数字信号处理与生物信息库：
-  - 调用 `scipy.signal` 执行巴特沃斯带通滤波与功率谱密度（PSD）估计；
-  - 调用 `neurokit2` / `wfdb` 进行心电 R 波峰值探测与 HRV 频域指标（LF/HF）解算；
-  - 调用 `pandas` 执行移动窗口分位数统计与双变量格兰杰因果检验。
+### 4.4 CodeAct Agent 与神经符号协同范式 (ICML 2024)
+针对纯 LLM 无法可靠处理连续浮点数、频域变换与时序积分运算的致命缺陷，前沿健康系统（如 HEARTS 等）深入集成了 **CodeAct Agent** 范式：
+- **核心定义与来源**：CodeAct（*Executable Code as Actions with Language Models*，ICML 2024 / UIUC Xingyao Wang 等，开源项目 OpenHands 核心基石）主张**将大模型 Agent 的行动空间（Action Space）彻底统一为可执行的 Python 代码**，而非僵硬受限的 JSON 工具调用（Function Calling）或脆弱的纯文本正则匹配（ReAct）。
+- **工作机制与核心优势**：
+  1. **支持复杂控制流与原生数据流**：支持多步循环、条件分支与局部临时变量，工具间数据传递直接在沙箱内存中流转，杜绝了数百个浮点数在 LLM 上下文中反复序列化导致的 Context 长度爆炸。
+  2. **有状态执行环境（Stateful REPL Sandbox）**：沙箱内部维护长期活跃的 Python 解释器进程，前序轮次加载的 `ppg_raw` 数组或 `pandas.DataFrame` 长期保留在内存中，后续指令直接按需索引计算。
+  3. **自主异常捕获与调试闭环（Self-Debugging）**：当滤波参数超限或峰值检测未捕获信号触发 `ValueError` 时，Python 解释器的 Traceback 报错堆栈会作为下文 Observation 自动喂回，驱动模型像算法工程师一样自我修复代码。
+- **生理时序领域的杀手级应用**：
+  - 调用 `scipy.signal` 执行巴特沃斯带通滤波、自适应陷波与功率谱密度（PSD）估计；
+  - 调用 `neurokit2` / `wfdb` / `heartpy` 进行心电 R 波/脉搏波峰值探测、重搏切迹定位与 HRV 频域指标（LF/HF）解算；
+  - 调用 `scipy.optimize.curve_fit` 执行血流动力学非线性方程拟合（如 Hughes 血管弹性方程求解），实现神经符号（Neuro-Symbolic）混合求解。
 - **效果飞跃**：在引入 CodeAct 机制后，大模型在复杂 Data Reasoning 和 Perception 任务上的达标率平均提升了 **38.6%**，彻底克服了浮点数乘除法和时序积分运算的幻觉问题。
+
+---
 
 ### 4.5 中科院/港理工 CBPM-LLaMA (ACM-BCB '24) —— 生理动力学先验解耦的 Prompt 微调范式
 - **论文**: *Large Language Models for Cuffless Blood Pressure Measurement From Wearable Biosignals* (ACM-BCB '24 / arXiv:2406.18069)
 - **研发团队**: 中国科学院深圳先进技术研究院 (SIAT 李烨/苗芬团队) 联合香港理工大学 (PolyU 曹建农团队)
 - **开源资源**: [GitHub: zdzdliu/CAS-BP](https://github.com/zdzdliu/CAS-BP) (微调权重 CBPM-LLaMA 开源)
 
-#### 1. 数据底座与团队渊源 (CAS-BP 与华为团队参与)
-- **CAS-BP 与 CBPM-LLaMA 的关系**：CAS-BP (*Chinese Academy of Sciences Blood Pressure*) 是该团队历经数年建立的高精度可穿戴血压评测基准**数据集**（奠基论文发表于 *IEEE JBHI 2023*）；而 CBPM-LLaMA 是该团队在 ACM-BCB '24 中**以 CAS-BP 数据集为监督底座，对 LLaMA3-8B 等开源大模型进行领域专用后训练产出的算法模型**。
-- **华为技术团队的深度参与**：在 CAS-BP 奠基论文的作者名单中，**曾甲（Jia Zeng）**与**陈祖仙（Zu-Xian Chen）**两位核心作者来自**华为技术有限公司（Huawei Technologies Co., Ltd.）**。整个数据集由中科院先进院与华为穿戴健康团队产学研联合采集，所采用的受试者腕戴设备即为华为多波长光电脉搏波（PPG）与心电（ECG）同步采集的智能手表实验平台。
+#### 1. 论文对比与工业落地透视：CAS-BP (2023) vs CBPM-LLaMA (2024)
 
-#### 2. 有监督后训练流水线 (Supervised Post-training / SFT)
+| 核心维度 | 23年基石工作（IEEE JBHI - CAS-BP 原作） | 24年大模型工作（ACM-BCB '24 - CBPM-LLaMA） |
+| :--- | :--- | :--- |
+| **团队背景** | **中科院先进院 + 华为技术团队**（曾甲、陈祖仙等） | 高校团队（基于 23 年开源的 CAS-BP 数据集） |
+| **硬件与数据** | 华为多波长 PPG + ECG 手表，**1,272人，12,624条 4周随访** | **同源数据**，直接使用 23 年公开的 CAS-BP 训练集 |
+| **输入形态** | 原始 1000 Hz 同步时序波形 / 结合波形与多模态特征 | **非原始时序**，手工提取 **31 维生理特征**转为自然语言文本 Prompt |
+| **模型架构** | 传统机器学习与轻量深度学习（XGBoost, ResNet, BiLSTM, MLP） | **LLaMA-3-8B / LLaMA-2-7B**（LoRA / 全参数 SFT） |
+| **核心机制** | 传统信号处理与端到端时序时空特征建模 | **MAP/PP 目标分解** + **大比例基线校准（$\alpha=0.3$）** |
+| **端侧部署可行性** | **极高**（模型几百 KB 到数 MB，穿戴/手机端毫秒级离线推理） | **极低**（8B 参数需数 GB 显存与重型算力，手表端侧无法承载） |
+
+#### 2. “指标为什么这么好”的关键内幕：训练与评估的校准机制割裂
+业界与算法团队在评估 24 年大模型工作时，必须严格区分**训练阶段**与**评估后处理阶段**的差异：
+1. **微调阶段（SFT）未引入个人基线**：
+   - 训练时 Prompt 仅包含用户人口学信息 + 31 维特征，**严禁输入用户的历史袖带基线真值（BaseSBP）**；
+   - **设计原因**：大模型具备极强的**捷径学习（Shortcut Learning）与梯度懒惰**特性。若在 Prompt 中直接提供基线血压真值，模型的注意力机制会迅速将其作为捷径直接复读输出，使 31 维生理特征的注意力权重趋近于零，模型退化为无法响应脉搏波动态波动的“复读机”。因此微调模型输出的是纯未校准估计（$\text{SBP}_{\text{free}}, \text{DBP}_{\text{free}}$）。
+2. **测试评估阶段强行引入 70% 真实基线后处理**：
+   - 论文宣称达到 AAMI/BHS 医疗标准的低误差，实际上来自测试阶段的**静态加权校准公式**：
+     $$\text{SBP}_{\text{cal}} = 0.3 \times \text{SBP}_{\text{free}} + 0.7 \times \text{BaseSBP}$$
+   - **真实推手分析**：整整 **70% 的权重直接锚定在用户随访第一天的真实袖带基线上**！在 CAS-BP 这类静息随访队列中，受试者 4 周内的个体内血压变异通常仅有 5~8 mmHg，强行融合 70% 的历史真值天然能将 MAE 压缩到 3~4 mmHg。
+   - **脱去校准外衣的真实性能**：若剥离这层 0.7 的基线后处理，纯看 LLaMA 模型微调输出的 $\text{SBP}_{\text{free}}$，其 MAE 仍在 **8 ~ 11 mmHg** 左右，不仅无法达到 AAMI 标准，且相比同等无校准条件下的轻量级树模型（XGBoost）或时序 ResNet 并没有统计学代差。若将同款 0.7 基线校准套用在传统轻量模型上，同样能刷出 3.x mmHg 的亮眼指标。
+
+#### 3. 有监督后训练流水线 (Supervised Post-training / SFT)
 CBPM-LLaMA 本质上是对预训练开源大模型执行标准的**领域有监督后训练（Instruction Tuning）**：
 1. **数据流水线构建**：将 CAS-BP 采集的 12,624 次测量记录转化为有监督的文本 Prompt-Response 对。
 2. **训练工具与优化目标**：基于 **LLaMA-Factory** 框架，在 4 张 NVIDIA RTX A6000 (48GB) 上训练。输入端 Prompt 被 Mask 掩蔽，**仅对大模型输出的 Response（预测数值文本）计算自回归交叉熵损失（Token-level Cross-Entropy Loss）**：
    $$\mathcal{L}_{\text{SFT}} = -\sum_{t=1}^{T} \log P(y_t \mid y_{<t}, \text{Input\_Prompt})$$
 3. **严格 5 折交叉验证**：以 1,272 名受试者划分为 5 折交叉验证，杜绝受试者级数据穿越。
 
-#### 3. 真实 Prompt 设计与具体示例 (Appendix B Table 6)
+#### 4. 真实 Prompt 设计与具体示例 (Appendix B Table 6)
 微调每条样本被严格拆解为 **Instruction（角色目标）**、**Input（医学先验 + 画像 + 机制特征）** 与 **Response（极简数值标签）**：
 
 ```json
@@ -245,11 +270,47 @@ CBPM-LLaMA 本质上是对预训练开源大模型执行标准的**领域有监�
   1. *Level 1 (Basic)*: 仅输入 31 维纯数值特征列表 $\to$ SBP MAE 为 **7.77 mmHg**；
   2. *Level 2 (+ BP Knowledge)*: 加入 MAP/PP 生理机制解释与特征分组 $\to$ SBP MAE 降至 **7.69 mmHg**（降 1.03%）；
   3. *Level 3 (Full Context)*: 叠加年龄、性别、BMI 及高血压病史 $\to$ SBP MAE 进一步降至 **7.08 mmHg**（累计下降 **8.90%**）。
-- **确定性代数反算**：模型推断出 $\text{MAP}$ 与 $\text{PP}$ 后，利用确定性物理公式反解收缩压与舒张压：
-  $$\text{SBP}_{\text{free}} = \text{MAP} + \frac{2}{3}\text{PP}, \quad \text{DBP}_{\text{free}} = \text{MAP} - \frac{1}{3}\text{PP}$$
-  随后结合第 1 天基线血压完成校准：$\text{SBP}_{\text{cal}} = 0.3 \times \text{SBP}_{\text{free}} + 0.7 \times BaseSBP$。
 
-#### 4. 深度辨析：为什么特征文本化后，LLM 能击败传统机器学习（AdaBoost/决策树）？
+#### 5. 生理血流动力学正交解耦深度剖析：从 SBP/DBP 到 MAP/PP 的理论来源与算法收益
+将传统的收缩压（SBP）与舒张压（DBP）直接双头回归，转化为平均动脉压（MAP）与脉压差（PP）预测，是心血管生理学与算法工程结合的典范思路：
+
+```
+                      总血压波形 P(t)
+                            │
+            ┌───────────────┴───────────────┐
+            ▼                               ▼
+    稳态分量 (DC Component)         搏动分量 (AC Component)
+         MAP (平均动脉压)                 PP (脉压差)
+            │                               │
+   由【心输出量 × 外周阻力】决定        由【每搏量 ÷ 大动脉顺应性】决定
+   (CO × TPR, 微循环毛细血管网)       (SV / Compliance, 主动脉大血管弹性)
+```
+
+1. **血流动力学根源（二元件 Windkessel 弹性储器模型）**：
+   - **MAP（稳态阻力分量 / DC）**：代表一个心动周期内心脏射血流经全身微循环的恒定平均灌注压。根据循环欧姆定律：
+     $$\text{MAP} \approx \text{CO} \times \text{TPR}$$
+     其中 $\text{CO}$（心输出量）$= \text{HR} \times \text{SV}$，$\text{TPR}$（外周总阻力）由微小动脉平滑肌张力决定。MAP 在全身大中小动脉中压力降极小（几乎恒定），受外周反射波干扰极微弱。
+   - **PP（动态搏动分量 / AC）**：代表单次射血引起的血管壁扩张与回缩震荡幅度（$\text{PP} = \text{SBP} - \text{DBP}$）。
+     $$\text{PP} \approx \frac{\text{SV}}{C_A}$$
+     其中 $C_A$ 为大动脉顺应性（Compliance，与血管硬度成反比）。随着血管老化变硬，$C_A$ 下降，脉冲波传导速度（PWV）加快，反射波提前叠加到收缩期，导致 PP 剧烈拉大。
+   - **直接预测 SBP/DBP 的机理混杂弊端**：SBP 既叠加了稳态底压（MAP），又包含了射血峰值与反射波（PP）；DBP 则是微循环阻力泄漏与心舒末期弹性回缩的复合体。直接回归 SBP/DBP 等于强迫模型去拟合两个“物理机理高度交织”的混乱目标。
+
+2. **数学映射与 1/3 近似法则**：
+   临床上由于心室收缩期占周期的 $1/3$、舒张期占 $2/3$，采用积分均值加权建立双向确定性变换：
+   - **正向解耦（构建训练目标）**：
+     $$\begin{cases} \text{MAP} = \frac{1}{3}\text{SBP} + \frac{2}{3}\text{DBP} \\ \text{PP} = \text{SBP} - \text{DBP} \end{cases}$$
+   - **逆向重构（反推临床血压）**：
+     $$\begin{cases} \text{SBP} = \text{MAP} + \frac{2}{3}\text{PP} \\ \text{DBP} = \text{MAP} - \frac{1}{3}\text{PP} \end{cases}$$
+
+3. **机器学习与算法工程维度的四大核心收益**：
+   - **① 特征与生理通道的强一一对齐（消除负迁移）**：外周阻力特征（PPG 重搏切迹比、降中峡面积等）专门对齐拟合 MAP；时延与弹性特征（PTT、上升支斜率、刚度指数）专门对齐拟合 PP，避免了同一个特征在多任务学习中相互拉扯（Negative Transfer）。
+   - **② 数学上 100% 杜绝反常生理预测（$\text{SBP} \le \text{DBP}$）**：传统双头网络易在伪影样本上输出 $\text{SBP} \le \text{DBP}$ 的违规错误；而在 MAP/PP 框架下，只要对输出施加非负约束（如 $\text{PP} > 0$），反推公式在代数上严格保证 $\text{SBP} > \text{DBP}$。
+   - **③ 抑制手腕“外周脉压放大效应（Peripheral Amplification）”的噪声**：手腕佩戴测量的是桡动脉/指端毛细血管，受外周小动脉口径变窄和阻抗失配反射影响，SBP 在腕部通常被放大 10~20 mmHg，方差极大；而 MAP 在全身动脉树中高度稳定，信噪比极佳，模型能率先稳健锁定基底灌注水平。
+   - **④ 优化损失曲面与降低 Hessian 条件数**：SBP 与 DBP 高度共线（相关系数 $r > 0.85$），多任务直接回归会导致损失函数曲面病态振荡；转为正交的 MAP/PP 后，梯度方向趋于正交，显著加速模型平滑收敛。
+4. **对工业穿戴团队的落地价值**：
+   该解耦思路具有**零额外算力、零模型参数开销**的特性。在端侧无论是运行 XGBoost、CatBoost 还是轻量级 1D-CNN/MLP，仅需将训练目标变换为 MAP/PP 并在输出端反解，即可零成本在测试集上稳定获取 **0.5 ~ 1.0 mmHg 的 MAE 纯收益**。
+
+#### 6. 深度辨析：为什么特征文本化后，LLM 能击败传统机器学习（AdaBoost/决策树）？
 既然输入给大模型的仍然是这 31 维手工提取特征和人口学数字，为什么 LLM 会比传统回归树模型表现更优？底层机制在于：
 1. **语义归纳偏置（Semantic Inductive Bias）vs 零先验（Tabula Rasa）**：
    - 传统 ML（AdaBoost、决策树）把输入视作彼此孤立的数值列（Column 1, Column 2），完全不知“年龄”与“脉搏波速度 PTT”存在怎样的生理耦合，必须从零拟合；
@@ -260,8 +321,6 @@ CBPM-LLaMA 本质上是对预训练开源大模型执行标准的**领域有监�
 3. **小样本高维空间的极佳泛化效率（Sample Efficiency）**：
    - 1,272 名受试者在探索全年龄高血压复杂分布时依然属于稀缺小样本（Data Scarcity）；
    - 预训练大模型具备平滑的函数逼近基底，实测显示：**LLaMA3-8B 仅使用 30% 数据微调，其收缩压预测精度（MAE 7.22 mmHg）即可超越使用 80% 全量数据充分训练的 AdaBoost 基线（7.42 mmHg）**。
-4. **目标正交解耦（MAP/PP）显著降低了回归熵**：
-   - 传统模型强行直接拟合双重耦合波动的 SBP 与 DBP；将目标分解为稳态流动（MAP）与搏动冲击（PP），大大降低了端到端回归的非线性映射混乱度。
 
 ### 4.6 北大/NUS GEM (NeurIPS 2025) —— 走向波形物理锚定的 Grounded ECG 多模态大模型
 - **论文**: *GEM: Empowering MLLM for Grounded ECG Understanding with Time Series and Images* (NeurIPS 2025 / arXiv:2503.06073)
