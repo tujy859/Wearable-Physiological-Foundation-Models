@@ -113,6 +113,8 @@ Wearable Physiological Foundation Models
 | **TimesFM** | Google Research | ICML 2024 / v2.0 | 通用单变量时序 | 解码器自回归 | 200M | 1000亿点 | 🟢 | 🟢 (HF) |
 | **Chronos** | Amazon Research | ICML 2024 / Bolt | 通用单变量时序 | 离散分箱 T5/Encoder | 20M～710M | 泛领域时序语料 | 🟢 | 🟢 (HF) |
 | **MOMENT** | CMU Auton Lab | ICML 2024 | 通用多变量时序 | Patch-MAE | 385M | Time-series Pile (含生理) | 🟢 | 🟢 (HF) |
+| **Timestral** | Mistral AI | 2026.10 | 通用多变量时序 (含协变量) | 因果 Patch Trans + DHF 解耦预测 | **5M～209M** | 多领域大规模时序语料 | 🟢 (GitHub) | 🟢 (HF) |
+| **Kumo-Forecast** | NVIDIA (GTC 2026) | 2026.10 | 通用多变量时序 + 关系表 | MOMENT 骨干 + DARR 检索增强 | \~340M | 跨领域工业与企业时序 | 🟢 (GitHub) | 🟢 (HF/NIM) |
 | **Time-LLM** | Monash / 蚂蚁集团 | ICLR 2024 | 通用数值时序 | 跨模态原型重编程 (Reprogramming) | 冻结 7B (微调 <1%) | 泛领域时序基准 (少样本) | 🟢 | 🟢 (GitHub) |
 | **TimeBraid** | UCSD / USC | arXiv 2026.09 | 通用时序 + 自然语言 | 双塔交错全局注意力 (MoT) | 1.2B～6.7B | 2.2M对齐 + 4.9M SFT | 🟡 (承诺开源) | 📄 [arXiv:2609.29792](https://arxiv.org/abs/2609.29792) |
 | **OpenMHC** | Stanford / Imperial | arXiv 2026 | 19维腕戴时序+169维变量 | 开源基础模型生态基座 | WBM / LSM-2 | >6,700万小时 (11,894人) | 🟢 | 🟢 (Dataverse/HF) |
@@ -195,6 +197,8 @@ Wearable Physiological Foundation Models
 - **TimesFM** (Google): 采用分块解码器架构，在巨量时序数据上预训练，提供强大的零样本点预测与概率区间预测。
 - **Chronos & Chronos-Bolt** (Amazon): 将连续时间序列离散化为词元（Tokenization via Bins），利用语言模型（T5 骨干）进行自回归时间序列预测。
 - **CMU MOMENT & MANTIS**: 基于 Patch-MAE 理念，覆盖多变量重建、异常检测与分类，预训练数据 Time-series Pile 包含大量生理信号。
+- **Mistral Timestral** (Mistral AI, 2026.10): 极轻量级零样本概率时序预测基座（**5M / 28M / 123M / 209M**），首创**解耦预测跨度（Decoupled Horizon Forecasting, DHF）**与时间-变量双重注意力，支持 32,768 步超长上下文、已知未来协变量（如进食/给药计划）与 21 分位数不确定性输出，纯 CPU 推理仅需 10–140ms，在 GIFT-Eval、TIME、fev-bench 三大零样本基准登顶第 1（开源代码：[mistralai/timestral](https://github.com/mistralai/timestral)）。
+- **NVIDIA Kumo-Forecast / Kumo-TS** (NVIDIA GTC Berlin, 2026.10): 英伟达开源企业级多变量时序分析与基础模型套件（原代号 NV-Tesseract）。基于 340M 参数 MOMENT-1-large 骨干，首创**检索增强时序预测（DARR：Domain-Aware Representation and Retrieval）**，将直接神经网络预测与历史模式 $k$-NN 近邻检索动态融合，并内置特征/滞后归因（Lag Attributions）可解释性层与扩散异常检测（`Kumo-Anomaly`）（开源代码：[NVIDIA/Kumo-TS](https://github.com/NVIDIA/Kumo-TS)）。
 - **TimeBraid** (UCSD / USC, 2026.09): 首创时序基础模型（TimesFM 2.5）与大语言模型（Qwen）深层交错全局残差注意力架构，统一时序感知、文本推理、纯时序预测与受控反事实情景推演（Ctrl-F）。
 
 ---
