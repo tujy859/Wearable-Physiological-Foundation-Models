@@ -15,7 +15,8 @@ Thumbs.db
 
 # Large Datasets & Raw Files (Never commit raw data to survey repo)
 /datasets/
-/data/
+/data/*.csv
+/data/*.parquet
 *.csv
 *.parquet
 *.h5
@@ -36,9 +37,10 @@ Thumbs.db
 /papers/
 *.pdf
 
-# Scratch & Logs
+# Scratch & Local Workspace
 /logs/
 /scratch/
 /runs/
+/data/staging/
 .licenses/
 blog_drafts/

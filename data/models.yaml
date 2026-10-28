@@ -1,0 +1,672 @@
+- id: sensorfm
+  name: SensorFM
+  org: Google Research / Fitbit Health AI
+  venue: arXiv 2026
+  date: 2026-05
+  modality: 腕部多模态 (PPG, ACC, EDA, 皮温, 气压计)
+  method: 统一物理时间分块 + 掩码多模态建模与跨模态填补
+  params: 大模型级
+  data: 1 万亿分钟 (500 万真实用户)
+  paper: https://arxiv.org/abs/2605.22759
+  code: ''
+  weights: ''
+  access: closed
+  doc: docs/models/smartwatch_models.md#sensorfm
+  type: model
+  added: '2026-10-12'
+- id: papagei
+  name: PaPaGei
+  org: Nokia Bell Labs / 剑桥大学 / 达特茅斯学院
+  venue: ICLR 2025
+  date: 2024-10
+  modality: 单通道 PPG (光电脉搏波)
+  method: 形态感知对比学习 + ResNet1D-MoE
+  params: 约 1.5M
+  data: 5.7 万小时 (10 个公开数据集)
+  paper: https://arxiv.org/abs/2410.20542
+  code: https://github.com/Nokia-Bell-Labs/papagei-foundation-model
+  weights: https://zenodo.org/records/13983110
+  access: open
+  doc: docs/models/smartwatch_models.md#papagei
+  type: model
+  added: '2026-10-12'
+- id: pulse-ppg
+  name: Pulse-PPG
+  org: 孟菲斯大学 / UIUC
+  venue: UbiComp 2025
+  date: 2025-01
+  modality: 腕部高噪 PPG
+  method: 相对对比学习 (RelCon) + 大核 1D-ResNet
+  params: 约 2M
+  data: 5.5 万小时 (120 人连续 100 天野外生活数据)
+  paper: ''
+  code: https://github.com/maxxu05/pulseppg
+  weights: https://zenodo.org/records/10892019
+  access: open
+  doc: docs/models/smartwatch_models.md#pulse-ppg
+  type: model
+  added: '2026-10-12'
+- id: xmae
+  name: xMAE
+  org: Samsung Research America / UCLA
+  venue: ICML 2024
+  date: 2024-05
+  modality: PPG + ECG (跨模态虚拟传感)
+  method: 跨模态掩码自编码 (Cross-Modal MAE)
+  params: 紧凑级
+  data: 9,400 小时同步配对 ECG-PPG 数据
+  paper: ''
+  code: ''
+  weights: ''
+  access: closed
+  doc: docs/models/smartwatch_models.md#xmae
+  type: model
+  added: '2026-10-12'
+- id: himae
+  name: HiMAE
+  org: Samsung Research America / UCLA
+  venue: ICLR 2026
+  date: 2025-10
+  modality: 单通道手腕绿光 PPG
+  method: 5 级 1D 卷积 U-Net + 混合分块掩码自编码 (80% MAE)
+  params: 0.31M (编码器)
+  data: 8 万小时 (47,644 名用户真实手表数据)
+  paper: https://arxiv.org/abs/2510.25785
+  code: https://github.com/Simonlee711/HiMAE
+  weights: https://github.com/Simonlee711/HiMAE
+  access: open
+  doc: docs/models/smartwatch_models.md#himae
+  type: model
+  added: '2026-10-12'
+- id: unicardio
+  name: UniCardio
+  org: 清华大学 / 安贞医院 / 帝国理工学院
+  venue: Nature Machine Intelligence 2025/2026
+  date: 2025-05
+  modality: PPG + ECG + 动脉血压 (BP)
+  method: 多模态扩散 DiT + 任务特异性掩码与持续学习
+  params: 骨干共享 + 0.3M/模态增量
+  data: 339 小时高精度三模态全时程波形
+  paper: https://doi.org/10.1038/s42256-025-01147-y
+  code: https://github.com/chen-zehua/UniCardio
+  weights: ''
+  access: open
+  doc: docs/models/smartwatch_models.md#unicardio
+  type: model
+  added: '2026-10-12'
+- id: ppgflowecg
+  name: PPGFlowECG
+  org: 北京大学健康医疗大数据国家研究院
+  venue: arXiv 2025-2026
+  date: 2025-02
+  modality: PPG → 诊断级 ECG
+  method: CardioAlign 潜空间对齐 + 潜空间整流流 (Rectified Flow)
+  params: 紧凑级 (1-4 步 ODE 快速采样)
+  data: MC-MED (11.8 万人 / 1000 万对急诊样本)
+  paper: https://arxiv.org/abs/2502.14856
+  code: https://github.com/PKUDigitalHealth/PPGFlowECG
+  weights: ''
+  access: open
+  doc: docs/models/smartwatch_models.md#ppgflowecg
+  type: model
+  added: '2026-10-12'
+- id: anyppg
+  name: AnyPPG
+  org: 北京大学健康医疗大数据国家研究院
+  venue: ACM SIGKDD 2026
+  date: 2025-11
+  modality: 单通道 PPG (心电引导)
+  method: 心电引导跨模态对比预训练 (ECG-Guided InfoNCE)
+  params: 5.85M (单分支)
+  data: 100,000+ 小时同步配对数据 (MC-MED, MIMIC 等)
+  paper: https://arxiv.org/abs/2511.01747
+  code: https://github.com/Ngk03/AnyPPG
+  weights: ''
+  access: open
+  doc: docs/models/smartwatch_models.md#anyppg
+  type: model
+  added: '2026-10-12'
+- id: ppg-distill
+  name: PPG-Distill
+  org: Emory University
+  venue: 2025
+  date: 2025-06
+  modality: 腕部 PPG
+  method: 预测级 + 特征级 + 形态节律三级多尺度蒸馏
+  params: 紧凑 1D 学生网络 (内存降低 19x)
+  data: 多中心公开穿戴语料
+  paper: ''
+  code: https://github.com/LingFengGold/PPG-Distill
+  weights: ''
+  access: open
+  doc: docs/models/smartwatch_models.md#ppg-distill
+  type: model
+  added: '2026-10-12'
+- id: ppgage
+  name: Apple PpgAge
+  org: Apple Health
+  venue: Nature Medicine 2025/2026
+  date: 2025-09
+  modality: 腕戴日常 PPG
+  method: 深度时序表征与血管生理年龄预测 (PPG Age Gap)
+  params: 工业级
+  data: Apple Health Study (213,593 名真实佩戴者)
+  paper: ''
+  code: ''
+  weights: ''
+  access: closed
+  doc: docs/models/smartwatch_models.md#ppgage
+  type: model
+  added: '2026-10-12'
+- id: openmhc
+  name: OpenMHC
+  org: 斯坦福大学医学院 (Euan Ashley Lab) / 帝国理工
+  venue: arXiv 2026
+  date: 2026-07
+  modality: 19 通道穿戴时序 + 169 维自述健康变量
+  method: 统一基准赛道 (预测/插补/外推) + WBM/LSM 开源复现
+  params: 统一基准
+  data: 6,700+ 万小时 (11,894 名受试者 13 年纵向记录)
+  paper: https://arxiv.org/abs/2607.16235
+  code: https://github.com/AshleyLab/OpenMHC
+  weights: https://huggingface.co/MyHeartCounts
+  access: open
+  doc: docs/models/smartwatch_models.md#openmhc
+  type: benchmark
+  added: '2026-10-12'
+- id: ppg-lm
+  name: PPG-LM
+  org: Emory / UCLA / Google / Stanford
+  venue: arXiv 2026
+  date: 2026-09
+  modality: PPG 波形 + 多层级临床自然语言
+  method: 两阶段对齐 (CoCa 对比/生成 + 连续物理时间 RoPE)
+  params: 12.7M (波形塔) + 8 层因果语言塔
+  data: 73,700 小时 (MC-MED 队列 36,430 名急诊患者)
+  paper: https://arxiv.org/abs/2609.33516
+  code: ''
+  weights: ''
+  access: open
+  doc: docs/models/smartwatch_models.md#ppg-lm
+  type: model
+  added: '2026-10-12'
+- id: sensorlm
+  name: SensorLM
+  org: Google Research / Google DeepMind
+  venue: NeurIPS 2025
+  date: 2025-06
+  modality: 5 维传感器 (PPG, ACC, EDA, 皮温, 气压计) + 文本
+  method: ViT-2D Patch + CoCa 对比与多模态自回归解码
+  params: 工业级
+  data: 5,970 万小时 (103,000+ 名真实用户)
+  paper: https://arxiv.org/abs/2506.09108
+  code: https://github.com/Google-Health/consumer-health-research/tree/main/sensorlm
+  weights: ''
+  access: open
+  doc: docs/models/smartwatch_models.md#sensorlm
+  type: model
+  added: '2026-10-12'
+- id: limu-bert
+  name: LIMU-BERT
+  org: 南洋理工大学 (NTU)
+  venue: ACM SenSys 2021
+  date: 2021-11
+  modality: 手腕三轴 ACC + 陀螺仪
+  method: 掩码传感器建模 (Masked Sensor Modeling)
+  params: 紧凑级
+  data: 公开 IMU 运动数据集
+  paper: https://dl.acm.org/doi/10.1145/3485730.3485938
+  code: https://github.com/dapowan/LIMU-BERT-Public
+  weights: https://github.com/dapowan/LIMU-BERT-Public
+  access: open
+  doc: docs/models/smartwatch_models.md#limu-bert
+  type: model
+  added: '2026-10-12'
+- id: glucofm
+  name: GlucoFM
+  org: Google Research / UNSW
+  venue: arXiv 2026
+  date: 2026-05
+  modality: CGM 血糖
+  method: 双流 JEPA 潜空间预测
+  params: 0.72M
+  data: 477 人 (10.9 万小时)
+  paper: https://arxiv.org/abs/2605.30865
+  code: ''
+  weights: ''
+  access: gated
+  doc: docs/models/cgm_models.md#glucofm
+  type: model
+  added: '2026-09-08'
+- id: cgm-jepa
+  name: CGM-JEPA
+  org: CRUISE Lab
+  venue: 2025
+  date: 2025-01
+  modality: CGM 血糖
+  method: 潜空间 JEPA 预测
+  params: 约 0.5M
+  data: 228 人 (开源重训基座)
+  paper: ''
+  code: https://huggingface.co/CRUISEResearchGroup/CGM-JEPA
+  weights: https://huggingface.co/CRUISEResearchGroup/CGM-JEPA
+  access: open
+  doc: docs/models/cgm_models.md#cgm-jepa
+  type: model
+  added: '2026-09-09'
+- id: gluformer
+  name: GluFormer
+  org: Pheno.AI / 魏茨曼 / NVIDIA
+  venue: Nature 2026
+  date: 2024-08
+  modality: CGM 血糖
+  method: GPT 式因果自回归
+  params: 135M
+  data: 10,812 人 (>1000 万读数)
+  paper: https://www.nature.com/articles/s41586-025-08639-6
+  code: https://github.com/Guylu/GluFormer
+  weights: ''
+  access: gated
+  doc: docs/models/cgm_models.md#gluformer
+  type: model
+  added: '2026-09-08'
+- id: cgmformer
+  name: CGMformer
+  org: 中科院 / 上海六院
+  venue: NSR 2025
+  date: 2025-01
+  modality: CGM 血糖
+  method: BERT 式 MLM 掩码重构
+  params: 0.85M～10M
+  data: 5.9 万人 (131 万天)
+  paper: https://doi.org/10.1093/nsr/nwaf082
+  code: https://github.com/YurunLu/CGMformer
+  weights: https://github.com/YurunLu/CGMformer
+  access: open
+  doc: docs/models/cgm_models.md#cgmformer
+  type: model
+  added: '2026-09-08'
+- id: cgm-lsm
+  name: CGM-LSM
+  org: JHU CDHAI
+  venue: arXiv 2024
+  date: 2024-12
+  modality: CGM 血糖
+  method: GPT-2 自回归
+  params: 约 124M
+  data: 592 人 (1600 万读数)
+  paper: https://arxiv.org/abs/2412.09727
+  code: https://github.com/JHU-CDHAI/cgmlsm
+  weights: ''
+  access: open
+  doc: docs/models/cgm_models.md#cgm-lsm
+  type: model
+  added: '2026-09-08'
+- id: glucobench
+  name: GlucoBench
+  org: Texas A&M University
+  venue: ICLR 2024
+  date: 2024-01
+  modality: CGM 血糖
+  method: 标准化评测基准套件
+  params: '-'
+  data: 多队列基准集成
+  paper: https://openreview.net/forum?id=u4UaZq1Goi
+  code: https://github.com/IrinaStatsLab/GlucoBench
+  weights: ''
+  access: open
+  doc: docs/models/cgm_models.md#glucobench
+  type: benchmark
+  added: '2026-09-09'
+- id: npj-ecg-ppg-review
+  name: Review of Open FM for ECG & PPG
+  org: MIT / SNU / Yonsei
+  venue: npj Digital Medicine 2026
+  date: 2026-08
+  modality: ECG + PPG
+  method: 综述与开源生态绘制
+  params: '-'
+  data: 覆盖数十个公开基准
+  paper: https://doi.org/10.1038/s41746-026-03101-7
+  code: ''
+  weights: ''
+  access: open
+  doc: docs/models/ecg_models.md#1-领域综述导读心电与脉搏波开源基础模型及数据集全景
+  type: survey
+  added: '2026-10-14'
+- id: ecg-fm
+  name: ECG-FM
+  org: 多伦多大学 / UHN / Vector
+  venue: arXiv 2024
+  date: 2024-07
+  modality: 12 导联 ECG
+  method: 掩码重构 + 对比学习
+  params: 约 100M
+  data: 约 150 万条心电 (MIMIC-IV + UHN)
+  paper: https://arxiv.org/abs/2407.13576
+  code: https://github.com/kadenmckeen/ecg-fm
+  weights: https://huggingface.co/kadenmckeen/ecg-fm
+  access: open
+  doc: docs/models/ecg_models.md#ecg-fm
+  type: model
+  added: '2026-10-14'
+- id: st-mem
+  name: ST-MEM
+  org: VUNO Inc.
+  venue: ICLR 2024
+  date: 2024-02
+  modality: 12 导联 ECG
+  method: 时空解耦 Patch-MAE
+  params: 紧凑级
+  data: 约 80 万例 12 导联心电
+  paper: https://arxiv.org/abs/2402.04631
+  code: https://github.com/vuno-inc/ST-MEM
+  weights: https://github.com/vuno-inc/ST-MEM
+  access: open
+  doc: docs/models/ecg_models.md#st-mem
+  type: model
+  added: '2026-10-14'
+- id: heartbeit
+  name: HeartBEiT
+  org: Mila / 蒙特利尔大学
+  venue: arXiv 2023
+  date: 2023-06
+  modality: 12 导联 ECG
+  method: 离散代码本掩码建模
+  params: 紧凑级
+  data: MIMIC-IV-ECG
+  paper: https://arxiv.org/abs/2306.07920
+  code: https://github.com/hsd1503/HeartBEiT
+  weights: ''
+  access: open
+  doc: docs/models/ecg_models.md#heartbeit
+  type: model
+  added: '2026-10-14'
+- id: clocs
+  name: CLOCS
+  org: 牛津大学
+  venue: NeurIPS 2020
+  date: 2020-05
+  modality: 多导联 ECG
+  method: 时空多导联对比学习
+  params: 轻量级
+  data: PhysioNet 2017 + Chapman
+  paper: https://proceedings.neurips.cc/paper/2020/hash/da65ae7d09f25745b85e0546cb7ee3b4-Abstract.html
+  code: https://github.com/danikiyasseh/CLOCS
+  weights: ''
+  access: open
+  doc: docs/models/ecg_models.md#clocs
+  type: model
+  added: '2026-10-14'
+- id: sleepfm
+  name: SleepFM / SleepFM-2
+  org: 斯坦福大学 / DTU / BrainCapture
+  venue: Nat Med 2024 / arXiv 2026
+  date: 2026-09
+  modality: 多导睡眠监测 (EEG, ECG, PPG, Resp, EMG)
+  method: 留一对比学习 (LOO-CL) + 局部 MAE 重构
+  params: 2.57M (v2)
+  data: 200+ 万小时 / 23.5 万受试者
+  paper: https://arxiv.org/abs/2609.06849
+  code: https://github.com/zou-group/sleepfm-v2-public
+  weights: https://github.com/zou-group/sleepfm-v2-public
+  access: open
+  doc: docs/models/sleep_models.md#sleepfm
+  type: model
+  added: '2026-10-12'
+- id: sleepmami
+  name: SleepMaMi
+  org: 首尔大学
+  venue: ICML 2026
+  date: 2026-05
+  modality: 多导睡眠监测 (EEG, ECG, Resp)
+  method: 宏微观分层双编码器 + 人口统计学引导对比
+  params: 约 15M
+  data: 15.8 万小时 / 2.0 万受试者
+  paper: https://arxiv.org/abs/2605.15852
+  code: https://github.com/SNU-SPL/SleepMaMi
+  weights: ''
+  access: open
+  doc: docs/models/sleep_models.md#sleepmami
+  type: model
+  added: '2026-10-12'
+- id: u-sleep
+  name: U-Sleep
+  org: 哥本哈根大学
+  venue: npj Digit Med 2021
+  date: 2021-03
+  modality: 睡眠脑电与眼电 (EEG, EOG)
+  method: 1D 全卷积深层 U-Net
+  params: 约 3.1M
+  data: 约 1.5 万小时多中心临床 PSG
+  paper: https://doi.org/10.1038/s41746-021-00440-5
+  code: https://github.com/perslev/U-Sleep
+  weights: https://github.com/perslev/U-Sleep
+  access: open
+  doc: docs/models/sleep_models.md#u-sleep
+  type: model
+  added: '2026-10-12'
+- id: wearableqa
+  name: WearableQA
+  org: Meta AI / Reality Labs
+  venue: arXiv 2026
+  date: 2026-09
+  modality: 长程多模态聚合指标 (16 维时序 + 17 维化验)
+  method: 解耦评测基准 (数据计算推理 + 健康机制推理)
+  params: '-'
+  data: 200 人 × 500 天长程穿戴数据 (4,084 道推理题)
+  paper: https://arxiv.org/abs/2609.05405
+  code: ''
+  weights: ''
+  access: open
+  doc: docs/models/health_reasoning_llms.md#wearableqa
+  type: benchmark
+  added: '2026-10-12'
+- id: hearts
+  name: HEARTS
+  org: Yang AI Lab
+  venue: ICML 2026
+  date: 2026-03
+  modality: 全谱系 20 种生理模态 (ECG, EEG, PPG, CGM 等)
+  method: 四层认知能力阶梯评测 + CodeAct 工具调用
+  params: '-'
+  data: 16 个开源数据集 / 110 项任务 / 20,226 评测样本
+  paper: https://arxiv.org/abs/2603.06638
+  code: https://github.com/yang-ai-lab/HEARTS
+  weights: ''
+  access: open
+  doc: docs/models/health_reasoning_llms.md#hearts
+  type: benchmark
+  added: '2026-10-12'
+- id: cbpm-llama
+  name: CBPM-LLaMA
+  org: 中科院深圳先进院 / 香港理工大学
+  venue: ACM-BCB '24
+  date: 2024-06
+  modality: ECG + PPG (31 维血流动力学先验特征)
+  method: 血流动力学解耦 Prompt + LLaMA 指令微调
+  params: 8B
+  data: CAS-BP (1,272 受试者无袖带血压队列)
+  paper: https://arxiv.org/abs/2406.18069
+  code: https://github.com/zdzdliu/CAS-BP
+  weights: ''
+  access: open
+  doc: docs/models/health_reasoning_llms.md#cbpm-llama
+  type: model
+  added: '2026-10-12'
+- id: gem
+  name: GEM
+  org: 北京大学 / 新加坡国立大学
+  venue: NeurIPS 2025
+  date: 2025-03
+  modality: 12 导联 ECG (1D 波形 + 2D 心电报告图)
+  method: 双编码器 + 波形参数物理锚定 (ECG-Grounding)
+  params: 7B 级
+  data: PTB-XL, Chapman, Ningbo 等多源临床心电
+  paper: https://arxiv.org/abs/2503.06073
+  code: https://github.com/lanxiang1017/GEM
+  weights: ''
+  access: open
+  doc: docs/models/health_reasoning_llms.md#gem
+  type: model
+  added: '2026-10-12'
+- id: risq
+  name: RisQ
+  org: TUM / Helmholtz / Harvard
+  venue: 2026
+  date: 2026-07
+  modality: 全基因组 + 生化 + EHR + 穿戴
+  method: 统一跨模态共享潜在表征
+  params: '-'
+  data: 74.5 万人 (UKB + All of Us)
+  paper: https://doi.org/10.64898/2026.07.07.26357373
+  code: ''
+  weights: ''
+  access: closed
+  doc: docs/models/universal_health_models.md#risq
+  type: model
+  added: '2026-09-20'
+- id: timesfm
+  name: TimesFM
+  org: Google Research
+  venue: ICML 2024
+  date: 2023-10
+  modality: 通用一维时序
+  method: 纯解码器自回归 (Decoder-Only) + 连续 Patch
+  params: 200M / 500M
+  data: 1000 亿+ 时间点 (Google Trends, Wikipedia 等)
+  paper: https://arxiv.org/abs/2310.10688
+  code: https://github.com/google-research/timesfm
+  weights: https://huggingface.co/google/timesfm-1.0-200m
+  access: open
+  doc: docs/models/general_tsfm.md#timesfm
+  type: model
+  added: '2026-10-12'
+- id: chronos
+  name: Chronos / Chronos-Bolt
+  org: Amazon Web Services (AWS)
+  venue: ICML 2024
+  date: 2024-03
+  modality: 通用一维时序
+  method: 离散分箱量化 (4096 Bins) + T5 语言模型迁移
+  params: 20M - 710M
+  data: 多领域公开时序 + 合成高斯过程数据
+  paper: https://arxiv.org/abs/2403.07815
+  code: https://github.com/amazon-science/chronos-forecasting
+  weights: https://huggingface.co/amazon/chronos-t5-base
+  access: open
+  doc: docs/models/general_tsfm.md#chronos
+  type: model
+  added: '2026-10-12'
+- id: moment
+  name: MOMENT
+  org: Carnegie Mellon University (Auton Lab)
+  venue: ICML 2024
+  date: 2024-02
+  modality: 通用多变量时序 (含生理信号)
+  method: 连续值分块掩码自编码 (Patch-MAE) + 通道独立
+  params: 385M (Large)
+  data: Time-series Pile (13 领域公开时序, 含 ECG/PPG/EEG)
+  paper: https://arxiv.org/abs/2402.04385
+  code: https://github.com/moment-timeseries-foundation-model/moment
+  weights: https://huggingface.co/AutonLab/MOMENT-1-large
+  access: open
+  doc: docs/models/general_tsfm.md#moment
+  type: model
+  added: '2026-10-12'
+- id: mantis
+  name: Mantis
+  org: 华为诺亚方舟实验室 / Inria
+  venue: ICML 2026
+  date: 2025-02
+  modality: 通用多变量时序
+  method: 自适应卷积分块 (TGU) + 轻量 ViT-1D 对比学习
+  params: 约 8M
+  data: 多样化公开时序基准 (UCR/UEA)
+  paper: https://arxiv.org/abs/2502.15637
+  code: https://github.com/vfeofanov/mantis
+  weights: https://huggingface.co/paris-noah/Mantis-8M
+  access: open
+  doc: docs/models/general_tsfm.md#mantis
+  type: model
+  added: '2026-10-12'
+- id: moirai
+  name: MOIRAI
+  org: Salesforce AI Research
+  venue: ICML 2024
+  date: 2024-02
+  modality: 通用多变量时序
+  method: 多尺寸分块 + 任意变量掩码注意力 (Any-Variate)
+  params: 14M - 311M
+  data: LOTSA 数据集 (270 亿观测值)
+  paper: https://arxiv.org/abs/2402.02592
+  code: https://github.com/SalesforceAIResearch/uni2ts
+  weights: https://huggingface.co/Salesforce/moirai-1.0-R-base
+  access: open
+  doc: docs/models/general_tsfm.md#moirai
+  type: model
+  added: '2026-10-12'
+- id: timestral
+  name: Timestral
+  org: Mistral AI
+  venue: 2026
+  date: 2026-10
+  modality: 通用单/多变量时序
+  method: 解耦预测跨度 (DHF) + 21 分位数概率预测
+  params: 5M - 209M
+  data: 大规模多领域时序语料
+  paper: ''
+  code: https://github.com/mistralai/timestral
+  weights: https://huggingface.co/mistralai/Timestral-209M
+  access: open
+  doc: docs/models/general_tsfm.md#timestral
+  type: model
+  added: '2026-10-26'
+- id: kumo-forecast
+  name: Kumo-Forecast
+  org: NVIDIA
+  venue: 2026
+  date: 2026-10
+  modality: 通用多变量时序 / 结构化数据
+  method: 冻结 MOMENT + DARR 时序检索增强与原生可解释层
+  params: 约 340M
+  data: 企业级多变量时序与结构化数据集
+  paper: ''
+  code: https://github.com/NVIDIA/Kumo-TS
+  weights: https://huggingface.co/nvidia/Kumo-Forecast
+  access: open
+  doc: docs/models/general_tsfm.md#kumo-forecast
+  type: model
+  added: '2026-10-26'
+- id: timebraid
+  name: TimeBraid
+  org: UC San Diego / USC / Aether AI
+  venue: arXiv 2026
+  date: 2026-09
+  modality: 时序数值 + 自然语言文本
+  method: 双塔深度交错残差注意力 (MoT) + 统一 Prompt
+  params: 1.2B - 6.7B
+  data: 跨模态时序-语言对齐数据集
+  paper: https://arxiv.org/abs/2609.29792
+  code: https://github.com/Aether-AI/TimeBraid
+  weights: ''
+  access: open
+  doc: docs/models/general_tsfm.md#timebraid
+  type: model
+  added: '2026-10-12'
+- id: time-llm
+  name: Time-LLM
+  org: Monash / 蚂蚁集团 / HKUST
+  venue: ICLR 2024
+  date: 2023-10
+  modality: 通用一维时序
+  method: 文本原型跨注意力重编程 + 提示词前缀增强
+  params: 冻结 7B LLM (微调 <1%)
+  data: 多领域通用时序基准 (M4, ETT 等)
+  paper: https://arxiv.org/abs/2310.01728
+  code: https://github.com/KimMeen/Time-LLM
+  weights: ''
+  access: open
+  doc: docs/models/general_tsfm.md#time-llm
+  type: model
+  added: '2026-10-12'

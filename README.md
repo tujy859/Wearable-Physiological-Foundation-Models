@@ -1,317 +1,216 @@
-# Awesome Wearable & Physiological Foundation Models
+# Wearable & Physiological Foundation Models | 可穿戴与生理信号基础模型研读与选型指南
 
-[![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
-[![Tracking](https://img.shields.io/badge/Status-Actively%20Maintained-blue.svg)]()
+[![Style Guide](https://img.shields.io/badge/Docs-Style%20Guide-blue.svg)](docs/STYLE.md)
 
-> 精选追踪学术界与工业界关于 **智能手表、连续血糖监测（CGM）及可穿戴生理信号基础模型（Foundation Models）** 的前沿论文、开源代码、预训练权重、基准数据集与实战解析。
+> 面向 **智能手表、连续血糖监测（CGM）、心电（ECG）及多导睡眠（PSG）** 等可穿戴与临床生理信号基础模型的论文精读、方法对比、开源权重与数据集索引；同时收录通用时间序列基础模型（General TSFM）与系统级多模态健康模型作为对照与延伸。
 
----
-
-## 📑 目录导航
-
-- [📌 为什么需要可穿戴生理基础模型？](#-为什么需要可穿戴生理基础模型)
-- [🗺️ 技术分类全景图 (Taxonomy)](#️-技术分类全景图-taxonomy)
-- [📖 权威顶刊综述与前沿全景 (Surveys & Reviews)](#-权威顶刊综述与前沿全景-surveys--reviews)
-- [📊 核心基础模型全景横评表](#-核心基础模型全景横评表)
-- [⌚ 1. 智能手表与腕戴生理模型 (Smartwatch & Wrist)](#-1-智能手表与腕戴生理模型-smartwatch--wrist)
-- [❤️ 2. 心电与心血管电生理基础模型 (ECG & Electrophysiology)](#-2-心电与心血管电生理基础模型-ecg--electrophysiology)
-- [🩸 3. 连续血糖监测基础模型 (Continuous Glucose Monitoring, CGM)](#-3-连续血糖监测基础模型-continuous-glucose-monitoring-cgm)
-- [📈 4. 通用时间序列基础模型 (General Time-Series FM)](#-4-通用时间序列基础模型-general-time-series-fm)
-- [💤 5. 睡眠与心肺多模态模型 (Sleep & Cardiopulmonary)](#-5-睡眠与心肺多模态模型-sleep--cardiopulmonary)
-- [🧠 6. 可穿戴健康推理与系统级生理大模型 (Wearable Health Reasoning & Universal Health FMs)](#-6-可穿戴健康推理与系统级生理大模型-wearable-health-reasoning--universal-health-fms)
-- [📦 7. 开源数据集与评测基准 (Datasets & Benchmarks)](#-7-开源数据集与评测基准-datasets--benchmarks)
-- [🛠️ 8. 动手实战与子工程关联 (Hands-on Labs)](#️-8-动手实战与子工程关联-hands-on-labs)
-- [🤝 参与贡献 (Contributing)](#-参与贡献-contributing)
-
-
+![可穿戴与生理信号基础模型技术分层全景](assets/taxonomy_overview.png)
 
 ---
 
-## 📌 为什么需要可穿戴生理基础模型？
+## 目录
 
-通用时序大模型（如 TimesFM、Chronos）多将时序视为抽象的数值序列。然而，智能手表、手环、CGM 传感器等设备产生的生理信号具有极强的物理学与生物医学特异性：
-
-1. **异构采样率与多模态物理对齐**：原始 PPG（25～100Hz）、ACC（25～50Hz）、ECG（250～1000Hz）、CGM（5分钟/点）以及派生指标（心率 1Hz、睡眠 30s）。通用模型难以直接处理如此大跨度的物理时间窗口。
-2. **严重的运动伪影与频域碰撞**：手腕日常挥动或剧烈跑步产生的步频谐波（1～3.5 Hz）与心率脉搏波频段高度重叠。
-3. **生物非平稳性与昼夜节律**：血糖的餐后突变漂移与 24 小时昼夜波动具有明确的生理因果机制。
-
-**可穿戴生理信号基础模型的核心目标**：通过自监督预训练（SSL），从海量无标注生理时序中学习泛化的生理表征，从而仅用轻量级线性探针（Linear Probe）或极少微调即可服务于心率追踪、心律失常筛查、糖尿病与代谢风险预测、睡眠分期等数十种下游健康任务。
-
----
-
-## 🗺️ 技术分类全景图 (Taxonomy)
-
-```text
-Wearable Physiological Foundation Models
-│
-├── 按硬件设备与传感器模态
-│   ├── 智能手表/手环 (Wrist): PPG + 3-Axis ACC/IMU + ECG + Skin Temp + EDA
-│   ├── 微创/穿戴传感 (Subcutaneous): CGM (血糖 5min 网格) + 汗液生物标志物
-│   └── 临床与家庭睡眠设备: 多导睡眠监测 (PSG: EEG/EOG/EMG/ECG/Resp)
-│
-├── 按预训练学习范式 (Pretraining Paradigms)
-│   ├── 掩码时序重建 (Masked Autoencoding, MAE): MOMENT, LIMU-BERT, xMAE
-│   ├── 相对对比学习 (Relative Contrastive Learning): PaPaGei, Pulse-PPG
-│   ├── 潜空间联合预测 (Latent Prediction / JEPA): GlucoFM
-│   ├── 离散分箱自回归 (Next-Token Autoregression): Chronos, GluFormer, CGM-LSM
-│   └── 多模态深层交错编织 (Interleaved Multimodal Fusion): TimeBraid
-│
-└── 按认知与计算层级 (Cognitive & Computational Hierarchy)
-    ├── Layer 3 认知推理与智能体 (Reasoning & Agent Systems): WearableQA, HEARTS
-    ├── Layer 2 系统级全景健康模型 (Universal Health World Models): RisQ
-    ├── Layer 1 端侧物理波形表征 (Signal Representation & Edge FMs): SensorFM, UniCardio, PaPaGei
-    └── Layer 0 开放数据与生态基底 (Open Data & Infrastructure): Stanford OpenMHC
-```
+- [如何使用本仓库](#如何使用本仓库)
+- [为什么需要生理信号专用基础模型](#为什么需要生理信号专用基础模型)
+- [领域专题文档与技术长文](#领域专题文档与技术长文)
+- [最近更新](#最近更新)
+- [基础模型与评测基准索引表](#基础模型与评测基准索引表)
+- [开放数据集与临床队列索引](#开放数据集与临床队列索引)
+- [领域综述参考](#领域综述参考)
+- [关联实验工程与参与贡献](#关联实验工程与参与贡献)
 
 ---
 
-## 📖 权威顶刊综述与前沿全景 (Surveys & Reviews)
+## 如何使用本仓库
 
-- **npj Digital Medicine 2026 旗舰综述：心电与脉搏波开源基础模型与数据集全景**
-  - **论文题目**：*Review of open foundation models and datasets for ECG and PPG waveforms*
-  - **发表期刊**：*npj Digital Medicine* (2026, Nature 旗下旗舰数字医疗期刊，**IF 18.0**，中科院医学一区 Top)
-  - **作者团队**：Ahram Han, Takeshi Tohyama, Dukyong Yoon, Kenneth Paik, Brian Gow, **Leo Anthony Celi (通讯作者, MIT 计算生理学实验室主任 / MIMIC 开创者)**, Hyeonhoon Lee, Hyung-Chul Lee (首尔大学医学院)
-  - **DOI 链接**：[10.1038/s41746-026-03101-7](https://doi.org/10.1038/s41746-026-03101-7)
-  - **核心定位与学术价值**：
-    1. **范式转变**：系统总结了从传统“高成本专家标注的专用窄模型”向“通用时序生理表征大模型”的跃迁，深入剖析了数据效率（Few-shot / Linear Probe）与跨设备迁移性的底层机理；
-    2. **开源生态拓扑**：首次全景式绘制了全球公开的心电（ECG）与光电脉搏波（PPG）开源基础模型（如 ECG-FM, ST-MEM, HeartBEiT, CardioFM 等）及其训练数据基座（MIMIC-IV-ECG, PTB-XL, CODE-15%, VitalDB 等）；
-    3. **五大结构性挑战**：深入针砭了当前领域“预训练数据种族与人群偏倚（Homogeneity & Bias）”、“评估划分混乱与缺乏标准化基准（切分泄漏）”、“真实穿戴高噪运动伪影”、“黑盒表征缺乏电生理波形可解释性”以及“端侧微控制器轻量化部署壁垒”，为本知识库提供了扎实的理论顶层设计；
-    4. **专题深度拆解**：查阅心电基础模型与跨模态生成专篇：📖 [docs/models/ecg_models.md](docs/models/ecg_models.md)。
+按使用目的可从以下四条路径切入：
 
----
-
-## 📊 核心基础模型全景横评表
-
-> 状态标记说明：🟢 官方公开开源 | 🟡 申请开放 / 部分代码 | 🔴 闭源未公开
-
-| 模型名称 | 机构 / 团队 | 发表时间 / 会议期刊 | 主要模态 | 架构类型 | 参数量 | 预训练数据规模 | 代码状态 | 权重状态 |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :---: | :---: |
-| **ECG-FM** | MIT / Stanford / Harvard | Nat Commun / arXiv | 12-导联 ECG | 1D-ViT (MAE+Contrastive) | ~100M | 114万条心电 (MIMIC-IV+CODE) | 🟢 (GitHub) | 🟢 (HF/开源) |
-| **ST-MEM** | 清华 / 伯克利等 | NeurIPS 2023/2024 | 12-导联 ECG | 时空解耦 Patch-MAE | 紧凑级 | 80万例 12-导联心电 | 🟢 | 🟢 (GitHub) |
-| **SensorFM** | Google Research | arXiv 2026 | PPG+ACC+EDA+Temp | Patch-Transformer | 大规模 | 1万亿分钟 (>500万人) | 🔴 | 🔴 |
-| **SensorLM** | Google Research / DeepMind | NeurIPS 2025 | PPG+ACC+EDA+Temp+气压 | ViT-2D + CoCa 解码器 | 亿级 | 5,970万小时 (10.3万人) | 🟢 (GitHub) | 📄 [arXiv:2506.09108](https://arxiv.org/abs/2506.09108) |
-| **Apple WBM** | Apple Health | 2024-2026 | Watch PPG+ACC+ECG | Multi-task Trans | - | 百万级 Apple Watch 数据 | 🔴 | 🔴 |
-| **PaPaGei** | Nokia Bell Labs | ICLR 2025 | PPG (光电脉搏) | ResNet1D-MoE | \~1.5M | 5.7万小时 (10个公开库) | 🟢 | 🟢 (Zenodo) |
-| **Pulse-PPG** | UIUC / Memphis | UbiComp 2025 | 腕部野外高噪 PPG | 1D-ResNet (RelCon) | \~2M | 5.5万小时 (真实自由生活) | 🟢 | 🟢 (Zenodo) |
-| **UniCardio** | 清华大学 / 安贞医院 | Nature MI 2025 | PPG+ECG+BP | 统一多模态扩散 DiT | 增量0.3M/模态| 339小时三模态全时程 | 🟢 | 🟢 (论文公开) |
-| **PPGFlowECG** | 北京大学 (PKU Health) | arXiv 2025/2026 | PPG $\to$ 诊断级 ECG | 潜空间整流流 (Rectified Flow) | 紧凑级 | 千万级配对 (MC-MED 11.8万人) | 🟢 | 🟢 (GitHub) |
-| **AnyPPG** | 北京大学 (PKU Health) | KDD 2026 | 腕戴 PPG (心电引导) | Net1D 双分支 ResNet | 5.85M/分支 | >10万小时同步数据 | 🟢 | 🟢 (GitHub) |
-| **Samsung xMAE** | Samsung Research | ICML 2024 | PPG $\to$ 虚拟 ECG | 跨模态 MAE | 端侧优化 | 9,400 小时配对数据 | 🔴 | 🔴 |
-| **Samsung HiMAE** | Samsung Research / UCLA | ICLR 2026 | 腕部绿光 PPG (可扩 ECG) | 1D-CNN U-Net (MAE) | 编码器 0.31M (全网1.2M) | 8万小时 (4.7万人, 7款手表) | 🟢 (GitHub) | 🔴 |
-| **GlucoFM** | Google / UNSW | arXiv 2026 | CGM (5min 血糖) | 双流 JEPA 预测 | **0.72M** | 10.9万小时 (477人) | 🟡 (承诺开源) | 🔴 |
-| **GluFormer** | Pheno.AI / Weizmann | Nature 2026 | CGM (15min 血糖) | GPT 式自回归 | 135M | >1000万读数 (10,812人) | 🟢 | 🔴 (HPP受限) |
-| **CGMformer** | 中科院 / 上海六院 | NSR 2025 | CGM (5min 血糖) | BERT 式 MLM | 0.85M～10M | 131万天 (5.9万人) | 🟢 | 🟢 (GitHub) |
-| **CGM-LSM** | JHU CDHAI | arXiv 2024 | CGM 血糖 | GPT-2 自回归 | \~124M | 1600万读数 (592人) | 🟢 (无数据) | 🔴 |
-| **CGM-JEPA** | CRUISE Lab | 2025 | CGM (5min 血糖) | 潜空间 JEPA 预测 | \~0.5M | 228人 (开源重训基座) | 🟢 | 🟢 (HF) |
-| **PPG-Distill** | Emory University | 2025 | 腕戴 PPG (脉搏) | 跨尺度知识蒸馏 | 极轻量 (<0.5M) | 多任务穿戴语料 | 🟢 | 🟢 (GitHub) |
-| **PPG-LM** | Emory / UCLA / Google | arXiv 2026.09 | PPG + 结构化临床语言 | CoCa + 连续时间 RoPE | 12.7M (波形塔) | 73,700小时 (Stanford MC-MED) | 🟢 (论文公开) | 📄 [arXiv:2609.33516](https://arxiv.org/abs/2609.33516) |
-| **SleepFM-1 / 2** | Stanford Medicine | Nat Med 24 / arXiv 26 | EEG+ECG+PPG+Resp+ACC | LOO-CL + 局部 MAE | **2.57M** (LLaMA) | **200万小时 (23.5万人)** | 🟢 | 🟢 (GitHub) |
-| **SleepMaMi** | 首尔大学 (SNU) | ICML 2026 | PSG (EEG+ECG+Resp) | 宏微观双编码器 (MAE+CL) | \~15M | 15.8万小时 (2万人) | 🟢 | 🟢 (GitHub) |
-| **LIMU-BERT** | 厦门大学等 | UbiComp 2021 | 3轴 ACC + Gyro | Sensor-BERT | 轻量级 | 多源 IMU 无标注数据 | 🟢 | 🟢 |
-| **TimesFM** | Google Research | ICML 2024 / v2.0 | 通用单变量时序 | 解码器自回归 | 200M | 1000亿点 | 🟢 | 🟢 (HF) |
-| **Chronos** | Amazon Research | ICML 2024 / Bolt | 通用单变量时序 | 离散分箱 T5/Encoder | 20M～710M | 泛领域时序语料 | 🟢 | 🟢 (HF) |
-| **MOMENT** | CMU Auton Lab | ICML 2024 | 通用多变量时序 | Patch-MAE | 385M | Time-series Pile (含生理) | 🟢 | 🟢 (HF) |
-| **Timestral** | Mistral AI | 2026.10 | 通用多变量时序 (含协变量) | 因果 Patch Trans + DHF 解耦预测 | **5M～209M** | 多领域大规模时序语料 | 🟢 (GitHub) | 🟢 (HF) |
-| **Kumo-Forecast** | NVIDIA (GTC 2026) | 2026.10 | 通用多变量时序 + 关系表 | MOMENT 骨干 + DARR 检索增强 | \~340M | 跨领域工业与企业时序 | 🟢 (GitHub) | 🟢 (HF/NIM) |
-| **Time-LLM** | Monash / 蚂蚁集团 | ICLR 2024 | 通用数值时序 | 跨模态原型重编程 (Reprogramming) | 冻结 7B (微调 <1%) | 泛领域时序基准 (少样本) | 🟢 | 🟢 (GitHub) |
-| **TimeBraid** | UCSD / USC | arXiv 2026.09 | 通用时序 + 自然语言 | 双塔交错全局注意力 (MoT) | 1.2B～6.7B | 2.2M对齐 + 4.9M SFT | 🟡 (承诺开源) | 📄 [arXiv:2609.29792](https://arxiv.org/abs/2609.29792) |
-| **OpenMHC** | Stanford / Imperial | arXiv 2026 | 19维腕戴时序+169维变量 | 开源基础模型生态基座 | WBM / LSM-2 | >6,700万小时 (11,894人) | 🟢 | 🟢 (Dataverse/HF) |
-| **RisQ** | TUM / Helmholtz | 2026 | 全基因组+生化+EHR+穿戴 | 全景健康世界模型 | 统一跨模态表征 | 74.5万人 (UKB+All of Us)| 🟢 (论文公开) | 🔴 (顶刊在审) |
-| **WearableQA** | Meta AI | arXiv 2026.09 | 500天日常16维指标+血检 | 纵向健康推理基准 | 14大主流LLM | 200人真实长程 (4,084题) | 🟢 (论文公开) | 🔴 (基准数据) |
-| **HEARTS** | Yang AI Lab | ICML 2026 | 20种生理模态(ECG/PPG/CGM等) | 四层认知推理金字塔 | 多架构+CodeAct | 16大开源库 (20,226样本) | 🟢 | 🟢 (HF/Web) |
-| **GEM** | 北京大学 (洪申达组) / NUS | NeurIPS 2025 | 12-导联 ECG 时序 + 图像 | Grounded 多模态 MLLM | 7B～8B 级 | 知识引导心电图谱语料 | 🟢 | 🟢 (GitHub) |
-| **CBPM-LLaMA** | 中科院深圳先进院 / 港理工 | ACM-BCB '24 | 手腕 PPG+ECG 机制特征 | 生理先验解耦 Prompt 微调 | 7B～8B 级 | 1,272人 (CAS-BP 1.26万对) | 🟢 | 🟢 (GitHub) |
+1. **快速建立领域脉络**：先阅读下方“为什么需要生理信号专用基础模型”，再按传感器模态选读代表性工作：
+   - 腕戴 PPG 与多传感器表征：[PaPaGei](docs/models/smartwatch_models.md#papagei)、[Pulse-PPG](docs/models/smartwatch_models.md#pulse-ppg)、[AnyPPG](docs/models/smartwatch_models.md#anyppg)、[HiMAE](docs/models/smartwatch_models.md#himae)、[OpenMHC](docs/models/smartwatch_models.md#openmhc)
+   - 传感器-语言对齐与跨模态生成：[SensorLM](docs/models/smartwatch_models.md#sensorlm)、[PPG-LM](docs/models/smartwatch_models.md#ppg-lm)、[PPGFlowECG](docs/models/smartwatch_models.md#ppgflowecg)、[UniCardio](docs/models/smartwatch_models.md#unicardio)
+   - 12 导联心电与物理锚定推理：[ECG-FM](docs/models/ecg_models.md#ecg-fm)、[ST-MEM](docs/models/ecg_models.md#st-mem)、[GEM](docs/models/health_reasoning_llms.md#gem)
+   - CGM 连续血糖与多导睡眠：[GlucoFM](docs/models/cgm_models.md#glucofm)、[GluFormer](docs/models/cgm_models.md#gluformer)、[CGMformer](docs/models/cgm_models.md#cgmformer)、[SleepFM](docs/models/sleep_models.md#sleepfm)
+2. **开源模型与预训练权重选型**：直接查阅 [基础模型与评测基准索引表](#基础模型与评测基准索引表)，按模态、参数量与开源资源筛选可直接加载的权重，点击模型名称跳转至对应精读小节与架构图。
+3. **按模块深入研读**：在 [领域专题文档与技术长文](#领域专题文档与技术长文) 中按研究方向查阅横向对比，或阅读串联多篇工作的专题长文。
+4. **查找训练数据与评测基准**：查阅 [开放数据集与临床队列索引](#开放数据集与临床队列索引) 以及 [数据集文档](docs/datasets/wearable_datasets.md)，获取采样率、样本规模、预处理工具与下载申请入口。
 
 ---
 
+## 为什么需要生理信号专用基础模型
 
-## ⌚ 1. 智能手表与腕戴生理模型 (Smartwatch & Wrist)
+通用时间序列模型（如 TimesFM、Chronos）通常将时序视为无量纲的抽象数值序列，而可穿戴与临床生理信号具有明确的生物物理约束：
 
-详细分析与网络细节请查阅：📖 [docs/models/smartwatch_models.md](docs/models/smartwatch_models.md)
+1. **异构采样率与多时间尺度耦合**：原始 PPG（25～100 Hz）、三轴加速度计 ACC（25～50 Hz）、ECG（250～1000 Hz）、CGM（5～15 min/点）以及每日聚合指标跨越多个数量级，模型需兼顾毫秒级波形微形态（如 QRS 波宽、重搏波切迹）与数周至数月的长程昼夜节律。
+2. **运动伪影与频域重叠**：日常手腕活动或跑步产生的步频谐波（1～3.5 Hz）与心率脉搏波基频高度重叠，单纯依赖像素级掩码重构（MSE）容易拟合噪声与基线漂移。
+3. **生理机制与临床可解释性要求**：血糖的餐后波动、血压的心输出量与外周阻力关系、心电导联的空间几何投影均遵循生理学先验；临床场景要求模型输出可核验的波形测量依据，而非黑盒分类标签。
 
-### 工业级与旗舰全能多模态巨座
-- **Google SensorFM** (2026): 可穿戴健康领域的万亿分钟里程碑。基于动态重采样解决 PPG/ACC/EDA 采样率异构问题，在 35 个健康与行为基准中大幅超越专用模型。
-- **清华大学 UniCardio** (Nature MI 2025/2026): 清华大学朱军教授、王立元教授团队联合北京安贞医院研发的**统一心血管多模态扩散基础模型**。首创统一扩散 Transformer (DiT) 框架融合去噪、插补与 PPG $\to$ 诊断级 ECG / 连续血压 BP 的跨模态生成，并引入持续学习范式以极低增量参数（0.3M/模态）支持端侧传感器的动态热插拔与终身防遗忘。
-- **Apple WBM & PPG/ECG FMs**: 深入探索日常无感监测与心律失常预警，通过海量真实世界日常佩戴数据学习个体基线与行为动力学。
-- **Samsung xMAE & HiMAE** (ICML 24 / ICLR 26): 专为智能手表端侧计算优化。xMAE 利用连续 PPG 虚拟重构偶发高精度 ECG；HiMAE 提出多尺度分层时间架构与“分辨率假说”，编码器仅 0.31M 参数，在 Galaxy Watch 8 (Exynos W1000 CPU) 上实现 0.99ms 亚毫秒级纯端侧推理（已开源：[Simonlee711/HiMAE](https://github.com/Simonlee711/HiMAE)）。
-
-### 开源先锋代表
-- **Stanford OpenMHC** (arXiv 2026): 斯坦福医学院 Euan Ashley 团队联合帝国理工发布的**首个超大规模开源可穿戴基础模型基座与生态**。依托 10 余年真实世界生活时序（>6700 万佩戴小时、11,894 名受试者、19 维连续传感器通道及 169 维 HealthKit 变量），不仅打破了 Google SensorFM 与 Apple WBM 的数据垄断，更在统一基准下开源复现了工业级 WBM、LSM-2 及 Chronos-2 等基础模型，规范化了下游判别、生成式插补与未来预测三大赛道。
-  > [!NOTE]
-  > **先驱临床沿革**：OpenMHC 的数据底座源自 2015 年苹果发布 ResearchKit 时的首批先驱应用 **My Heart Counts (MHC)**；而同期苹果官方开展的 41.9 万人 **Apple Heart Study (AHS, 2017)** 则通过严格远程心电贴片闭环促成 Apple Watch 房颤预警算法获得美国 FDA 认证。两项研究共同奠定了穿戴设备迈向严肃医学基础模型的基石。
-- **Google SensorLM** (NeurIPS 2025): Google 官方开源的传感器-语言多模态基础模型。基于 5,970 万小时（10.3 万真实用户）Fitbit/Pixel Watch 真实野外多传感器时序（PPG+ACC+EDA+Temp+气压），采用 ViT-CoCa 统一框架与自底向上三层分层语料生成流水线，首次打通穿戴硬件波形与人类自然语言的语义映射（开源代码：[Google-Health/sensorlm](https://github.com/Google-Health/consumer-health-research/tree/main/sensorlm)）。
-- **Emory / UCLA / Google PPG-LM** (arXiv 2026.09): 埃默里大学、UCLA 联合 Google、斯坦福发布的**首个多尺度临床对齐脉搏-语言基础模型**。基于 Stanford MC-MED 急诊队列 73,700 小时连续 PPG 波形，首创贯通 30 秒片段形态、急危重症给药事件与长程整场就诊的三层级对齐体系；利用轻量级 12.7M 波形编码器与连续时间 RoPE 锚点聚合，实现心率等生理数值的高保真零样本测算（心率 MAE 3.9 bpm）、双向跨模态语义检索，在 32 项临床预测任务中全面超越现有纯波形基础模型。
-- **北京大学 PPGFlowECG** (2025/2026): 北大洪申达团队研发的 PPG 转 ECG 跨模态生成框架。首创 CardioAlign 编码器与潜空间整流流（Latent Rectified Flow），仅需 1～4 步 ODE 直线传输即可从可穿戴 PPG 极速合成高保真诊断级心电波形，依托千万级急诊数据集 MC-MED 在房颤、心梗等疾病筛查与医生盲测中表现优异。
-- **北京大学 AnyPPG** (KDD 2026): 北大洪申达团队推出的通用光电脉搏基座大模型。基于超 10 万小时同步脉搏-心电数据进行跨模态对比预训练，突破传统单一心血管任务，首次实现对慢性肾病（CKD）、帕金森病等全身多器官复杂表型的无创筛查。
-- **PaPaGei** (ICLR 2025): Nokia Bell Labs 与剑桥联合发布，首个开源通用光电生理基础模型。采用 ResNet1D-MoE 架构，参数量仅 1.5M，在心率、血压、血管年龄等 20 个下游任务表现卓越。
-- **Pulse-PPG** (UbiComp 2025): UIUC 主导，针对真实野外高噪手腕 PPG 提出相对对比学习（RelCon），有效克服真实生活中的剧烈运动伪影。
-- **PPG-Distill** (Emory University, 2025): 针对穿戴设备端侧资源受限难题，首创面向光电脉搏大模型的三级知识蒸馏框架（预测/特征/波形形态蒸馏），在保持心率与房颤高精度判别的同时实现 7 倍推理加速与 19 倍内存节省。
-- **Apple PpgAge & WBM** (Nature Medicine 2025/2026): 基于 21 万人 Apple Health Study 真实世界手腕脉搏波，验证了 PPG 潜表征独立于日历年龄评估血管老化程度（Vascular Age）与心血管发病风险（HR = 1.46）的临床有效性。
-- **开源脉搏大模型生物年龄基准横评** (arXiv 2026.03): 首个对标 Apple 闭源 PpgAge 的独立开源 Benchmark。证实 Pulse-PPG 仅凭冻结无监督潜表征（融合人口学 MAE 8.22年）即可在跨域临床患者上全面击败 21 万人监督训练的专用大模型与传统 HR/HRV，并成功复现 PPG 年龄差与舒张压（DBP）血管硬化的强负相关（详见 [docs/models/smartwatch_models.md](docs/models/smartwatch_models.md#113-开源脉搏基础模型生物年龄独立横评pulse-ppgpapagei-对标-apple-ppgage-arxiv-2026)）。
-- **LIMU-BERT** (UbiComp): 针对 IMU/加速度计的传感器表征模型，实现与个体身份解耦的高阶步态和运动模式提取。
+生理信号基础模型通过自监督预训练（对比学习、掩码自编码、潜空间预测、流匹配或临床语言对齐），从大规模无标注或多模态配对生理记录中提取通用表征，支持下游少样本微调、零样本检索与跨模态生成。
 
 ---
 
-## ❤️ 2. 心电与心血管电生理基础模型 (ECG & Electrophysiology)
+## 领域专题文档与技术长文
 
-详细分析与网络细节请查阅：📖 [docs/models/ecg_models.md](docs/models/ecg_models.md)
+### 领域专题文档 (`docs/`)
 
-- **MIT / Stanford / Harvard ECG-FM** (Nature Communications / arXiv):
-  - 全球首个针对 12-导联临床心电的大规模开源基础模型。在 MIMIC-IV-ECG 与 CODE-15% 超过 114 万条真实临床心电上完成预训练。
-  - 采用 Patch-Transformer 骨干，创新性融合**时序掩码重建（MAE）与患者间对比学习**，即使在仅有 1% 极微量下游标注样本时，也能在心肌梗死、左室射血分数降低（LVEF $\le 40\%$）及 20 余种复杂心律失常分类中显著超越传统监督模型。
-- **ST-MEM (时空解耦掩码心电建模)** (NeurIPS):
-  - 首次将计算机视觉中的 MAE 拓展到解剖多导联空间，设计了“空间导联掩码（模拟穿戴单导联推断全导联）”与“时间片段掩码”，通过非对称双向自注意力编码器极大提升了空间几何与心室去极化先验的学习效率。
-- **HeartBEiT** (Vision Transformer for ECG):
-  - 引入离散标记（Discrete Codebook Tokenization）机制，将连续电压波形量化为有限字典标记，有效克服了传统均方误差（MSE）损失易受高频白噪声和基线漂移干扰的痛点。
-- **北京大学 / NUS GEM** (NeurIPS 2025):
-  - 首个 Grounded ECG 跨模态大模型，强制将心电时序与 2D 图纸视觉诊断输出绑定至微观波形物理指标（PR间期、QRS波宽、ST段抬高），以证据链彻底消除模型幻觉。
-- **跨模态电生理重建前沿**：
-  - **北京大学 PPGFlowECG** 与 **清华大学 UniCardio**：利用潜空间整流流（Rectified Flow）与统一扩散 Transformer（DiT），实现从消费级智能手表连续光电脉搏（PPG）极速生成诊断级 12-导联心电波形。
+按传感器模态与认知层级组织的文献拆解与横向对比：
 
----
+| 专题文档 | 定位 | 涵盖模型 / 内容 |
+| :--- | :--- | :--- |
+| [智能手表与腕戴生理模型](docs/models/smartwatch_models.md) | 核心主线 | SensorFM、PaPaGei、Pulse-PPG、xMAE、HiMAE、UniCardio、PPGFlowECG、AnyPPG、PPG-Distill、PpgAge、OpenMHC、PPG-LM、SensorLM、LIMU-BERT |
+| [心电与心血管电生理基础模型](docs/models/ecg_models.md) | 核心主线 | ECG-FM、ST-MEM、HeartBEiT、CLOCS 及 PPG-ECG 跨模态生成对比 |
+| [连续血糖监测（CGM）基础模型](docs/models/cgm_models.md) | 核心主线 | GlucoFM、CGM-JEPA、GluFormer、CGMformer、CGM-LSM、GlucoBench |
+| [睡眠与心肺多模态模型](docs/models/sleep_models.md) | 核心主线 | SleepFM / SleepFM-2、SleepMaMi、U-Sleep 及穿戴睡眠迁移分析 |
+| [可穿戴健康推理与生理大语言模型](docs/models/health_reasoning_llms.md) | 核心主线 | WearableQA、HEARTS、CBPM-LLaMA、GEM 及神经符号 Agent 协同 |
+| [开源数据集与评测基准](docs/datasets/wearable_datasets.md) | 数据底座 | 腕戴多模态、CGM、临床重症与心电、睡眠 PSG、大型人群队列及清洗工具 |
+| [系统级多模态健康模型](docs/models/universal_health_models.md) | 扩展专题 | RisQ 及静态组学与动态穿戴时序的联合建模 |
+| [通用时间序列基础模型](docs/models/general_tsfm.md) | 扩展专题 | TimesFM、Chronos、MOMENT、Mantis、MOIRAI、Timestral、Kumo-Forecast、TimeBraid、Time-LLM |
 
-## 🩸 3. 连续血糖监测基础模型 (Continuous Glucose Monitoring, CGM)
+### 专题技术长文 (`blogs/`)
 
-详细分析与基准横评请查阅：📖 [docs/models/cgm_models.md](docs/models/cgm_models.md)
+围绕特定研究脉络与跨模态范式撰写的图文解析长文：
 
-- **Google GlucoFM** (arXiv 2605.30865, 2026):
-  - 针对 CGM 专有的 5 分钟离散网格与间质液延迟物理特性，首创双流联合预测架构（Dual-Stream JEPA），参数量仅 **0.72M**。
-  - 巧妙融合全局自注意力（捕获全天昼夜节律动力学）与局部卷积（捕捉餐后血糖陡峭尖峰），在 22 个少样本/跨设备临床血糖任务中超越多变量模型。
-- **GluFormer** (Nature 2026, Pheno.AI / Weizmann Institute):
-  - 基于 GPT 式因果自回归架构（1.35 亿参数），在大规模真实世界人类表型计划 (HPP) 10,812 人连续 15 分钟 CGM 数据上完成预训练。
-  - 不仅能实现极高精度的 24 小时血糖轨迹生成与低血糖预警，更能直接从血糖波动潜表征中零样本推断内脏脂肪、肝脂肪变性及未来糖尿病发展风险。
-- **CGMformer** (中科院 / 上海六院, National Science Review 2025):
-  - 依托中国人群超大规模动态血糖队列（131 万天监测记录、59,000+ 受试者），构建了覆盖正常糖耐量、糖尿病前期及 1/2 型糖尿病全谱系语料库。
-  - 采用 BERT 式掩码语言模型（MLM）预训练，在多中心验证中显著提升了隐匿性糖尿病视网膜病变与微血管并发症的早筛灵敏度。
-- **CGM-JEPA** (2025):
-  - 首个完全基于开源血糖数据重训的非生成式 JEPA 基础模型，证明潜空间预测比像素级还原更能抵御传感器漂移噪声。
+- [从波形生成到全身画像：北京大学洪申达团队在生理时序基模与医疗大模型的前沿探索](blogs/从波形重构到全身画像_北京大学洪申达团队生理基模与医疗大模型探索.md)  
+  梳理 MC-MED 急诊配对管线、PPGFlowECG 潜空间整流流生成、AnyPPG 心电引导多器官预训练、GEM 与 ECG-R1 物理锚定推理及软硬件转化闭环。
+- [让大语言模型理解和赋能生理时序波形](blogs/让大语言模型理解和赋能生理时序波形.md)  
+  围绕 CBPM-LLaMA、Time-LLM、GEM、PPG-LM、SensorLM 与 TimeBraid，讨论领域先验注入时序预测与自然语言对齐消除黑盒幻觉的双向机制。
 
 ---
 
-## 📈 4. 通用时序基础模型 (General Time-Series FMs)
+## 最近更新
 
-详细分析与适用性评估请查阅：📖 [docs/models/general_tsfm.md](docs/models/general_tsfm.md)
+以下列表由 `data/models.yaml` 自动生成，展示最近收录或更新的 10 个条目：
 
-- **TimesFM** (Google): 采用分块解码器架构，在巨量时序数据上预训练，提供强大的零样本点预测与概率区间预测。
-- **Chronos & Chronos-Bolt** (Amazon): 将连续时间序列离散化为词元（Tokenization via Bins），利用语言模型（T5 骨干）进行自回归时间序列预测。
-- **CMU MOMENT & MANTIS**: 基于 Patch-MAE 理念，覆盖多变量重建、异常检测与分类，预训练数据 Time-series Pile 包含大量生理信号。
-- **Mistral Timestral** (Mistral AI, 2026.10): 极轻量级零样本概率时序预测基座（**5M / 28M / 123M / 209M**），首创**解耦预测跨度（Decoupled Horizon Forecasting, DHF）**与时间-变量双重注意力，支持 32,768 步超长上下文、已知未来协变量（如进食/给药计划）与 21 分位数不确定性输出，纯 CPU 推理仅需 10–140ms，在 GIFT-Eval、TIME、fev-bench 三大零样本基准登顶第 1（开源代码：[mistralai/timestral](https://github.com/mistralai/timestral)）。
-- **NVIDIA Kumo-Forecast / Kumo-TS** (NVIDIA GTC Berlin, 2026.10): 英伟达开源企业级多变量时序分析与基础模型套件（原代号 NV-Tesseract）。基于 340M 参数 MOMENT-1-large 骨干，首创**检索增强时序预测（DARR：Domain-Aware Representation and Retrieval）**，将直接神经网络预测与历史模式 $k$-NN 近邻检索动态融合，并内置特征/滞后归因（Lag Attributions）可解释性层与扩散异常检测（`Kumo-Anomaly`）（开源代码：[NVIDIA/Kumo-TS](https://github.com/NVIDIA/Kumo-TS)）。
-- **TimeBraid** (UCSD / USC, 2026.09): 首创时序基础模型（TimesFM 2.5）与大语言模型（Qwen）深层交错全局残差注意力架构，统一时序感知、文本推理、纯时序预测与受控反事实情景推演（Ctrl-F）。
+<!-- BEGIN:RECENT_UPDATES -->
 
----
+| 收录日期 | 名称 | 机构 | 发表 | 模态 | 简介与资源 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-10-26 | [**Timestral**](docs/models/general_tsfm.md#timestral) | Mistral AI | 2026 | 通用单/多变量时序 | 解耦预测跨度 (DHF) + 21 分位数概率预测（大规模多领域时序语料） · [代码](https://github.com/mistralai/timestral) · [权重](https://huggingface.co/mistralai/Timestral-209M) |
+| 2026-10-26 | [**Kumo-Forecast**](docs/models/general_tsfm.md#kumo-forecast) | NVIDIA | 2026 | 通用多变量时序 / 结构化数据 | 冻结 MOMENT + DARR 时序检索增强与原生可解释层（企业级多变量时序与结构化数据集） · [代码](https://github.com/NVIDIA/Kumo-TS) · [权重](https://huggingface.co/nvidia/Kumo-Forecast) |
+| 2026-10-14 | [**Review of Open FM for ECG & PPG**](docs/models/ecg_models.md#1-领域综述导读心电与脉搏波开源基础模型及数据集全景) | MIT / SNU / Yonsei | npj Digital Medicine 2026 | ECG + PPG | 综述与开源生态绘制（覆盖数十个公开基准） · [论文](https://doi.org/10.1038/s41746-026-03101-7) |
+| 2026-10-14 | [**ECG-FM**](docs/models/ecg_models.md#ecg-fm) | 多伦多大学 / UHN / Vector | arXiv 2024 | 12 导联 ECG | 掩码重构 + 对比学习（约 150 万条心电 (MIMIC-IV + UHN)） · [论文](https://arxiv.org/abs/2407.13576) · [代码](https://github.com/kadenmckeen/ecg-fm) · [权重](https://huggingface.co/kadenmckeen/ecg-fm) |
+| 2026-10-14 | [**ST-MEM**](docs/models/ecg_models.md#st-mem) | VUNO Inc. | ICLR 2024 | 12 导联 ECG | 时空解耦 Patch-MAE（约 80 万例 12 导联心电） · [论文](https://arxiv.org/abs/2402.04631) · [代码](https://github.com/vuno-inc/ST-MEM) · [权重](https://github.com/vuno-inc/ST-MEM) |
+| 2026-10-14 | [**HeartBEiT**](docs/models/ecg_models.md#heartbeit) | Mila / 蒙特利尔大学 | arXiv 2023 | 12 导联 ECG | 离散代码本掩码建模（MIMIC-IV-ECG） · [论文](https://arxiv.org/abs/2306.07920) · [代码](https://github.com/hsd1503/HeartBEiT) |
+| 2026-10-14 | [**CLOCS**](docs/models/ecg_models.md#clocs) | 牛津大学 | NeurIPS 2020 | 多导联 ECG | 时空多导联对比学习（PhysioNet 2017 + Chapman） · [论文](https://proceedings.neurips.cc/paper/2020/hash/da65ae7d09f25745b85e0546cb7ee3b4-Abstract.html) · [代码](https://github.com/danikiyasseh/CLOCS) |
+| 2026-10-12 | [**PPG-LM**](docs/models/smartwatch_models.md#ppg-lm) | Emory / UCLA / Google / Stanford | arXiv 2026 | PPG 波形 + 多层级临床自然语言 | 两阶段对齐 (CoCa 对比/生成 + 连续物理时间 RoPE)（73,700 小时 (MC-MED 队列 36,430 名急诊患者)） · [论文](https://arxiv.org/abs/2609.33516) |
+| 2026-10-12 | [**SleepFM / SleepFM-2**](docs/models/sleep_models.md#sleepfm) | 斯坦福大学 / DTU / BrainCapture | Nat Med 2024 / arXiv 2026 | 多导睡眠监测 (EEG, ECG, PPG, Resp, EMG) | 留一对比学习 (LOO-CL) + 局部 MAE 重构（200+ 万小时 / 23.5 万受试者） · [论文](https://arxiv.org/abs/2609.06849) · [代码](https://github.com/zou-group/sleepfm-v2-public) · [权重](https://github.com/zou-group/sleepfm-v2-public) |
+| 2026-10-12 | [**WearableQA**](docs/models/health_reasoning_llms.md#wearableqa) | Meta AI / Reality Labs | arXiv 2026 | 长程多模态聚合指标 (16 维时序 + 17 维化验) | 解耦评测基准 (数据计算推理 + 健康机制推理)（200 人 × 500 天长程穿戴数据 (4,084 道推理题)） · [论文](https://arxiv.org/abs/2609.05405) |
 
-## 💤 5. 睡眠与心肺多模态模型 (Sleep & Cardiopulmonary)
-
-详细分析与网络细节请查阅：📖 [docs/models/sleep_models.md](docs/models/sleep_models.md)
-
-- **Stanford Medicine SleepFM & SleepFM-2** (Nature Medicine 2024 / arXiv 2609.06849, 2026.09):
-  - **从 60 万到 200 万小时多器官生理基座**：依托 26 个独立队列、282,511 份完整夜间 PSG 记录（预训练 23.5 万份），联合建模脑电（EEG）、眼电（EOG）、心电（ECG/PPG）、肌电（EMG）与呼吸气流/胸腹阻抗，在完全保留的 Harvard HSP 独立医疗中心盲测中验证了强大的真实泛化力。
-  - **LLaMA 现代架构与双流联合自监督 (LOO-CL + MAE)**：骨干采用 RMSNorm、SwiGLU 与 RoPE，编码器参数量精简至 **2.57M**（减重 47%），Token 时间步长细化至 **1 秒**；对比分支对齐全局多器官互补性，掩码自编码分支重构局部微观波形形态。
-  - **四大临床事件打分闭环**：在微觉醒（Arousals, F1 0.60）、周期性肢体运动（PLMS, F1 0.60）及呼吸事件（Apnea/Hypopnea）上打分达到甚至超越人类资深睡眠技师水平。
-  - **PheWAS 215 种新发疾病预测与通用生理风险轴 (PC1)**：联合年龄/性别/BMI 预测 215 种长期疾病（C-index $\ge 0.75$），全面超越涵盖 480 维专业工程特征全家桶；提取出解释 58% 方差的通用生理风险轴，关联全脑 Sigma 波空间失谐与催眠密度熵增。
-  - **消费级穿戴迁移神级突破**：手腕 PPG 零样本微调睡眠分期 Macro-F1 达 **0.531**；手腕加速度计首创“物理生理代理通道桥”（0.1～0.6 Hz 提取呼吸，3.5～14 Hz 提取心动冲击 SCG），在 **UK Biobank 10 万人 390 种疾病预测**中直接打平专有加速度计模型！
-  - **核心思辨与穿戴微觉醒解答**：详见专题解析中的 [SleepFM-2 与 SleepFM-1 本质区别深度思辨](docs/models/sleep_models.md#24-深度思辨sleepfm-2-与-sleepfm-1-最本质的区别是什么) 及 [穿戴式 ACC 基模能否用来识别微觉醒深度辩析](docs/models/sleep_models.md#72-核心前沿问答穿戴式-acc-基模能否用来识别微觉醒-cortical-arousals)（澄清 AASM 脑电金标准冲突、Sub-movement Arousals 假阴性与手腕 PPG+ACC 自主神经微觉醒工程方案）。
-  - **开源代码**：[github.com/zou-group/sleepfm-v2-public](https://github.com/zou-group/sleepfm-v2-public)
-- **SleepMaMi** (首尔大学, ICML 2026):
-  - **宏观-微观层级双编码器架构**：针对整夜宏观睡眠时序与局部微观瞬变波形尺度断层的痛点，提出 Macro-Encoder（结合年龄/性别/BMI 人口统计学先验建模全夜周期节律）与 Micro-Encoder（局部 MAE 重构与多模态对比学习）。
-  - **少样本多中心迁移**：在 20,000+ 份 PSG 记录（约 15.8 万小时）上预训练，仅需 1% 标注即可匹敌全监督模型。
-- **U-Sleep & 开源基准网络** (Nature npj Digital Medicine):
-  - 基于全卷积 1D U-Net 的端到端多通道睡眠分期架构，具备极强的跨传感器配置与动态导联适应能力。
+<!-- END:RECENT_UPDATES -->
 
 ---
 
-## 🧠 6. 可穿戴健康推理与系统级生理大模型 (Wearable Health Reasoning & Universal Health FMs)
+## 基础模型与评测基准索引表
 
-### 6.1 系统级多模态健康世界模型 (Universal Health & Cross-Disease Risk FMs)
+以下表格由 `data/models.yaml` 自动生成，点击模型名称可跳转至对应专题文档中的详细拆解与论文架构图：
 
-详细技术深度解构与架构剖析请查阅：📖 [docs/models/universal_health_models.md](docs/models/universal_health_models.md)
+<!-- BEGIN:MODELS_TABLE -->
 
-长期以来，临床流行病学陷于“单一疾病孤岛（Disease Silos）”的局限（如 Framingham 仅算心梗、SCORE2 仅算中风、FINDRISC 仅算糖尿病）。2026 年，慕尼黑工业大学（TUM）、亥姆霍兹慕尼黑中心（Helmholtz Munich）、哈佛大学及斯坦福医学 AIMI 团队提出了革命性的**人体健康世界模型**范式：
+| 模型 / 基准 | 机构 | 发表 | 主要模态 | 方法与参数规模 | 预训练 / 评测规模 | 开源资源 | 收录日期 |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| [**SensorFM**](docs/models/smartwatch_models.md#sensorfm) | Google Research / Fitbit Health AI | arXiv 2026 | 腕部多模态 (PPG, ACC, EDA, 皮温, 气压计) | 统一物理时间分块 + 掩码多模态建模与跨模态填补（大模型级） | 1 万亿分钟 (500 万真实用户) | [论文](https://arxiv.org/abs/2605.22759) | 2026-10-12 |
+| [**PaPaGei**](docs/models/smartwatch_models.md#papagei) | Nokia Bell Labs / 剑桥大学 / 达特茅斯学院 | ICLR 2025 | 单通道 PPG (光电脉搏波) | 形态感知对比学习 + ResNet1D-MoE（约 1.5M） | 5.7 万小时 (10 个公开数据集) | [论文](https://arxiv.org/abs/2410.20542) · [代码](https://github.com/Nokia-Bell-Labs/papagei-foundation-model) · [权重](https://zenodo.org/records/13983110) | 2026-10-12 |
+| [**Pulse-PPG**](docs/models/smartwatch_models.md#pulse-ppg) | 孟菲斯大学 / UIUC | UbiComp 2025 | 腕部高噪 PPG | 相对对比学习 (RelCon) + 大核 1D-ResNet（约 2M） | 5.5 万小时 (120 人连续 100 天野外生活数据) | [代码](https://github.com/maxxu05/pulseppg) · [权重](https://zenodo.org/records/10892019) | 2026-10-12 |
+| [**xMAE**](docs/models/smartwatch_models.md#xmae) | Samsung Research America / UCLA | ICML 2024 | PPG + ECG (跨模态虚拟传感) | 跨模态掩码自编码 (Cross-Modal MAE)（紧凑级） | 9,400 小时同步配对 ECG-PPG 数据 | 未公开 | 2026-10-12 |
+| [**HiMAE**](docs/models/smartwatch_models.md#himae) | Samsung Research America / UCLA | ICLR 2026 | 单通道手腕绿光 PPG | 5 级 1D 卷积 U-Net + 混合分块掩码自编码 (80% MAE)（0.31M (编码器)） | 8 万小时 (47,644 名用户真实手表数据) | [论文](https://arxiv.org/abs/2510.25785) · [代码](https://github.com/Simonlee711/HiMAE) · [权重](https://github.com/Simonlee711/HiMAE) | 2026-10-12 |
+| [**UniCardio**](docs/models/smartwatch_models.md#unicardio) | 清华大学 / 安贞医院 / 帝国理工学院 | Nature Machine Intelligence 2025/2026 | PPG + ECG + 动脉血压 (BP) | 多模态扩散 DiT + 任务特异性掩码与持续学习（骨干共享 + 0.3M/模态增量） | 339 小时高精度三模态全时程波形 | [论文](https://doi.org/10.1038/s42256-025-01147-y) · [代码](https://github.com/chen-zehua/UniCardio) | 2026-10-12 |
+| [**PPGFlowECG**](docs/models/smartwatch_models.md#ppgflowecg) | 北京大学健康医疗大数据国家研究院 | arXiv 2025-2026 | PPG → 诊断级 ECG | CardioAlign 潜空间对齐 + 潜空间整流流 (Rectified Flow)（紧凑级 (1-4 步 ODE 快速采样)） | MC-MED (11.8 万人 / 1000 万对急诊样本) | [论文](https://arxiv.org/abs/2502.14856) · [代码](https://github.com/PKUDigitalHealth/PPGFlowECG) | 2026-10-12 |
+| [**AnyPPG**](docs/models/smartwatch_models.md#anyppg) | 北京大学健康医疗大数据国家研究院 | ACM SIGKDD 2026 | 单通道 PPG (心电引导) | 心电引导跨模态对比预训练 (ECG-Guided InfoNCE)（5.85M (单分支)） | 100,000+ 小时同步配对数据 (MC-MED, MIMIC 等) | [论文](https://arxiv.org/abs/2511.01747) · [代码](https://github.com/Ngk03/AnyPPG) | 2026-10-12 |
+| [**PPG-Distill**](docs/models/smartwatch_models.md#ppg-distill) | Emory University | 2025 | 腕部 PPG | 预测级 + 特征级 + 形态节律三级多尺度蒸馏（紧凑 1D 学生网络 (内存降低 19x)） | 多中心公开穿戴语料 | [代码](https://github.com/LingFengGold/PPG-Distill) | 2026-10-12 |
+| [**Apple PpgAge**](docs/models/smartwatch_models.md#ppgage) | Apple Health | Nature Medicine 2025/2026 | 腕戴日常 PPG | 深度时序表征与血管生理年龄预测 (PPG Age Gap)（工业级） | Apple Health Study (213,593 名真实佩戴者) | 未公开 | 2026-10-12 |
+| [**OpenMHC**](docs/models/smartwatch_models.md#openmhc) | 斯坦福大学医学院 (Euan Ashley Lab) / 帝国理工 | arXiv 2026 | 19 通道穿戴时序 + 169 维自述健康变量 | 统一基准赛道 (预测/插补/外推) + WBM/LSM 开源复现（统一基准） | 6,700+ 万小时 (11,894 名受试者 13 年纵向记录) | [论文](https://arxiv.org/abs/2607.16235) · [代码](https://github.com/AshleyLab/OpenMHC) · [权重](https://huggingface.co/MyHeartCounts) | 2026-10-12 |
+| [**PPG-LM**](docs/models/smartwatch_models.md#ppg-lm) | Emory / UCLA / Google / Stanford | arXiv 2026 | PPG 波形 + 多层级临床自然语言 | 两阶段对齐 (CoCa 对比/生成 + 连续物理时间 RoPE)（12.7M (波形塔) + 8 层因果语言塔） | 73,700 小时 (MC-MED 队列 36,430 名急诊患者) | [论文](https://arxiv.org/abs/2609.33516) | 2026-10-12 |
+| [**SensorLM**](docs/models/smartwatch_models.md#sensorlm) | Google Research / Google DeepMind | NeurIPS 2025 | 5 维传感器 (PPG, ACC, EDA, 皮温, 气压计) + 文本 | ViT-2D Patch + CoCa 对比与多模态自回归解码（工业级） | 5,970 万小时 (103,000+ 名真实用户) | [论文](https://arxiv.org/abs/2506.09108) · [代码](https://github.com/Google-Health/consumer-health-research/tree/main/sensorlm) | 2026-10-12 |
+| [**LIMU-BERT**](docs/models/smartwatch_models.md#limu-bert) | 南洋理工大学 (NTU) | ACM SenSys 2021 | 手腕三轴 ACC + 陀螺仪 | 掩码传感器建模 (Masked Sensor Modeling)（紧凑级） | 公开 IMU 运动数据集 | [论文](https://dl.acm.org/doi/10.1145/3485730.3485938) · [代码](https://github.com/dapowan/LIMU-BERT-Public) · [权重](https://github.com/dapowan/LIMU-BERT-Public) | 2026-10-12 |
+| [**GlucoFM**](docs/models/cgm_models.md#glucofm) | Google Research / UNSW | arXiv 2026 | CGM 血糖 | 双流 JEPA 潜空间预测（0.72M） | 477 人 (10.9 万小时) | [论文](https://arxiv.org/abs/2605.30865) · 权重需申请 | 2026-09-08 |
+| [**CGM-JEPA**](docs/models/cgm_models.md#cgm-jepa) | CRUISE Lab | 2025 | CGM 血糖 | 潜空间 JEPA 预测（约 0.5M） | 228 人 (开源重训基座) | [代码](https://huggingface.co/CRUISEResearchGroup/CGM-JEPA) · [权重](https://huggingface.co/CRUISEResearchGroup/CGM-JEPA) | 2026-09-09 |
+| [**GluFormer**](docs/models/cgm_models.md#gluformer) | Pheno.AI / 魏茨曼 / NVIDIA | Nature 2026 | CGM 血糖 | GPT 式因果自回归（135M） | 10,812 人 (>1000 万读数) | [论文](https://www.nature.com/articles/s41586-025-08639-6) · [代码](https://github.com/Guylu/GluFormer) · 权重需申请 | 2026-09-08 |
+| [**CGMformer**](docs/models/cgm_models.md#cgmformer) | 中科院 / 上海六院 | NSR 2025 | CGM 血糖 | BERT 式 MLM 掩码重构（0.85M～10M） | 5.9 万人 (131 万天) | [论文](https://doi.org/10.1093/nsr/nwaf082) · [代码](https://github.com/YurunLu/CGMformer) · [权重](https://github.com/YurunLu/CGMformer) | 2026-09-08 |
+| [**CGM-LSM**](docs/models/cgm_models.md#cgm-lsm) | JHU CDHAI | arXiv 2024 | CGM 血糖 | GPT-2 自回归（约 124M） | 592 人 (1600 万读数) | [论文](https://arxiv.org/abs/2412.09727) · [代码](https://github.com/JHU-CDHAI/cgmlsm) | 2026-09-08 |
+| [**GlucoBench**](docs/models/cgm_models.md#glucobench) | Texas A&M University | ICLR 2024 | CGM 血糖 | 标准化评测基准套件 | 多队列基准集成 | [论文](https://openreview.net/forum?id=u4UaZq1Goi) · [代码](https://github.com/IrinaStatsLab/GlucoBench) | 2026-09-09 |
+| [**ECG-FM**](docs/models/ecg_models.md#ecg-fm) | 多伦多大学 / UHN / Vector | arXiv 2024 | 12 导联 ECG | 掩码重构 + 对比学习（约 100M） | 约 150 万条心电 (MIMIC-IV + UHN) | [论文](https://arxiv.org/abs/2407.13576) · [代码](https://github.com/kadenmckeen/ecg-fm) · [权重](https://huggingface.co/kadenmckeen/ecg-fm) | 2026-10-14 |
+| [**ST-MEM**](docs/models/ecg_models.md#st-mem) | VUNO Inc. | ICLR 2024 | 12 导联 ECG | 时空解耦 Patch-MAE（紧凑级） | 约 80 万例 12 导联心电 | [论文](https://arxiv.org/abs/2402.04631) · [代码](https://github.com/vuno-inc/ST-MEM) · [权重](https://github.com/vuno-inc/ST-MEM) | 2026-10-14 |
+| [**HeartBEiT**](docs/models/ecg_models.md#heartbeit) | Mila / 蒙特利尔大学 | arXiv 2023 | 12 导联 ECG | 离散代码本掩码建模（紧凑级） | MIMIC-IV-ECG | [论文](https://arxiv.org/abs/2306.07920) · [代码](https://github.com/hsd1503/HeartBEiT) | 2026-10-14 |
+| [**CLOCS**](docs/models/ecg_models.md#clocs) | 牛津大学 | NeurIPS 2020 | 多导联 ECG | 时空多导联对比学习（轻量级） | PhysioNet 2017 + Chapman | [论文](https://proceedings.neurips.cc/paper/2020/hash/da65ae7d09f25745b85e0546cb7ee3b4-Abstract.html) · [代码](https://github.com/danikiyasseh/CLOCS) | 2026-10-14 |
+| [**SleepFM / SleepFM-2**](docs/models/sleep_models.md#sleepfm) | 斯坦福大学 / DTU / BrainCapture | Nat Med 2024 / arXiv 2026 | 多导睡眠监测 (EEG, ECG, PPG, Resp, EMG) | 留一对比学习 (LOO-CL) + 局部 MAE 重构（2.57M (v2)） | 200+ 万小时 / 23.5 万受试者 | [论文](https://arxiv.org/abs/2609.06849) · [代码](https://github.com/zou-group/sleepfm-v2-public) · [权重](https://github.com/zou-group/sleepfm-v2-public) | 2026-10-12 |
+| [**SleepMaMi**](docs/models/sleep_models.md#sleepmami) | 首尔大学 | ICML 2026 | 多导睡眠监测 (EEG, ECG, Resp) | 宏微观分层双编码器 + 人口统计学引导对比（约 15M） | 15.8 万小时 / 2.0 万受试者 | [论文](https://arxiv.org/abs/2605.15852) · [代码](https://github.com/SNU-SPL/SleepMaMi) | 2026-10-12 |
+| [**U-Sleep**](docs/models/sleep_models.md#u-sleep) | 哥本哈根大学 | npj Digit Med 2021 | 睡眠脑电与眼电 (EEG, EOG) | 1D 全卷积深层 U-Net（约 3.1M） | 约 1.5 万小时多中心临床 PSG | [论文](https://doi.org/10.1038/s41746-021-00440-5) · [代码](https://github.com/perslev/U-Sleep) · [权重](https://github.com/perslev/U-Sleep) | 2026-10-12 |
+| [**WearableQA**](docs/models/health_reasoning_llms.md#wearableqa) | Meta AI / Reality Labs | arXiv 2026 | 长程多模态聚合指标 (16 维时序 + 17 维化验) | 解耦评测基准 (数据计算推理 + 健康机制推理) | 200 人 × 500 天长程穿戴数据 (4,084 道推理题) | [论文](https://arxiv.org/abs/2609.05405) | 2026-10-12 |
+| [**HEARTS**](docs/models/health_reasoning_llms.md#hearts) | Yang AI Lab | ICML 2026 | 全谱系 20 种生理模态 (ECG, EEG, PPG, CGM 等) | 四层认知能力阶梯评测 + CodeAct 工具调用 | 16 个开源数据集 / 110 项任务 / 20,226 评测样本 | [论文](https://arxiv.org/abs/2603.06638) · [代码](https://github.com/yang-ai-lab/HEARTS) | 2026-10-12 |
+| [**CBPM-LLaMA**](docs/models/health_reasoning_llms.md#cbpm-llama) | 中科院深圳先进院 / 香港理工大学 | ACM-BCB '24 | ECG + PPG (31 维血流动力学先验特征) | 血流动力学解耦 Prompt + LLaMA 指令微调（8B） | CAS-BP (1,272 受试者无袖带血压队列) | [论文](https://arxiv.org/abs/2406.18069) · [代码](https://github.com/zdzdliu/CAS-BP) | 2026-10-12 |
+| [**GEM**](docs/models/health_reasoning_llms.md#gem) | 北京大学 / 新加坡国立大学 | NeurIPS 2025 | 12 导联 ECG (1D 波形 + 2D 心电报告图) | 双编码器 + 波形参数物理锚定 (ECG-Grounding)（7B 级） | PTB-XL, Chapman, Ningbo 等多源临床心电 | [论文](https://arxiv.org/abs/2503.06073) · [代码](https://github.com/lanxiang1017/GEM) | 2026-10-12 |
+| [**RisQ**](docs/models/universal_health_models.md#risq) | TUM / Helmholtz / Harvard | 2026 | 全基因组 + 生化 + EHR + 穿戴 | 统一跨模态共享潜在表征 | 74.5 万人 (UKB + All of Us) | [论文](https://doi.org/10.64898/2026.07.07.26357373) | 2026-09-20 |
+| [**TimesFM**](docs/models/general_tsfm.md#timesfm) | Google Research | ICML 2024 | 通用一维时序 | 纯解码器自回归 (Decoder-Only) + 连续 Patch（200M / 500M） | 1000 亿+ 时间点 (Google Trends, Wikipedia 等) | [论文](https://arxiv.org/abs/2310.10688) · [代码](https://github.com/google-research/timesfm) · [权重](https://huggingface.co/google/timesfm-1.0-200m) | 2026-10-12 |
+| [**Chronos / Chronos-Bolt**](docs/models/general_tsfm.md#chronos) | Amazon Web Services (AWS) | ICML 2024 | 通用一维时序 | 离散分箱量化 (4096 Bins) + T5 语言模型迁移（20M - 710M） | 多领域公开时序 + 合成高斯过程数据 | [论文](https://arxiv.org/abs/2403.07815) · [代码](https://github.com/amazon-science/chronos-forecasting) · [权重](https://huggingface.co/amazon/chronos-t5-base) | 2026-10-12 |
+| [**MOMENT**](docs/models/general_tsfm.md#moment) | Carnegie Mellon University (Auton Lab) | ICML 2024 | 通用多变量时序 (含生理信号) | 连续值分块掩码自编码 (Patch-MAE) + 通道独立（385M (Large)） | Time-series Pile (13 领域公开时序, 含 ECG/PPG/EEG) | [论文](https://arxiv.org/abs/2402.04385) · [代码](https://github.com/moment-timeseries-foundation-model/moment) · [权重](https://huggingface.co/AutonLab/MOMENT-1-large) | 2026-10-12 |
+| [**Mantis**](docs/models/general_tsfm.md#mantis) | 华为诺亚方舟实验室 / Inria | ICML 2026 | 通用多变量时序 | 自适应卷积分块 (TGU) + 轻量 ViT-1D 对比学习（约 8M） | 多样化公开时序基准 (UCR/UEA) | [论文](https://arxiv.org/abs/2502.15637) · [代码](https://github.com/vfeofanov/mantis) · [权重](https://huggingface.co/paris-noah/Mantis-8M) | 2026-10-12 |
+| [**MOIRAI**](docs/models/general_tsfm.md#moirai) | Salesforce AI Research | ICML 2024 | 通用多变量时序 | 多尺寸分块 + 任意变量掩码注意力 (Any-Variate)（14M - 311M） | LOTSA 数据集 (270 亿观测值) | [论文](https://arxiv.org/abs/2402.02592) · [代码](https://github.com/SalesforceAIResearch/uni2ts) · [权重](https://huggingface.co/Salesforce/moirai-1.0-R-base) | 2026-10-12 |
+| [**Timestral**](docs/models/general_tsfm.md#timestral) | Mistral AI | 2026 | 通用单/多变量时序 | 解耦预测跨度 (DHF) + 21 分位数概率预测（5M - 209M） | 大规模多领域时序语料 | [代码](https://github.com/mistralai/timestral) · [权重](https://huggingface.co/mistralai/Timestral-209M) | 2026-10-26 |
+| [**Kumo-Forecast**](docs/models/general_tsfm.md#kumo-forecast) | NVIDIA | 2026 | 通用多变量时序 / 结构化数据 | 冻结 MOMENT + DARR 时序检索增强与原生可解释层（约 340M） | 企业级多变量时序与结构化数据集 | [代码](https://github.com/NVIDIA/Kumo-TS) · [权重](https://huggingface.co/nvidia/Kumo-Forecast) | 2026-10-26 |
+| [**TimeBraid**](docs/models/general_tsfm.md#timebraid) | UC San Diego / USC / Aether AI | arXiv 2026 | 时序数值 + 自然语言文本 | 双塔深度交错残差注意力 (MoT) + 统一 Prompt（1.2B - 6.7B） | 跨模态时序-语言对齐数据集 | [论文](https://arxiv.org/abs/2609.29792) · [代码](https://github.com/Aether-AI/TimeBraid) | 2026-10-12 |
+| [**Time-LLM**](docs/models/general_tsfm.md#time-llm) | Monash / 蚂蚁集团 / HKUST | ICLR 2024 | 通用一维时序 | 文本原型跨注意力重编程 + 提示词前缀增强（冻结 7B LLM (微调 <1%)） | 多领域通用时序基准 (M4, ETT 等) | [论文](https://arxiv.org/abs/2310.01728) · [代码](https://github.com/KimMeen/Time-LLM) | 2026-10-12 |
 
-- **TUM / Helmholtz RisQ** (medRxiv / Research Square 2026):
-  - **75 万人双中心零样本验证**：依托英国生物样本库（UK Biobank 48.8 万人）与美国国立卫生研究院（All of Us 25.7 万人跨族裔多中心），首次证实了**“人类健康全景跨疾病共享潜在结构（Shared Structure of Human Health）”**的客观存在。
-  - **自然语言提示词驱动 (Promptable Risk Query)**：打破固定输出分类头，支持临床医生以自然语言 Prompt 自由定义查询——在 1 年、5 年或 10 年等任意时间跨度下，对全生命周期上百种 ICD-10 疾病进行零样本发病风险推演。
-  - **医学风险预测领域的缩放定律 (Scaling Law)**：首次在医学领域严格证明了类似大语言模型的 Scaling Law——预训练覆盖的疾病谱系越宽，模型对未知疾病的零样本表征迁移能力与判别精度越高。
-  - **微观单基因功能缺失突变 (LoF) 的跨系统病理锚定**：即便在没有任何临床生化化验的极端场景下，仅凭 *LDLR*（家族性高胆固醇血症）或 *HBB*（地中海贫血）等单基因变异，模型即可在潜在空间自发推演并映射至心血管与血液系统的全谱系并发症。
-  - **穿戴动态遥测的未来中枢**：系统阐明了静态基因组（先天底色）、临床血液生化（稳态快照）与智能手表/体动仪（动态遥测探针）的共生关系，将可穿戴设备正式升级为通用医学大模型的高频动态感知中枢。
+<!-- END:MODELS_TABLE -->
 
 ---
 
-### 6.2 认知推理与智能体评测基准 (Longitudinal Health Reasoning Benchmarks)
+## 开放数据集与临床队列索引
 
-详细技术深度解构与架构剖析请查阅：📖 [docs/models/health_reasoning_llms.md](docs/models/health_reasoning_llms.md)
+以下表格由 `data/datasets.yaml` 自动生成，详细说明与预处理工具请查阅 [docs/datasets/wearable_datasets.md](docs/datasets/wearable_datasets.md)：
 
-随着穿戴设备从“偶发读数”走向“全生命周期纵向监测”，学术界与工业界（Meta、MIT、Yang AI Lab 等）于 2025–2026 年迎来了**从“信号级单点预测与表征提取”向“认知级多模态健康因果推理”**的重大范式跃迁：
+<!-- BEGIN:DATASETS_TABLE -->
 
-- **Meta WearableQA** (arXiv:2609.05405, 2026):
-  - **首个真实世界长程健康推理基准**：基于 200 名真实用户最长 500 天的连续穿戴记录（16 维每日心肺、运动、睡眠指标）、17 项临床化验血液面板及大样本群体分位数先验，构建 4,084 道 10 选 1 深度推理选择题。
-  - **$2 \times 2$ 解耦评测与双重锚定**：严密分离纯数据计算推理（Data Reasoning）与临床病理机制推理（Health Reasoning）；采用“顶级医学指南文献”与“超大规模人群统计显著（$p<0.001$）”双重锚定真实标签。
-  - **实证揭示**：顶级大模型（Gemini 3.1 Pro、GPT-5）准确率在 60%～72% 之间，中小开源模型甚至不足 40%（随机基线 10%），揭示了 LLM 在长程连续数字计算与微弱生理异常捕捉上的严重短板。
-- **Yang AI Lab HEARTS** (ICML 2026 / arXiv:2603.06638):
-  - **首个覆盖全谱系健康时序的大模型评测体系**：涵盖 16 个开源数据集、12 个健康领域、20 种生理模态（ECG、EEG、PPG、EMG、CGM、呼吸音等），采样率跨越每日聚合到 48 kHz 高频，包含 110 项任务与 20,226 个评测样本。
-  - **四层认知阶梯 (Hierarchical Spectrum)**：首次将健康时序评测系统化抽象为 $\text{Perception (底层感知)} \to \text{Inference (状态推断)} \to \text{Generation (波形生成)} \to \text{Deduction (纵向因果演化)}$。
-  - **关键“解毒”洞察**：纯 LLM 在多数健康时序任务上明显落后于专用轻量时序基础模型（如 PaPaGei、MOMENT），且在高频长序列上倾向于采用“低复杂度启发式作弊（复制/简单插值）”。
-  - **CodeAct 神经符号协作**：验证了 LLM 必须借助 CodeAct 范式，作为中枢调度 Python 科学计算库（SciPy、NeuroKit2、BioSPPy）执行精确数值运算，才能真正实现高可靠健康时序分析。
-- **北京大学 / NUS GEM** (NeurIPS 2025 / arXiv:2503.06073):
-  - **首个 Grounded ECG 跨模态大模型**：结合 12-导联心电 1D 连续时序与 2D 图纸视觉双编码器，首次将诊断输出强制绑定至微观波形参数（PR 间期、QRS 波宽、QT/QTc、ST 段抬高/压低毫米数），以波形证据链消除医学幻觉，可解释性提升 22.7%。
-- **中科院深圳先进院 / 港理工 CBPM-LLaMA** (ACM-BCB '24 / arXiv:2406.18069):
-  - **首个可穿戴无袖带血压微调大模型**：从 1000 Hz 同步 ECG+PPG 提取 31 维特征，通过心血管血流动力学先验将预测目标解耦为平均动脉压 MAP（心输出量 CO + 外周阻力 PR）与脉压差 PP（大动脉硬度 PTT），仅用 30% 样本微调即可超越传统 AdaBoost 基线。
-
----
-
-## 📦 7. 开源数据集与评测基准 (Datasets & Benchmarks)
-
-详细数据集下载指引与预处理代码请查阅：📖 [docs/datasets/wearable_datasets.md](docs/datasets/wearable_datasets.md)
-
-| 领域 / 模态 | 数据集名称 | 采集设备 / 团队 | 核心传感器与采样率 | 样本规模 | 适用任务与特色 | 获取方式 |
+| 领域 | 数据集 | 机构 / 来源 | 传感器与采样率 | 样本规模 | 适用任务 | 获取方式 |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **⌚ 手腕多模态** | **OpenMHC** | Stanford (Ashley组) / 帝国理工 | 19维腕戴连续时序 + 169维变量 | 11,894人 (>6700万h, 13年) | 首个超大规模开源穿戴基础模型生态基座 (插补/预测/评估) | 🟢 开放免费 (Dataverse/HF) |
-| **⌚ 手腕多模态** | **PhysioNet Wrist** | PhysioNet | PPG 256Hz, ACC 256Hz, ECG | 8人 (走跑骑运动) | 运动伪影消除、心率连续回归金标准 | 🟢 开放直下 |
-| **⌚ 手腕多模态** | **PPG-DaLiA** | Fraunhofer / UCI | 手腕 E4 (PPG 64Hz, ACC 32Hz, EDA) | 15人 (真实自由生活) | 日常非受限活动心率监测、动态去噪 | 🟢 开放直下 |
-| **⌚ 手腕多模态** | **WESAD** | UCI / Bosch | 手腕 E4 + 胸戴 RespiBAN | 15人 (受控压力诱发) | 情绪识别、心理压力 (Stress) 状态分类 | 🟢 开放直下 |
-| **⌚ 手腕多模态** | **TROIKA** | IEEE TBME 2015 | 双通道手腕 PPG + 3轴 ACC | 12人 (跑步机高动态) | 运动伪影频域碰撞与心率追踪经典开山集 | 🟢 开放直下 |
-| **⌚ 手腕多模态** | **CAS-BP** | 中科院深圳先进院 (SIAT) | 手腕 PPG 1000Hz, ECG 1000Hz | 1,272人 (4周随访, 12.6k对) | 无袖带连续血压、脉搏动力学、大模型微调基准 | 🟢 GitHub 开源 |
-| **⌚ 手腕多模态** | **BIDMC PPG** | 哈佛医学院 BIDMC | 手指 PPG 125Hz, ECG, 阻抗呼吸 | 53人 (8分钟高精波形) | 脉搏微形态分析、呼吸率 (RR) 估计基准 | 🟢 开放直下 |
-| **🩸 CGM 连续血糖**| **CGMacros** | PhysioNet (2024) | 双 CGM (5/15min) + 高清餐食照 | 45人 (带生化血检) | 饮食营养摄入响应、生化探针多任务 | 🟢 开放直下 |
-| **🩸 CGM 连续血糖**| **ShanghaiT1/T2DM**| 上海六院 (包玉倩团队) | 雅培瞬感 Libre (15min 连续间质液) | 112人 (14天连续) | 缺失值插补、糖尿病分型与并发症探针 | 🟢 开放直下 |
-| **🩸 CGM 连续血糖**| **Hall Glucotypes** | 斯坦福大学 (Snyder组)| Dexcom G4 (5min 密集网格) | 57人 (10.5万读数) | 血糖波动分型 (Glucotype)、无监督表征 | 🟢 开放直下 |
-| **🩸 CGM 连续血糖**| **BIG IDEAs** | 杜克大学 (PhysioNet) | Dexcom G6 (5min) + 手环 E4 | 16人 (双设备佩戴) | 穿戴光电-皮下间质血糖跨模态关联 | 🟢 开放直下 |
-| **🩸 CGM 连续血糖**| **Colas DFA** | PLOS ONE (2019) | 微创 CGM (5min 网格) | 208人 (>9,500小时) | 自由生活大规模预训练、长程稳定性 | 🟢 开放直下 |
-| **🩸 CGM 连续血糖**| **OhioT1DM** | 俄亥俄大学 / BGLP | Dexcom 5min + 胰岛素/碳水记录 | 12人 (8周连续时程) | 30～120min 短程血糖自回归预测标准集 | 🟡 学术申请 |
-| **🩸 CGM 连续血糖**| **Weinstock 2016** | T1D Exchange / JAEB | Dexcom G4 (5min) 长期监测 | 226人 (>1.2亿读数) | 老年高危人群夜间无症状低血糖筛查 | 🟡 学术申请 |
-| **🩸 CGM 连续血糖**| **Glucose-ML** | Augmented Health Lab | 自动化集成 20+ 个公开数据集 | 4,300+人 (44.9M点) | 一键下载、单位自动对齐与标准化集合库 | 🟢 GitHub 开源 |
-| **🏥 临床高精基准**| **MC-MED** | 北京大学 (洪申达团队) | 急诊监护 PPG 100Hz+, ECG, 呼吸 | 11.8万人 (>1000万对) | PPG $\to$ ECG 跨模态生成、急诊重症筛查 | 🟡 凭证申请 |
-| **🏥 临床高精基准**| **VitalDB** | 首尔大学医院 | 500Hz 动脉血压波, PPG, ECG | >10,000 例手术患者 | 血管弹性、连续无创血压金标准映射 | 🟢 开放 API |
-| **🏥 临床心电基准**| **MIMIC-IV-ECG** | MIT (Celi团队) / PhysioNet | 12-导联诊断级 ECG 500Hz + EHR | 80万+条记录 (16万人) | 心电基础模型预训练黄金底座、EHR互联多任务 | 🟡 凭证申请 (PhysioNet) |
-| **🏥 临床心电基准**| **PTB-XL** | 德国 PTB / PhysioNet | 12-导联临床 ECG 500Hz (SCP-ECG) | 21,837 条 (18,885人) | 多标签心电诊断评测世界公认金标准、受试者级划分 | 🟢 开放直下 (PhysioNet) |
-| **🏥 临床心电基准**| **CODE-15%** | 巴西米纳斯吉拉斯远程心电系统 (TNMG) | 12-导联 ECG 300～400Hz | 34.5万条开源 (总库230万) | 大规模自监督缩放定律验证、远期全因死亡率预测 | 🟢 开放直下 (Zenodo) |
-| **🏥 临床心电基准**| **Chapman / Ningbo**| 绍兴/宁波医院 / PhysioNet | 12-导联 ECG 500Hz (10秒波形) | 45,152 条记录 | 亚洲人群心律失常与心肌缺血多中心基准 | 🟢 开放直下 (PhysioNet) |
-| **💤 睡眠多导 PSG**| **SHHS** | 美国 NIH / NHLBI | 全套临床 PSG (EEG/ECG/Resp/EMG) | 5,804人 (多年随访) | 睡眠呼吸暂停、心脑血管死亡长期队列 | 🟢 NSRR 申请 |
-| **💤 睡眠多导 PSG**| **MESA** | 美国 NHLBI / 多中心 | 完整 PSG + 7天手腕体动仪 | 2,237人 (多族裔) | 多族裔睡眠结构、动脉粥样硬化结局 | 🟢 NSRR 申请 |
-| **🌐 系统级全景队列**| **UK Biobank** | 英国 MRC / Wellcome | 手腕高频体动 100Hz + WGS + EHR | 10万人体动 / 50万人全景 | 系统级健康世界模型 (RisQ基石)、全生命周期疾病风险 | 🔴 严格申请 (AMS/RAP云端) |
-| **🌐 系统级全景队列**| **All of Us** | 美国 NIH | 电子健康档案 + 多组学 + 穿戴体动 | 25万+人 (多族裔) | 多族裔系统健康模型零微调外推验证金标准 | 🟡 平台认证 (Workbench) |
-| **🧠 健康推理基准**| **WearableQA** | Meta AI (2026) | 16维每日聚合指标 + 17项血检面板 | 200人 (500天轨迹, 4,084题) | 真实用户长程健康推理、因果归因与临床指南对齐 | 📄 [arXiv:2609.05405](https://arxiv.org/abs/2609.05405) |
-| **🧠 健康推理基准**| **HEARTS** | Yang AI Lab (ICML 2026) | 20种生理模态(ECG/PPG/EEG/CGM等) | 16大开源库 (20,226样本) | 全谱系生理时序四层认知推理阶梯、CodeAct Agent 协同 | 🟢 [GitHub](https://github.com/yang-ai-lab/HEARTS) / [Web](https://yang-ai-lab.github.io/HEARTS/) |
+| 手腕多模态 | [**OpenMHC**](docs/datasets/wearable_datasets.md#openmhc) | Stanford / Imperial / Charité | 19 维分钟级时序 + 169 维自述健康变量 | 11,894 人 (>6,700 万小时) | 基础模型预训练、多变量缺失插补、未来预测 | [开放获取](https://github.com/AshleyLab/OpenMHC) |
+| 手腕多模态 | [**PhysioNet Wrist PPG**](docs/datasets/wearable_datasets.md#physionet-wrist-ppg) | Univ. of Manchester | 腕部 PPG/ACC/Gyro 256 Hz + 胸 ECG 256 Hz | 8 人 (走、跑、骑行 4 类运动) | 运动伪影消除、运动心率回归 | [开放获取](https://physionet.org/content/wrist/1.0.0/) |
+| 手腕多模态 | [**PPG-DaLiA**](docs/datasets/wearable_datasets.md#ppg-dalia) | Univ. of Siegen / Bosch | 腕部 PPG 64 Hz、ACC 32 Hz、EDA 4 Hz + 胸 ECG 700 Hz | 15 人 (每人 2.5 小时，共 36 小时) | 日常活动心率监测与去噪 | [开放获取](https://archive.ics.uci.edu/dataset/495/ppg+dalia) |
+| 手腕多模态 | [**WESAD**](docs/datasets/wearable_datasets.md#wesad) | Univ. of Siegen / Bosch | 腕部 E4 (PPG/ACC/EDA/Temp) + 胸 RespiBAN 700 Hz | 15 人 (实验室压力与情绪诱发) | 心理压力检测、情绪状态分类 | [开放获取](https://archive.ics.uci.edu/dataset/465/wesad+wearable+stress+and+affect+detection) |
+| 手腕多模态 | [**TROIKA**](docs/datasets/wearable_datasets.md#troika) | Samsung Research / 国防科大 | 腕部双通道 PPG 125 Hz、ACC 125 Hz + 胸 ECG 125 Hz | 12 人 (跑步机最高 15 km/h) | 剧烈跑步心率跟踪基准 | [开放获取](https://zenodo.org/records/3902660) |
+| 手腕多模态 | [**CAS-BP**](docs/datasets/wearable_datasets.md#cas-bp) | 中科院深圳先进院 / 华为 | 手表多波长 PPG 1000 Hz + ECG 1000 Hz + 听诊血压 | 1,272 人 (4 周随访，12,624 次测量) | 无袖带连续血压回归与校准 | [学术申请](https://github.com/zdzdliu/CAS-BP) |
+| CGM 连续血糖 | [**ShanghaiT1DM / T2DM**](docs/datasets/wearable_datasets.md#shanghait1dm) | 上海市第六人民医院 | Abbott Libre (15 min 间质液血糖) + 入院血检生化 | 112 人 (12 例 T1D + 100 例 T2D，3-14 天) | 连续血糖预测、缺失插补、生化指标探针 | [开放获取](https://figshare.com/articles/dataset/ShanghaiT1DM_T2DM_data/20444397) |
+| CGM 连续血糖 | [**Hall Glucotypes**](docs/datasets/wearable_datasets.md#hall-glucotypes) | 斯坦福大学 (Michael Snyder 实验室) | Dexcom G4 (5 min 血糖) + 标准化早餐记录 | 57 人 (105,426 个采样点) | 血糖动态波动分型、前驱糖尿病表征 | [开放获取](https://doi.org/10.1371/journal.pbio.2005143.s010) |
+| CGM 连续血糖 | [**BIG IDEAs**](docs/datasets/wearable_datasets.md#big-ideas) | 杜克大学 (Jessilyn Dunn 实验室) | Dexcom G6 (5 min) + Empatica E4 手环 | 16 人 (连续配对 8-10 天) | 腕戴光电与皮下间质血糖跨模态建模 | [开放获取](https://physionet.org/content/big-ideas-glycemic-wearable/1.1.2/) |
+| CGM 连续血糖 | [**CGMacros**](docs/datasets/wearable_datasets.md#cgmacros) | 德州农工大学 / Sansum | 双 CGM (5/15 min) + Fitbit + 餐食照片与宏量营养素 | 45 人 (每人约 10 天，含生化与菌群) | 个性化营养餐后血糖响应建模 | [开放获取](https://physionet.org/content/cgmacros/1.0.0/) |
+| CGM 连续血糖 | [**Colas DFA**](docs/datasets/wearable_datasets.md#colas-dfa) | Hospital Universitario de Móstoles | Medtronic iPro (5 min 血糖) | 208 人 (累计约 9,500 小时) | 2 型糖尿病发病风险预测、时序预训练 | [开放获取](https://doi.org/10.1371/journal.pone.0225817.s001) |
+| CGM 连续血糖 | [**OhioT1DM**](docs/datasets/wearable_datasets.md#ohiot1dm) | 俄亥俄大学 | Medtronic Enlite (5 min) + 胰岛素泵 + 碳水 + 手环 | 12 人 (每人 8 周连续自由生活) | 30-60 min 短程血糖自回归预测基准 | [学术申请](http://smarthealth.cs.ohio.edu/OhioT1DM-dataset.html) |
+| CGM 连续血糖 | [**Weinstock 2016**](docs/datasets/wearable_datasets.md#weinstock-2016) | T1D Exchange / Jaeb Center | 盲态 Dexcom G4 (5 min) + 严重低血糖发作史 | 201 人 (高龄 T1D，每人约 14 天) | 老年高危人群严重低血糖风险分析 | [开放获取](https://public.jaeb.org/) |
+| CGM 连续血糖 | [**GlucoBench**](docs/datasets/wearable_datasets.md#glucobench) | 德州农工大学 (Irina Gaynanova 实验室) | 整合 5 个公开 CGM 队列 (统一 5 min 网格) | >500 人 | 跨队列标准化血糖预测与零样本评测 | [开放获取](https://github.com/IrinaStatsLab/GlucoBench) |
+| CGM 连续血糖 | [**Glucose-ML**](docs/datasets/wearable_datasets.md#glucose-ml) | Emory / Dartmouth (Prioleau 团队) | 自动化整合 20 余个公开 CGM 数据集 | 4,300+ 人 (约 4,490 万采样点) | 大规模 CGM 基础模型预训练与标准化转换 | [开放获取](https://github.com/Augmented-Health-Lab/Glucose-ML-Project) |
+| 临床多模态 | [**MC-MED**](docs/datasets/wearable_datasets.md#mc-med) | 斯坦福大学医学院 | 床旁 ECG 500 Hz、PPG 125 Hz、Resp 125 Hz + 急诊 EHR | 118,385 次就诊 (70,545 人) | 脉搏与心电基础模型预训练、急诊表型预测 | [凭证申请](https://physionet.org/content/mc-med/) |
+| 临床多模态 | [**VitalDB**](docs/datasets/wearable_datasets.md#vitaldb) | 首尔大学医院 | 桡动脉波 ABP 500 Hz、PPG 500 Hz、ECG 500 Hz | 6,388 例非心脏手术全程监护 | PPG 转血压波形重建、围术期多参数建模 | [开放获取](https://vitaldb.net/) |
+| 临床多模态 | [**BIDMC PPG**](docs/datasets/wearable_datasets.md#bidmc-ppg) | 牛津大学 / BIDMC | 指尖 PPG 125 Hz、ECG 125 Hz、阻抗呼吸波 125 Hz | 53 人 (每人 8 min 重症监护记录) | 呼吸率估计、脉搏波微观形态分析基准 | [开放获取](https://physionet.org/content/bidmc/1.0.0/) |
+| 临床心电 | [**MIMIC-IV-ECG**](docs/datasets/wearable_datasets.md#mimic-iv-ecg) | MIT / BIDMC | 12 导联诊断级 ECG 500 Hz (10 s) + 住院 EHR | 800,035 条记录 (161,352 人) | 大规模心电自监督预训练与多病种筛查 | [开放获取](https://physionet.org/content/mimic-iv-ecg/1.0/) |
+| 临床心电 | [**PTB-XL**](docs/datasets/wearable_datasets.md#ptb-xl) | 德国 PTB / Fraunhofer HHI | 12 导联 ECG 500/100 Hz (10 s，71 类 SCP 标签) | 21,837 条记录 (18,885 人) | 多标签心电分类与基础模型微调基准 | [开放获取](https://physionet.org/content/ptb-xl/1.0.3/) |
+| 临床心电 | [**CODE-15%**](docs/datasets/wearable_datasets.md#code-15) | 巴西 TNMG / Uppsala Univ. | 12 导联 ECG 400 Hz (7-10 s) + 死亡率随访 | 345,779 条记录 (233,770 人) | 心电预训练缩放定律与长程生存分析 | [开放获取](https://zenodo.org/records/4916206) |
+| 临床心电 | [**Chapman-Shaoxing / Ningbo**](docs/datasets/wearable_datasets.md#chapman-shaoxing) | Chapman Univ. / 绍兴与宁波医院 | 12 导联 ECG 500 Hz (10 s，SNOMED-CT 标签) | 45,152 条临床记录 | 东亚人群心律失常分类与跨中心泛化验证 | [开放获取](https://physionet.org/content/ecg-arrhythmia/1.0.0/) |
+| 睡眠 PSG | [**SHHS**](docs/datasets/wearable_datasets.md#shhs) | 美国 NIH / NHLBI (NSRR) | 整夜家庭 PSG (EEG/EOG/EMG/ECG/Resp/SpO2) | 5,804 人 (>15 年心血管随访) | 睡眠分期、心肺耦合与慢病发病预测 | [学术申请](https://sleepdata.org/datasets/shhs) |
+| 睡眠 PSG | [**MESA**](docs/datasets/wearable_datasets.md#mesa) | 美国 NIH / NHLBI (NSRR) | 整夜 PSG (256 Hz) + 7 天腕部体动仪 Actigraphy | 2,237 人 (四族裔中老年队列) | 临床 PSG 与腕戴睡眠/脉搏跨模态对齐 | [学术申请](https://sleepdata.org/datasets/mesa) |
+| 睡眠 PSG | [**Sleep-EDF**](docs/datasets/wearable_datasets.md#sleep-edf) | St. Antonius Hospital / LUMC | 双通道 EEG 100 Hz、EOG 100 Hz、EMG、呼吸 | 197 份整夜 PSG 记录 | 睡眠分期算法快速原型验证基准 | [开放获取](https://physionet.org/content/sleep-edfx/1.0.0/) |
+| 人群队列 | [**UK Biobank**](docs/datasets/wearable_datasets.md#uk-biobank) | UK Biobank / 牛津大学 | 腕部三轴 ACC 100 Hz (7 天) + 全基因组 + MRI + EHR | 103,712 人体动 (总队列 50 万人) | 运动数字生物标志物、全谱系慢病风险建模 | [受限申请](https://www.ukbiobank.ac.uk/enable-your-research/apply-for-access) |
+| 人群队列 | [**All of Us**](docs/datasets/wearable_datasets.md#all-of-us) | 美国 NIH All of Us Research Program | Fitbit 多年连续序列 + 全基因组 + OMOP EHR | 40 万+ 人 EHR (数万人含 Fitbit) | 跨族裔精准医学与长程可穿戴健康模型验证 | [受限申请](https://www.researchallofus.org/) |
+
+<!-- END:DATASETS_TABLE -->
 
 ---
 
-## 🛠️ 8. 动手实战与子工程关联 (Hands-on Labs)
+## 领域综述参考
 
-本项目与核心实验复现子工程联动，提供端到端真实世界实操代码：
-
-- ⌚ **智能手表工程实践自建库**: [**Watch_LSM**](https://github.com/tujy859/Watch_LSM)
-  - 包含真实智能手表运动伪影碰撞分析（跑步场景心率 MAE 从 51 BPM 降至 7.5 BPM）；
-  - 包含生产级双流跨模态自监督训练框架 `watch_lsm`。
-- 🩸 **CGM 基础模型横评与复现**: [**CGM_FM**](https://github.com/tujy859/CGM_FM)
-  - 深入评测 GlucoFM、GluFormer 与 CGM-JEPA 的表征迁移能力。
-- 💻 **极简 Demo 脚本**（开箱即用体验）：
-  - 详见 `notebooks/`（使用已公开开源权重进行 10 行代码特征提取与预测）。
+- **Review of open foundation models and datasets for ECG and PPG waveforms**
+  - **来源**：*npj Digital Medicine* (2026) · [DOI: 10.1038/s41746-026-03101-7](https://doi.org/10.1038/s41746-026-03101-7)
+  - **作者**：Ahram Han, Takeshi Tohyama, Dukyong Yoon, Kenneth Paik, Brian Gow, Leo Anthony Celi, Hyeonhoon Lee, Hyung-Chul Lee（首尔大学医学院、MIT 计算生理学实验室等）
+  - **主要内容**：系统梳理了公开的心电（ECG）与光电脉搏波（PPG）基础模型（ECG-FM、ST-MEM、HeartBEiT 等）及其训练数据集（MIMIC-IV-ECG、PTB-XL、CODE-15%、VitalDB 等），归纳了当前领域的五项主要挑战：预训练人群分布偏倚、缺乏统一划分协议导致的评估泄漏、真实穿戴环境下的运动伪影、黑盒表征缺乏电生理可解释性、以及端侧微控制器部署的资源限制。详见 [心电专题导读](docs/models/ecg_models.md)。
 
 ---
 
-## 🤝 参与贡献 (Contributing)
+## 关联实验工程与参与贡献
 
-欢迎提交 Issue 或 Pull Request 推荐最新的顶会论文或开源模型！具体规范请见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+### 关联代码仓库
+
+- **智能手表表征与抗伪影实验库**：[Watch_LSM](https://github.com/tujy859/Watch_LSM) —— 包含手腕 PPG 与加速度计运动伪影频域分析及双流跨模态自监督训练代码。
+- **CGM 基础模型复现与对比库**：[CGM_FM](https://github.com/tujy859/CGM_FM) —— 包含 GlucoFM、GluFormer 与 CGM-JEPA 的表征迁移评测。
+
+### 参与贡献与维护规范
+
+欢迎提交 Issue 或 Pull Request 补充新发表的论文、开源权重或数据集。提交前请参阅 [参与贡献说明](CONTRIBUTING.md) 与 [写作与格式规范](docs/STYLE.md)。

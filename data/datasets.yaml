@@ -1,0 +1,323 @@
+- id: openmhc
+  name: OpenMHC
+  category: wrist
+  org: Stanford / Imperial / Charité
+  sensors: 19 维分钟级时序 + 169 维自述健康变量
+  scale: 11,894 人 (>6,700 万小时)
+  tasks: 基础模型预训练、多变量缺失插补、未来预测
+  access: open
+  url: https://github.com/AshleyLab/OpenMHC
+  paper: https://arxiv.org/abs/2607.16235
+  doc: docs/datasets/wearable_datasets.md#openmhc
+
+- id: wrist-ppg
+  name: PhysioNet Wrist PPG
+  category: wrist
+  org: Univ. of Manchester
+  sensors: 腕部 PPG/ACC/Gyro 256 Hz + 胸 ECG 256 Hz
+  scale: 8 人 (走、跑、骑行 4 类运动)
+  tasks: 运动伪影消除、运动心率回归
+  access: open
+  url: https://physionet.org/content/wrist/1.0.0/
+  paper: https://doi.org/10.3390/data2010001
+  doc: docs/datasets/wearable_datasets.md#physionet-wrist-ppg
+
+- id: ppg-dalia
+  name: PPG-DaLiA
+  category: wrist
+  org: Univ. of Siegen / Bosch
+  sensors: 腕部 PPG 64 Hz、ACC 32 Hz、EDA 4 Hz + 胸 ECG 700 Hz
+  scale: 15 人 (每人 2.5 小时，共 36 小时)
+  tasks: 日常活动心率监测与去噪
+  access: open
+  url: https://archive.ics.uci.edu/dataset/495/ppg+dalia
+  paper: https://doi.org/10.3390/s19143079
+  doc: docs/datasets/wearable_datasets.md#ppg-dalia
+
+- id: wesad
+  name: WESAD
+  category: wrist
+  org: Univ. of Siegen / Bosch
+  sensors: 腕部 E4 (PPG/ACC/EDA/Temp) + 胸 RespiBAN 700 Hz
+  scale: 15 人 (实验室压力与情绪诱发)
+  tasks: 心理压力检测、情绪状态分类
+  access: open
+  url: https://archive.ics.uci.edu/dataset/465/wesad+wearable+stress+and+affect+detection
+  paper: https://doi.org/10.1145/3242969.3242985
+  doc: docs/datasets/wearable_datasets.md#wesad
+
+- id: troika
+  name: TROIKA
+  category: wrist
+  org: Samsung Research / 国防科大
+  sensors: 腕部双通道 PPG 125 Hz、ACC 125 Hz + 胸 ECG 125 Hz
+  scale: 12 人 (跑步机最高 15 km/h)
+  tasks: 剧烈跑步心率跟踪基准
+  access: open
+  url: https://zenodo.org/records/3902660
+  paper: https://doi.org/10.1109/TBME.2014.2359372
+  doc: docs/datasets/wearable_datasets.md#troika
+
+- id: cas-bp
+  name: CAS-BP
+  category: wrist
+  org: 中科院深圳先进院 / 华为
+  sensors: 手表多波长 PPG 1000 Hz + ECG 1000 Hz + 听诊血压
+  scale: 1,272 人 (4 周随访，12,624 次测量)
+  tasks: 无袖带连续血压回归与校准
+  access: application
+  url: https://github.com/zdzdliu/CAS-BP
+  paper: https://doi.org/10.1109/JBHI.2023.3287313
+  doc: docs/datasets/wearable_datasets.md#cas-bp
+
+- id: shanghai-cgm
+  name: ShanghaiT1DM / T2DM
+  category: cgm
+  org: 上海市第六人民医院
+  sensors: Abbott Libre (15 min 间质液血糖) + 入院血检生化
+  scale: 112 人 (12 例 T1D + 100 例 T2D，3-14 天)
+  tasks: 连续血糖预测、缺失插补、生化指标探针
+  access: open
+  url: https://figshare.com/articles/dataset/ShanghaiT1DM_T2DM_data/20444397
+  paper: https://doi.org/10.1038/s41597-023-01940-7
+  doc: docs/datasets/wearable_datasets.md#shanghait1dm
+
+- id: hall-glucotypes
+  name: Hall Glucotypes
+  category: cgm
+  org: 斯坦福大学 (Michael Snyder 实验室)
+  sensors: Dexcom G4 (5 min 血糖) + 标准化早餐记录
+  scale: 57 人 (105,426 个采样点)
+  tasks: 血糖动态波动分型、前驱糖尿病表征
+  access: open
+  url: https://doi.org/10.1371/journal.pbio.2005143.s010
+  paper: https://doi.org/10.1371/journal.pbio.2005143
+  doc: docs/datasets/wearable_datasets.md#hall-glucotypes
+
+- id: big-ideas
+  name: BIG IDEAs
+  category: cgm
+  org: 杜克大学 (Jessilyn Dunn 实验室)
+  sensors: Dexcom G6 (5 min) + Empatica E4 手环
+  scale: 16 人 (连续配对 8-10 天)
+  tasks: 腕戴光电与皮下间质血糖跨模态建模
+  access: open
+  url: https://physionet.org/content/big-ideas-glycemic-wearable/1.1.2/
+  paper: https://doi.org/10.13026/aw6y-fc44
+  doc: docs/datasets/wearable_datasets.md#big-ideas
+
+- id: cgmacros
+  name: CGMacros
+  category: cgm
+  org: 德州农工大学 / Sansum
+  sensors: 双 CGM (5/15 min) + Fitbit + 餐食照片与宏量营养素
+  scale: 45 人 (每人约 10 天，含生化与菌群)
+  tasks: 个性化营养餐后血糖响应建模
+  access: open
+  url: https://physionet.org/content/cgmacros/1.0.0/
+  paper: https://doi.org/10.1038/s41597-025-05851-7
+  doc: docs/datasets/wearable_datasets.md#cgmacros
+
+- id: colas-dfa
+  name: Colas DFA
+  category: cgm
+  org: Hospital Universitario de Móstoles
+  sensors: Medtronic iPro (5 min 血糖)
+  scale: 208 人 (累计约 9,500 小时)
+  tasks: 2 型糖尿病发病风险预测、时序预训练
+  access: open
+  url: https://doi.org/10.1371/journal.pone.0225817.s001
+  paper: https://doi.org/10.1371/journal.pone.0225817
+  doc: docs/datasets/wearable_datasets.md#colas-dfa
+
+- id: ohiot1dm
+  name: OhioT1DM
+  category: cgm
+  org: 俄亥俄大学
+  sensors: Medtronic Enlite (5 min) + 胰岛素泵 + 碳水 + 手环
+  scale: 12 人 (每人 8 周连续自由生活)
+  tasks: 30-60 min 短程血糖自回归预测基准
+  access: application
+  url: http://smarthealth.cs.ohio.edu/OhioT1DM-dataset.html
+  paper: https://pmc.ncbi.nlm.nih.gov/articles/PMC6299888/
+  doc: docs/datasets/wearable_datasets.md#ohiot1dm
+
+- id: weinstock-2016
+  name: Weinstock 2016
+  category: cgm
+  org: T1D Exchange / Jaeb Center
+  sensors: 盲态 Dexcom G4 (5 min) + 严重低血糖发作史
+  scale: 201 人 (高龄 T1D，每人约 14 天)
+  tasks: 老年高危人群严重低血糖风险分析
+  access: open
+  url: https://public.jaeb.org/
+  paper: https://doi.org/10.2337/dc15-1426
+  doc: docs/datasets/wearable_datasets.md#weinstock-2016
+
+- id: glucobench
+  name: GlucoBench
+  category: cgm
+  org: 德州农工大学 (Irina Gaynanova 实验室)
+  sensors: 整合 5 个公开 CGM 队列 (统一 5 min 网格)
+  scale: ">500 人"
+  tasks: 跨队列标准化血糖预测与零样本评测
+  access: open
+  url: https://github.com/IrinaStatsLab/GlucoBench
+  paper: https://arxiv.org/abs/2410.05780
+  doc: docs/datasets/wearable_datasets.md#glucobench
+
+- id: glucose-ml
+  name: Glucose-ML
+  category: cgm
+  org: Emory / Dartmouth (Prioleau 团队)
+  sensors: 自动化整合 20 余个公开 CGM 数据集
+  scale: 4,300+ 人 (约 4,490 万采样点)
+  tasks: 大规模 CGM 基础模型预训练与标准化转换
+  access: open
+  url: https://github.com/Augmented-Health-Lab/Glucose-ML-Project
+  paper: https://arxiv.org/abs/2507.14077
+  doc: docs/datasets/wearable_datasets.md#glucose-ml
+
+- id: mc-med
+  name: MC-MED
+  category: clinical
+  org: 斯坦福大学医学院
+  sensors: 床旁 ECG 500 Hz、PPG 125 Hz、Resp 125 Hz + 急诊 EHR
+  scale: 118,385 次就诊 (70,545 人)
+  tasks: 脉搏与心电基础模型预训练、急诊表型预测
+  access: credentialed
+  url: https://physionet.org/content/mc-med/
+  paper: https://doi.org/10.1038/s41597-025-05419-5
+  doc: docs/datasets/wearable_datasets.md#mc-med
+
+- id: vitaldb
+  name: VitalDB
+  category: clinical
+  org: 首尔大学医院
+  sensors: 桡动脉波 ABP 500 Hz、PPG 500 Hz、ECG 500 Hz
+  scale: 6,388 例非心脏手术全程监护
+  tasks: PPG 转血压波形重建、围术期多参数建模
+  access: open
+  url: https://vitaldb.net/
+  paper: https://doi.org/10.1038/s41597-022-01411-5
+  doc: docs/datasets/wearable_datasets.md#vitaldb
+
+- id: bidmc-ppg
+  name: BIDMC PPG
+  category: clinical
+  org: 牛津大学 / BIDMC
+  sensors: 指尖 PPG 125 Hz、ECG 125 Hz、阻抗呼吸波 125 Hz
+  scale: 53 人 (每人 8 min 重症监护记录)
+  tasks: 呼吸率估计、脉搏波微观形态分析基准
+  access: open
+  url: https://physionet.org/content/bidmc/1.0.0/
+  paper: https://doi.org/10.1109/TBME.2016.2613124
+  doc: docs/datasets/wearable_datasets.md#bidmc-ppg
+
+- id: mimic-iv-ecg
+  name: MIMIC-IV-ECG
+  category: ecg
+  org: MIT / BIDMC
+  sensors: 12 导联诊断级 ECG 500 Hz (10 s) + 住院 EHR
+  scale: 800,035 条记录 (161,352 人)
+  tasks: 大规模心电自监督预训练与多病种筛查
+  access: open
+  url: https://physionet.org/content/mimic-iv-ecg/1.0/
+  paper: https://doi.org/10.13026/4nqg-sb35
+  doc: docs/datasets/wearable_datasets.md#mimic-iv-ecg
+
+- id: ptb-xl
+  name: PTB-XL
+  category: ecg
+  org: 德国 PTB / Fraunhofer HHI
+  sensors: 12 导联 ECG 500/100 Hz (10 s，71 类 SCP 标签)
+  scale: 21,837 条记录 (18,885 人)
+  tasks: 多标签心电分类与基础模型微调基准
+  access: open
+  url: https://physionet.org/content/ptb-xl/1.0.3/
+  paper: https://doi.org/10.1038/s41597-020-0495-6
+  doc: docs/datasets/wearable_datasets.md#ptb-xl
+
+- id: code-15
+  name: CODE-15%
+  category: ecg
+  org: 巴西 TNMG / Uppsala Univ.
+  sensors: 12 导联 ECG 400 Hz (7-10 s) + 死亡率随访
+  scale: 345,779 条记录 (233,770 人)
+  tasks: 心电预训练缩放定律与长程生存分析
+  access: open
+  url: https://zenodo.org/records/4916206
+  paper: https://doi.org/10.1038/s41467-020-15432-4
+  doc: docs/datasets/wearable_datasets.md#code-15
+
+- id: chapman-shaoxing-ningbo
+  name: Chapman-Shaoxing / Ningbo
+  category: ecg
+  org: Chapman Univ. / 绍兴与宁波医院
+  sensors: 12 导联 ECG 500 Hz (10 s，SNOMED-CT 标签)
+  scale: 45,152 条临床记录
+  tasks: 东亚人群心律失常分类与跨中心泛化验证
+  access: open
+  url: https://physionet.org/content/ecg-arrhythmia/1.0.0/
+  paper: https://doi.org/10.1038/s41597-020-0386-x
+  doc: docs/datasets/wearable_datasets.md#chapman-shaoxing
+
+- id: shhs
+  name: SHHS
+  category: sleep
+  org: 美国 NIH / NHLBI (NSRR)
+  sensors: 整夜家庭 PSG (EEG/EOG/EMG/ECG/Resp/SpO2)
+  scale: 5,804 人 (>15 年心血管随访)
+  tasks: 睡眠分期、心肺耦合与慢病发病预测
+  access: application
+  url: https://sleepdata.org/datasets/shhs
+  paper: https://doi.org/10.1093/sleep/20.12.1077
+  doc: docs/datasets/wearable_datasets.md#shhs
+
+- id: mesa
+  name: MESA
+  category: sleep
+  org: 美国 NIH / NHLBI (NSRR)
+  sensors: 整夜 PSG (256 Hz) + 7 天腕部体动仪 Actigraphy
+  scale: 2,237 人 (四族裔中老年队列)
+  tasks: 临床 PSG 与腕戴睡眠/脉搏跨模态对齐
+  access: application
+  url: https://sleepdata.org/datasets/mesa
+  paper: https://doi.org/10.5665/sleep.4732
+  doc: docs/datasets/wearable_datasets.md#mesa
+
+- id: sleep-edf
+  name: Sleep-EDF
+  category: sleep
+  org: St. Antonius Hospital / LUMC
+  sensors: 双通道 EEG 100 Hz、EOG 100 Hz、EMG、呼吸
+  scale: 197 份整夜 PSG 记录
+  tasks: 睡眠分期算法快速原型验证基准
+  access: open
+  url: https://physionet.org/content/sleep-edfx/1.0.0/
+  paper: https://doi.org/10.1109/10.867928
+  doc: docs/datasets/wearable_datasets.md#sleep-edf
+
+- id: uk-biobank
+  name: UK Biobank
+  category: cohort
+  org: UK Biobank / 牛津大学
+  sensors: 腕部三轴 ACC 100 Hz (7 天) + 全基因组 + MRI + EHR
+  scale: 103,712 人体动 (总队列 50 万人)
+  tasks: 运动数字生物标志物、全谱系慢病风险建模
+  access: restricted
+  url: https://www.ukbiobank.ac.uk/enable-your-research/apply-for-access
+  paper: https://doi.org/10.1371/journal.pone.0169649
+  doc: docs/datasets/wearable_datasets.md#uk-biobank
+
+- id: all-of-us
+  name: All of Us
+  category: cohort
+  org: 美国 NIH All of Us Research Program
+  sensors: Fitbit 多年连续序列 + 全基因组 + OMOP EHR
+  scale: 40 万+ 人 EHR (数万人含 Fitbit)
+  tasks: 跨族裔精准医学与长程可穿戴健康模型验证
+  access: restricted
+  url: https://www.researchallofus.org/
+  paper: https://doi.org/10.1056/NEJMsr1809937
+  doc: docs/datasets/wearable_datasets.md#all-of-us

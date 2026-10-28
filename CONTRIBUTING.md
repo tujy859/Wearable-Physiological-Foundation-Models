@@ -1,19 +1,20 @@
-# Contributing to Wearable Physiological Foundation Models
+# 参与贡献
 
-感谢你关注并愿意为本项目贡献力量！我们非常欢迎学术界与工业界同行提交最新论文、开源模型权重或基准数据集。
+欢迎通过 Issue 或 Pull Request 补充与修正本仓库收录的论文、开源模型权重及基准数据集。
 
-## 推荐收录规范
+## 收录规范
 
-提交新的论文或基础模型时，请在 Pull Request 中提供以下关键信息：
+提交新的论文或基础模型时，请遵循 [写作与格式规范](docs/STYLE.md)，并在 Pull Request 中提供以下信息：
 
-1. **基本元数据**：论文标题、发表年份、收录会议/期刊（或 arXiv 编号）、作者与单位机构。
-2. **论文链接**：arXiv 或 DOI 官方链接。
-3. **开源资产状态**：
-   - 官方代码库链接（GitHub / GitLab）
-   - 官方预训练权重链接（Hugging Face / Zenodo / Google Drive）
-   - 预训练数据集来源与规模说明
-4. **一句话核心创新**：特别注明其针对可穿戴生理信号（PPG/ACC/ECG/CGM 等）所做的特定技术改进（如采样率对齐、抗运动伪影机制、潜空间动力学设计等）。
+1. **基本元数据**：论文标题、发表年份、收录会议或期刊（或 arXiv 编号）、主要研究机构。
+2. **官方链接**：arXiv 或 DOI 论文链接、官方代码库链接（GitHub / GitLab）、预训练权重链接（Hugging Face / Zenodo）。
+3. **方法与结果摘要**：说明其针对可穿戴或生理时序信号的具体设计（如异构采样率对齐、运动伪影抑制、跨模态对齐等），并给出可查证的实验指标。
+4. **结构化索引更新**：
+   - 在 `data/models.yaml`（或 `data/datasets.yaml`）中添加对应条目，`added` 字段填写收录日期（`YYYY-MM-DD`）；
+   - 在 `docs/models/`（或 `docs/datasets/`）对应专题文档中补充小节与论文架构图（放置在 `docs/figures/<id>/`）；
+   - 运行 `python scripts/build_tables.py` 更新 README 索引表，并运行 `python scripts/lint_md.py` 确保无格式与文风错误。
 
-## 严禁事项
-- **严禁直接提交大尺寸二进制权重文件（.pth, .bin, .safetensors 等）**；
-- **严禁直接提交论文 PDF 原件或未脱敏/私有数据集**。
+## 注意事项
+
+- 请勿在 Git 仓库中提交模型权重文件（`.pth`、`.bin`、`.safetensors` 等）、原始数据集文件或论文 PDF 原件。
+- 论文插图请标注来源（如 `图源：PaPaGei 论文 Fig. 1（arXiv:2410.17260）`），单张图片控制在 500 KB 以内。
