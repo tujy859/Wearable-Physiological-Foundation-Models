@@ -21,55 +21,70 @@ os.makedirs("docs/figures/health_reasoning", exist_ok=True)
 
 # 1. README 顶层技术架构与模态全景图 (assets/taxonomy_overview.png)
 top_html = (
-    "<div style='width:820px; text-align:center; padding:10px 0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;'>"
-    "<div style='font-size:14px; font-weight:700; color:#0F172A; letter-spacing:0.3px;'>健康认知推理与大语言模型 (Health Reasoning &amp; Multimodal AI)</div>"
+    "<div style='width:1080px; text-align:center; padding:10px 0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;'>"
+    "<div style='font-size:14.5px; font-weight:700; color:#0F172A; letter-spacing:0.3px;'>健康认知推理与大语言模型 (Health Reasoning &amp; Multimodal AI)</div>"
     "<div style='font-size:12px; color:#334155; margin-top:5px; line-height:1.6;'>"
     "<b>时序-语言跨模态对齐</b>：SensorLM · PPG-LM · TimeBraid &nbsp;|&nbsp; "
-    "<b>临床生理参数物理锚定</b>：GEM (ECG) · CBPM-LLaMA (BP)<br/>"
+    "<b>生理参数物理锚定</b>：GEM (ECG) · CBPM-LLaMA (BP)<br/>"
     "<b>全域认知评测与系统健康</b>：WearableQA · HEARTS · RisQ"
     "</div>"
     "</div>"
 )
 
-physio_html = (
-    "<div style='width:510px; text-align:left; padding:10px 14px; font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;'>"
-    "<div style='font-size:13px; font-weight:700; color:#0F172A; border-bottom:1px solid #CBD5E1; padding-bottom:4px; margin-bottom:8px;'>"
-    "专用生理信号基础模型 (Specialized Physiological FMs)"
+col1_html = (
+    "<div style='width:290px; text-align:left; padding:10px 12px; font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;'>"
+    "<div style='font-size:13px; font-weight:700; color:#0F172A; border-bottom:1px solid #CBD5E1; padding-bottom:4px; margin-bottom:6px;'>"
+    "腕戴光电与心脏电生理"
     "</div>"
     "<div style='font-size:11.5px; line-height:1.65; color:#334155;'>"
-    "• <b>腕戴光电与运动 (PPG / Wearable)</b><br/>"
-    "&nbsp;&nbsp;SensorFM · PaPaGei · Pulse-PPG · HiMAE · OpenMHC · LIMU-BERT<br/>"
-    "• <b>心脏电生理 (ECG)</b><br/>"
+    "• <b>腕部 PPG 与体动感知</b><br/>"
+    "&nbsp;&nbsp;SensorFM · PaPaGei · Pulse-PPG<br/>"
+    "&nbsp;&nbsp;HiMAE · OpenMHC · LIMU-BERT<br/>"
+    "• <b>心脏心电 (ECG)</b><br/>"
     "&nbsp;&nbsp;ECG-FM · ST-MEM · HeartBEiT · CLOCS<br/>"
-    "• <b>连续动态血糖 (CGM)</b><br/>"
-    "&nbsp;&nbsp;GlucoFM · CGM-JEPA · GluFormer · CGMformer · CGM-LSM<br/>"
-    "• <b>多导睡眠与心肺 (Sleep PSG)</b><br/>"
-    "&nbsp;&nbsp;SleepFM-1/2 · SleepMaMi · U-Sleep<br/>"
-    "• <b>跨模态生理生成与虚拟传感 (Cross-Modal Generative)</b><br/>"
-    "&nbsp;&nbsp;PPGFlowECG (PPG→ECG) · UniCardio (多模态扩散) · xMAE"
+    "• <b>跨模态生成 (PPG→ECG)</b><br/>"
+    "&nbsp;&nbsp;PPGFlowECG · UniCardio · xMAE"
     "</div>"
     "</div>"
 )
 
-tsfm_html = (
-    "<div style='width:290px; text-align:left; padding:10px 14px; font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;'>"
-    "<div style='font-size:13px; font-weight:700; color:#334155; border-bottom:1px solid #CBD5E1; padding-bottom:4px; margin-bottom:8px;'>"
-    "通用时序基础模型 (General TSFM)"
+col2_html = (
+    "<div style='width:290px; text-align:left; padding:10px 12px; font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;'>"
+    "<div style='font-size:13px; font-weight:700; color:#0F172A; border-bottom:1px solid #CBD5E1; padding-bottom:4px; margin-bottom:6px;'>"
+    "连续动态血糖与多导睡眠"
+    "</div>"
+    "<div style='font-size:11.5px; line-height:1.65; color:#334155;'>"
+    "• <b>连续动态血糖 (CGM)</b><br/>"
+    "&nbsp;&nbsp;GlucoFM · CGM-JEPA · GluFormer<br/>"
+    "&nbsp;&nbsp;CGMformer · CGM-LSM<br/>"
+    "• <b>多导睡眠与心肺 (Sleep PSG)</b><br/>"
+    "&nbsp;&nbsp;SleepFM-1/2 · SleepMaMi · U-Sleep<br/>"
+    "• <b>无袖带血压与血流动力</b><br/>"
+    "&nbsp;&nbsp;CAS-BP · CBPM-LLaMA"
+    "</div>"
+    "</div>"
+)
+
+col3_html = (
+    "<div style='width:290px; text-align:left; padding:10px 12px; font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;'>"
+    "<div style='font-size:13px; font-weight:700; color:#334155; border-bottom:1px solid #CBD5E1; padding-bottom:4px; margin-bottom:6px;'>"
+    "通用时序基模与评测对照"
     "</div>"
     "<div style='font-size:11.5px; line-height:1.65; color:#475569;'>"
-    "<b>跨界对照与通用特征底座</b><br/>"
-    "• <b>预测基模</b>：TimesFM · Chronos<br/>"
-    "• <b>多任务掩码</b>：MOMENT · MOIRAI<br/>"
-    "• <b>轻量判别</b>：Mantis (端侧分类)<br/>"
-    "• <b>概率预测</b>：Timestral (DHF 解耦)<br/>"
-    "• <b>检索增强</b>：Kumo-Forecast (时序 RAG)<br/>"
-    "• <b>语言重编程</b>：Time-LLM (原型对齐)"
+    "• <b>自回归预测基模</b><br/>"
+    "&nbsp;&nbsp;TimesFM (Google) · Chronos (AWS)<br/>"
+    "• <b>分块多任务掩码建模</b><br/>"
+    "&nbsp;&nbsp;MOMENT · MOIRAI<br/>"
+    "• <b>轻量判别与概率预测</b><br/>"
+    "&nbsp;&nbsp;Mantis (端侧) · Timestral (Mistral)<br/>"
+    "• <b>检索增强与语言重编程</b><br/>"
+    "&nbsp;&nbsp;Kumo-Forecast · Time-LLM"
     "</div>"
     "</div>"
 )
 
 data_html = (
-    "<div style='width:820px; text-align:left; padding:10px 14px; font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;'>"
+    "<div style='width:1080px; text-align:left; padding:10px 14px; font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;'>"
     "<div style='font-size:13px; font-weight:700; color:#0F172A; border-bottom:1px solid #CBD5E1; padding-bottom:4px; margin-bottom:6px;'>"
     "开放数据集与临床队列底座 (Open Datasets &amp; Clinical Cohorts)"
     "</div>"
@@ -80,9 +95,6 @@ data_html = (
     "</div>"
 )
 
-def make_label(text: str) -> str:
-    return f"<span style='background:#F8FAFC; color:#475569; padding:2px 6px; border-radius:4px; font-size:11px; border:1px solid #E2E8F0; font-family:system-ui;'>{text}</span>"
-
 mmd_taxonomy = f"""flowchart TB
     classDef topBrain fill:#F8FAFC,stroke:#334155,stroke-width:1.5px,rx:8px,ry:8px;
     classDef physioCol fill:#FFFFFF,stroke:#475569,stroke-width:1.5px,rx:8px,ry:8px;
@@ -90,14 +102,22 @@ mmd_taxonomy = f"""flowchart TB
     classDef bottomData fill:#F8FAFC,stroke:#334155,stroke-width:1.5px,rx:8px,ry:8px;
 
     REASONING["{top_html}"]:::topBrain
-    PHYSIO["{physio_html}"]:::physioCol
-    TSFM["{tsfm_html}"]:::tsfmCol
+
+    subgraph MODELS[" "]
+        direction LR
+        COL1["{col1_html}"]:::physioCol
+        COL2["{col2_html}"]:::physioCol
+        COL3["{col3_html}"]:::tsfmCol
+    end
+
     DATA["{data_html}"]:::bottomData
 
-    REASONING ==>|"{make_label('时序-语言跨模态对齐与临床决策')}"| PHYSIO
-    REASONING ==>|"{make_label('通用推理与假设性情景推演')}"| TSFM
-    PHYSIO ==>|"{make_label('自监督预训练与生理表征评测')}"| DATA
-    TSFM ==>|"{make_label('通用时序模式预训练与跨域验证')}"| DATA
+    REASONING ==> COL1
+    REASONING ==> COL2
+    REASONING ==> COL3
+    COL1 ==> DATA
+    COL2 ==> DATA
+    COL3 ==> DATA
 
     linkStyle default stroke:#64748B,stroke-width:1.5px;
 """
