@@ -51,14 +51,30 @@ def replace_block(text: str, marker: str, content: str) -> str:
 def format_model_resources(m: dict) -> str:
     links: list[str] = []
     if m.get("paper"):
-        links.append(f"[论文]({m['paper']})")
+        paper_label = (
+            "报告"
+            if any(k in m["paper"] for k in ["mistral.ai", "developer.nvidia.com"])
+            else "论文"
+        )
+        links.append(f"[{paper_label}]({m['paper']})")
+
+    open_parts: list[str] = []
     if m.get("code"):
-        links.append(f"[代码]({m['code']})")
+        open_parts.append(f"[代码]({m['code']})")
     if m.get("weights"):
-        links.append(f"[权重]({m['weights']})")
+        open_parts.append(f"[权重]({m['weights']})")
     elif m.get("access") == "gated":
-        links.append("权重需申请")
-    return " · ".join(links) if links else "未公开"
+        open_parts.append("权重需申请")
+
+    if open_parts:
+        links.extend(open_parts)
+    else:
+        if m.get("access") == "gated":
+            links.append("需申请")
+        else:
+            links.append("闭源")
+
+    return " · ".join(links)
 
 
 def build_recent_table(models: list[dict], limit: int = 10) -> str:
@@ -85,7 +101,7 @@ def build_recent_table(models: list[dict], limit: int = 10) -> str:
 
 def build_models_table(models: list[dict]) -> str:
     lines = [
-        "| 模型 / 基准 | 机构 | 发表 | 主要模态 | 方法与参数规模 | 预训练 / 评测规模 | 开源资源 | 收录日期 |",
+        "| 模型 / 基准 | 机构 | 发表 | 主要模态 | 方法与参数规模 | 预训练 / 评测规模 | 资源链接 | 收录日期 |",
         "| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |",
     ]
     for m in models:

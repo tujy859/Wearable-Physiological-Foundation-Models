@@ -39,7 +39,7 @@
   method: 相对对比学习 (RelCon) + 大核 1D-ResNet
   params: 约 2M
   data: 5.5 万小时 (120 人连续 100 天野外生活数据)
-  paper: ''
+  paper: https://arxiv.org/abs/2410.08375
   code: https://github.com/maxxu05/pulseppg
   weights: https://zenodo.org/records/10892019
   access: open
@@ -55,7 +55,7 @@
   method: 跨模态掩码自编码 (Cross-Modal MAE)
   params: 紧凑级
   data: 9,400 小时同步配对 ECG-PPG 数据
-  paper: ''
+  paper: https://openreview.net/forum?id=VjI72R3gJq
   code: ''
   weights: ''
   access: closed
@@ -135,7 +135,7 @@
   method: 预测级 + 特征级 + 形态节律三级多尺度蒸馏
   params: 紧凑 1D 学生网络 (内存降低 19x)
   data: 多中心公开穿戴语料
-  paper: ''
+  paper: https://arxiv.org/abs/2509.19215
   code: https://github.com/LingFengGold/PPG-Distill
   weights: ''
   access: open
@@ -151,7 +151,7 @@
   method: 深度时序表征与血管生理年龄预测 (PPG Age Gap)
   params: 工业级
   data: Apple Health Study (213,593 名真实佩戴者)
-  paper: ''
+  paper: https://doi.org/10.1038/s41467-025-64275-4
   code: ''
   weights: ''
   access: closed
@@ -247,8 +247,8 @@
   method: 潜空间 JEPA 预测
   params: 约 0.5M
   data: 228 人 (开源重训基座)
-  paper: ''
-  code: https://huggingface.co/CRUISEResearchGroup/CGM-JEPA
+  paper: https://arxiv.org/abs/2605.00933
+  code: https://github.com/cruiseresearchgroup/CGM-JEPA
   weights: https://huggingface.co/CRUISEResearchGroup/CGM-JEPA
   access: open
   doc: docs/models/cgm_models.md#cgm-jepa
@@ -456,8 +456,8 @@
   params: '-'
   data: 200 人 × 500 天长程穿戴数据 (4,084 道推理题)
   paper: https://arxiv.org/abs/2609.05405
-  code: ''
-  weights: ''
+  code: https://github.com/facebookresearch/WearableQA
+  weights: https://huggingface.co/datasets/facebook/WearableQA
   access: open
   doc: docs/models/health_reasoning_llms.md#wearableqa
   type: benchmark
@@ -615,7 +615,7 @@
   method: 解耦预测跨度 (DHF) + 21 分位数概率预测
   params: 5M - 209M
   data: 大规模多领域时序语料
-  paper: ''
+  paper: https://mistral.ai/news/timestral/
   code: https://github.com/mistralai/timestral
   weights: https://huggingface.co/mistralai/Timestral-209M
   access: open
@@ -631,7 +631,7 @@
   method: 冻结 MOMENT + DARR 时序检索增强与原生可解释层
   params: 约 340M
   data: 企业级多变量时序与结构化数据集
-  paper: ''
+  paper: https://developer.nvidia.com/blog/advancing-tabular-and-time-series-ai-with-nvidia-kumo/
   code: https://github.com/NVIDIA/Kumo-TS
   weights: https://huggingface.co/nvidia/Kumo-Forecast
   access: open
