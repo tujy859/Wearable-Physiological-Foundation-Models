@@ -109,7 +109,7 @@
   access: open
   doc: docs/models/smartwatch_models.md#ppgflowecg
   type: model
-  added: '2026-10-12'
+  added: '2026-10-22'
 - id: anyppg
   name: AnyPPG
   org: 北京大学健康医疗大数据国家研究院
@@ -125,7 +125,7 @@
   access: open
   doc: docs/models/smartwatch_models.md#anyppg
   type: model
-  added: '2026-10-12'
+  added: '2026-10-22'
 - id: ppg-distill
   name: PPG-Distill
   org: Emory University
@@ -158,6 +158,38 @@
   doc: docs/models/smartwatch_models.md#ppgage
   type: model
   added: '2026-10-12'
+- id: ppg-bench
+  name: PPG-Bench
+  org: Mannas AI
+  venue: arXiv 2026
+  date: 2026-10
+  added: '2026-10-19'
+  modality: 腕部与指尖 PPG
+  method: 4 级探针微调协议 (跨 5 大脉搏基模评测)
+  params: 评测套件
+  data: 9 个公开数据集 · 26 项下游任务
+  doc: docs/models/smartwatch_models.md#ppg-bench
+  paper: https://arxiv.org/abs/2610.13435
+  code: https://github.com/mannas-ai/ppg-bench
+  weights: ''
+  access: open
+  type: benchmark
+- id: ppg-age-benchmark
+  name: PPG Age Benchmark
+  org: Nabil Brag
+  venue: arXiv 2026
+  date: 2026-03
+  added: '2026-10-19'
+  modality: 腕戴 PPG
+  method: 脉搏基础模型血管生物年龄跨域横评
+  params: 评测基准
+  data: PulseDB (906 人, 41,104 段) vs UKB
+  doc: docs/models/smartwatch_models.md#开源脉搏基础模型生物年龄横评
+  paper: https://arxiv.org/abs/2603.14030
+  code: https://github.com/Misterbra/ppg-age-benchmark
+  weights: ''
+  access: open
+  type: benchmark
 - id: openmhc
   name: OpenMHC
   org: 斯坦福大学医学院 (Euan Ashley Lab) / 帝国理工
@@ -493,7 +525,7 @@
   access: open
   doc: docs/models/health_reasoning_llms.md#cbpm-llama
   type: model
-  added: '2026-10-12'
+  added: '2026-10-15'
 - id: gem
   name: GEM
   org: 北京大学 / 新加坡国立大学
@@ -509,7 +541,7 @@
   access: open
   doc: docs/models/health_reasoning_llms.md#gem
   type: model
-  added: '2026-10-12'
+  added: '2026-10-22'
 - id: risq
   name: RisQ
   org: TUM / Helmholtz / Harvard

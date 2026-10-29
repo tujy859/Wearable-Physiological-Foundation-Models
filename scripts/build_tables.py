@@ -77,6 +77,16 @@ def format_model_resources(m: dict) -> str:
     return " · ".join(links)
 
 
+def format_model_name(m: dict) -> str:
+    tag = "`基准` " if m.get("type") == "benchmark" else ""
+    if m.get("type") == "survey":
+        tag = "`综述` "
+    name = m.get("name", "")
+    if m.get("doc"):
+        return f"{tag}[**{name}**]({m['doc']})"
+    return f"{tag}**{name}**"
+
+
 def build_recent_table(models: list[dict], limit: int = 10) -> str:
     items = sorted(
         models,
@@ -84,11 +94,12 @@ def build_recent_table(models: list[dict], limit: int = 10) -> str:
         reverse=True,
     )[:limit]
     lines = [
-        "| 收录日期 | 名称 | 机构 | 发表 | 模态 | 简介与资源 |",
-        "| :--- | :--- | :--- | :--- | :--- | :--- |",
+        '<div style="overflow-x: auto;">\n',
+        "| 收录日期 | 名称 | 机构 | 发表 | 模态 | 核心简介与资源链接 |",
+        "| :---: | :--- | :--- | :---: | :--- | :--- |",
     ]
     for m in items:
-        name_cell = f"[**{m['name']}**]({m['doc']})" if m.get("doc") else f"**{m['name']}**"
+        name_cell = format_model_name(m)
         res = format_model_resources(m)
         summary = m.get("method", "")
         if m.get("data"):
@@ -96,35 +107,39 @@ def build_recent_table(models: list[dict], limit: int = 10) -> str:
         lines.append(
             f"| {m.get('added', '')} | {name_cell} | {m.get('org', '')} | {m.get('venue', '')} | {m.get('modality', '')} | {summary} · {res} |"
         )
+    lines.append("\n</div>")
     return "\n".join(lines)
 
 
 def build_models_table(models: list[dict]) -> str:
     lines = [
-        "| 模型 / 基准 | 机构 | 发表 | 主要模态 | 方法与参数规模 | 预训练 / 评测规模 | 资源链接 | 收录日期 |",
-        "| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |",
+        '<div style="overflow-x: auto;">\n',
+        "| 模型 / 基准 | 机构 | 发表 | 模态 | 核心机制与参数规模 | 预训练 / 评测规模 | 资源链接 |",
+        "| :--- | :--- | :---: | :--- | :--- | :--- | :--- |",
     ]
     for m in models:
         if m.get("type") == "survey":
             continue
-        name_cell = f"[**{m['name']}**]({m['doc']})" if m.get("doc") else f"**{m['name']}**"
+        name_cell = format_model_name(m)
         method = str(m.get("method", "")).strip()
         params = str(m.get("params", "")).strip()
-        if params and params not in ("-", "—"):
+        if params and params not in ("-", "—") and m.get("type") != "benchmark":
             method_cell = f"{method}（{params}）" if method else params
         else:
             method_cell = method or "-"
         res = format_model_resources(m)
         lines.append(
-            f"| {name_cell} | {m.get('org', '')} | {m.get('venue', '')} | {m.get('modality', '')} | {method_cell} | {m.get('data', '-')} | {res} | {m.get('added', '')} |"
+            f"| {name_cell} | {m.get('org', '')} | {m.get('venue', '')} | {m.get('modality', '')} | {method_cell} | {m.get('data', '-')} | {res} |"
         )
+    lines.append("\n</div>")
     return "\n".join(lines)
 
 
 def build_datasets_table(datasets: list[dict]) -> str:
     lines = [
+        '<div style="overflow-x: auto;">\n',
         "| 领域 | 数据集 | 机构 / 来源 | 传感器与采样率 | 样本规模 | 适用任务 | 获取方式 |",
-        "| :--- | :--- | :--- | :--- | :--- | :--- | :--- |",
+        "| :--- | :--- | :--- | :--- | :--- | :--- | :---: |",
     ]
     for d in datasets:
         cat = CATEGORY_LABELS.get(d.get("category", ""), d.get("category", ""))
@@ -135,6 +150,7 @@ def build_datasets_table(datasets: list[dict]) -> str:
         lines.append(
             f"| {cat} | {name_cell} | {d.get('org', '')} | {d.get('sensors', '')} | {d.get('scale', '')} | {d.get('tasks', '')} | {access_cell} |"
         )
+    lines.append("\n</div>")
     return "\n".join(lines)
 
 

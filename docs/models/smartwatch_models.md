@@ -14,10 +14,11 @@
   - [UniCardio](#unicardio)
   - [PPGFlowECG](#ppgflowecg)
   - [AnyPPG](#anyppg)
-- [3. 端侧轻量化与生物年龄前沿](#3-端侧轻量化与生物年龄前沿)
+- [3. 端侧轻量化、生物年龄与大一统评测基准](#3-端侧轻量化生物年龄与大一统评测基准)
   - [PPG-Distill](#ppg-distill)
   - [PpgAge](#ppgage)
   - [开源脉搏基础模型生物年龄横评](#开源脉搏基础模型生物年龄横评)
+  - [PPG-Bench](#ppg-bench)
 - [4. 空间运动与跨专题基模索引](#4-空间运动与跨专题基模索引)
   - [LIMU-BERT](#limu-bert)
   - [Mantis](#mantis)
@@ -235,7 +236,7 @@ AnyPPG 探讨了将单模态 PPG 从传统心血管任务拓展至全身多器�
 
 ---
 
-## 3. 端侧轻量化与生物年龄前沿
+## 3. 端侧轻量化、生物年龄与大一统评测基准
 
 ### PPG-Distill
 
@@ -280,6 +281,24 @@ Nabil Brag · arXiv 2026 · [论文](https://arxiv.org/abs/2603.14030) · [代�
   - 在大型单中心队列（UK Biobank 21 万人）上强监督训练的模型在跨域迁移至术中受试者时出现泛化性能下降；
   - 采用无监督预训练的 Pulse-PPG 配合线性探针取得了更具鲁棒性的表现（MAE = 9.28 年，结合人口统计学特征后降至 8.22 年）；
   - 单心拍固定点数重采样会破坏主动脉脉搏波传导时间（PWTT）的绝对物理量纲并抹杀心率变异性（HRV）；保留连续 10 秒自然节律波形更有利于保留心血管衰老的多尺度信息。
+
+---
+
+### PPG-Bench
+
+Mannas AI · arXiv 2026 · [论文](https://arxiv.org/abs/2610.13435) · [代码](https://github.com/mannas-ai/ppg-bench)
+
+针对以往各个 PPG 基础模型采用各自碎片化的私有/公有测试集、不同的数据清洗过滤标准与微调协议导致无法公允对比的痛点，该工作构建了首个标准化、严谨防数据泄露的脉搏基础模型大一统评测套件。
+
+- **评测体系与覆盖面**：
+  - **参评基模**：AnyPPG、PaPaGei-S、PaPaGei-P、PulsePPG 与 SigmaPPG；
+  - **评测规模**：跨越 9 个公开数据集（PPG-DaLiA、WildPPG、DREAMT、WESAD、ECSMP、PPG-BP、TROIKA、BAMI-1/2、Apple Heart Study），涵盖 26 项下游任务（心率回归、体动识别、睡眠分期、压力情绪、抑郁筛查、年龄/血压估计及身份识别）；
+  - **4 级递进适配协议**：线性探测（Linear Probing）、随机森林（Random Forest）、冻结 MLP 探针、端到端全量微调（End-to-End Finetuning）；
+  - **严苛对照组**：随机/常数基线、无训练参数的脉搏率变异性特征集（PRV）、通用时序大模型（MOMENT）。
+- **核心结论（为基模“挤水分”）**：
+  - 在全部 68 组“任务-适配策略”配置中，有 35.3% 的组合相比最简单的随机/常数基线未展现出统计学优势；
+  - 在高达 83.8%（57/68）的任务组合中，无任何一个专用 PPG 基础模型能同时战胜“确定性 PRV 特征”与“通用时序大模型 MOMENT”；
+  - 下游探测头容量越复杂，在小规模临床稀疏数据集上过拟合风险越显著，呼吁未来脉搏表征学习必须始终引入强物理先验的对照组。
 
 ---
 
@@ -442,6 +461,8 @@ SensorLM 是在近 6,000 万小时真实世界生活穿戴数据上训练的传�
 | **PPG-LM** | Emory / UCLA / Google | arXiv 2026 | 多时间尺度临床对齐脉搏-语言基础模型 · [论文](https://arxiv.org/abs/2609.33516) |
 | **SensorLM** | Google Research / DeepMind | NeurIPS 2025 | 5,970 万小时智能手表传感器-语言多模态基座 · [论文](https://arxiv.org/abs/2506.09108) · [代码](https://github.com/Google-Health/consumer-health-research/tree/main/sensorlm) |
 | **LIMU-BERT** | 南洋理工大学 (NTU) | ACM SenSys 2021 | 手腕三轴 IMU 空间运动表征模型 · [代码](https://github.com/dapowan/LIMU-BERT-Public) |
+| **PPG-Bench** | Mannas AI | arXiv 2026 | 9 数据集 26 任务脉搏大模型大一统评测套件 · [论文](https://arxiv.org/abs/2610.13435) · [代码](https://github.com/mannas-ai/ppg-bench) |
+| **PPG 生物年龄横评** | Nabil Brag | arXiv 2026 | 脉搏基础模型血管生物年龄跨域评测基准 · [论文](https://arxiv.org/abs/2603.14030) · [代码](https://github.com/Misterbra/ppg-age-benchmark) |
 
 ---
 
