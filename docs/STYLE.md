@@ -72,7 +72,7 @@ CommonMark 判断 `**` 能否闭合时会看两侧字符。加粗内容以标点
 
 ### 5. 链接
 
-- 仓库内的文件一律用相对路径，例如 `[睡眠专题](docs/models/sleep_models.md#sleepfm)`。不要写 `file:///` 或本机绝对路径。
+- 仓库内的文件一律用相对路径，例如 `` `[睡眠专题](docs/models/sleep_models.md#sleepfm)` ``。不要写 `file:///` 或本机绝对路径。
 - 论文优先链接 arXiv abs 页或 DOI，不直接链接 PDF。
 - 锚点按 GitHub 规则生成：小写，去掉标点，空格变 `-`。`scripts/lint_md.py` 会检查仓库内的锚点是否存在。
 

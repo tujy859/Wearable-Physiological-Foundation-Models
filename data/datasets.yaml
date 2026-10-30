@@ -80,7 +80,7 @@
   access: open
   url: https://figshare.com/articles/dataset/ShanghaiT1DM_T2DM_data/20444397
   paper: https://doi.org/10.1038/s41597-023-01940-7
-  doc: docs/datasets/wearable_datasets.md#shanghait1dm
+  doc: docs/datasets/wearable_datasets.md#shanghait1dm--shanghait2dm
 
 - id: hall-glucotypes
   name: Hall Glucotypes
@@ -260,7 +260,7 @@
   access: open
   url: https://physionet.org/content/ecg-arrhythmia/1.0.0/
   paper: https://doi.org/10.1038/s41597-020-0386-x
-  doc: docs/datasets/wearable_datasets.md#chapman-shaoxing
+  doc: docs/datasets/wearable_datasets.md#chapman-shaoxing--ningbo
 
 - id: shhs
   name: SHHS
