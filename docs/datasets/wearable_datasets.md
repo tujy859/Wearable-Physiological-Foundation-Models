@@ -88,6 +88,46 @@ CAS-BP 是面向智能手表无袖带血压（Cuffless Blood Pressure）连续�
   - **基线校准评估**（Calibrated）：以第 0 天袖带基准值 $\text{BaseSBP}$ 为个性化锚点，测试阶段结合无校准预测值进行后处理校准（如 $\text{SBP}_{\text{cal}} = 0.3 \times \text{SBP}_{\text{free}} + 0.7 \times \text{BaseSBP}$），可将静息队列收缩压与舒张压 MAE 降低至 3.0-4.5 mmHg。
 - **获取方式**：GitHub 仓库直接提供示例数据、解析脚本与 31 维特征说明；完整原始波形（Dataset-1）需填写仓库中的数据访问申请表向作者团队免费申请。基于该数据集的血压大模型微调方法参见 [CBPM-LLaMA](../models/health_reasoning_llms.md#cbpm-llama)。
 
+### WildPPG
+
+ETH Zürich (SIPLab) · NeurIPS 2024 · [主页/代码](https://github.com/eth-siplab/WildPPG) · [论文](https://arxiv.org/abs/2405.08083)
+
+WildPPG 由苏黎世联邦理工学院（ETH Zürich）SIPLab 团队发布于 NeurIPS 2024 Datasets and Benchmarks Track，专门针对非受控真实野外环境下的剧烈运动、高海拔与极端温差干扰构建多部位光电脉搏基准。
+
+- **样本规模**：**16 名**受试者完成从苏黎世往返少女峰（Jungfraujoch，海拔最高 3,571 米）的全天户外行程，单人连续记录约 13.5 小时，累计总时长 **216 小时**，涵盖徒步登山、上下楼梯、步行、进餐及乘坐火车/缆车等多样化真实生活状态。
+- **传感器与采样率**：受试者在**头部、胸骨、手腕与脚踝 4 个身体部位**同步佩戴定制穿戴节点，采集三波长 PPG（红光、绿光、红外，**128 Hz**）、三轴加速度计（ACC，**128 Hz**）、皮肤温度与气压海拔高度，并以胸部单导联心电（ECG，**128 Hz**）作为心率与心动周期参考真值。
+- **获取方式**：以开放协议托管于 GitHub 与 Hugging Face（`eth-siplab/WildPPG`），直接下载。
+
+### BUT-PPG
+
+Brno University of Technology · 2021 · [主页/下载](https://physionet.org/content/butppg/2.0.0/) · [论文](https://doi.org/10.3390/s21113832)
+
+BUT-PPG（Brno University of Technology Smartphone PPG Database）由布尔诺理工大学 Nemcova 等人构建并发布于 PhysioNet，聚焦移动终端光电脉搏波的信号质量评估（SQI）与抗伪影心率估计。
+
+- **样本规模**：2.0 版本包含 **48 名**健康受试者（年龄 19-76 岁）的 **3,888 段** 10 s 同步配对记录，采集条件覆盖静息及故意引入的走动、交谈、咳嗽、大笑、手指按压力度变化与环境光突变等伪影场景。
+- **传感器与标注**：采用智能手机摄像头（Xiaomi Mi9 / Huawei P20 Pro，采样率 **30 Hz**）采集指尖或耳部 PPG 波形，胸部通过医疗级心电仪（Bittium Faros，**1000 Hz**）与三轴加速度计（**100 Hz**）同步采集参考信号。每段记录均附带多位专家共识标注的二元信号质量标签（Good / Poor）、人工核验的参考心率以及血压、血氧饱和度（SpO2）与血糖参考值。
+- **获取方式**：遵循 ODC-BY 1.0 协议托管于 PhysioNet，直接下载。
+
+### RealWorldPPG
+
+Menoufia University · 2019 · [主页/下载](https://data.mendeley.com/datasets/yynb8t9x3d/3) · [论文](https://doi.org/10.17632/yynb8t9x3d.3)
+
+RealWorldPPG（Real-World PPG Dataset）由埃及曼努菲亚大学 Siam 等人构建并发布于 Mendeley Data，是物联网便携传感条件下的短时指端光电脉搏波形库，被纳入 [PPG-Bench](../models/smartwatch_models.md#ppg-bench) 统一评测套件。
+
+- **样本规模**：采集自 **35 名**受试者（年龄 10-75 岁，平均年龄 28.4 岁），每人包含 50-60 段独立记录，总计 **2,074 段** PPG 波形（官方标准划分为训练集 1,374 段、测试集 700 段）。
+- **传感器与采样率**：采用便携式光电脉搏传感器以 **50 Hz** 采样率采集指端外周血容积脉搏波，单段记录时长为 **6 s**（300 个采样点），常用于评估轻量级脉搏特征提取、心率回归与生物身份识别（Biometric Identification）模型。
+- **获取方式**：遵循 CC BY 4.0 协议托管于 Mendeley Data，直接下载。
+
+### ECSMP
+
+重庆邮电大学 / 西南大学 · 2021 · [主页/下载](https://data.mendeley.com/datasets/f9bf7b6264/2) · [论文](https://doi.org/10.3389/fnins.2021.751441)
+
+ECSMP（A dataset on emotion, cognition, sleep, and multi-model physiological signals）由高竹等人发布于 *Frontiers in Neuroscience* 与 Mendeley Data，面向情绪、认知、睡眠与心理健康的跨模态生理分析。
+
+- **样本规模**：**89 名**健康大学生受试者完成静息基线测试、6 类基本情绪视频片段诱发（中性、恐惧、悲伤、快乐、愤怒、厌恶）及认知测试，并配套抑郁自评量表（SDS）、匹兹堡睡眠质量指数（PSQI）、正负性情绪量表（PANAS）及森田神经质问卷标注。
+- **传感器与采样率**：手腕佩戴 Empatica E4 手环（PPG **64 Hz**、三轴 ACC **32 Hz**、EDA **4 Hz**、皮温 **4 Hz**），同步记录前额脑电（EEG）与胸部单导联心电（ECG）。在 [PPG-Bench](../models/smartwatch_models.md#ppg-bench) 中常用于检验脉搏基础模型在情绪唤醒、心理压力及抑郁倾向筛查上的表征迁移能力。
+- **获取方式**：遵循 CC BY 4.0 协议托管于 Mendeley Data，直接下载。
+
 ---
 
 ## 2. 连续血糖监测数据集与基准
@@ -225,6 +265,26 @@ BIDMC PPG and Respiration Dataset 由牛津大学 Pimentel 等人从 MIMIC-II �
 - **传感器与采样率**：包含指尖 PPG、II 导联 ECG 与胸腹阻抗呼吸波（Resp），采样率均为 **125 Hz**，同时提供 1 Hz 生命体征数值序列及两位专家独立标注的单次呼吸周期时间戳。
 - **获取方式**：遵循 ODC-BY 1.0 协议托管于 PhysioNet，直接下载。
 
+### PulseDB
+
+Texas A&M University (PulseLab) · 2023 · [主页/代码](https://github.com/pulselabteam/PulseDB) · [论文](https://doi.org/10.3389/fdgth.2022.1090854)
+
+PulseDB 由德州农工大学 Wang 等人发表于 *Frontiers in Digital Health*，是从 MIMIC-III Waveform Database Matched Subset 与 VitalDB 两大重症/围术期库中经过严格质量控制与特征点对齐提炼而成的超大规模标准化无袖带血压基准库。
+
+- **样本规模**：涵盖 **5,361 名**受试者的 **5,245,454 段**高质量 10 s 同步生理波形切片，并附带受试者年龄、性别、身高、体重与 BMI 等人口学信息（其 VitalDB 子集亦被 [PPG 生物年龄横评](../models/smartwatch_models.md#开源脉搏基础模型生物年龄横评) 用作血管生物年龄跨域评测基准）。
+- **传感器与标注**：每段 10 s 切片均统一重采样至 **125 Hz**，包含同步配对的心电（ECG）、指尖光电脉搏波（PPG）与有创动脉血压波（ABP），并提供逐拍收缩压（SBP）、舒张压（DBP）、平均动脉压（MAP）真值以及标准化的有校准（Calibration-based）与无校准（Calibration-free）训练集/测试集划分脚本。
+- **获取方式**：开源 GitHub 仓库提供全套构建脚本与预处理好的数据分片下载链接。
+
+### PPG-BP
+
+桂林电子科技大学 / University of British Columbia · 2018 · [主页/下载](https://figshare.com/articles/dataset/PPG-BP_Database_zip/5459299) · [论文](https://doi.org/10.1038/sdata.2018.20)
+
+PPG-BP Database 由梁永波、陈真诚与 Mohamed Elgendi 等人发布于 *Scientific Data*，是面向短时指端光电脉搏波无创血压估计与心血管慢病筛查的常用公开临床数据集。
+
+- **样本规模**：采集自桂林市人民医院 **219 名**住院与门诊受试者（年龄 20-89 岁，平均 57 岁，涵盖正常血压、高血压前期、1/2 期高血压及糖尿病、脑梗死等慢病患者），每人连续采集 3 段高质量波形，共 **657 段** PPG 记录。
+- **传感器与临床标签**：采用指夹式光电传感器（SMPLUS SEP9AF-2）以 **1000 Hz** 高采样率采集指尖 PPG 信号，单段时长 **2.1 s**（2,100 个采样点），同步配对欧姆龙上臂式电子血压计测量的收缩压（SBP）、舒张压（DBP）、心率以及住院临床疾病诊断标签。
+- **获取方式**：遵循 CC BY 4.0 协议托管于 Figshare，直接下载。
+
 ### MIMIC-IV-ECG
 
 MIT / Beth Israel Deaconess Medical Center · 2023 · [主页/申请](https://physionet.org/content/mimic-iv-ecg/1.0/) · [论文](https://doi.org/10.13026/4nqg-sb35)
@@ -303,6 +363,16 @@ Sleep-EDF Expanded 由荷兰 Kemp 等人发布于 PhysioNet，是睡眠分期算
 - **传感器与采样率**：包含双通道脑电（Fpz-Cz 与 Pz-Oz，**100 Hz**）、水平眼电（EOG，**100 Hz**）、颏下肌电（EMG）及口鼻呼吸与体温（1 Hz），配有按 R&K 标准人工标注的 30 s 睡眠分期（W、R、N1、N2、N3、N4）。
 - **获取方式**：遵循 ODC-BY 1.0 协议托管于 PhysioNet，直接下载。
 
+### DREAMT
+
+Duke University (BIG IDEAs Lab) · 2024 · [主页/下载](https://physionet.org/content/dreamt/2.1.0/) · [论文](https://arxiv.org/abs/2405.13086)
+
+DREAMT（Dataset for Real-time sleep stage EstimAtion using Multisensor wearable Technology）由杜克大学 Jessilyn Dunn 实验室（Wang 等人）发布于 PhysioNet，提供了睡眠障碍门诊患者整夜腕戴多传感器与临床金标准多导睡眠图（PSG）的严格同步记录。
+
+- **样本规模**：采集自杜克大学医疗系统睡眠实验室的 **100 名**受试者（涵盖阻塞性睡眠呼吸暂停 OSA、打鼾、呼吸急促等真实睡眠障碍人群），记录整夜约 8 小时同步睡眠过程。
+- **传感器与采样率**：受试者左手腕佩戴 Empatica E4 手环（绿光/红光 PPG **64 Hz**、三轴 ACC **32 Hz**、皮肤电活动 EDA **4 Hz**、皮肤温度 **4 Hz**），同时接受临床标准整夜 PSG 监测（EEG、EOG、颏下与腿部 EMG、ECG、口鼻气流、胸腹呼吸带及血氧 SpO2，提供 100 Hz 对齐版本与 64 Hz 穿戴切片版本）。每 30 s 睡眠帧均由专业睡眠技师按 AASM 标准标注睡眠分期（W、N1、N2、N3、R）及呼吸暂停低通气指数（AHI）、微觉醒事件与临床肥胖/慢病元数据，被 [HiMAE](../models/smartwatch_models.md#himae) 与 [PPG-Bench](../models/smartwatch_models.md#ppg-bench) 广泛用作腕部睡眠分期与呼吸暂停评测基准。
+- **获取方式**：托管于 PhysioNet（注册账号并在线签署标准数据使用协议 DUA 后即可下载）。
+
 ### UK Biobank
 
 UK Biobank / University of Oxford · 2015 / 2017 · [主页/申请](https://www.ukbiobank.ac.uk/enable-your-research/apply-for-access) · [论文](https://doi.org/10.1371/journal.pone.0169649)
@@ -327,35 +397,46 @@ All of Us 是美国国立卫生研究院（NIH）发起的国家级多族裔精�
 
 ## 5. 数据集全景汇总表
 
-| 领域 / 模态 | 数据集名称 | 机构 | 核心传感器与采样率 | 样本规模 | 获取方式 | 适用任务 |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 腕部多模态 | [OpenMHC](#openmhc) | Stanford / Imperial / Charité | 19 维分钟级时序 + 169 维临床变量 | 11,894 人（>6,700 万小时） | 开放下载（XS 直接下载 / Full 注册） | 基础模型预训练、多变量插补与预测 |
-| 腕部多模态 | [PhysioNet Wrist PPG](#physionet-wrist-ppg) | Univ. of Manchester | 腕部 PPG/ACC/Gyro 256 Hz + 胸 ECG 256 Hz | 8 人（走、跑、骑行） | 开放直接下载（PhysioNet） | 运动伪影消除、运动心率回归 |
-| 腕部多模态 | [PPG-DaLiA](#ppg-dalia) | Univ. of Siegen / Bosch | 腕部 PPG 64 Hz、ACC 32 Hz、EDA 4 Hz + 胸 ECG 700 Hz | 15 人（每人约 2.5 小时，共 36 小时） | 开放直接下载（UCI） | 日常活动心率监测与去噪 |
-| 腕部多模态 | [WESAD](#wesad) | Univ. of Siegen / Bosch | 腕部 E4（PPG/ACC/EDA/Temp）+ 胸 RespiBAN 700 Hz | 15 人（实验室压力与情绪诱发） | 开放直接下载（UCI） | 心理压力检测、三态情绪分类 |
-| 腕部多模态 | [TROIKA](#troika) | Samsung Research / 国防科大 | 腕部双通道 PPG 125 Hz、ACC 125 Hz + 胸 ECG 125 Hz | 12 人（跑步机最高 15 km/h） | 开放直接下载（Zenodo） | 剧烈跑步心率跟踪基准 |
-| 腕部多模态 | [CAS-BP](#cas-bp) | 中科院深圳先进院 / 华为 | 手表多波长 PPG 1000 Hz + ECG 1000 Hz + 听诊血压 | 1,272 人（4 周随访，12,624 次测量） | 示例开放 / 完整库填写申请（GitHub） | 无袖带血压回归、脉搏传导时间建模 |
-| CGM 血糖 | [ShanghaiT1DM / T2DM](#shanghait1dm--shanghait2dm) | 上海六院 | Abbott Libre（15 min 间质液血糖）+ 血检生化 | 112 人（12 例 T1D + 100 例 T2D，3-14 天） | 开放直接下载（Figshare） | 血糖预测、缺失插补、生化指标探针 |
-| CGM 血糖 | [Hall Glucotypes](#hall-glucotypes) | Stanford Univ. | Dexcom G4（5 min）+ 标准化早餐餐食记录 | 57 人（105,426 个采样点） | 开放直接下载（PLOS Biology 附件） | 血糖动态波动分型、前驱糖尿病聚类 |
-| CGM 血糖 | [BIG IDEAs](#big-ideas) | Duke Univ. | Dexcom G6（5 min）+ Empatica E4 手环 | 16 人（连续配对 8-10 天） | 开放直接下载（PhysioNet） | 腕戴光电与皮下间质血糖跨模态建模 |
-| CGM 血糖 | [CGMacros](#cgmacros) | Texas A&M / Sansum | 双 CGM（5/15 min）+ Fitbit + 餐食照片与宏量营养素 | 45 人（每人约 10 天，含血检与菌群） | 开放直接下载（PhysioNet） | 个性化营养餐后血糖响应建模 |
-| CGM 血糖 | [Colas DFA](#colas-dfa) | Hosp. Univ. de Móstoles | Medtronic iPro（5 min） | 208 人（每人 24-48 小时，共约 9,500 小时） | 开放直接下载（PLOS ONE 附件） | 2 型糖尿病发病风险预测、CGM 预训练 |
-| CGM 血糖 | [OhioT1DM](#ohiot1dm) | Ohio Univ. | Medtronic CGM（5 min）+ 胰岛素泵 + 碳水 + 手环 | 12 人（每人 8 周） | 签署学术 DUA 申请 | 30-60 min 短程血糖自回归预测基准 |
-| CGM 血糖 | [Weinstock 2016](#weinstock-2016) | T1D Exchange / Jaeb Center | 盲态 Dexcom G4（5 min）+ 低血糖与认知评估 | 201 人（老年 T1D，每人约 14 天） | 开放下载（Jaeb / GlucoBench） | 老年高危人群严重低血糖风险分析 |
-| CGM 基准 | [GlucoBench](#glucobench) | Texas A&M Univ. | 整合 5 个公开 CGM 队列（统一 5 min 网格） | >500 人 | 开放代码与脚本（GitHub） | 跨队列标准化血糖预测评测基准 |
-| CGM 集合 | [Glucose-ML](#glucose-ml) | Emory / Dartmouth | 自动化整合 20 余个公开 CGM 数据集 | 4,300+ 人（约 4,490 万采样点） | 开放代码与脚本（GitHub） | 大规模 CGM 基础模型预训练与标准化 |
-| 临床监护 | [MC-MED](#mc-med) | Stanford Univ. | 床旁 ECG 500 Hz、PPG 125 Hz、Resp 125 Hz + 急诊 EHR | 118,385 次急诊就诊（70,545 人） | PhysioNet 凭证访问（CITI + DUA） | 脉搏与心电基础模型预训练、急诊预测 |
-| 临床监护 | [VitalDB](#vitaldb) | 首尔大学医院 | 有创动脉波 ABP 500 Hz、PPG 500 Hz、ECG 500 Hz | 6,388 例非心脏手术 | 开放下载 / Python API | PPG 转血压波形重建、围术期监护 |
-| 临床监护 | [BIDMC PPG](#bidmc-ppg) | Univ. of Oxford / BIDMC | 指尖 PPG 125 Hz、ECG 125 Hz、阻抗呼吸波 125 Hz | 53 人（每人 8 min） | 开放直接下载（PhysioNet） | 呼吸率估计、脉搏波形态分析基准 |
-| 临床心电 | [MIMIC-IV-ECG](#mimic-iv-ecg) | MIT / BIDMC | 12 导联诊断级 ECG 500 Hz（10 s）+ 住院 EHR | 800,035 条记录（161,352 人） | 波形开放下载 / 关联 EHR 需凭证 | 大规模心电自监督预训练与多病种筛查 |
-| 临床心电 | [PTB-XL](#ptb-xl) | 德国 PTB / Fraunhofer HHI | 12 导联 ECG 500 Hz / 100 Hz（10 s，71 类 SCP 标签） | 21,837 条记录（18,885 人） | 开放直接下载（PhysioNet） | 多标签心电分类与基础模型微调基准 |
-| 临床心电 | [CODE-15%](#code-15) | 巴西 TNMG / Uppsala Univ. | 12 导联 ECG 400 Hz（7-10 s）+ 死亡率随访 | 345,779 条记录（233,770 人） | 开放直接下载（Zenodo） | 心电预训练缩放定律与生存分析 |
-| 临床心电 | [Chapman-Shaoxing / Ningbo](#chapman-shaoxing--ningbo) | Chapman Univ. / 绍兴与宁波医院 | 12 导联 ECG 500 Hz（10 s，SNOMED-CT 标签） | 45,152 条记录 | 开放直接下载（PhysioNet） | 东亚人群心律失常分类与跨中心验证 |
-| 睡眠多导 | [SHHS](#shhs) | NIH / NHLBI（NSRR） | 整夜家庭 PSG（EEG/EOG/EMG/ECG 125-250 Hz、Resp、SpO2） | 5,804 人（含 >15 年心血管随访） | NSRR 注册签署 DUA | 睡眠分期、脑心肺耦合与慢病生存预测 |
-| 睡眠多导 | [MESA](#mesa) | NIH / NHLBI（NSRR） | 整夜 PSG（256 Hz，含指尖 PPG）+ 7 天腕部体动仪 | 2,237 人（四族裔队列） | NSRR 注册签署 DUA | 临床 PSG 与腕戴睡眠/脉搏跨模态对齐 |
-| 睡眠多导 | [Sleep-EDF](#sleep-edf) | St. Antonius / LUMC | 双通道 EEG 100 Hz、EOG 100 Hz、EMG、呼吸 | 197 份整夜 PSG 记录 | 开放直接下载（PhysioNet） | 睡眠分期算法快速验证基准 |
-| 人群队列 | [UK Biobank](#uk-biobank) | UK Biobank / Univ. of Oxford | 腕部三轴 ACC 100 Hz（7 天）+ 全基因组 + MRI + EHR | 103,712 人体动（总队列 50 万人） | 机构课题申请 + RAP 云端封闭计算 | 运动生物标志物、全谱系疾病风险建模 |
-| 人群队列 | [All of Us](#all-of-us) | 美国 NIH | Fitbit 多年连续序列 + 全基因组 + OMOP EHR | 40 万+ 人 EHR（数万人含 Fitbit） | 机构注册认证 + Workbench 云端计算 | 跨族裔精准医学与长程健康模型验证 |
+<!-- BEGIN:DATASETS_DOC_TABLE -->
+
+| 数⁠据⁠集⁠与⁠领⁠域 | 机⁠构 / 来⁠源 | 传⁠感⁠器⁠与⁠采⁠样⁠率 | 样⁠本⁠规⁠模⁠与⁠适⁠用⁠任⁠务 | 获⁠取⁠方⁠式 |
+| :--- | :--- | :--- | :--- | :---: |
+| [**OpenMHC**](#openmhc)<br>手⁠腕⁠多⁠模⁠态 | Stanford / Imperial / Charité | 19 维⁠分⁠钟⁠级⁠时序 + 169 维⁠自⁠述⁠健⁠康变⁠量 | 11,894 人 (>6,700 万小时)<br>任务：基础模型预训练、多变量缺失插补、未来预测 | [开⁠放⁠获⁠取](https://github.com/AshleyLab/OpenMHC) |
+| [**PhysioNet Wrist PPG**](#physionet-wrist-ppg)<br>手⁠腕⁠多⁠模⁠态 | Univ. of Manchester | 腕⁠部 PPG/ACC/Gyro 256 Hz + 胸 ECG 256 Hz | 8 人 (走、跑、骑行 4 类运动)<br>任务：运动伪影消除、运动心率回归 | [开⁠放⁠获⁠取](https://physionet.org/content/wrist/1.0.0/) |
+| [**PPG-DaLiA**](#ppg-dalia)<br>手⁠腕⁠多⁠模⁠态 | Univ. of Siegen / Bosch | 腕⁠部 PPG 64 Hz、ACC 32 Hz、EDA 4 Hz + 胸 ECG 700 Hz | 15 人 (每人 2.5 小时，共 36 小时)<br>任务：日常活动心率监测与去噪 | [开⁠放⁠获⁠取](https://archive.ics.uci.edu/dataset/495/ppg+dalia) |
+| [**WESAD**](#wesad)<br>手⁠腕⁠多⁠模⁠态 | Univ. of Siegen / Bosch | 腕⁠部 E4 (PPG/ACC/EDA/Temp) + 胸 RespiBAN 700 Hz | 15 人 (实验室压力与情绪诱发)<br>任务：心理压力检测、情绪状态分类 | [开⁠放⁠获⁠取](https://archive.ics.uci.edu/dataset/465/wesad+wearable+stress+and+affect+detection) |
+| [**TROIKA**](#troika)<br>手⁠腕⁠多⁠模⁠态 | Samsung Research / 国⁠防⁠科⁠大 | 腕⁠部⁠双⁠通⁠道 PPG 125 Hz、ACC 125 Hz + 胸 ECG 125 Hz | 12 人 (跑步机最高 15 km/h)<br>任务：剧烈跑步心率跟踪基准 | [开⁠放⁠获⁠取](https://zenodo.org/records/3902660) |
+| [**CAS-BP**](#cas-bp)<br>手⁠腕⁠多⁠模⁠态 | 中⁠科⁠院⁠深圳⁠先⁠进⁠院 / 华⁠为 | 手⁠表⁠多⁠波⁠长 PPG 1000 Hz + ECG 1000 Hz + 听⁠诊⁠血⁠压 | 1,272 人 (4 周随访，12,624 次测量)<br>任务：无袖带连续血压回归与校准 | [学⁠术⁠申⁠请](https://github.com/zdzdliu/CAS-BP) |
+| [**WildPPG**](#wildppg)<br>手⁠腕⁠多⁠模⁠态 | ETH Zürich (SIPLab) | 4 部⁠位⁠多⁠波⁠长 PPG/ACC 128 Hz + 皮⁠温 + 气⁠压 + 胸 ECG | 16 人 (高山徒步与日常交通，共 216 小时)<br>任务：野外高噪/温差/海拔变化下 PPG 心率估计与去噪 | [开⁠放⁠获⁠取](https://github.com/eth-siplab/WildPPG) |
+| [**BUT-PPG**](#but-ppg)<br>手⁠腕⁠多⁠模⁠态 | 布⁠尔⁠诺⁠理工⁠大⁠学 (BUT) | 手⁠机⁠镜⁠头⁠指端/耳⁠部 PPG 30 Hz + 胸 ECG 1000 Hz + ACC | 48 人 (3,888 段 10 s 记录，含血压/血氧/血糖)<br>任务：PPG 信号质量评估 (SQI)、伪影判别与心率估计 | [开⁠放⁠获⁠取](https://physionet.org/content/butppg/2.0.0/) |
+| [**RealWorldPPG**](#realworldppg)<br>手⁠腕⁠多⁠模⁠态 | 曼⁠努⁠菲⁠亚大⁠学 (Menoufia Univ.) | 指⁠端⁠光⁠电 PPG 50 Hz (单⁠段 6 s，300 采⁠样⁠点) | 35 人 (共 2,074 段记录，年龄 10-75 岁)<br>任务：脉搏波形特征提取、心率估计与生物身份识别 | [开⁠放⁠获⁠取](https://data.mendeley.com/datasets/yynb8t9x3d/3) |
+| [**ECSMP**](#ecsmp)<br>手⁠腕⁠多⁠模⁠态 | 重⁠庆⁠邮⁠电大⁠学 / 西⁠南⁠大⁠学 | 腕⁠部 E4 (PPG 64 Hz/ACC/EDA/Temp) + 脑⁠电 EEG + 胸 ECG | 89 人 (静息、情绪诱发、睡眠与抑郁量表评估)<br>任务：多模态情绪识别、抑郁筛查与自主神经状态评估 | [开⁠放⁠获⁠取](https://data.mendeley.com/datasets/f9bf7b6264/2) |
+| [**ShanghaiT1DM / T2DM**](#shanghait1dm--shanghait2dm)<br>CGM 连⁠续⁠血⁠糖 | 上⁠海⁠市⁠第六⁠人⁠民⁠医院 | Abbott Libre (15 min 间⁠质⁠液⁠血⁠糖) + 入⁠院⁠血⁠检⁠生化 | 112 人 (12 例 T1D + 100 例 T2D，3-14 天)<br>任务：连续血糖预测、缺失插补、生化指标探针 | [开⁠放⁠获⁠取](https://figshare.com/articles/dataset/ShanghaiT1DM_T2DM_data/20444397) |
+| [**Hall Glucotypes**](#hall-glucotypes)<br>CGM 连⁠续⁠血⁠糖 | 斯⁠坦⁠福⁠大学 (Michael Snyder 实⁠验⁠室) | Dexcom G4 (5 min 血⁠糖) + 标⁠准⁠化⁠早⁠餐记⁠录 | 57 人 (105,426 个采样点)<br>任务：血糖动态波动分型、前驱糖尿病表征 | [开⁠放⁠获⁠取](https://doi.org/10.1371/journal.pbio.2005143.s010) |
+| [**BIG IDEAs**](#big-ideas)<br>CGM 连⁠续⁠血⁠糖 | 杜⁠克⁠大⁠学 (Jessilyn Dunn 实⁠验⁠室) | Dexcom G6 (5 min) + Empatica E4 手⁠环 | 16 人 (连续配对 8-10 天)<br>任务：腕戴光电与皮下间质血糖跨模态建模 | [开⁠放⁠获⁠取](https://physionet.org/content/big-ideas-glycemic-wearable/1.1.2/) |
+| [**CGMacros**](#cgmacros)<br>CGM 连⁠续⁠血⁠糖 | 德⁠州⁠农⁠工大⁠学 / Sansum | 双 CGM (5/15 min) + Fitbit + 餐⁠食⁠照⁠片⁠与宏⁠量⁠营⁠养⁠素 | 45 人 (每人约 10 天，含生化与菌群)<br>任务：个性化营养餐后血糖响应建模 | [开⁠放⁠获⁠取](https://physionet.org/content/cgmacros/1.0.0/) |
+| [**Colas DFA**](#colas-dfa)<br>CGM 连⁠续⁠血⁠糖 | Hospital Universitario de Móstoles | Medtronic iPro (5 min 血⁠糖) | 208 人 (累计约 9,500 小时)<br>任务：2 型糖尿病发病风险预测、时序预训练 | [开⁠放⁠获⁠取](https://doi.org/10.1371/journal.pone.0225817.s001) |
+| [**OhioT1DM**](#ohiot1dm)<br>CGM 连⁠续⁠血⁠糖 | 俄⁠亥⁠俄⁠大学 | Medtronic Enlite (5 min) + 胰⁠岛⁠素⁠泵 + 碳⁠水 + 手⁠环 | 12 人 (每人 8 周连续自由生活)<br>任务：30-60 min 短程血糖自回归预测基准 | [学⁠术⁠申⁠请](http://smarthealth.cs.ohio.edu/OhioT1DM-dataset.html) |
+| [**Weinstock 2016**](#weinstock-2016)<br>CGM 连⁠续⁠血⁠糖 | T1D Exchange / Jaeb Center | 盲⁠态 Dexcom G4 (5 min) + 严⁠重⁠低⁠血⁠糖发⁠作⁠史 | 201 人 (高龄 T1D，每人约 14 天)<br>任务：老年高危人群严重低血糖风险分析 | [开⁠放⁠获⁠取](https://public.jaeb.org/) |
+| [**GlucoBench**](#glucobench)<br>CGM 连⁠续⁠血⁠糖 | 德⁠州⁠农⁠工大⁠学 (Irina Gaynanova 实⁠验⁠室) | 整⁠合 5 个⁠公⁠开 CGM 队⁠列 (统⁠一 5 min 网⁠格) | >500 人<br>任务：跨队列标准化血糖预测与零样本评测 | [开⁠放⁠获⁠取](https://github.com/IrinaStatsLab/GlucoBench) |
+| [**Glucose-ML**](#glucose-ml)<br>CGM 连⁠续⁠血⁠糖 | Emory / Dartmouth (Prioleau 团⁠队) | 自⁠动⁠化⁠整⁠合 20 余⁠个⁠公⁠开 CGM 数⁠据⁠集 | 4,300+ 人 (约 4,490 万采样点)<br>任务：大规模 CGM 基础模型预训练与标准化转换 | [开⁠放⁠获⁠取](https://github.com/Augmented-Health-Lab/Glucose-ML-Project) |
+| [**MC-MED**](#mc-med)<br>临⁠床⁠多⁠模⁠态 | 斯⁠坦⁠福⁠大学⁠医⁠学⁠院 | 床⁠旁 ECG 500 Hz、PPG 125 Hz、Resp 125 Hz + 急⁠诊 EHR | 118,385 次就诊 (70,545 人)<br>任务：脉搏与心电基础模型预训练、急诊表型预测 | [凭⁠证⁠申⁠请](https://physionet.org/content/mc-med/) |
+| [**VitalDB**](#vitaldb)<br>临⁠床⁠多⁠模⁠态 | 首⁠尔⁠大⁠学医⁠院 | 桡⁠动⁠脉⁠波 ABP 500 Hz、PPG 500 Hz、ECG 500 Hz | 6,388 例非心脏手术全程监护<br>任务：PPG 转血压波形重建、围术期多参数建模 | [开⁠放⁠获⁠取](https://vitaldb.net/) |
+| [**BIDMC PPG**](#bidmc-ppg)<br>临⁠床⁠多⁠模⁠态 | 牛⁠津⁠大⁠学 / BIDMC | 指⁠尖 PPG 125 Hz、ECG 125 Hz、阻⁠抗⁠呼⁠吸⁠波 125 Hz | 53 人 (每人 8 min 重症监护记录)<br>任务：呼吸率估计、脉搏波微观形态分析基准 | [开⁠放⁠获⁠取](https://physionet.org/content/bidmc/1.0.0/) |
+| [**PulseDB**](#pulsedb)<br>临⁠床⁠多⁠模⁠态 | 德⁠州⁠农⁠工大⁠学 (PulseLab) | 同⁠步 ECG + 指⁠尖 PPG + 有⁠创⁠动⁠脉⁠波 ABP 125 Hz (10 s) | 5,361 人 (524.5 万段清洗切片，源自 MIMIC-III 与 VitalDB)<br>任务：无袖带连续血压回归基准、血管生物年龄跨域评测 | [开⁠放⁠获⁠取](https://github.com/pulselabteam/PulseDB) |
+| [**PPG-BP**](#ppg-bp)<br>临⁠床⁠多⁠模⁠态 | 桂⁠林⁠电⁠子科⁠技⁠大⁠学 / 英⁠属⁠哥⁠伦比⁠亚⁠大⁠学 | 短⁠时⁠指⁠尖 PPG 1000 Hz (单⁠段 2.1 s) + 袖⁠带⁠血⁠压⁠与临⁠床⁠诊⁠断 | 219 人 (657 段波形，年龄 20-89 岁，含高血压与糖尿病标签)<br>任务：短时 PPG 无袖带血压估计、高血压与慢病筛查 | [开⁠放⁠获⁠取](https://figshare.com/articles/dataset/PPG-BP_Database_zip/5459299) |
+| [**MIMIC-IV-ECG**](#mimic-iv-ecg)<br>临⁠床⁠心⁠电 | MIT / BIDMC | 12 导⁠联⁠诊⁠断⁠级 ECG 500 Hz (10 s) + 住⁠院 EHR | 800,035 条记录 (161,352 人)<br>任务：大规模心电自监督预训练与多病种筛查 | [开⁠放⁠获⁠取](https://physionet.org/content/mimic-iv-ecg/1.0/) |
+| [**PTB-XL**](#ptb-xl)<br>临⁠床⁠心⁠电 | 德⁠国 PTB / Fraunhofer HHI | 12 导⁠联 ECG 500/100 Hz (10 s，71 类 SCP 标⁠签) | 21,837 条记录 (18,885 人)<br>任务：多标签心电分类与基础模型微调基准 | [开⁠放⁠获⁠取](https://physionet.org/content/ptb-xl/1.0.3/) |
+| [**CODE-15%**](#code-15)<br>临⁠床⁠心⁠电 | 巴⁠西 TNMG / Uppsala Univ. | 12 导⁠联 ECG 400 Hz (7-10 s) + 死⁠亡⁠率⁠随⁠访 | 345,779 条记录 (233,770 人)<br>任务：心电预训练缩放定律与长程生存分析 | [开⁠放⁠获⁠取](https://zenodo.org/records/4916206) |
+| [**Chapman-Shaoxing / Ningbo**](#chapman-shaoxing--ningbo)<br>临⁠床⁠心⁠电 | Chapman Univ. / 绍⁠兴⁠与⁠宁波⁠医⁠院 | 12 导⁠联 ECG 500 Hz (10 s，SNOMED-CT 标⁠签) | 45,152 条临床记录<br>任务：东亚人群心律失常分类与跨中心泛化验证 | [开⁠放⁠获⁠取](https://physionet.org/content/ecg-arrhythmia/1.0.0/) |
+| [**SHHS**](#shhs)<br>睡⁠眠 PSG | 美⁠国 NIH / NHLBI (NSRR) | 整⁠夜⁠家⁠庭 PSG (EEG/EOG/EMG/ECG/Resp/SpO2) | 5,804 人 (>15 年心血管随访)<br>任务：睡眠分期、心肺耦合与慢病发病预测 | [学⁠术⁠申⁠请](https://sleepdata.org/datasets/shhs) |
+| [**MESA**](#mesa)<br>睡⁠眠 PSG | 美⁠国 NIH / NHLBI (NSRR) | 整⁠夜 PSG (256 Hz) + 7 天⁠腕⁠部⁠体⁠动仪 Actigraphy | 2,237 人 (四族裔中老年队列)<br>任务：临床 PSG 与腕戴睡眠/脉搏跨模态对齐 | [学⁠术⁠申⁠请](https://sleepdata.org/datasets/mesa) |
+| [**Sleep-EDF**](#sleep-edf)<br>睡⁠眠 PSG | St. Antonius Hospital / LUMC | 双⁠通⁠道 EEG 100 Hz、EOG 100 Hz、EMG、呼⁠吸 | 197 份整夜 PSG 记录<br>任务：睡眠分期算法快速原型验证基准 | [开⁠放⁠获⁠取](https://physionet.org/content/sleep-edfx/1.0.0/) |
+| [**DREAMT**](#dreamt)<br>睡⁠眠 PSG | 杜⁠克⁠大⁠学 (BIG IDEAs Lab) | 左⁠腕 Empatica E4 (PPG 64 Hz/ACC 32 Hz/EDA/Temp) + 整⁠夜⁠临⁠床 PSG | 100 名睡眠障碍门诊患者 (整夜同步记录，30 s 睡眠分期标注)<br>任务：腕戴 PPG/ACC 实时睡眠分期、睡眠呼吸暂停与肥胖筛查 | [注⁠册⁠获⁠取](https://physionet.org/content/dreamt/2.1.0/) |
+| [**UK Biobank**](#uk-biobank)<br>人⁠群⁠队⁠列 | UK Biobank / 牛⁠津⁠大⁠学 | 腕⁠部⁠三⁠轴 ACC 100 Hz (7 天) + 全⁠基⁠因⁠组 + MRI + EHR | 103,712 人体动 (总队列 50 万人)<br>任务：运动数字生物标志物、全谱系慢病风险建模 | [受⁠限⁠申⁠请](https://www.ukbiobank.ac.uk/enable-your-research/apply-for-access) |
+| [**All of Us**](#all-of-us)<br>人⁠群⁠队⁠列 | 美⁠国 NIH All of Us Research Program | Fitbit 多⁠年⁠连⁠续⁠序列 + 全⁠基⁠因⁠组 + OMOP EHR | 40 万+ 人 EHR (数万人含 Fitbit)<br>任务：跨族裔精准医学与长程可穿戴健康模型验证 | [受⁠限⁠申⁠请](https://www.researchallofus.org/) |
+
+<!-- END:DATASETS_DOC_TABLE -->
 
 ---
 

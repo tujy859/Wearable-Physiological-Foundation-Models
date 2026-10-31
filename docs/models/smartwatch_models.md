@@ -14,6 +14,7 @@
   - [UniCardio](#unicardio)
   - [PPGFlowECG](#ppgflowecg)
   - [AnyPPG](#anyppg)
+  - [SigmaPPG](#sigmappg)
 - [3. 端侧轻量化、生物年龄与大一统评测基准](#3-端侧轻量化生物年龄与大一统评测基准)
   - [PPG-Distill](#ppg-distill)
   - [PpgAge](#ppgage)
@@ -196,13 +197,13 @@ HiMAE 是专为智能手表 CPU 研发、实现**亚毫秒级（<1 ms）纯腕�
   - 解码器采用对称的转置卷积逐步上采样，并通过 **Skip Connections** 直接拼接编码器对应的浅层高分辨率特征，最终通过 `tanh` 输出归一化重构信号。
 - **层级深度与物理时间尺度的数学映射表**：
 
-| 网络层级 (Stage) | 特征点数 ($L_\ell$) | 感受野点数 ($R_\ell$) | 物理时间跨度 ($R_\ell \times 10\text{ ms}$) | 对应时间尺度 | 生理学物理意义与对应事件 |
+| 网⁠络⁠层⁠级 (Stage) | 特⁠征⁠点⁠数 ($L_\ell$) | 感⁠受⁠野⁠点⁠数 ($R_\ell$) | 物⁠理⁠时⁠间⁠跨⁠度 ($R_\ell \times 10\text{ ms}$) | 对⁠应⁠时⁠间⁠尺⁠度 | 生⁠理⁠学⁠物⁠理⁠意⁠义⁠与⁠对⁠应⁠事⁠件 |
 | :--- | :---: | :---: | :---: | :---: | :--- |
-| **Enc 1 (浅层)** | 500 点 | $5 \sim 13$ 点 | **$50 \sim 130\text{ ms}$** | **毫秒级 (ms)** | **心拍微观瞬态形态**：收缩期上升支斜率、收缩峰顶点、重搏波切迹 (Dicrotic Notch) |
-| **Enc 2 (中浅层)** | 250 点 | $21 \sim 37$ 点 | **$210 \sim 370\text{ ms}$** | **亚秒级 (数百 ms)** | **单次心室射血与充盈期**：局部脉搏波传导与血管顺应性响应 |
-| **Enc 3 (中层)** | 125 点 | $53 \sim 85$ 点 | **$530 \sim 850\text{ ms}$** | **约 1 秒级** | **完整单心动周期 (Cardiac Cycle)**：对应正常人单个完整心跳（60～100 BPM） |
-| **Enc 4 (中深层)** | 62 点 | $117 \sim 181$ 点 | **$1.17 \sim 1.81\text{ s}$** | **秒级 (多心拍)** | **跨心搏间期交互**：2～3 跳相邻搏动差异、偶发早搏后的代偿间歇 |
-| **Enc 5 (深层/瓶颈)** | 31 点 | $245 \sim 373+$ 点 | **$2.45 \sim 3.73\text{ s+}$** | **多秒级宏观** | **宏观血流动力学包络**：呼吸性窦性心律不齐 (RSA)、自主神经低频节律、基线包络漂移 |
+| **Enc 1 (浅⁠层)** | 500 点 | $5 \sim 13$ 点 | **$50 \sim 130\text{ ms}$** | **毫秒级 (ms)** | **心拍微观瞬态形态**：收缩期上升支斜率、收缩峰顶点、重搏波切迹 (Dicrotic Notch) |
+| **Enc 2 (中⁠浅⁠层)** | 250 点 | $21 \sim 37$ 点 | **$210 \sim 370\text{ ms}$** | **亚秒级 (数百 ms)** | **单次心室射血与充盈期**：局部脉搏波传导与血管顺应性响应 |
+| **Enc 3 (中⁠层)** | 125 点 | $53 \sim 85$ 点 | **$530 \sim 850\text{ ms}$** | **约 1 秒级** | **完整单心动周期 (Cardiac Cycle)**：对应正常人单个完整心跳（60～100 BPM） |
+| **Enc 4 (中⁠深⁠层)** | 62 点 | $117 \sim 181$ 点 | **$1.17 \sim 1.81\text{ s}$** | **秒级 (多心拍)** | **跨心搏间期交互**：2～3 跳相邻搏动差异、偶发早搏后的代偿间歇 |
+| **Enc 5 (深⁠层/瓶⁠颈)** | 31 点 | $245 \sim 373+$ 点 | **$2.45 \sim 3.73\text{ s+}$** | **多秒级宏观** | **宏观血流动力学包络**：呼吸性窦性心律不齐 (RSA)、自主神经低频节律、基线包络漂移 |
 
 #### 3. 自监督预训练目标：高掩码率与混合掩码机制
 
@@ -236,13 +237,13 @@ HiMAE 在预训练后冻结骨干，通过对 5 个不同层级的隐空间特�
 
 研究直接在 **Samsung Galaxy Watch 8（搭载 Exynos W1000 手表 CPU，FP32 未量化）** 上进行了实机全量评测，对比主流穿戴基础模型基准：
 
-| 评测维度 | LSM-Base (1D-ViT) | 1D Swin-Transformer | EfficientNet-B1 | **Samsung HiMAE (本文)** | 优势收益 |
+| 评⁠测⁠维⁠度 | LSM-Base (1D-ViT) | 1D Swin-Transformer | EfficientNet-B1 | **Samsung HiMAE (本⁠文)** | 优⁠势⁠收⁠益 |
 | :--- | :---: | :---: | :---: | :---: | :--- |
-| **参数量 (Parameters)** | 110.0 M | 110.0 M | 7.8 M | **0.31 M (编码器) / 1.2M (全网)** | **参数量缩减约 355×** |
-| **计算复杂度 (FLOPs/10s)** | 15.94 G | 11.90 G | 0.85 G | **0.065 G** | **计算量降低约 246×** |
-| **常驻内存 (RAM 占用)** | 441.3 MB | 423.0 MB | 31.2 MB | **3.6 MB** | **内存缩小约 123× (<10 MB 门槛)** |
-| **手表 CPU 推理延迟** | 3.93 ms | - | 1.42 ms | **0.99 ms (亚毫秒级)** | **速度提升约 4×** |
-| **手表端吞吐量** | 255 samples/s | - | 704 samples/s | **1,200 samples/s** | **每分钟可处理约 2.8 小时信号** |
+| **参⁠数⁠量 (Parameters)** | 110.0 M | 110.0 M | 7.8 M | **0.31 M (编码器) / 1.2M (全网)** | **参数量缩减约 355×** |
+| **计⁠算⁠复⁠杂⁠度 (FLOPs/10s)** | 15.94 G | 11.90 G | 0.85 G | **0.065 G** | **计算量降低约 246×** |
+| **常⁠驻⁠内⁠存 (RAM 占⁠用)** | 441.3 MB | 423.0 MB | 31.2 MB | **3.6 MB** | **内存缩小约 123× (<10 MB 门槛)** |
+| **手⁠表 CPU 推⁠理⁠延⁠迟** | 3.93 ms | - | 1.42 ms | **0.99 ms (亚毫秒级)** | **速度提升约 4×** |
+| **手⁠表⁠端⁠吞⁠吐⁠量** | 255 samples/s | - | 704 samples/s | **1,200 samples/s** | **每分钟可处理约 2.8 小时信号** |
 
 - **综合性能**：在参数缩小超 300 倍的前提下，HiMAE 在下游 12 项分类任务和多项生成式插补任务上**全面逼平或超越 110M 的 LSM-Base**。
 
@@ -382,6 +383,34 @@ AnyPPG 经冻结表征（Frozen Representation）与极简线性探针（Linear 
 
 ---
 
+### SigmaPPG
+
+米兰理工大学 / 浙江大学 / Emory University · arXiv 2026 · [论文](https://arxiv.org/abs/2601.21031) · [代码](https://github.com/ZonghengGuo/SigmaPPG)
+
+SigmaPPG（*Rethinking the Paradigm of Masked Autoencoders for Photoplethysmography Representation Learning*）针对可穿戴光电脉搏波（PPG）高噪声、强准周期冗余的物理特性，重构了掩码自编码器（MAE）的自监督预训练范式。
+
+#### 1. 核心动机：破解均匀随机掩码的“噪声拟合陷阱”
+
+- **传统 MAE 在 PPG 上的两大结构性缺陷**：
+  1. **均匀随机掩码的无效重建**：常规 MAE 对所有时间片无差别执行均匀随机遮蔽。在真实穿戴场景下，高幅值运动伪影与基线漂移片段往往占据大量重建损失权重，迫使编码器消耗模型容量去记忆运动噪声，而非提炼心血管动力学特征；
+  2. **跨心动周期的简单插值捷径**：由于静息 PPG 具有较强的相邻周期重复性，均匀小块掩码极易被解码器通过邻近未遮蔽区域的低阶线性插值拟合，难以习得重搏切迹（Dicrotic Notch）与反射波时延等高阶生理语义。
+
+#### 2. 核心架构与自监督机制
+
+1. **强化学习先验引导对抗掩码（Prior-Guided Adversarial Masking）**：
+   - 引入基于策略梯度（Policy Gradient）的掩码生成器与形态质量先验（Signal Quality Prior），构建动态对抗训练机制：掩码策略主动定位并优先遮蔽高信噪比、富含血管形态特征的关键心动相位（如收缩期主峰与重搏波切迹区域），同时抑制对纯伪影噪声区段的无效重建；
+   - 配合由易到难的课程学习（Curriculum Learning）调度，使编码器逐步从局部波形补全过渡到跨周期血流动力学推断。
+2. **向量量化语义一致性（Vector Quantization Semantic Consistency）**：
+   - 摒弃单纯依赖时域逐点均方误差（MSE）的低阶重建目标，引入离散生理形态码本（Codebook）将连续 PPG 时间片映射为高阶形态原语（Morphological Primitives）；
+   - 在潜空间施加跨视角向量量化语义一致性约束，促使模型对轻微相位抖动和接触压力变化保持表征不变性。
+
+#### 3. 12 万小时预训练与下游泛化评测
+
+- **预训练规模**：在超过 **120,000 小时**的多源公开 PPG 语料上完成自监督预训练；
+- **下游评测表现**：在心率估计、无袖带血压回归、呼吸率监测及心律失常筛查等多项基准任务中，以及在 [PPG-Bench](#ppg-bench) 的 9 数据集 26 任务独立评测套件中，SigmaPPG 均展现出良好的跨设备表征鲁棒性与特征迁移效率。
+
+---
+
 ## 3. 端侧轻量化、生物年龄与大一统评测基准
 
 ### PPG-Distill
@@ -427,7 +456,7 @@ Apple PpgAge（21.3 万人）与 UK Biobank AI-PPG（21.2 万人）确立了光�
 
 #### 2. 全景实验结果横评表（906 例 VitalDB 患者，5 折受试者级分层交叉验证）
 
-| 模型 / 特征配置 | 模态与特征维度 | MAE (年) | $R^2$ | 相关系数 $r$ |
+| 模⁠型 / 特⁠征⁠配⁠置 | 模⁠态⁠与⁠特⁠征⁠维⁠度 | MAE (年) | $R^2$ | 相⁠关⁠系⁠数 $r$ |
 | :--- | :--- | :---: | :---: | :---: |
 | **Baseline** | 盲猜训练集受试者年龄均值 | 11.91 | - | - |
 | **HR only** | 单一平均心率 (1 维) | 11.83 | - | - |
@@ -440,7 +469,7 @@ Apple PpgAge（21.3 万人）与 UK Biobank AI-PPG（21.2 万人）确立了光�
 | **Pulse-PPG (Linear Probe)** | 冻结 512 维潜表征 + 岭回归 | **9.28 ± 0.44** | **0.388** | **0.645** |
 | **PaPaGei-S + Demographics** | 512 维潜表征 + 6 维人口学特征拼接 | 8.56 ± 0.22 | 0.477 | 0.696 |
 | **AI-PPG Age + Demographics** | 192 维潜表征 + 6 维人口学特征拼接 | 8.58 ± 0.25 | 0.440 | 0.664 |
-| **Pulse-PPG + Demographics (最优)** | 512 维潜表征 + 6 维人口学特征拼接 | **8.22 ± 0.25** | **0.517** | **0.725** |
+| **Pulse-PPG + Demographics (最⁠优)** | 512 维潜表征 + 6 维人口学特征拼接 | **8.22 ± 0.25** | **0.517** | **0.725** |
 
 #### 3. 关键技术洞察与“两大反转”机理解构
 
@@ -639,13 +668,13 @@ Stage 2 冻结 / 微调 Stage 1 骨干，引入长程时序动力学聚合模块
 
 在构建智能手表长程健康模型（如 `Watch_LSM` 的 Layer 2 特征基模）时，如何向长程骨干输入一连串碎片化生理特征？业界存在两大主流技术阵营：
 
-| 评估维度 | 方案 A：固定规整网格派 (Google SensorFM, Apple WBM, OpenMHC) | 方案 B：连续物理时间派 (PPG-LM, 连续时间 Transformer) |
+| 评⁠估⁠维⁠度 | 方⁠案 A：固⁠定⁠规⁠整⁠网⁠格⁠派 (Google SensorFM, Apple WBM, OpenMHC) | 方⁠案 B：连⁠续⁠物⁠理⁠时⁠间⁠派 (PPG-LM, 连⁠续⁠时⁠间 Transformer) |
 | :--- | :--- | :--- |
-| **数据组织机制** | 每天切出 1,440 个 1 分钟固定网格；用户脱表、洗澡、充电时填入 `[MASK]` 或置零。 | 仅送入实际观测到的有效窗口（如每天 80 个）；每个窗口自带真实物理时间戳 $t_i$（分钟浮点数）。 |
-| **算力与显存开销** | **开销较大**：用户若一天仅戴表 6 小时，序列中 75% 是无效 Pad/Mask，自注意力依然承受 $O(1440^2)$ 开销。 | **满负荷有效计算**：只计算真实存在的 80 个窗口，注意力开销仅为 $O(80^2)$，算力节约百倍以上。 |
-| **时间分辨率灵活性** | **受限于网格粒度**：分辨率受限于网格大小（如 1 min）；难以原生感知 10 秒瞬时早搏或跨数小时长程空洞。 | **连续分辨率**：时间差是真实物理分钟 / 秒，无需重采样或人工分箱。 |
-| **24h 昼夜节律感知** | **天然对齐**：第 480 个网格永远是早晨 08:00，模型凭绝对网格索引即可直接学习交感神经昼夜节律。 | **需显式时间注入**：RoPE 擅长算相对时间差，对绝对钟表相位（白天 vs. 深夜）需通过外挂绝对时间特征辅助。 |
-| **缺失值生成插补** | **天然支持 Infilling**：预训练（AIM / 掩码自编码）本质就是在填空，开箱即具备全天波形插补能力。 | **偏向判别与表征**：需以特定时间戳作为 Query 探针查询隐空间，插补不如网格直观。 |
+| **数⁠据⁠组⁠织⁠机⁠制** | 每天切出 1,440 个 1 分钟固定网格；用户脱表、洗澡、充电时填入 `[MASK]` 或置零。 | 仅送入实际观测到的有效窗口（如每天 80 个）；每个窗口自带真实物理时间戳 $t_i$（分钟浮点数）。 |
+| **算⁠力⁠与⁠显⁠存⁠开⁠销** | **开销较大**：用户若一天仅戴表 6 小时，序列中 75% 是无效 Pad/Mask，自注意力依然承受 $O(1440^2)$ 开销。 | **满负荷有效计算**：只计算真实存在的 80 个窗口，注意力开销仅为 $O(80^2)$，算力节约百倍以上。 |
+| **时⁠间⁠分⁠辨⁠率⁠灵⁠活⁠性** | **受限于网格粒度**：分辨率受限于网格大小（如 1 min）；难以原生感知 10 秒瞬时早搏或跨数小时长程空洞。 | **连续分辨率**：时间差是真实物理分钟 / 秒，无需重采样或人工分箱。 |
+| **24h 昼⁠夜⁠节⁠律⁠感⁠知** | **天然对齐**：第 480 个网格永远是早晨 08:00，模型凭绝对网格索引即可直接学习交感神经昼夜节律。 | **需显式时间注入**：RoPE 擅长算相对时间差，对绝对钟表相位（白天 vs. 深夜）需通过外挂绝对时间特征辅助。 |
+| **缺⁠失⁠值⁠生⁠成⁠插⁠补** | **天然支持 Infilling**：预训练（AIM / 掩码自编码）本质就是在填空，开箱即具备全天波形插补能力。 | **偏向判别与表征**：需以特定时间戳作为 Query 探针查询隐空间，插补不如网格直观。 |
 
 ##### PPG-LM 的折中工程智慧：兼得两家之长
 PPG-LM 在连续 RoPE 架构上做了精巧的折中设计（值得 `Watch_LSM` 重点吸收）：
@@ -747,29 +776,29 @@ Google SensorLM 的官方开源代码库（`Google-Health/consumer-health-resear
 
 ### 表 1：脉搏波与心血管多模态基础模型
 
-| 维度 / 特征 | PaPaGei | Pulse-PPG | AnyPPG | PPGFlowECG | UniCardio | Samsung xMAE / HiMAE |
+| 维⁠度 / 特⁠征 | PaPaGei | Pulse-PPG | AnyPPG | PPGFlowECG | UniCardio | Samsung xMAE / HiMAE |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **机构团队** | Nokia Bell Labs | UIUC / 孟菲斯大学 | 北京大学数字健康实验室 | 北京大学数字健康实验室 | 清华大学 / 安贞医院 | Samsung Research / UCLA |
-| **核心模态** | 单通道 PPG | 腕部高噪 PPG | PPG (心电引导) | PPG → 诊断级 ECG | PPG + ECG + 动脉血压 (BP) | PPG → 虚拟 ECG / 绿光 PPG |
-| **预训练规模** | 5.7 万小时 (10 个公开集) | 5.5 万小时 (野外 100 天) | >100,000 小时同步数据 | 千万级配对 (MC-MED 11.8 万人) | 339 小时三模态全时程 | xMAE 9.4k h / HiMAE 8 万 h (4.7 万人) |
-| **网络骨干** | ResNet1D-MoE | 12 层 1D-ResNet | Net1D 1D-ResNet 双分支 | CardioAlign + Rectified Flow | 多模态扩散 DiT | xMAE 跨模态 / HiMAE 1D U-Net (0.31M) |
-| **自监督目标** | 形态引导对比学习 | 连续相对对比 (RelCon) | 跨模态深层 InfoNCE 对比 | 潜空间分布对齐 + 整流流生成 | 条件扩散去噪 + 持续学习 | 跨模态重构 / 混合掩码 (80% MAE) |
-| **抗伪影机制** | 形态过滤配对 | 结合运动强度的软对比 | 中枢心电无伪影电信号锚定 | 参数绑定潜空间生理不变量 | 多模态互信息互补生成 | 严格三道 SQI (偏度 + 散度 + 模板) |
-| **部署延迟** | 端侧轻量 (约 1.5M) | 端侧中等 (约 2M) | 端侧单分支 (约 5.85M) | 1～4 步极速 ODE (<0.1 s) | 极低增量 (约 0.3M / 模态) | 极低 (HiMAE 手表 CPU 0.99 ms) |
-| **开源状态** | 代码 + Zenodo 权重 | 代码 + Zenodo 权重 | 代码开源 (GitHub) | 代码开源 (GitHub) | 论文公开 / 代码开源中 | xMAE 闭源 / HiMAE 代码开源 |
+| **机⁠构⁠团⁠队** | Nokia Bell Labs | UIUC / 孟菲斯大学 | 北京大学数字健康实验室 | 北京大学数字健康实验室 | 清华大学 / 安贞医院 | Samsung Research / UCLA |
+| **核⁠心⁠模⁠态** | 单通道 PPG | 腕部高噪 PPG | PPG (心电引导) | PPG → 诊断级 ECG | PPG + ECG + 动脉血压 (BP) | PPG → 虚拟 ECG / 绿光 PPG |
+| **预⁠训⁠练⁠规⁠模** | 5.7 万小时 (10 个公开集) | 5.5 万小时 (野外 100 天) | >100,000 小时同步数据 | 千万级配对 (MC-MED 11.8 万人) | 339 小时三模态全时程 | xMAE 9.4k h / HiMAE 8 万 h (4.7 万人) |
+| **网⁠络⁠骨⁠干** | ResNet1D-MoE | 12 层 1D-ResNet | Net1D 1D-ResNet 双分支 | CardioAlign + Rectified Flow | 多模态扩散 DiT | xMAE 跨模态 / HiMAE 1D U-Net (0.31M) |
+| **自⁠监⁠督⁠目⁠标** | 形态引导对比学习 | 连续相对对比 (RelCon) | 跨模态深层 InfoNCE 对比 | 潜空间分布对齐 + 整流流生成 | 条件扩散去噪 + 持续学习 | 跨模态重构 / 混合掩码 (80% MAE) |
+| **抗⁠伪⁠影⁠机⁠制** | 形态过滤配对 | 结合运动强度的软对比 | 中枢心电无伪影电信号锚定 | 参数绑定潜空间生理不变量 | 多模态互信息互补生成 | 严格三道 SQI (偏度 + 散度 + 模板) |
+| **部⁠署⁠延⁠迟** | 端侧轻量 (约 1.5M) | 端侧中等 (约 2M) | 端侧单分支 (约 5.85M) | 1～4 步极速 ODE (<0.1 s) | 极低增量 (约 0.3M / 模态) | 极低 (HiMAE 手表 CPU 0.99 ms) |
+| **开⁠源⁠状⁠态** | 代码 + Zenodo 权重 | 代码 + Zenodo 权重 | 代码开源 (GitHub) | 代码开源 (GitHub) | 论文公开 / 代码开源中 | xMAE 闭源 / HiMAE 代码开源 |
 
 ### 表 2：全传感器、空间运动与时序语言多模态基础模型
 
-| 维度 / 特征 | SensorFM | SensorLM | OpenMHC (WBM/LSM) | PPG-LM | PPG-Distill | SleepFM-1 / 2 | Huawei Mantis |
+| 维⁠度 / 特⁠征 | SensorFM | SensorLM | OpenMHC (WBM/LSM) | PPG-LM | PPG-Distill | SleepFM-1 / 2 | Huawei Mantis |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **机构团队** | Google Research | Google Research / DeepMind | 斯坦福大学 / 帝国理工 | Emory / UCLA / Google | Emory University | 斯坦福大学医学院 | 华为诺亚方舟实验室 |
-| **核心模态** | PPG+ACC+EDA+Temp | 5 维传感器 (含气压计) | 19 通道腕部 + 169 维变量 | PPG + 结构化临床语言 | 腕戴 PPG | PSG + 腕部 PPG/ACC 代理桥 | 多变量 (ACC / 生理) |
-| **预训练规模** | 1 万亿分钟 (500 万人) | 5,970 万小时 (10.3 万人) | >6,700 万小时 (1.2 万人) | 73,700 小时 (MC-MED 3.6 万人) | 多任务穿戴语料 | 200+ 万小时 (23.5 万人) | 多领域通用分类语料 |
-| **网络骨干** | Patch Transformer | ViT-2D Patch + CoCa 解码器 | WBM / LSM-2 / Chronos-2 | Patch-Conv1D + 6 层 Trans (12.7M) | 紧凑 1D 学生网络 | 2.57M LLaMA Transformer | 8M ViT-1D + TGU |
-| **自监督目标** | 掩码建模 + 跨模态填补 | CoCa 对比对齐 + 自回归生成 | 多任务表征 + 自回归预测 | CoCa 对称对比 + 物理 RoPE 聚合 | 多尺度三级知识蒸馏 | LOO-CL 对比 + 局部 MAE | 几何自监督对比学习 |
-| **抗伪影机制** | 万亿级数据 Scaling | 多传感器交叉互补 (ACC 辅助) | 真实野外全生命周期滤波 | 严格 SQI 分层 + Content-Key 过滤 | 结构化节律形态迁移 | 多器官互信息 + 物理代理桥 | 多尺度差分局部卷积 |
-| **部署延迟** | 云端基座 | 端云协同 (编码器端侧) | 端云协同评测基准 | 极轻量 (波形塔 12.7M，单卡极速) | 极低 (内存降 19×) | 冻结编码器 (轻量 2.57M) | 端侧极低 (约 19.8 ms) |
-| **开源状态** | 仅论文 (闭源) | 代码开源 (GitHub) | 代码 + 权重 + 基准开源 | 论文公开 (arXiv:2609.33516) | 代码开源 (GitHub) | 代码开源 (GitHub) | 代码与权重开源 (HF) |
+| **机⁠构⁠团⁠队** | Google Research | Google Research / DeepMind | 斯坦福大学 / 帝国理工 | Emory / UCLA / Google | Emory University | 斯坦福大学医学院 | 华为诺亚方舟实验室 |
+| **核⁠心⁠模⁠态** | PPG+ACC+EDA+Temp | 5 维传感器 (含气压计) | 19 通道腕部 + 169 维变量 | PPG + 结构化临床语言 | 腕戴 PPG | PSG + 腕部 PPG/ACC 代理桥 | 多变量 (ACC / 生理) |
+| **预⁠训⁠练⁠规⁠模** | 1 万亿分钟 (500 万人) | 5,970 万小时 (10.3 万人) | >6,700 万小时 (1.2 万人) | 73,700 小时 (MC-MED 3.6 万人) | 多任务穿戴语料 | 200+ 万小时 (23.5 万人) | 多领域通用分类语料 |
+| **网⁠络⁠骨⁠干** | Patch Transformer | ViT-2D Patch + CoCa 解码器 | WBM / LSM-2 / Chronos-2 | Patch-Conv1D + 6 层 Trans (12.7M) | 紧凑 1D 学生网络 | 2.57M LLaMA Transformer | 8M ViT-1D + TGU |
+| **自⁠监⁠督⁠目⁠标** | 掩码建模 + 跨模态填补 | CoCa 对比对齐 + 自回归生成 | 多任务表征 + 自回归预测 | CoCa 对称对比 + 物理 RoPE 聚合 | 多尺度三级知识蒸馏 | LOO-CL 对比 + 局部 MAE | 几何自监督对比学习 |
+| **抗⁠伪⁠影⁠机⁠制** | 万亿级数据 Scaling | 多传感器交叉互补 (ACC 辅助) | 真实野外全生命周期滤波 | 严格 SQI 分层 + Content-Key 过滤 | 结构化节律形态迁移 | 多器官互信息 + 物理代理桥 | 多尺度差分局部卷积 |
+| **部⁠署⁠延⁠迟** | 云端基座 | 端云协同 (编码器端侧) | 端云协同评测基准 | 极轻量 (波形塔 12.7M，单卡极速) | 极低 (内存降 19×) | 冻结编码器 (轻量 2.57M) | 端侧极低 (约 19.8 ms) |
+| **开⁠源⁠状⁠态** | 仅论文 (闭源) | 代码开源 (GitHub) | 代码 + 权重 + 基准开源 | 论文公开 (arXiv:2609.33516) | 代码开源 (GitHub) | 代码开源 (GitHub) | 代码与权重开源 (HF) |
 
 ---
 
@@ -799,7 +828,7 @@ Google SensorLM 的官方开源代码库（`Google-Health/consumer-health-resear
 
 ## 8. 核心文献与资源汇总
 
-| 项目 / 论文名称 | 主要机构 | 发表情况 | 核心定位与资源 |
+| 项⁠目 / 论⁠文⁠名⁠称 | 主⁠要⁠机⁠构 | 发⁠表⁠情⁠况 | 核⁠心⁠定⁠位⁠与⁠资⁠源 |
 | :--- | :--- | :--- | :--- |
 | **SensorFM** | Google / Fitbit Health AI | arXiv 2026 | 1 万亿分钟消费级穿戴多模态基座 · [论文](https://arxiv.org/abs/2605.22759) |
 | **PaPaGei** | Nokia Bell Labs | ICLR 2025 | 开源形态感知脉搏波基础模型 · [论文](https://arxiv.org/abs/2410.20542) · [代码](https://github.com/Nokia-Bell-Labs/papagei-foundation-model) |
@@ -808,6 +837,7 @@ Google SensorLM 的官方开源代码库（`Google-Health/consumer-health-resear
 | **UniCardio** | 清华大学 / 安贞医院 | Nat Mach Intell 2025/2026 | 统一心血管多模态扩散基础模型 · [论文](https://doi.org/10.1038/s42256-025-01147-y) · [代码](https://github.com/chen-zehua/UniCardio) |
 | **PPGFlowECG** | 北京大学健康医疗大数据国家研究院 | arXiv 2025-2026 | 潜空间整流流 PPG 转 ECG 跨模态生成 · [论文](https://arxiv.org/abs/2502.14856) · [代码](https://github.com/PKUDigitalHealth/PPGFlowECG) |
 | **AnyPPG** | 北京大学健康医疗大数据国家研究院 | ACM SIGKDD 2026 | 心电引导预训练的光电多器官基座大模型 · [论文](https://arxiv.org/abs/2511.01747) · [代码](https://github.com/Ngk03/AnyPPG) |
+| **SigmaPPG** | 米兰理工大学 / 浙江大学 / Emory | arXiv 2026 | 强化学习先验引导对抗掩码与向量量化 PPG 基座 · [论文](https://arxiv.org/abs/2601.21031) · [代码](https://github.com/ZonghengGuo/SigmaPPG) |
 | **PPG-Distill** | Emory University | 2025 | 脉搏波基础模型多层次端侧知识蒸馏 · [代码](https://github.com/LingFengGold/PPG-Distill) |
 | **PpgAge** | Apple Health | Nat Commun 2025 | 21.3 万人腕部脉搏波血管生物年龄研究 · [论文](https://doi.org/10.1038/s41467-025-64275-4) |
 | **OpenMHC** | 斯坦福大学医学院 | arXiv 2026 | 6,700 万小时真实世界穿戴基础模型基准与生态 · [论文](https://arxiv.org/abs/2607.16235) · [代码](https://github.com/AshleyLab/OpenMHC) |
@@ -815,7 +845,7 @@ Google SensorLM 的官方开源代码库（`Google-Health/consumer-health-resear
 | **SensorLM** | Google Research / DeepMind | NeurIPS 2025 | 5,970 万小时智能手表传感器-语言多模态基座 · [论文](https://arxiv.org/abs/2506.09108) · [代码](https://github.com/Google-Health/consumer-health-research/tree/main/sensorlm) |
 | **LIMU-BERT** | 南洋理工大学 (NTU) | ACM SenSys 2021 | 手腕三轴 IMU 空间运动表征模型 · [代码](https://github.com/dapowan/LIMU-BERT-Public) |
 | **PPG-Bench** | Mannas AI | arXiv 2026 | 9 数据集 26 任务脉搏大模型大一统评测套件 · [论文](https://arxiv.org/abs/2610.13435) · [代码](https://github.com/mannas-ai/ppg-bench) |
-| **PPG 生物年龄横评** | Nabil Brag | arXiv 2026 | 脉搏基础模型血管生物年龄跨域评测基准 · [论文](https://arxiv.org/abs/2603.14030) · [代码](https://github.com/Misterbra/ppg-age-benchmark) |
+| **PPG 生⁠物⁠年⁠龄⁠横⁠评** | Nabil Brag | arXiv 2026 | 脉搏基础模型血管生物年龄跨域评测基准 · [论文](https://arxiv.org/abs/2603.14030) · [代码](https://github.com/Misterbra/ppg-age-benchmark) |
 
 ---
 

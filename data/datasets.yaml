@@ -70,6 +70,54 @@
   paper: https://doi.org/10.1109/JBHI.2023.3287313
   doc: docs/datasets/wearable_datasets.md#cas-bp
 
+- id: wildppg
+  name: WildPPG
+  category: wrist
+  org: ETH Zürich (SIPLab)
+  sensors: 4 部位多波长 PPG/ACC 128 Hz + 皮温 + 气压 + 胸 ECG
+  scale: 16 人 (高山徒步与日常交通，共 216 小时)
+  tasks: 野外高噪/温差/海拔变化下 PPG 心率估计与去噪
+  access: open
+  url: https://github.com/eth-siplab/WildPPG
+  paper: https://arxiv.org/abs/2405.08083
+  doc: docs/datasets/wearable_datasets.md#wildppg
+
+- id: but-ppg
+  name: BUT-PPG
+  category: wrist
+  org: 布尔诺理工大学 (BUT)
+  sensors: 手机镜头指端/耳部 PPG 30 Hz + 胸 ECG 1000 Hz + ACC
+  scale: 48 人 (3,888 段 10 s 记录，含血压/血氧/血糖)
+  tasks: PPG 信号质量评估 (SQI)、伪影判别与心率估计
+  access: open
+  url: https://physionet.org/content/butppg/2.0.0/
+  paper: https://doi.org/10.3390/s21113832
+  doc: docs/datasets/wearable_datasets.md#but-ppg
+
+- id: realworld-ppg
+  name: RealWorldPPG
+  category: wrist
+  org: 曼努菲亚大学 (Menoufia Univ.)
+  sensors: 指端光电 PPG 50 Hz (单段 6 s，300 采样点)
+  scale: 35 人 (共 2,074 段记录，年龄 10-75 岁)
+  tasks: 脉搏波形特征提取、心率估计与生物身份识别
+  access: open
+  url: https://data.mendeley.com/datasets/yynb8t9x3d/3
+  paper: https://doi.org/10.17632/yynb8t9x3d.3
+  doc: docs/datasets/wearable_datasets.md#realworldppg
+
+- id: ecsmp
+  name: ECSMP
+  category: wrist
+  org: 重庆邮电大学 / 西南大学
+  sensors: 腕部 E4 (PPG 64 Hz/ACC/EDA/Temp) + 脑电 EEG + 胸 ECG
+  scale: 89 人 (静息、情绪诱发、睡眠与抑郁量表评估)
+  tasks: 多模态情绪识别、抑郁筛查与自主神经状态评估
+  access: open
+  url: https://data.mendeley.com/datasets/f9bf7b6264/2
+  paper: https://doi.org/10.3389/fnins.2021.751441
+  doc: docs/datasets/wearable_datasets.md#ecsmp
+
 - id: shanghai-cgm
   name: ShanghaiT1DM / T2DM
   category: cgm
@@ -214,6 +262,30 @@
   paper: https://doi.org/10.1109/TBME.2016.2613124
   doc: docs/datasets/wearable_datasets.md#bidmc-ppg
 
+- id: pulsedb
+  name: PulseDB
+  category: clinical
+  org: 德州农工大学 (PulseLab)
+  sensors: 同步 ECG + 指尖 PPG + 有创动脉波 ABP 125 Hz (10 s)
+  scale: 5,361 人 (524.5 万段清洗切片，源自 MIMIC-III 与 VitalDB)
+  tasks: 无袖带连续血压回归基准、血管生物年龄跨域评测
+  access: open
+  url: https://github.com/pulselabteam/PulseDB
+  paper: https://doi.org/10.3389/fdgth.2022.1090854
+  doc: docs/datasets/wearable_datasets.md#pulsedb
+
+- id: ppg-bp
+  name: PPG-BP
+  category: clinical
+  org: 桂林电子科技大学 / 英属哥伦比亚大学
+  sensors: 短时指尖 PPG 1000 Hz (单段 2.1 s) + 袖带血压与临床诊断
+  scale: 219 人 (657 段波形，年龄 20-89 岁，含高血压与糖尿病标签)
+  tasks: 短时 PPG 无袖带血压估计、高血压与慢病筛查
+  access: open
+  url: https://figshare.com/articles/dataset/PPG-BP_Database_zip/5459299
+  paper: https://doi.org/10.1038/sdata.2018.20
+  doc: docs/datasets/wearable_datasets.md#ppg-bp
+
 - id: mimic-iv-ecg
   name: MIMIC-IV-ECG
   category: ecg
@@ -297,6 +369,18 @@
   url: https://physionet.org/content/sleep-edfx/1.0.0/
   paper: https://doi.org/10.1109/10.867928
   doc: docs/datasets/wearable_datasets.md#sleep-edf
+
+- id: dreamt
+  name: DREAMT
+  category: sleep
+  org: 杜克大学 (BIG IDEAs Lab)
+  sensors: 左腕 Empatica E4 (PPG 64 Hz/ACC 32 Hz/EDA/Temp) + 整夜临床 PSG
+  scale: 100 名睡眠障碍门诊患者 (整夜同步记录，30 s 睡眠分期标注)
+  tasks: 腕戴 PPG/ACC 实时睡眠分期、睡眠呼吸暂停与肥胖筛查
+  access: registration
+  url: https://physionet.org/content/dreamt/2.1.0/
+  paper: https://arxiv.org/abs/2405.13086
+  doc: docs/datasets/wearable_datasets.md#dreamt
 
 - id: uk-biobank
   name: UK Biobank

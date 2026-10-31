@@ -126,6 +126,22 @@
   doc: docs/models/smartwatch_models.md#anyppg
   type: model
   added: '2026-10-22'
+- id: sigmappg
+  name: SigmaPPG
+  org: 米兰理工大学 / 浙江大学 / Emory Univ.
+  venue: arXiv 2026
+  date: 2026-01
+  modality: 单通道 PPG
+  method: 强化学习先验引导对抗掩码 + 向量量化语义一致性
+  params: 紧凑级
+  data: 120,000+ 小时公开 PPG 预训练语料
+  paper: https://arxiv.org/abs/2601.21031
+  code: https://github.com/ZonghengGuo/SigmaPPG
+  weights: https://github.com/ZonghengGuo/SigmaPPG
+  access: open
+  doc: docs/models/smartwatch_models.md#sigmappg
+  type: model
+  added: '2026-10-30'
 - id: ppg-distill
   name: PPG-Distill
   org: Emory University
