@@ -129,15 +129,15 @@
 - id: sigmappg
   name: SigmaPPG
   org: 米兰理工大学 / 浙江大学 / Emory Univ.
-  venue: arXiv 2026
+  venue: ICML 2026
   date: 2026-01
   modality: 单通道 PPG
-  method: 强化学习先验引导对抗掩码 + 向量量化语义一致性
+  method: 统计先验引导强化学习对抗掩码 + 向量量化语义一致性
   params: 紧凑级
-  data: 120,000+ 小时公开 PPG 预训练语料
+  data: 120,000+ 小时公开 PPG 语料 (MIMIC-III, VitalDB 等)
   paper: https://arxiv.org/abs/2601.21031
   code: https://github.com/ZonghengGuo/SigmaPPG
-  weights: https://github.com/ZonghengGuo/SigmaPPG
+  weights: https://huggingface.co/zonhengu/sigmappg
   access: open
   doc: docs/models/smartwatch_models.md#sigmappg
   type: model

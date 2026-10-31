@@ -385,7 +385,7 @@ AnyPPG 经冻结表征（Frozen Representation）与极简线性探针（Linear 
 
 ### SigmaPPG
 
-米兰理工大学 / 浙江大学 / Emory University · arXiv 2026 · [论文](https://arxiv.org/abs/2601.21031) · [代码](https://github.com/ZonghengGuo/SigmaPPG)
+米兰理工大学 / 浙江大学 / Emory University · ICML 2026 · [论文](https://arxiv.org/abs/2601.21031) · [代码](https://github.com/ZonghengGuo/SigmaPPG) · [权重](https://huggingface.co/zonhengu/sigmappg)
 
 SigmaPPG（*Rethinking the Paradigm of Masked Autoencoders for Photoplethysmography Representation Learning*）针对可穿戴光电脉搏波（PPG）高噪声、强准周期冗余的物理特性，重构了掩码自编码器（MAE）的自监督预训练范式。
 
@@ -837,7 +837,7 @@ Google SensorLM 的官方开源代码库（`Google-Health/consumer-health-resear
 | **UniCardio** | 清华大学 / 安贞医院 | Nat Mach Intell 2025/2026 | 统一心血管多模态扩散基础模型 · [论文](https://doi.org/10.1038/s42256-025-01147-y) · [代码](https://github.com/chen-zehua/UniCardio) |
 | **PPGFlowECG** | 北京大学健康医疗大数据国家研究院 | arXiv 2025-2026 | 潜空间整流流 PPG 转 ECG 跨模态生成 · [论文](https://arxiv.org/abs/2502.14856) · [代码](https://github.com/PKUDigitalHealth/PPGFlowECG) |
 | **AnyPPG** | 北京大学健康医疗大数据国家研究院 | ACM SIGKDD 2026 | 心电引导预训练的光电多器官基座大模型 · [论文](https://arxiv.org/abs/2511.01747) · [代码](https://github.com/Ngk03/AnyPPG) |
-| **SigmaPPG** | 米兰理工大学 / 浙江大学 / Emory | arXiv 2026 | 强化学习先验引导对抗掩码与向量量化 PPG 基座 · [论文](https://arxiv.org/abs/2601.21031) · [代码](https://github.com/ZonghengGuo/SigmaPPG) |
+| **SigmaPPG** | 米兰理工大学 / 浙江大学 / Emory | ICML 2026 | 统计先验引导强化学习对抗掩码与向量量化 PPG 基座 · [论文](https://arxiv.org/abs/2601.21031) · [代码](https://github.com/ZonghengGuo/SigmaPPG) · [权重](https://huggingface.co/zonhengu/sigmappg) |
 | **PPG-Distill** | Emory University | 2025 | 脉搏波基础模型多层次端侧知识蒸馏 · [代码](https://github.com/LingFengGold/PPG-Distill) |
 | **PpgAge** | Apple Health | Nat Commun 2025 | 21.3 万人腕部脉搏波血管生物年龄研究 · [论文](https://doi.org/10.1038/s41467-025-64275-4) |
 | **OpenMHC** | 斯坦福大学医学院 | arXiv 2026 | 6,700 万小时真实世界穿戴基础模型基准与生态 · [论文](https://arxiv.org/abs/2607.16235) · [代码](https://github.com/AshleyLab/OpenMHC) |
