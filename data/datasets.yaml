@@ -9,7 +9,7 @@
   url: https://github.com/AshleyLab/OpenMHC
   paper: https://arxiv.org/abs/2607.16235
   doc: docs/datasets/wearable_datasets.md#openmhc
-
+  tag: 含 PPG
 - id: wrist-ppg
   name: PhysioNet Wrist PPG
   category: wrist
@@ -21,7 +21,7 @@
   url: https://physionet.org/content/wrist/1.0.0/
   paper: https://doi.org/10.3390/data2010001
   doc: docs/datasets/wearable_datasets.md#physionet-wrist-ppg
-
+  tag: PPG+ECG 配对
 - id: ppg-dalia
   name: PPG-DaLiA
   category: wrist
@@ -33,7 +33,7 @@
   url: https://archive.ics.uci.edu/dataset/495/ppg+dalia
   paper: https://doi.org/10.3390/s19143079
   doc: docs/datasets/wearable_datasets.md#ppg-dalia
-
+  tag: PPG+ECG 配对
 - id: wesad
   name: WESAD
   category: wrist
@@ -45,7 +45,7 @@
   url: https://archive.ics.uci.edu/dataset/465/wesad+wearable+stress+and+affect+detection
   paper: https://doi.org/10.1145/3242969.3242985
   doc: docs/datasets/wearable_datasets.md#wesad
-
+  tag: PPG+ECG 配对
 - id: troika
   name: TROIKA
   category: wrist
@@ -57,7 +57,7 @@
   url: https://zenodo.org/records/3902660
   paper: https://doi.org/10.1109/TBME.2014.2359372
   doc: docs/datasets/wearable_datasets.md#troika
-
+  tag: PPG+ECG 配对
 - id: cas-bp
   name: CAS-BP
   category: wrist
@@ -69,7 +69,7 @@
   url: https://github.com/zdzdliu/CAS-BP
   paper: https://doi.org/10.1109/JBHI.2023.3287313
   doc: docs/datasets/wearable_datasets.md#cas-bp
-
+  tag: PPG+ECG 配对
 - id: wildppg
   name: WildPPG
   category: wrist
@@ -81,7 +81,7 @@
   url: https://github.com/eth-siplab/WildPPG
   paper: https://arxiv.org/abs/2405.08083
   doc: docs/datasets/wearable_datasets.md#wildppg
-
+  tag: PPG+ECG 配对
 - id: but-ppg
   name: BUT-PPG
   category: wrist
@@ -93,7 +93,7 @@
   url: https://physionet.org/content/butppg/2.0.0/
   paper: https://doi.org/10.3390/s21113832
   doc: docs/datasets/wearable_datasets.md#but-ppg
-
+  tag: PPG+ECG 配对
 - id: realworld-ppg
   name: RealWorldPPG
   category: wrist
@@ -105,7 +105,7 @@
   url: https://data.mendeley.com/datasets/yynb8t9x3d/3
   paper: https://doi.org/10.17632/yynb8t9x3d.3
   doc: docs/datasets/wearable_datasets.md#realworldppg
-
+  tag: 含 PPG
 - id: ecsmp
   name: ECSMP
   category: wrist
@@ -117,7 +117,7 @@
   url: https://data.mendeley.com/datasets/f9bf7b6264/2
   paper: https://doi.org/10.3389/fnins.2021.751441
   doc: docs/datasets/wearable_datasets.md#ecsmp
-
+  tag: PPG+ECG 配对
 - id: shanghai-cgm
   name: ShanghaiT1DM / T2DM
   category: cgm
@@ -129,7 +129,6 @@
   url: https://figshare.com/articles/dataset/ShanghaiT1DM_T2DM_data/20444397
   paper: https://doi.org/10.1038/s41597-023-01940-7
   doc: docs/datasets/wearable_datasets.md#shanghait1dm--shanghait2dm
-
 - id: hall-glucotypes
   name: Hall Glucotypes
   category: cgm
@@ -141,7 +140,6 @@
   url: https://doi.org/10.1371/journal.pbio.2005143.s010
   paper: https://doi.org/10.1371/journal.pbio.2005143
   doc: docs/datasets/wearable_datasets.md#hall-glucotypes
-
 - id: big-ideas
   name: BIG IDEAs
   category: cgm
@@ -153,7 +151,7 @@
   url: https://physionet.org/content/big-ideas-glycemic-wearable/1.1.2/
   paper: https://doi.org/10.13026/aw6y-fc44
   doc: docs/datasets/wearable_datasets.md#big-ideas
-
+  tag: 含 PPG
 - id: cgmacros
   name: CGMacros
   category: cgm
@@ -165,7 +163,7 @@
   url: https://physionet.org/content/cgmacros/1.0.0/
   paper: https://doi.org/10.1038/s41597-025-05851-7
   doc: docs/datasets/wearable_datasets.md#cgmacros
-
+  tag: 含 PPG
 - id: colas-dfa
   name: Colas DFA
   category: cgm
@@ -177,7 +175,6 @@
   url: https://doi.org/10.1371/journal.pone.0225817.s001
   paper: https://doi.org/10.1371/journal.pone.0225817
   doc: docs/datasets/wearable_datasets.md#colas-dfa
-
 - id: ohiot1dm
   name: OhioT1DM
   category: cgm
@@ -189,7 +186,7 @@
   url: http://smarthealth.cs.ohio.edu/OhioT1DM-dataset.html
   paper: https://pmc.ncbi.nlm.nih.gov/articles/PMC6299888/
   doc: docs/datasets/wearable_datasets.md#ohiot1dm
-
+  tag: 含 PPG
 - id: weinstock-2016
   name: Weinstock 2016
   category: cgm
@@ -201,19 +198,17 @@
   url: https://public.jaeb.org/
   paper: https://doi.org/10.2337/dc15-1426
   doc: docs/datasets/wearable_datasets.md#weinstock-2016
-
 - id: glucobench
   name: GlucoBench
   category: cgm
   org: 德州农工大学 (Irina Gaynanova 实验室)
   sensors: 整合 5 个公开 CGM 队列 (统一 5 min 网格)
-  scale: ">500 人"
+  scale: '>500 人'
   tasks: 跨队列标准化血糖预测与零样本评测
   access: open
   url: https://github.com/IrinaStatsLab/GlucoBench
   paper: https://arxiv.org/abs/2410.05780
   doc: docs/datasets/wearable_datasets.md#glucobench
-
 - id: glucose-ml
   name: Glucose-ML
   category: cgm
@@ -225,7 +220,6 @@
   url: https://github.com/Augmented-Health-Lab/Glucose-ML-Project
   paper: https://arxiv.org/abs/2507.14077
   doc: docs/datasets/wearable_datasets.md#glucose-ml
-
 - id: mc-med
   name: MC-MED
   category: clinical
@@ -237,7 +231,7 @@
   url: https://physionet.org/content/mc-med/
   paper: https://doi.org/10.1038/s41597-025-05419-5
   doc: docs/datasets/wearable_datasets.md#mc-med
-
+  tag: PPG+ECG 配对
 - id: vitaldb
   name: VitalDB
   category: clinical
@@ -249,7 +243,7 @@
   url: https://vitaldb.net/
   paper: https://doi.org/10.1038/s41597-022-01411-5
   doc: docs/datasets/wearable_datasets.md#vitaldb
-
+  tag: PPG+ECG 配对
 - id: bidmc-ppg
   name: BIDMC PPG
   category: clinical
@@ -261,7 +255,7 @@
   url: https://physionet.org/content/bidmc/1.0.0/
   paper: https://doi.org/10.1109/TBME.2016.2613124
   doc: docs/datasets/wearable_datasets.md#bidmc-ppg
-
+  tag: PPG+ECG 配对
 - id: pulsedb
   name: PulseDB
   category: clinical
@@ -273,7 +267,7 @@
   url: https://github.com/pulselabteam/PulseDB
   paper: https://doi.org/10.3389/fdgth.2022.1090854
   doc: docs/datasets/wearable_datasets.md#pulsedb
-
+  tag: PPG+ECG 配对
 - id: ppg-bp
   name: PPG-BP
   category: clinical
@@ -285,55 +279,43 @@
   url: https://figshare.com/articles/dataset/PPG-BP_Database_zip/5459299
   paper: https://doi.org/10.1038/sdata.2018.20
   doc: docs/datasets/wearable_datasets.md#ppg-bp
-
-- id: mimic-iv-ecg
-  name: MIMIC-IV-ECG
-  category: ecg
-  org: MIT / BIDMC
-  sensors: 12 导联诊断级 ECG 500 Hz (10 s) + 住院 EHR
-  scale: 800,035 条记录 (161,352 人)
-  tasks: 大规模心电自监督预训练与多病种筛查
+  tag: 含 PPG
+- id: mimic-iii-waveform
+  name: MIMIC-III Waveform
+  category: clinical
+  org: MIT LCP / BIDMC
+  sensors: ICU 多导联 ECG、指尖 PPG、有创动脉波 ABP、呼吸 125 Hz
+  scale: 67,830 条记录 (约 3 万人；匹配 EHR 子集 10,282 人 / 22,317 条)
+  tasks: 脉搏与心电连续波形预训练、无创血压估计与危重症预警
   access: open
-  url: https://physionet.org/content/mimic-iv-ecg/1.0/
-  paper: https://doi.org/10.13026/4nqg-sb35
-  doc: docs/datasets/wearable_datasets.md#mimic-iv-ecg
-
-- id: ptb-xl
-  name: PTB-XL
-  category: ecg
-  org: 德国 PTB / Fraunhofer HHI
-  sensors: 12 导联 ECG 500/100 Hz (10 s，71 类 SCP 标签)
-  scale: 21,837 条记录 (18,885 人)
-  tasks: 多标签心电分类与基础模型微调基准
-  access: open
-  url: https://physionet.org/content/ptb-xl/1.0.3/
-  paper: https://doi.org/10.1038/s41597-020-0495-6
-  doc: docs/datasets/wearable_datasets.md#ptb-xl
-
-- id: code-15
-  name: CODE-15%
-  category: ecg
-  org: 巴西 TNMG / Uppsala Univ.
-  sensors: 12 导联 ECG 400 Hz (7-10 s) + 死亡率随访
-  scale: 345,779 条记录 (233,770 人)
-  tasks: 心电预训练缩放定律与长程生存分析
-  access: open
-  url: https://zenodo.org/records/4916206
-  paper: https://doi.org/10.1038/s41467-020-15432-4
-  doc: docs/datasets/wearable_datasets.md#code-15
-
-- id: chapman-shaoxing-ningbo
-  name: Chapman-Shaoxing / Ningbo
-  category: ecg
-  org: Chapman Univ. / 绍兴与宁波医院
-  sensors: 12 导联 ECG 500 Hz (10 s，SNOMED-CT 标签)
-  scale: 45,152 条临床记录
-  tasks: 东亚人群心律失常分类与跨中心泛化验证
-  access: open
-  url: https://physionet.org/content/ecg-arrhythmia/1.0.0/
-  paper: https://doi.org/10.1038/s41597-020-0386-x
-  doc: docs/datasets/wearable_datasets.md#chapman-shaoxing--ningbo
-
+  url: https://physionet.org/content/mimic3wdb/1.0/
+  paper: https://doi.org/10.1038/sdata.2016.35
+  doc: docs/datasets/wearable_datasets.md#mimic-iii-waveform
+  tag: PPG+ECG 配对
+- id: waves
+  name: WAVES
+  category: clinical
+  org: 斯坦福大学卢西尔·帕卡德儿童医院
+  sensors: 儿科床旁连续 ECG 125 Hz、指尖 PPG 125 Hz (平均 7 小时)
+  scale: 50,400 名儿科患者 (55 万条心电 + 51 万条脉搏波记录)
+  tasks: 儿科重症连续生命体征预训练与跨年龄生理泛化评估
+  access: restricted
+  url: https://stanfordmedicine.box.com/v/waves-dataset
+  paper: https://doi.org/10.1038/s41597-023-02374-3
+  doc: docs/datasets/wearable_datasets.md#waves
+  tag: PPG+ECG 配对
+- id: mover
+  name: MOVER
+  category: clinical
+  org: 加州大学欧文分校医疗中心 (UCI)
+  sensors: 术中 ECG 180/300 Hz、PPG 100 Hz、有创动脉波 ABP + 围术期 EHR
+  scale: 58,799 名手术患者 (83,468 台次手术全程监护与电子病历)
+  tasks: 围术期血流动力学建模、不良事件预测与跨模态预训练
+  access: application
+  url: https://mover.ics.uci.edu/
+  paper: https://doi.org/10.1093/jamiaopen/ooad084
+  doc: docs/datasets/wearable_datasets.md#mover
+  tag: PPG+ECG 配对
 - id: shhs
   name: SHHS
   category: sleep
@@ -345,7 +327,6 @@
   url: https://sleepdata.org/datasets/shhs
   paper: https://doi.org/10.1093/sleep/20.12.1077
   doc: docs/datasets/wearable_datasets.md#shhs
-
 - id: mesa
   name: MESA
   category: sleep
@@ -357,7 +338,7 @@
   url: https://sleepdata.org/datasets/mesa
   paper: https://doi.org/10.5665/sleep.4732
   doc: docs/datasets/wearable_datasets.md#mesa
-
+  tag: PPG+ECG 配对
 - id: sleep-edf
   name: Sleep-EDF
   category: sleep
@@ -369,7 +350,6 @@
   url: https://physionet.org/content/sleep-edfx/1.0.0/
   paper: https://doi.org/10.1109/10.867928
   doc: docs/datasets/wearable_datasets.md#sleep-edf
-
 - id: dreamt
   name: DREAMT
   category: sleep
@@ -381,7 +361,7 @@
   url: https://physionet.org/content/dreamt/2.1.0/
   paper: https://arxiv.org/abs/2405.13086
   doc: docs/datasets/wearable_datasets.md#dreamt
-
+  tag: PPG+ECG 配对
 - id: uk-biobank
   name: UK Biobank
   category: cohort
@@ -393,7 +373,6 @@
   url: https://www.ukbiobank.ac.uk/enable-your-research/apply-for-access
   paper: https://doi.org/10.1371/journal.pone.0169649
   doc: docs/datasets/wearable_datasets.md#uk-biobank
-
 - id: all-of-us
   name: All of Us
   category: cohort
@@ -405,3 +384,136 @@
   url: https://www.researchallofus.org/
   paper: https://doi.org/10.1056/NEJMsr1809937
   doc: docs/datasets/wearable_datasets.md#all-of-us
+  tag: 含 PPG
+- id: mimic-iv-ecg
+  name: MIMIC-IV-ECG
+  category: ecg
+  org: MIT / BIDMC
+  sensors: 12 导联诊断级 ECG 500 Hz (10 s) + 住院 EHR
+  scale: 800,035 条记录 (161,352 人)
+  tasks: 大规模心电自监督预训练与多病种筛查
+  access: open
+  url: https://physionet.org/content/mimic-iv-ecg/1.0/
+  paper: https://doi.org/10.13026/4nqg-sb35
+  doc: docs/datasets/wearable_datasets.md#mimic-iv-ecg
+  tag: 纯 ECG
+- id: ptb-xl
+  name: PTB-XL
+  category: ecg
+  org: 德国 PTB / Fraunhofer HHI
+  sensors: 12 导联 ECG 500/100 Hz (10 s，71 类 SCP 标签)
+  scale: 21,837 条记录 (18,885 人)
+  tasks: 多标签心电分类与基础模型微调基准
+  access: open
+  url: https://physionet.org/content/ptb-xl/1.0.3/
+  paper: https://doi.org/10.1038/s41597-020-0495-6
+  doc: docs/datasets/wearable_datasets.md#ptb-xl
+  tag: 纯 ECG
+- id: code-15
+  name: CODE-15%
+  category: ecg
+  org: 巴西 TNMG / Uppsala Univ.
+  sensors: 12 导联 ECG 400 Hz (7-10 s) + 死亡率随访
+  scale: 345,779 条记录 (233,770 人)
+  tasks: 心电预训练缩放定律与长程生存分析
+  access: open
+  url: https://zenodo.org/records/4916206
+  paper: https://doi.org/10.1038/s41467-020-15432-4
+  doc: docs/datasets/wearable_datasets.md#code-15
+  tag: 纯 ECG
+- id: chapman-shaoxing-ningbo
+  name: Chapman-Shaoxing / Ningbo
+  category: ecg
+  org: Chapman Univ. / 绍兴与宁波医院
+  sensors: 12 导联 ECG 500 Hz (10 s，SNOMED-CT 标签)
+  scale: 45,152 条临床记录
+  tasks: 东亚人群心律失常分类与跨中心泛化验证
+  access: open
+  url: https://physionet.org/content/ecg-arrhythmia/1.0.0/
+  paper: https://doi.org/10.1038/s41597-020-0386-x
+  doc: docs/datasets/wearable_datasets.md#chapman-shaoxing--ningbo
+  tag: 纯 ECG
+- id: heedb
+  name: HEEDB
+  category: ecg
+  org: 哈佛医学院 (MGH / BWH) / Emory Univ.
+  sensors: 12 导联诊断级 ECG 250/500 Hz (10 s) + Marquette 12SL 诊断码
+  scale: 1,170 万条记录 (210 万名患者，大规模临床心电库)
+  tasks: 千万级心电基础模型预训练 (ECGFounder, ECG-CPC 底座) 与全谱系筛查
+  access: credentialed
+  url: https://bdsp.io/content/heedb/
+  paper: https://doi.org/10.60508/rv6h-7d10
+  doc: docs/datasets/wearable_datasets.md#heedb
+  tag: 纯 ECG
+- id: echonext
+  name: EchoNext
+  category: ecg
+  org: 哥伦比亚大学欧文医学中心
+  sensors: 12 导联 ECG 250 Hz (10 s) + 配对超声心动图结构性心脏病标签
+  scale: 100,000 条心电-超声配对记录 (36,286 名患者，11 类结构性病变标签)
+  tasks: 隐匿性结构性心脏病筛查 (LVEF 降低、瓣膜狭窄/反流、心室肥厚)
+  access: credentialed
+  url: https://physionet.org/content/echonext/1.0.0/
+  paper: https://doi.org/10.13026/3ykd-bf14
+  doc: docs/datasets/wearable_datasets.md#echonext
+  tag: 纯 ECG
+- id: sph-ecg
+  name: SPH
+  category: ecg
+  org: 山东省立医院
+  sensors: 12 导联 ECG 500 Hz (10-60 s，44 类 AHA 标准诊断语句)
+  scale: 25,770 条记录 (24,666 名中国成人患者)
+  tasks: 多标签心电分类、AHA 标准层级诊断与跨中心泛化评测
+  access: open
+  url: https://springernature.figshare.com/collections/A_large-scale_multi-label_12-lead_electrocardiogram_database_with_standardized_diagnostic_statements/5779802
+  paper: https://doi.org/10.1038/s41597-022-01403-5
+  doc: docs/datasets/wearable_datasets.md#sph
+  tag: 纯 ECG
+- id: zzu-pecg
+  name: ZZU pECG
+  category: ecg
+  org: 郑州大学第三附属医院
+  sensors: 儿童 12/9 导联 ECG 500 Hz (5-120 s，64 类心电语句 + ICD-10)
+  scale: 14,190 条记录 (11,643 名 0-14 岁儿科患者)
+  tasks: 儿科心律失常与先心病筛查、成人心电基模跨年龄泛化基准
+  access: open
+  url: https://doi.org/10.6084/m9.figshare.27078763
+  paper: https://doi.org/10.1038/s41597-025-05196-z
+  doc: docs/datasets/wearable_datasets.md#zzu-pecg
+  tag: 纯 ECG
+- id: cpsc-2018
+  name: CPSC 2018 / CinC 2020
+  category: ecg
+  org: 东南大学 / 中国生理信号挑战赛 / PhysioNet
+  sensors: 12 导联 ECG 500 Hz (6-60 s，9 类心律与传导异常及 SNOMED-CT 标签)
+  scale: CPSC 10,330 条 (11 家医院)；CinC 2020/2021 跨国总库达 88,253 条
+  tasks: 多中心心律失常分类与心电基础模型标准微调评测
+  access: open
+  url: https://physionet.org/content/challenge-2020/1.0.2/
+  paper: https://doi.org/10.1088/1361-6579/ab2ef0
+  doc: docs/datasets/wearable_datasets.md#cpsc-2018--cinc-2020
+  tag: 纯 ECG
+- id: snuh-lydus
+  name: SNUH LYDUS
+  category: ecg
+  org: 首尔大学医院 (SNUH)
+  sensors: 12 导联 ECG 500/100 Hz (10 s) + 专家复核诊断与测量间期
+  scale: 167,000 条受限访问版 + 50,000 条完全开放版 (38,402 人)
+  tasks: 东亚人群心电预训练、传导间期回归与心律失常诊断
+  access: open
+  url: https://doi.org/10.1038/s41597-025-04520-z
+  paper: https://doi.org/10.1038/s41597-025-04520-z
+  doc: docs/datasets/wearable_datasets.md#snuh-lydus
+  tag: 纯 ECG
+- id: icentia11k
+  name: Icentia11k
+  category: ecg
+  org: 蒙特利尔大学 / Mila / Icentia
+  sensors: CardioSTAT 单导联动态胸贴 ECG 250 Hz (长达 3-14 天连续监测)
+  scale: 11,000 名患者 (54,000 段长时切片，累计约 2.77 亿次专家标注心拍)
+  tasks: 单导联长程心电预训练 (HeartGPT, HeartBERT 底座) 与逐拍心律失常识别
+  access: open
+  url: https://physionet.org/content/icentia11k-continuous-ecg/1.0/
+  paper: https://arxiv.org/abs/1910.09570
+  doc: docs/datasets/wearable_datasets.md#icentia11k
+  tag: 纯 ECG

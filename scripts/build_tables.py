@@ -25,8 +25,8 @@ NBHYPHEN = "\u2011"  # Non-Breaking Hyphen (不换行连字符)
 CATEGORY_LABELS = {
     "wrist": "手腕多模态",
     "cgm": "CGM 连续血糖",
-    "clinical": "临床多模态",
-    "ecg": "临床心电",
+    "clinical": "临床连续监护",
+    "ecg": "心电信号",
     "sleep": "睡眠 PSG",
     "cohort": "人群队列",
     "benchmark": "推理基准",
@@ -214,11 +214,13 @@ def build_datasets_table(datasets: list[dict], local_doc_links: bool = False) ->
     ]
     for d in datasets:
         cat = nowrap(CATEGORY_LABELS.get(d.get("category", ""), d.get("category", "")))
+        tag = str(d.get("tag", "")).strip()
         doc_link = str(d.get("doc", "")).strip()
         if local_doc_links and "#" in doc_link:
             doc_link = "#" + doc_link.split("#", 1)[1]
         name_link = f"[**{d['name']}**]({doc_link})" if doc_link else f"**{d['name']}**"
-        name_cell = f"{name_link}<br>{cat}"
+        sub_label = f"{cat}{NBSP}·{NBSP}`{tag}`" if tag else cat
+        name_cell = f"{name_link}<br>{sub_label}"
 
         org_cell = protect_cjk_chunks(str(d.get("org", "")), chunk_size=4)
         sensors_cell = protect_cjk_chunks(str(d.get("sensors", "")), chunk_size=5)

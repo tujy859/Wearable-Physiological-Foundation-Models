@@ -270,6 +270,22 @@
   doc: docs/models/smartwatch_models.md#limu-bert
   type: model
   added: '2026-10-12'
+- id: normwear
+  name: NormWear
+  org: UMass Amherst
+  venue: arXiv 2024
+  date: 2024-12
+  modality: 多模态可穿戴生理 (PPG, ECG, EEG, EDA, IMU)
+  method: 连续小波变换 (CWT) 词元化 + 通道感知注意力与混合 MAE
+  params: 紧凑级
+  data: 10.6 万段多源公开穿戴记录 (15 个数据集)
+  paper: https://arxiv.org/abs/2412.09758
+  code: https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear
+  weights: https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear
+  access: open
+  doc: docs/models/smartwatch_models.md#normwear
+  type: model
+  added: '2026-11-02'
 - id: glucofm
   name: GlucoFM
   org: Google Research / UNSW
@@ -382,15 +398,79 @@
   doc: docs/models/ecg_models.md#1-领域综述导读心电与脉搏波开源基础模型及数据集全景
   type: survey
   added: '2026-10-14'
+- id: ecgfounder
+  name: ECGFounder
+  org: 北京大学 (洪申达团队) / 哈佛大学 / Emory
+  venue: NEJM AI 2025
+  date: 2024-10
+  modality: 12 导联与单导联 ECG
+  method: RegNet1D 阶段式瓶颈卷积 + 置信度感知正未标记多标签预训练
+  params: 31M
+  data: 1,070 万条临床心电 (HEEDB, 180 万患者, 150 类诊断标签)
+  paper: https://arxiv.org/abs/2410.04133
+  code: https://github.com/PKUDigitalHealth/ECGFounder
+  weights: https://huggingface.co/PKUDigitalHealth/ECGFounder
+  access: open
+  doc: docs/models/ecg_models.md#ecgfounder
+  type: model
+  added: '2026-11-02'
+- id: ecg-cpc
+  name: ECG-CPC
+  org: 奥尔登堡大学 (Nils Strodthoff 团队)
+  venue: arXiv 2025
+  date: 2025-09
+  modality: 12 导联 ECG
+  method: 4 层 CNN + 4 层状态空间模型 (S4) + 自回归对比预测编码 (CPC)
+  params: 3.3M
+  data: 1,070 万条心电 (HEEDB) + 8 大基模 12 公开集 26 任务横评基准
+  paper: https://arxiv.org/abs/2509.25095
+  code: https://github.com/AI4HealthUOL/ecg-fm-benchmarking
+  weights: https://github.com/AI4HealthUOL/ecg-fm-benchmarking
+  access: open
+  doc: docs/models/ecg_models.md#ecg-cpc
+  type: model
+  added: '2026-11-02'
+- id: deepecg-ssl
+  name: DeepECG-SSL
+  org: 蒙特利尔心脏研究所 (HeartWise-AI)
+  venue: European Heart Journal 2026
+  date: 2025-06
+  modality: 12 导联 ECG
+  method: WCR 卷积-Transformer + SimCLR/CMSC 双层对比与随机导联掩码
+  params: 91M
+  data: 190 万条 12 导联心电 (MHI, MIMIC-IV-ECG, CODE-15%)
+  paper: https://doi.org/10.1093/eurheartj/ehaf1119
+  code: https://github.com/HeartWise-AI/DeepECG_Docker
+  weights: https://github.com/HeartWise-AI/DeepECG_Docker
+  access: open
+  doc: docs/models/ecg_models.md#deepecg-ssl
+  type: model
+  added: '2026-11-02'
+- id: hubert-ecg
+  name: HuBERT-ECG
+  org: 罗马生物医学自由大学
+  venue: medRxiv 2024
+  date: 2024-11
+  modality: 12 导联 ECG (100 Hz)
+  method: Wav2Vec 2.0 式卷积-Transformer + 迭代聚类伪标签掩码预测
+  params: 93M (Base)
+  data: 910 万条 12 导联心电 (整合 10 个多国队列)
+  paper: https://doi.org/10.1101/2024.11.14.24317328
+  code: https://github.com/Edoar-do/HuBERT-ECG
+  weights: https://huggingface.co/Edoardo-BS/hubert-ecg-base
+  access: open
+  doc: docs/models/ecg_models.md#hubert-ecg
+  type: model
+  added: '2026-11-02'
 - id: ecg-fm
   name: ECG-FM
   org: 多伦多大学 / UHN / Vector
   venue: arXiv 2024
   date: 2024-07
   modality: 12 导联 ECG
-  method: 掩码重构 + 对比学习
-  params: 约 100M
-  data: 约 150 万条心电 (MIMIC-IV + UHN)
+  method: 掩码重构 + 对比学习 (WCR + RLM)
+  params: 91M
+  data: 约 156 万条心电 (MIMIC-IV-ECG + UHN)
   paper: https://arxiv.org/abs/2407.13576
   code: https://github.com/kadenmckeen/ecg-fm
   weights: https://huggingface.co/kadenmckeen/ecg-fm
@@ -398,15 +478,31 @@
   doc: docs/models/ecg_models.md#ecg-fm
   type: model
   added: '2026-10-14'
+- id: ecg-jepa
+  name: ECG-JEPA
+  org: 首尔大学 / 庆北大学
+  venue: arXiv 2024
+  date: 2024-10
+  modality: 多导联 ECG (8 独立物理导联)
+  method: 师生非对称 Transformer + 跨导联模式注意力 (CroPA) 潜空间预测
+  params: 85M
+  data: 18 万条公开 12 导联心电 (Chapman-Shaoxing/Ningbo + CODE-15%)
+  paper: https://arxiv.org/abs/2410.08559
+  code: https://github.com/sehunfromdaegu/ecg_jepa
+  weights: https://github.com/sehunfromdaegu/ecg_jepa
+  access: open
+  doc: docs/models/ecg_models.md#ecg-jepa
+  type: model
+  added: '2026-11-02'
 - id: st-mem
   name: ST-MEM
-  org: VUNO Inc.
+  org: VUNO Inc. / 首尔大学
   venue: ICLR 2024
   date: 2024-02
   modality: 12 导联 ECG
-  method: 时空解耦 Patch-MAE
-  params: 紧凑级
-  data: 约 80 万例 12 导联心电
+  method: 时空解耦分块掩码自编码 + 导联隔离解码
+  params: 85M
+  data: 19 万条 12 导联心电 (Chapman-Shaoxing/Ningbo, CODE-15%, PhysioNet 2021)
   paper: https://arxiv.org/abs/2402.04631
   code: https://github.com/vuno-inc/ST-MEM
   weights: https://github.com/vuno-inc/ST-MEM
@@ -414,18 +510,130 @@
   doc: docs/models/ecg_models.md#st-mem
   type: model
   added: '2026-10-14'
+- id: heartlang
+  name: HeartLang
+  org: 北京大学 (洪申达团队) / 中山大学
+  venue: ICLR 2025
+  date: 2025-02
+  modality: 12 导联 ECG
+  method: QRS 心拍分词器 + 向量量化心电词表 (VQ-HBR) + ST-ECGFormer 掩码建模
+  params: 45M
+  data: 80 万条 12 导联心电 (MIMIC-IV-ECG)
+  paper: https://arxiv.org/abs/2502.10707
+  code: https://github.com/PKUDigitalHealth/HeartLang
+  weights: https://github.com/PKUDigitalHealth/HeartLang
+  access: open
+  doc: docs/models/ecg_models.md#heartlang
+  type: model
+  added: '2026-11-02'
+- id: merl
+  name: MERL
+  org: 帝国理工学院 / 剑桥大学 / 哈佛大学
+  venue: ICML 2024
+  date: 2024-03
+  modality: 12 导联 ECG + 临床文本报告
+  method: ResNet1D + Med-CPT 双重对比对齐 (CMA + UMA) + 临床知识增强提示 (CKEPE)
+  params: 5.5M (心电编码器)
+  data: 77.1 万对心电-文本报告配对 (MIMIC-IV-ECG)
+  paper: https://arxiv.org/abs/2403.06659
+  code: https://github.com/cheliu-computation/MERL-ICML2024
+  weights: https://github.com/cheliu-computation/MERL-ICML2024
+  access: open
+  doc: docs/models/ecg_models.md#merl
+  type: model
+  added: '2026-11-02'
+- id: esi
+  name: ESI
+  org: 莱斯大学 (Akane Sano 实验室) / UTHealth
+  venue: TMLR 2024
+  date: 2024-05
+  modality: 12 导联 ECG + LLM 形态增强文本
+  method: ConvNeXtV2-1D + BioLinkBERT + Cardio Query Assistant (CQA) 对比与描述生成
+  params: 88M (心电编码器)
+  data: 66 万条 12 导联心电 (MIMIC-IV-ECG 等 3 个队列)
+  paper: https://arxiv.org/abs/2405.19366
+  code: https://github.com/comp-well-org/ESI
+  weights: https://github.com/comp-well-org/ESI
+  access: open
+  doc: docs/models/ecg_models.md#esi
+  type: model
+  added: '2026-11-02'
+- id: melp
+  name: MELP
+  org: 香港大学 (HKU-MedAI) / 帝国理工学院
+  venue: ICML 2025
+  date: 2025-06
+  modality: 12 导联 ECG + 临床文本报告
+  method: 词元级 (Token) + 心拍级 (Beat) + 节律级 (Rhythm) 三层跨模态对齐预训练
+  params: 66M (心电编码器)
+  data: 76 万对心电-文本报告配对 (MIMIC-IV-ECG)
+  paper: https://arxiv.org/abs/2506.21803
+  code: https://github.com/HKU-MedAI/MELP
+  weights: https://github.com/HKU-MedAI/MELP
+  access: open
+  doc: docs/models/ecg_models.md#melp
+  type: model
+  added: '2026-11-02'
+- id: ked
+  name: KED
+  org: 上海交通大学 / 上海市浦东医院
+  venue: Cell Reports Medicine 2024
+  date: 2024-10
+  modality: 12 导联 ECG + 领域医学知识文本
+  method: 1D CNN 心电编码器 + 心脏病学知识图谱增强跨模态对比学习
+  params: 7.9M (心电编码器)
+  data: 80 万条 12 导联心电与报告 (MIMIC-IV-ECG)
+  paper: https://doi.org/10.1016/j.xcrm.2024.101775
+  code: https://github.com/control-spiderman/ECGFM-KED
+  weights: https://github.com/control-spiderman/ECGFM-KED
+  access: open
+  doc: docs/models/ecg_models.md#ked
+  type: model
+  added: '2026-11-02'
+- id: heartgpt
+  name: HeartGPT
+  org: 帝国理工学院 (Danilo Mandic 实验室)
+  venue: arXiv 2024
+  date: 2024-07
+  modality: 单导联 ECG 与单通道 PPG (ECG-PT / PPG-PT)
+  method: 幅值分箱离散量化 + GPT 纯解码器因果自回归下一词元预测
+  params: 0.44M
+  data: 4,200 万心电词元 (Icentia11k) + 1.28 亿脉搏词元 (MIMIC-III + CapnoBase)
+  paper: https://arxiv.org/abs/2407.20775
+  code: https://github.com/harryjdavies/HeartGPT
+  weights: https://github.com/harryjdavies/HeartGPT
+  access: open
+  doc: docs/models/ecg_models.md#heartgpt
+  type: model
+  added: '2026-11-02'
+- id: heartbert
+  name: HeartBERT
+  org: 多伦多大学
+  venue: arXiv 2024
+  date: 2024-11
+  modality: 单导联与多导联 ECG
+  method: 幅值均匀量化字母映射 + SentencePiece BPE 分词 + RoBERTa 掩码语言建模
+  params: 83.5M
+  data: 7,400 万 BPE 词元 (MIMIC-III, PTB-XL, Icentia11k)
+  paper: https://arxiv.org/abs/2411.11896
+  code: https://github.com/ecgResearch/HeartBert
+  weights: https://github.com/ecgResearch/HeartBert
+  access: open
+  doc: docs/models/ecg_models.md#heartbert
+  type: model
+  added: '2026-11-02'
 - id: heartbeit
   name: HeartBEiT
-  org: Mila / 蒙特利尔大学
-  venue: arXiv 2023
+  org: 西奈山伊坎医学院 (Mount Sinai)
+  venue: npj Digital Medicine 2023
   date: 2023-06
-  modality: 12 导联 ECG
-  method: 离散代码本掩码建模
-  params: 紧凑级
-  data: MIMIC-IV-ECG
-  paper: https://arxiv.org/abs/2306.07920
-  code: https://github.com/hsd1503/HeartBEiT
-  weights: ''
+  modality: 12 导联 ECG (2D 图像化表征)
+  method: 离散代码本掩码图像建模 (BEiT)
+  params: 86M
+  data: 850 万条 12 导联心电 (Mount Sinai 医院系统)
+  paper: https://doi.org/10.1038/s41746-023-00840-9
+  code: https://github.com/akhilvaid/HeartBEiT
+  weights: https://huggingface.co/akhilvaid/HeartBEiT
   access: open
   doc: docs/models/ecg_models.md#heartbeit
   type: model

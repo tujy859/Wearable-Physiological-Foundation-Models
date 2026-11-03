@@ -21,6 +21,7 @@
   - [开源脉搏基础模型生物年龄横评](#开源脉搏基础模型生物年龄横评)
   - [PPG-Bench](#ppg-bench)
 - [4. 空间运动与跨专题基模索引](#4-空间运动与跨专题基模索引)
+  - [NormWear](#normwear)
   - [LIMU-BERT](#limu-bert)
   - [Mantis](#mantis)
   - [SleepFM](#sleepfm)
@@ -523,6 +524,23 @@ Mannas AI · arXiv 2026 · [论文](https://arxiv.org/abs/2610.13435) · [代码
 
 除了以心血管 PPG 为核心的模型外，针对手腕运动加速度（ACC）与多器官睡眠耦合的基础模型同样是智能手表算法体系的重要支柱：
 
+### NormWear
+
+马萨诸塞大学阿默斯特分校 (UMass Amherst) · arXiv 2024 · [论文](https://arxiv.org/abs/2412.09758) · [代码](https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear) · [权重](https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear)
+
+![NormWear 架构概览](../figures/normwear/overview.png)
+
+图源：NormWear 论文 Fig. 2（*Toward Foundation Models for Multivariate Wearable Sensing of Physiological Signals*, arXiv:2412.09758）
+
+**方法**：针对多模态可穿戴设备（PPG、ECG、EEG、EDA/GSR、三轴 IMU）采样率异构、通道数量随穿戴配置动态变化的问题，NormWear 在整合自 15 个公开可穿戴数据集的 **10.6 万段多变量生理记录（约 1.48 万小时）** 上进行了统一自监督预训练：
+1. **连续小波变换（CWT）时频词元化**：结合信号一阶与二阶导数对每个通道执行连续小波变换，将一维非平稳生理波形映射为多尺度时频尺度图（Scalogram），再经二维卷积块投影为词元序列；
+2. **任意通道感知融合（[CLS]-Attention Channel Fusion）**：各传感器通道共享底层 Intra-channel Transformer 权重，并通过每隔数层插入的跨通道 [CLS] 注意力融合块（复杂度仅为 (d \cdot C^2)$，独立于序列长度 $）支持任意通道组合热插拔；
+3. **时空-尺度混合掩码重建与语义对齐**：结合时间轴与小波频率尺度轴的结构化掩码自编码（Temporal + Scale MAE），并引入受记忆流启发的时间融合表征对齐机制。
+
+**结果**：在 11 个下游公开数据集的 18 项生理与健康评估任务（涵盖 WESAD 情绪压力、PPG-DaLiA 心率、无创血压、肌电手势及脑电认知负荷）上，NormWear 在零样本、线性探测与微调设定下均显著优于单模态自监督模型及通用时序基座（MOMENT、Chronos）。此外，针对单通道 PPG 的离散词元自回归预训练模型请参阅心电与电生理专题中的 **[HeartGPT (PPG-PT)](ecg_models.md#heartgpt)**。
+
+**评注**：NormWear 开源了支持任意通道数与采样率输入的统一可穿戴权重，其基于 [CLS] 词元的轻量跨通道融合设计避免了多通道拼接导致的二次方注意力膨胀。
+
 ### LIMU-BERT
 
 南洋理工大学 (NTU) · ACM SenSys 2021 · [代码](https://github.com/dapowan/LIMU-BERT-Public)
@@ -843,6 +861,7 @@ Google SensorLM 的官方开源代码库（`Google-Health/consumer-health-resear
 | **OpenMHC** | 斯坦福大学医学院 | arXiv 2026 | 6,700 万小时真实世界穿戴基础模型基准与生态 · [论文](https://arxiv.org/abs/2607.16235) · [代码](https://github.com/AshleyLab/OpenMHC) |
 | **PPG-LM** | Emory / UCLA / Google | arXiv 2026 | 多时间尺度临床对齐脉搏-语言基础模型 · [论文](https://arxiv.org/abs/2609.33516) |
 | **SensorLM** | Google Research / DeepMind | NeurIPS 2025 | 5,970 万小时智能手表传感器-语言多模态基座 · [论文](https://arxiv.org/abs/2506.09108) · [代码](https://github.com/Google-Health/consumer-health-research/tree/main/sensorlm) |
+| **NormWear** | UMass Amherst | arXiv 2024 | 连续小波变换与任意通道融合可穿戴多模态基座 · [论文](https://arxiv.org/abs/2412.09758) · [代码](https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear) |
 | **LIMU-BERT** | 南洋理工大学 (NTU) | ACM SenSys 2021 | 手腕三轴 IMU 空间运动表征模型 · [代码](https://github.com/dapowan/LIMU-BERT-Public) |
 | **PPG-Bench** | Mannas AI | arXiv 2026 | 9 数据集 26 任务脉搏大模型大一统评测套件 · [论文](https://arxiv.org/abs/2610.13435) · [代码](https://github.com/mannas-ai/ppg-bench) |
 | **PPG 生⁠物⁠年⁠龄⁠横⁠评** | Nabil Brag | arXiv 2026 | 脉搏基础模型血管生物年龄跨域评测基准 · [论文](https://arxiv.org/abs/2603.14030) · [代码](https://github.com/Misterbra/ppg-age-benchmark) |
