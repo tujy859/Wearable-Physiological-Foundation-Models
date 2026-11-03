@@ -44,3 +44,9 @@ Thumbs.db
 /data/staging/
 .licenses/
 blog_drafts/
+
+# Internal Strategy & Discussion Documents (Local only)
+internal_strategy/
+
+
+
