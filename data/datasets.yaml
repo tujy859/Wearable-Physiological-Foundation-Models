@@ -1,15 +1,16 @@
 - id: openmhc
   name: OpenMHC
   category: wrist
-  org: Stanford / Imperial / Charité
-  sensors: 19 维分钟级时序 + 169 维自述健康变量
-  scale: 11,894 人 (>6,700 万小时)
-  tasks: 基础模型预训练、多变量缺失插补、未来预测
-  access: open
-  url: https://github.com/AshleyLab/OpenMHC
+  org: Stanford / Imperial 等
+  sensors: 19 通道分钟级派生指标，非原始 PPG 波形
+  scale: 11,894 人、超 6,000 万小时
+  tasks: 健康/行为预测、缺失插补、未来预测
+  access: planned
+  url: https://github.com/AshleyLab/OpenMHC/blob/main/DATASET.md
   paper: https://arxiv.org/abs/2607.16235
   doc: docs/datasets/wearable_datasets.md#openmhc
-  tag: 含 PPG
+  tag: 派生指标
+  access_note: 全量数据待论文接收后发布，使用受 DUA 约束
 - id: wrist-ppg
   name: PhysioNet Wrist PPG
   category: wrist

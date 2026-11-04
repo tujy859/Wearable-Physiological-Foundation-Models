@@ -1,6 +1,6 @@
 # 可穿戴与生理时序公开数据集
 
-可穿戴生理基础模型的预训练与下游评测依赖多模态、多场景的生理时序数据集。本专题按信号采集形态与模态覆盖划分为五个部分：**腕部生理与日常活动数据集**、**连续血糖监测（CGM）数据集**、**临床连续 PPG 与多模态监护数据集**、**睡眠多导与大型人群队列**以及**心电信号数据集**，并在各条目及汇总表中标注 `含 PPG`、`PPG+ECG 配对` 与 `纯 ECG` 属性，便于区分支持连续背景采集的脉搏波数据与纯心电数据。
+可穿戴生理基础模型的预训练与下游评测依赖多模态、多场景的生理时序数据集。本专题按信号采集形态与模态覆盖划分为五个部分：**腕部生理与日常活动数据集**、**连续血糖监测（CGM）数据集**、**临床连续 PPG 与多模态监护数据集**、**睡眠多导与大型人群队列**以及**心电信号数据集**，并在各条目及汇总表中标注 `含 PPG`、`PPG+ECG 配对`、`纯 ECG` 与 `派生指标` 属性，便于区分支持连续背景采集的脉搏波数据与纯心电数据。
 
 ## 目录
 
@@ -20,21 +20,15 @@
 
 ### OpenMHC
 
-`含 PPG` · Stanford University / Imperial College London / Charité · 2026 · [主页/代码](https://github.com/AshleyLab/OpenMHC) · [论文](https://arxiv.org/abs/2607.16235)
+`派生指标` · Stanford / Imperial College London 等 · 2026 · [代码](https://github.com/AshleyLab/OpenMHC) · [论文](https://arxiv.org/abs/2607.16235) · [数据状态](https://github.com/AshleyLab/OpenMHC/blob/main/DATASET.md)
 
-OpenMHC（Open MyHeartCounts）源自斯坦福大学 MyHeartCounts 移动健康研究项目，面向可穿戴基础模型提供大规模真实世界多模态时序与标准化评测基准。
+OpenMHC 源自 My Heart Counts 研究。论文覆盖 11,894 人、超过 6,000 万小时记录、19 个穿戴通道及最多 169 项关联健康、生活方式、情绪和行为变量。通道主要为心率、步数、睡眠、活动等派生指标；有 PPG 测得的心率不等于开放原始 PPG 波形。[论文摘要](https://arxiv.org/abs/2607.16235)
 
-- **样本规模**：共 **11,894 名**受试者，累计超过 6,700 万佩戴小时（约 282 万人·天），时间跨度达 13 年。
-- **传感器与变量**：包含智能手机与 Apple Watch 采集的 19 维分钟级时序通道（步数、心率、心率变异性 HRV、静息心率、浅睡/深睡/REM 睡眠分期、运动能量消耗、环境光等），并关联 169 维临床与生活方式变量（问卷调查、健康感知、焦虑抑郁量表、心血管病史及 HealthKit 记录）。
-- **评测赛道**：划分为 Track 1（32 项下游健康与行为预测）、Track 2A（多变量缺失插补）与 Track 2B（未来时序预测）。
-- **获取方式**：提供两级开放获取途径。轻量级子集 `OpenMHC-XS`（约 1.9 GB）无需审批，可通过官方 Python 工具包直接下载：
+基准支持健康/行为预测、多变量插补和未来预测。官方实现提供 LSM-2 与 WBM 的复现或适配模型；这些模型的训练数据和实现条件不等同于 Google/Apple 原始工业模型。按参与者划分训练、验证和测试，有助于避免个体泄漏。[官方代码](https://github.com/AshleyLab/OpenMHC)
 
-```python
-import openmhc
-openmhc.download_dataset(version="xs", dest="~/.cache/openmhc/data-xs")
-```
+截至 2026-11-04，官方发布清单标记评测代码、模型检查点和榜单已发布，完整数据集仍写为“论文接收后发布”。DATASET.md 描述 Full 约 38 GB、11,894 人，XS 为 593 人、约 1.9 GB 的开发子集，并说明 DUA 与访问令牌流程。下载函数的存在不代表所有数据当前都可匿名获取，实际应以该页发布状态为准。[发布清单](https://github.com/AshleyLab/OpenMHC#release-plan) · [数据说明](https://github.com/AshleyLab/OpenMHC/blob/main/DATASET.md)
 
-完整数据集 `OpenMHC-Full`（约 38 GB）托管于 Harvard Dataverse，注册账号并在线签署标准数据使用协议（DUA）后可通过 API Token 批量下载。
+官方注明疾病标签为自报且缺少诊断日期。它适合方法比较和基准复现，不能仅凭这些标签的分类结果建立前瞻疾病风险预测结论。[用途说明](https://github.com/AshleyLab/OpenMHC#intended-use)
 
 ### PhysioNet Wrist PPG
 
@@ -508,7 +502,7 @@ Icentia11k Continuous ECG Database 由蒙特利尔大学、Mila 研究所与医�
 
 | 数⁠据⁠集⁠与⁠领⁠域 | 机⁠构 / 来⁠源 | 传⁠感⁠器⁠与⁠采⁠样⁠率 | 样⁠本⁠规⁠模⁠与⁠适⁠用⁠任⁠务 | 获⁠取⁠方⁠式 |
 | :--- | :--- | :--- | :--- | :---: |
-| [**OpenMHC**](#openmhc)<br>手⁠腕⁠多⁠模⁠态 · `含 PPG` | Stanford / Imperial / Charité | 19 维⁠分⁠钟⁠级⁠时序 + 169 维⁠自⁠述⁠健⁠康变⁠量 | 11,894 人 (>6,700 万小时)<br>任务：基础模型预训练、多变量缺失插补、未来预测 | [开⁠放⁠获⁠取](https://github.com/AshleyLab/OpenMHC) |
+| [**OpenMHC**](#openmhc)<br>手⁠腕⁠多⁠模⁠态 · `派生指标` | Stanford / Imperial 等 | 19 通⁠道⁠分⁠钟⁠级派⁠生⁠指⁠标，非⁠原⁠始 PPG 波⁠形 | 11,894 人、超 6,000 万小时<br>任务：健康/行为预测、缺失插补、未来预测 | [待⁠发⁠布](https://github.com/AshleyLab/OpenMHC/blob/main/DATASET.md)<br>全⁠量⁠数⁠据待⁠论⁠文⁠接收⁠后⁠发⁠布，使⁠用⁠受 DUA 约⁠束 |
 | [**PhysioNet Wrist PPG**](#physionet-wrist-ppg)<br>手⁠腕⁠多⁠模⁠态 · `PPG+ECG 配对` | Univ. of Manchester | 腕⁠部 PPG/ACC/Gyro 256 Hz + 胸 ECG 256 Hz | 8 人 (走、跑、骑行 4 类运动)<br>任务：运动伪影消除、运动心率回归 | [开⁠放⁠获⁠取](https://physionet.org/content/wrist/1.0.0/) |
 | [**PPG-DaLiA**](#ppg-dalia)<br>手⁠腕⁠多⁠模⁠态 · `PPG+ECG 配对` | Univ. of Siegen / Bosch | 腕⁠部 PPG 64 Hz、ACC 32 Hz、EDA 4 Hz + 胸 ECG 700 Hz | 15 人 (每人 2.5 小时，共 36 小时)<br>任务：日常活动心率监测与去噪 | [开⁠放⁠获⁠取](https://archive.ics.uci.edu/dataset/495/ppg+dalia) |
 | [**WESAD**](#wesad)<br>手⁠腕⁠多⁠模⁠态 · `PPG+ECG 配对` | Univ. of Siegen / Bosch | 腕⁠部 E4 (PPG/ACC/EDA/Temp) + 胸 RespiBAN 700 Hz | 15 人 (实验室压力与情绪诱发)<br>任务：心理压力检测、情绪状态分类 | [开⁠放⁠获⁠取](https://archive.ics.uci.edu/dataset/465/wesad+wearable+stress+and+affect+detection) |

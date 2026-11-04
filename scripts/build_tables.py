@@ -40,6 +40,7 @@ ACCESS_LABELS = {
     "restricted": "受限申请",
     "gated": "申请获取",
     "closed": "未公开",
+    "planned": "待发布",
 }
 
 
@@ -81,7 +82,26 @@ def replace_block(text: str, marker: str, content: str) -> str:
     )
     if not pattern.search(text):
         raise RuntimeError(f"未找到标记块 {marker}")
-    return pattern.sub(rf"\1\n\n{content.strip()}\n\n\3", text)
+    return pattern.sub(lambda match: f"{match[1]}\n\n{content.strip()}\n\n{match[3]}", text)
+
+
+def format_org_venue(m: dict) -> str:
+    """按机构分行，长刊名保留词间换行机会，避免整列被不可断行文本撑宽。"""
+    org = str(m.get("org_short") or m.get("org", "")).strip()
+    org_lines = [protect_cjk_chunks(part, chunk_size=4) for part in re.split(r"\s+/\s+", org)]
+    venue = str(m.get("venue_short") or m.get("venue", "")).strip()
+    if len(venue) <= 12:
+        venue = nowrap(venue)
+    else:
+        venue = re.sub(r"\s+(\d{4}(?:\s*[/\-\u2011\u2013]\s*\d{4})?)$", r"<br>\1", venue)
+    return "<br>".join(part for part in [*org_lines, venue] if part)
+
+
+def format_modality(m: dict) -> str:
+    """把模态组合与括号说明分行，让机制列获得更多可用宽度。"""
+    text = str(m.get("modality_short") or m.get("modality", "")).strip()
+    text = text.replace(" (", "<br>(").replace(" + ", " +<br>")
+    return protect_cjk_chunks(text, chunk_size=4).replace(NBSP, " ")
 
 
 def format_model_resources(m: dict, inline: bool = False) -> str:
@@ -94,26 +114,28 @@ def format_model_resources(m: dict, inline: bool = False) -> str:
         )
         links.append(f"[{nowrap(paper_label)}]({m['paper']})")
 
-    open_parts: list[str] = []
     if m.get("code"):
-        open_parts.append(f"[{nowrap('代码')}]({m['code']})")
-    if m.get("weights"):
-        open_parts.append(f"[{nowrap('权重')}]({m['weights']})")
+        links.append(f"[{nowrap('代码')}]({m['code']})")
+    dataset = str(m.get("dataset") or "").strip()
+    weights = str(m.get("weights") or "").strip()
+    # 兼容旧条目误放在 weights 中的 Hugging Face 数据集，避免生成“权重”标签。
+    dataset_in_weights = "/datasets/" in weights
+    if dataset:
+        links.append(f"[{nowrap('数据')}]({dataset})")
+    if dataset_in_weights and weights != dataset:
+        links.append(f"[{nowrap('数据')}]({weights})")
+    if weights and not dataset_in_weights:
+        links.append(f"[{nowrap(m.get('weights_label') or '权重')}]({weights})")
+    elif m.get("weights_status"):
+        links.append(protect_cjk_chunks(str(m["weights_status"]), chunk_size=4))
     elif m.get("access") == "gated":
-        open_parts.append(nowrap("权重需申请"))
+        links.append(nowrap("需申请"))
+    elif m.get("type") == "model":
+        links.append(nowrap("未列权重"))
+    elif not m.get("code") and not dataset and not dataset_in_weights:
+        links.append(nowrap("未列资源"))
 
-    if open_parts:
-        links.extend(open_parts)
-    else:
-        if m.get("access") == "gated":
-            links.append(nowrap("需申请"))
-        else:
-            links.append(nowrap("闭源"))
-
-    sep = f"{NBSP}·{NBSP}"
-    if inline or len(links) <= 2:
-        return sep.join(links)
-    return sep.join(links[:2]) + "<br>" + sep.join(links[2:])
+    return " · ".join(links) if inline else "<br>".join(links)
 
 
 def format_model_name(m: dict) -> str:
@@ -129,31 +151,29 @@ def format_model_name(m: dict) -> str:
 def build_recent_table(models: list[dict], limit: int = 10) -> str:
     items = sorted(
         models,
-        key=lambda x: (str(x.get("added", "")), str(x.get("date", ""))),
+        key=lambda x: (str(x.get("updated") or x.get("added", "")), str(x.get("date", ""))),
         reverse=True,
     )[:limit]
     headers = [
-        nowrap("收录日期"),
+        nowrap("更新日期"),
         nowrap("模型 / 基准"),
-        nowrap("机构与发表"),
+        nowrap("机构") + "<br>" + nowrap("与发表"),
         nowrap("传感模态"),
-        nowrap("核心机制与开源资源"),
+        nowrap("核心机制") + "<br>" + nowrap("与资源"),
     ]
     lines = [
         "| " + " | ".join(headers) + " |",
         "| :---: | :--- | :--- | :--- | :--- |",
     ]
     for m in items:
-        added_cell = nowrap(str(m.get("added", "")))
+        added_cell = nowrap(str(m.get("updated") or m.get("added", "")))
         name_cell = format_model_name(m)
-        org = protect_cjk_chunks(str(m.get("org", "")), chunk_size=4)
-        venue = nowrap(str(m.get("venue", "")))
-        org_venue_cell = f"{org}<br>{venue}" if org and venue else (org or venue)
-        modality_cell = protect_cjk_chunks(str(m.get("modality", "")), chunk_size=5)
+        org_venue_cell = format_org_venue(m)
+        modality_cell = format_modality(m)
         res = format_model_resources(m, inline=True)
         summary = str(m.get("method", "")).strip()
         if m.get("data"):
-            summary = f"{summary}（{m['data']}）" if summary else str(m["data"])
+            summary = f"{summary}<br>规模 {m['data']}" if summary else str(m["data"])
         lines.append(
             f"| {added_cell} | {name_cell} | {org_venue_cell} | {modality_cell} | {summary}<br>{res} |"
         )
@@ -163,10 +183,10 @@ def build_recent_table(models: list[dict], limit: int = 10) -> str:
 def build_models_table(models: list[dict]) -> str:
     headers = [
         nowrap("模型 / 基准"),
-        nowrap("机构与发表"),
+        nowrap("机构") + "<br>" + nowrap("与发表"),
         nowrap("传感模态"),
-        nowrap("核心机制与数据规模"),
-        nowrap("开源资源"),
+        nowrap("核心机制") + "<br>" + nowrap("与数据规模"),
+        nowrap("论文") + "<br>" + nowrap("与资源"),
     ]
     lines = [
         "| " + " | ".join(headers) + " |",
@@ -176,20 +196,22 @@ def build_models_table(models: list[dict]) -> str:
         if m.get("type") == "survey":
             continue
         name_cell = format_model_name(m)
-        org = protect_cjk_chunks(str(m.get("org", "")), chunk_size=4)
-        venue = nowrap(str(m.get("venue", "")))
-        org_venue_cell = f"{org}<br>{venue}" if org and venue else (org or venue)
-        modality_cell = protect_cjk_chunks(str(m.get("modality", "")), chunk_size=5)
+        org_venue_cell = format_org_venue(m)
+        modality_cell = format_modality(m)
 
         method = str(m.get("method", "")).strip()
         params = str(m.get("params", "")).strip()
-        if params and params not in ("-", "—") and m.get("type") != "benchmark":
-            method_line = f"{method}（{params}）" if method else params
+        param_pattern = r"\s*".join(re.escape(part) for part in params.split())
+        params_in_method = bool(params) and re.search(
+            rf"(?<![A-Za-z0-9.]){param_pattern}(?![A-Za-z0-9.])", method
+        )
+        if params and params not in ("-", "—") and m.get("type") != "benchmark" and not params_in_method:
+            method_line = f"{method}<br>参数 {params}" if method else f"参数 {params}"
         else:
             method_line = method or "-"
         data_str = str(m.get("data", "")).strip()
         if data_str and data_str not in ("-", "—"):
-            method_data_cell = f"{method_line}<br>规模：{data_str}"
+            method_data_cell = f"{method_line}<br>规模 {data_str}"
         else:
             method_data_cell = method_line
 
@@ -232,6 +254,8 @@ def build_datasets_table(datasets: list[dict], local_doc_links: bool = False) ->
         access_label = nowrap(ACCESS_LABELS.get(d.get("access", ""), d.get("access", "查看主页")))
         url = d.get("url") or d.get("paper") or ""
         access_cell = f"[{access_label}]({url})" if url else access_label
+        if d.get("access_note"):
+            access_cell += "<br>" + protect_cjk_chunks(str(d["access_note"]), chunk_size=4)
         lines.append(
             f"| {name_cell} | {org_cell} | {sensors_cell} | {scale_tasks_cell} | {access_cell} |"
         )

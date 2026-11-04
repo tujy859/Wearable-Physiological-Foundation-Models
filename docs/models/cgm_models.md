@@ -83,74 +83,68 @@ GlucoFM 摒弃了在原始数值空间逐点重建的 MAE 范式，转向隐空�
 
 ### CGM-JEPA
 
-> **发表信息**：CRUISE Research Group 2025 · [权重与数据集](https://huggingface.co/CRUISEResearchGroup/CGM-JEPA)  
-> **机构**：新南威尔士大学 (UNSW CRUISE Research Group)  
-> **预训练数据**：228 名受试者（公开多队列标准化重组语料）  
-> **开源状态**：开源预训练权重与配套数据集（Hugging Face）
+UNSW / Google Research · arXiv 2026 · [论文](https://arxiv.org/abs/2605.00933) · [代码](https://github.com/cruiseresearchgroup/CGM-JEPA) · [权重与数据入口](https://huggingface.co/CRUISEResearchGroup/CGM-JEPA)
 
 ![CGM-JEPA 架构](../figures/cgm-jepa/overview.png)
 
-图源：CGM-JEPA 架构示意图
+图源为 CGM-JEPA 论文架构图，arXiv 2605.00933。
 
-CGM-JEPA 是 GlucoFM 的单流联合嵌入预测前作原型与开源对照基线，为社区提供了可直接调用的预训练权重与标准化数据集切分。
+CGM-JEPA 预测被遮蔽片段的潜在表示，X-CGM-JEPA 进一步加入 Glucodensity 分布视图。两者用于研究同一代谢状态在居家 CGM、静脉 OGTT 和分布摘要之间的迁移。预训练包含 228 人约 38.9 万条读数，下游公开子集的两个临床队列分别为 27 人和 17 人。[论文](https://arxiv.org/abs/2605.00933)
 
-- **架构与配置**：采用 24 Patch × 12 步（每块对应 1 小时）的一维卷积分块、EMA 动量目标编码器（动量 $0.997$）与单层轻量 Predictor 骨架，参数量约 **0.5M**。
-- **开源生态**：在 Hugging Face 完整开放了预训练模型权重、预训练语料库 `CGM-JEPA-Pretraining` 以及下游评测集 `CGM-JEPA-Downstream`，是复现潜空间预测与双流滤波消融实验的重要开源基座。
+官方实现将一天的 288 个五分钟采样点分成 24 个块，公开 CGM-JEPA 与 X-CGM-JEPA 检查点、预训练数据和下游划分。作者在 20 次重复的二折交叉验证下报告，X-CGM-JEPA 相对最强基线在跨队列及静脉至 CGM 迁移中的 AUROC 最大分别提高 6.5 和 3.6 个百分点。[官方实现](https://github.com/cruiseresearchgroup/CGM-JEPA) · [论文](https://arxiv.org/abs/2605.00933)
+
+评注。此工作提供了可复现的潜空间与分布视图消融。临床验证样本较小，复现中应保留受试者级去重、划分及置信区间，并将跨视图设计的贡献与队列差异分别分析。
 
 ---
 
 ### GluFormer
 
-> **发表信息**：Nature 2026（预印本 arXiv 2024） · [论文](https://www.nature.com/articles/s41586-025-08639-6) · [代码](https://github.com/Guylu/GluFormer)  
+> **发表信息**：Nature 2026（预印本 arXiv 2024） · [论文](https://www.nature.com/articles/s41586-025-09925-9) · [代码](https://github.com/Guylu/GluFormer)<br>
 > **机构**：Pheno.AI / 魏茨曼科学研究所 (Weizmann Institute) / NVIDIA  
 > **预训练数据**：10,812 名非糖尿病及前驱糖尿病受试者（超 1,000 万条连续血糖读数，人类表型组计划 HPP）  
-> **开源状态**：开源评估与特征提取代码（预训练权重受 HPP 队列隐私协议限制需申请）
+> **开源状态**：官方仓库提供训练、评估与特征提取代码；本轮未找到预训练权重下载入口
 
 ![GluFormer 架构与训练流程](../figures/gluformer/overview.png)
 
 图源：GluFormer 论文 Fig. 1（Nature 2026 / arXiv:2408.11876）
 
-GluFormer（*A Foundation Model for Continuous Glucose Monitoring and Metabolic Health*）是基于万人级前瞻性纵向队列训练的自回归生成式血糖基础模型。
+GluFormer（*A foundation model for continuous glucose monitoring data*）是基于万人级前瞻性纵向队列训练的自回归生成式血糖基础模型。
 
 #### 核心架构与自回归建模
 
 - **分箱离散化词元（Quantization Tokenization）**：将连续血糖测量区间均匀量化映射为 460 个离散词元（Bins），从而将连续生理时序建模转化为标准的因果语言模型下一词元预测任务（Next-Token Prediction）。
-- **超长上下文窗口**：支持长达 **1,200 个 Token（对应约 12.5 天连续监测）** 的上下文窗口，采用 16 层 GPT 式单向因果 Transformer（特征维度 1024，参数量约 **135M**）。
+- **上下文窗口**：训练使用 1,200 个词元的片段，在 15 分钟采样下对应约 12.5 天。官方实现采用 16 层、16 个注意力头、隐藏维度 1,024、前馈维度 2,048 的因果 Transformer，参数量约 135M。[作者训练代码](https://github.com/Guylu/GluFormer/blob/main/train_model/train_GluFormer.py)
 - **临床长程预后与多模态扩展**：
   - **跨年远期结局预测**：在长达 2～12 年的前瞻性随访中，仅凭入组基线期的 14 天 CGM 表征，即可显著超越传统临床指标（HbA1c、空腹血糖）预测受试者未来发生 2 型糖尿病、心血管疾病及视网膜病变的风险；
-  - **个性化饮食响应生成**：通过交叉注意力融合餐食宏量营养素记录，可自回归生成受试者进食特定食物后的餐后血糖波动轨迹。
+  - **饮食响应生成**：多模态扩展将宏量营养素记录转为饮食词元，与血糖共同输入，评估餐后血糖轨迹生成。[官方实现说明](https://github.com/Guylu/GluFormer)
 
 ---
 
 ### CGMformer
 
-> **发表信息**：National Science Review (NSR) 2025 · [论文](https://doi.org/10.1093/nsr/nwaf082) · [代码](https://github.com/YurunLu/CGMformer) · [权重](https://github.com/YurunLu/CGMformer)  
-> **机构**：中国科学院微系统与信息技术研究所 / 上海交通大学医学院附属第六人民医院  
-> **预训练数据**：58,847 名中国受试者（累计 131 万天真实世界临床 CGM 记录）  
-> **开源状态**：开源代码与官方预训练权重
+中国科学院 / 上海交通大学医学院附属第六人民医院等 · National Science Review 2025 · [论文](https://doi.org/10.1093/nsr/nwaf039) · [代码与权重入口](https://github.com/YurunLu/CGMformer)
 
-CGMformer（*CGMformer: A Foundation Model for Continuous Glucose Monitoring in Real-World Clinical Practice*）是面向临床真实世界诊疗闭环的大规模掩码自编码血糖基座。
+CGMformer 将单日 288 点 CGM 离散化为血糖词元，使用四层、每层八头的 Transformer 编码器进行掩码预测，并对高低血糖词元调整遮蔽权重。论文分别报告全国多中心数据（964 人、1,917 人天）和真实世界扩展数据（58,847 人、1,310,548 人天）的预训练实验，模型规模实验覆盖约 0.8M-10M 参数。[论文 Fig. 1 与方法](https://doi.org/10.1093/nsr/nwaf039)
 
-- **掩码语言建模（BERT-style MLM）**：采用双向 Transformer 编码器结构（提供 0.85M 至 10M 等多种参数规格），将单日 288 点血糖值量化为 260 个离散 Token 并引入 `PAD` 与 `MASK` 特殊标记，通过上下文双向注意力还原被随机掩蔽的血糖读数。
-- **大规模临床应用验证**：依托上海六院等中心近 5.9 万人的真实世界监测队列预训练，重点验证了院内血糖变异性分型、糖尿病视网膜病变（DR）筛查以及个性化降糖药物与胰岛素方案辅助决策能力。
+作者报告糖尿病筛查 AUROC 0.914、并发症筛查 AUROC 0.741，并研究血糖分型和膳食反应预测。两组语料、各下游任务与模型规格应按原实验对应，不能把所有结果都归因于 5.9 万人版本。官方仓库提供训练代码与 Google Drive 检查点入口。[论文](https://doi.org/10.1093/nsr/nwaf039) · [官方实现](https://github.com/YurunLu/CGMformer)
+
+评注。此项补充掩码离散词元路线，可与 GluFormer 的自回归目标和 CGM-JEPA 的潜空间目标对照。现有实验提供筛查与膳食研究证据，不能据此直接推导自动用药或胰岛素剂量建议。
 
 ---
 
 ### CGM-LSM
 
-> **发表信息**：arXiv 2024 · [论文](https://arxiv.org/abs/2412.09727) · [代码](https://github.com/JHU-CDHAI/cgmlsm)  
-> **机构**：约翰霍普金斯大学数字健康与人工智能中心 (JHU CDHAI)  
-> **预训练数据**：592 名受试者（约 1,600 万条连续血糖读数）  
-> **开源状态**：开源训练与推理代码
+JHU / Welldoc · npj Health Systems 2025 · [期刊论文](https://doi.org/10.1038/s44401-025-00039-y) · [2024 预印本](https://arxiv.org/abs/2412.09727) · [代码](https://github.com/JHU-CDHAI/cgmlsm)
 
 ![CGM-LSM 数据流程与架构](../figures/cgm-lsm/overview.png)
 
 图源：CGM-LSM 论文 Fig. 1（arXiv:2412.09727）
 
-CGM-LSM（*CGM-LSM: A Language Model-Based Foundation Model for Continuous Glucose Monitoring*）探索将经典语言模型骨架直接迁移至短程血糖轨迹预测任务。
+CGM-LSM 的正式论文为 *A large sensor foundation model pretrained on continuous glucose monitor data for diabetes management*。模型使用 12 层、12 头、隐藏维度 768 的 GPT-2 式解码器，将 400 个整数血糖值和 17 个特殊标记组成词表，以 24 小时历史预测未来 2 小时。论文未明确给出总参数量，不沿用原始 GPT-2 语言模型的参数数目。[论文 Methods](https://doi.org/10.1038/s44401-025-00039-y)
 
-- **设计机制**：基于 GPT-2 Small 架构（约 **124M** 参数），将连续血糖值划分为 400 个离散分箱词元；输入序列设定为 26 小时（24 小时历史上下文 + 未来 2 小时自回归预测窗口）。
-- **短程外推表现**：在 OhioT1DM 等公开基准上，针对未来 30 分钟、60 分钟与 120 分钟的短程连续血糖预测，均方根误差（RMSE）相比传统 ARIMA 与循环神经网络（RNN）基线降低达 48.51%。
+正文列出 592 名参与者和 15,961,183 个有效样本，以参与者与观察时间构成一个实例，每例对应 26 小时窗口。摘要却写 160 万条记录，Methods 又将同一计数称为 glucose records，统计名称与数量存在不一致。本仓库采用正文的 592 人、约 1,596 万个有效实例口径，避免把重叠窗口数换算成独立观测时长。[论文 Results 与 Methods](https://pmc.ncbi.nlm.nih.gov/articles/PMC13354170/)
+
+期刊版在 OhioT1DM 外部评估中报告，1 小时预测 RMSE 为 15.90 mg/dL，相对论文选取的基线降低 48.51%；该百分比对应这一预测时距，不能扩写为所有预测窗口均降低相同比例。官方仓库提供训练和评测流程，此次未找到预训练权重下载入口。[期刊论文](https://doi.org/10.1038/s44401-025-00039-y) · [官方仓库](https://github.com/JHU-CDHAI/cgmlsm)
 
 ---
 
@@ -175,15 +169,15 @@ GlucoBench 针对早期血糖预测研究数据集切分不一、评价指标单
 
 | 对⁠比⁠维⁠度 | Google GlucoFM | CRUISE CGM-JEPA | Pheno.AI GluFormer | 中⁠科⁠院 CGMformer | JHU CGM-LSM |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **发⁠表⁠来⁠源** | arXiv 2026 | Hugging Face 2025 | Nature 2026 | NSR 2025 | arXiv 2024 |
-| **学⁠习⁠范⁠式** | 双流 JEPA 潜空间预测 | 单流 JEPA 潜空间预测 | GPT 式因果自回归生成 | BERT 式 MLM 掩码重构 | GPT-2 式因果自回归 |
+| **发⁠表⁠来⁠源** | arXiv 2026 | arXiv 2026 | Nature 2026 | NSR 2025 | npj Health Systems 2025 |
+| **学⁠习⁠范⁠式** | 双流 JEPA 潜空间预测 | JEPA 潜空间预测与 Glucodensity 跨视图扩展 | GPT 式因果自回归生成 | BERT 式 MLM 掩码重构 | GPT-2 式因果自回归 |
 | **词⁠元⁠化⁠方⁠式** | 连续 Conv1d + 双流滤波 | 连续 Conv1d 分块 | 460 Bins 离散化 | 260 Bins 离散化 | 400 Bins 离散化 |
-| **参⁠数⁠量** | **0.72M** | **约 0.5M** | 约 135M | 0.85M～10M | 约 124M |
-| **预⁠训⁠练⁠规⁠模** | 477 人（10.9 万小时） | 228 人（公开重组语料） | 10,812 人（>1,000 万读数） | 58,847 人（131 万天） | 592 人（1,600 万读数） |
+| **参⁠数⁠量** | **0.72M** | 未统一报告 | 约 135M | 0.85M～10M | 总参数量未报告 |
+| **预⁠训⁠练⁠规⁠模** | 477 人（10.9 万小时） | 228 人（约 38.9 万读数） | 10,812 人（>1,000 万读数） | 58,847 人（131 万天） | 592 人（约 1,596 万有效实例，见统计口径说明） |
 | **时⁠间⁠上⁠下⁠文** | 单日 24 小时（288 点） | 单日 24 小时（288 点） | **1,200 点（约 12.5 天）** | 单日 24 小时（288 点） | 26 小时（24h 历史 + 2h 预测） |
-| **缺⁠失⁠值⁠处⁠理** | 二值观测掩码显式保留 | 观测掩码保留 | 线性插值 | `PAD` 特殊标记填充 | 连续完整性切片过滤 |
-| **核⁠心⁠优⁠势⁠任⁠务** | 临床代谢表型线性探针判别 | 开源重训与迁移评测基线 | 2～12 年远期结局与饮食模拟 | 院内分型、并发症筛查与用药 | 30～120 分钟短程血糖外推 |
-| **开⁠源⁠状⁠态** | 论文公开（代码承诺开源） | 代码、数据与权重完全开源 | 代码开源（权重受限） | 代码与官方权重完全开源 | 代码开源 |
+| **缺⁠失⁠值⁠处⁠理** | 二值观测掩码显式保留 | 发布数据使用平滑样条插补 | 线性插值 | `PAD` 特殊标记填充 | 连续完整性切片过滤 |
+| **核⁠心⁠优⁠势⁠任⁠务** | 临床代谢表型线性探针判别 | 开源重训与迁移评测基线 | 2～12 年远期结局与饮食模拟 | 血糖分型、并发症筛查与膳食反应 | 30～120 分钟短程血糖外推 |
+| **开⁠源⁠状⁠态** | 论文公开（代码承诺开源） | 代码、数据与权重完全开源 | 代码可得，未列预训练权重 | 代码与官方权重完全开源 | 代码开源 |
 
 ---
 

@@ -56,38 +56,19 @@
 
 ### SensorFM
 
-Google Research / Fitbit Health AI · 2026 · [论文](https://arxiv.org/abs/2605.22759)
+Google Research 及合作团队 · arXiv 2026 · [论文](https://arxiv.org/abs/2605.22759) · [系列专题](longitudinal_wearable_models.md#sensorfm)
 
 ![SensorFM 架构与评测流程](../figures/sensorfm/overview.png)
 
-图源：SensorFM 论文 Fig. 1（*Towards a General Intelligence and Interface for Wearable Health Data*, arXiv:2605.22759）
+图源为 SensorFM 论文 Fig. 1，arXiv 2605.22759。
 
-SensorFM 是面向穿戴传感器时序构建的超大规模多模态基础模型，系统验证了万亿分钟级穿戴数据下的 Scaling Law。
+SensorFM 使用五类传感器派生的 **34 个分钟级聚合特征**，以 24 小时窗口预训练 ViT-1D MAE。它延续 LSM-2 的 Adaptive and Inherited Masking（AIM），同时处理真实缺失和人工遮挡，重构损失仅计算于原本可观测的遮挡区域。
 
-#### 1. 核心规模与数据构成
+论文报告 500 万参与者、超过 20 亿多模态数据小时，并另报超过 1 万亿传感器分钟。两项时长的换算口径在原文中未充分解释，本仓库分别保留。模型配置从约 0.139M 到 110.763M 参数，包含编码器与解码器。
 
-- **数据总量**：超过 **1 万亿分钟（>1,000,000,000,000 分钟）** 的真实可穿戴多模态时序；
-- **用户基数**：超过 **500 万**名经过知情同意的 Fitbit 与 Google Pixel Watch 全球真实用户；
-- **传感器模态**：绿光 / 红外 PPG、三轴 ACC、皮电反应（EDA）、皮肤温度、气压高度计；
-- **开源状态**：论文已发布；模型权重与代码闭源（商业生态核心资产）。
+在 35 项判别任务中，34 项优于工程特征监督基线。这里的比较对象应保留，不能扩大为所有专用模型。论文还评估少样本迁移、缺失数据填补和健康 Agent 工具调用。[论文第 2 节与方法 M.3](https://arxiv.org/html/2605.22759v3)
 
-#### 2. 核心架构与自监督算法
-
-- **统一时间分块 (Multi-Rate Patch Tokenization)**：
-  - 摒弃了简单粗暴的插值重采样，采用固定物理时间窗口（Physical Time Slice）作为统一的 Patch 跨度；
-  - 为不同速率的传感器配备独立的线性投影嵌入层（Sensor-Specific Embedding），附加时间位置编码后输入统一的双向 Transformer 编码器。
-- **复合预训练目标**：
-  - **Masked Multimodal Modeling**：在时域和模态域进行随机多维掩码，训练 Transformer 联合重建被遮蔽的生理片段；
-  - **Cross-Modal Infilling**：模拟硬件传感器掉线或低功耗节能策略（例如夜间关闭高耗电 PPG 仅开启低功耗 ACC），由存活模态在隐空间推断缺失模态表征。
-
-#### 3. 下游任务与 Scaling 验证
-
-- 在 **35 个下游健康与行为预测基准**上进行了迁移评估，横跨四大领域：
-  1. **心血管健康**：静息心率、运动恢复心率、HRV、血压趋势、最大摄氧量（VO2 Max）；
-  2. **代谢与活动**：步频能量消耗、高强度运动类型识别、代谢综合征风险评估；
-  3. **睡眠与神经**：睡眠深浅分期、REM 快速眼动期、阻塞性睡眠呼吸暂停；
-  4. **情绪与压力**：EDA 突变检测与全天候生理压力指数。
-- **关键结论**：在 35 项任务中的 **34 项**击败了此前针对单一任务精调的专用模型，在生理信号领域完整验证了 Scaling Law 的泛化飞轮。
+LSM-1、LSM-2、SensorFM 与 Apple WBM 的输入粒度、训练规模和结果边界见 [纵向可穿戴与行为基础模型](longitudinal_wearable_models.md)。
 
 ---
 
@@ -506,17 +487,19 @@ Apple PpgAge（21.3 万人）与 UK Biobank AI-PPG（21.2 万人）确立了光�
 
 Mannas AI · arXiv 2026 · [论文](https://arxiv.org/abs/2610.13435) · [代码](https://github.com/mannas-ai/ppg-bench)
 
-针对以往各个 PPG 基础模型采用各自碎片化的私有 / 公有测试集、不同的数据清洗过滤标准与微调协议导致无法公允对比的痛点，该工作构建了首个标准化、严谨防数据泄露的脉搏基础模型大一统评测套件。
+PPG-Bench 将 PPG 表征放入统一的数据预处理、下游头和受试者隔离交叉验证协议中比较。预训练语料与评测数据的重叠仍需单独核对，统一下游切分本身不能保证不存在预训练泄漏。[论文](https://arxiv.org/abs/2610.13435)
 
 - **评测体系与覆盖面**：
   - **参评基模**：AnyPPG、PaPaGei-S、PaPaGei-P、PulsePPG 与 SigmaPPG；
   - **评测规模**：跨越 9 个公开数据集（PPG-DaLiA、DREAMT、WESAD、ECSMP、PPG-BP、BIDMC、BUT-PPG、RealWorldPPG、WildPPG），涵盖 26 项下游任务（心率回归、体动识别、睡眠分期、压力情绪、抑郁筛查、年龄 / 血压估计及身份识别）；
   - **4 级递进适配协议**：线性探测（Linear Probing）、随机森林（Random Forest）、冻结 MLP 探针、端到端全量微调（End-to-End Finetuning）；
   - **严苛对照组**：随机 / 常数基线、无训练参数的脉搏率变异性特征集（PRV）、通用时序大模型（MOMENT）。
-- **核心结论（为基模“挤水分”）**：
+- **论文结果**：
   - 在全部 68 组“任务-适配策略”配置中，有 **35.3%** 的组合相比最简单的随机 / 常数基线未展现出统计学优势；
   - 在高达 **83.8%（57/68）** 的任务组合中，无任何一个专用 PPG 基础模型能同时战胜“确定性 PRV 特征”与“通用时序大模型 MOMENT”；
-  - 下游探测头容量越复杂，在小规模临床稀疏数据集上过拟合风险越显著，呼吁未来脉搏表征学习必须始终引入强物理先验的对照组。
+  - 增加下游头容量通常改善结果，但在表征表现接近随机或常数基线的任务中也可能退化。选型应同时比较简单特征、通用时序模型和不同适配预算。
+
+**版本口径**：论文报告 26 项任务与 68 组任务-适配组合；截至 2026-11-04，官方代码 README 以 17 项 primary tasks 描述公开框架。复现实验需固定代码版本和任务配置，不能把两种计数直接视为相同。[官方实现](https://github.com/mannas-ai/ppg-bench)
 
 ---
 
@@ -526,7 +509,7 @@ Mannas AI · arXiv 2026 · [论文](https://arxiv.org/abs/2610.13435) · [代码
 
 ### NormWear
 
-马萨诸塞大学阿默斯特分校 (UMass Amherst) · arXiv 2024 · [论文](https://arxiv.org/abs/2412.09758) · [代码](https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear) · [权重](https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear)
+马萨诸塞大学阿默斯特分校 (UMass Amherst) · ACM HEALTH 2026（作者模型卡标为 In Press） · [论文](https://arxiv.org/abs/2412.09758) · [代码](https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear) · [权重](https://huggingface.co/mosaic-laboratory/normwear)
 
 ![NormWear 架构概览](../figures/normwear/overview.png)
 
@@ -534,7 +517,7 @@ Mannas AI · arXiv 2026 · [论文](https://arxiv.org/abs/2610.13435) · [代码
 
 **方法**：针对多模态可穿戴设备（PPG、ECG、EEG、EDA/GSR、三轴 IMU）采样率异构、通道数量随穿戴配置动态变化的问题，NormWear 在整合自 15 个公开可穿戴数据集的 **10.6 万段多变量生理记录（约 1.48 万小时）** 上进行了统一自监督预训练：
 1. **连续小波变换（CWT）时频词元化**：结合信号一阶与二阶导数对每个通道执行连续小波变换，将一维非平稳生理波形映射为多尺度时频尺度图（Scalogram），再经二维卷积块投影为词元序列；
-2. **任意通道感知融合（[CLS]-Attention Channel Fusion）**：各传感器通道共享底层 Intra-channel Transformer 权重，并通过每隔数层插入的跨通道 [CLS] 注意力融合块（复杂度仅为 (d \cdot C^2)$，独立于序列长度 $）支持任意通道组合热插拔；
+2. **任意通道感知融合（[CLS]-Attention Channel Fusion）**：各传感器通道共享底层 Intra-channel Transformer 权重，并通过每隔数层插入的跨通道 [CLS] 注意力融合块（在通道汇总词元之间执行注意力）支持任意通道组合热插拔；
 3. **时空-尺度混合掩码重建与语义对齐**：结合时间轴与小波频率尺度轴的结构化掩码自编码（Temporal + Scale MAE），并引入受记忆流启发的时间融合表征对齐机制。
 
 **结果**：在 11 个下游公开数据集的 18 项生理与健康评估任务（涵盖 WESAD 情绪压力、PPG-DaLiA 心率、无创血压、肌电手势及脑电认知负荷）上，NormWear 在零样本、线性探测与微调设定下均显著优于单模态自监督模型及通用时序基座（MOMENT、Chronos）。此外，针对单通道 PPG 的离散词元自回归预训练模型请参阅心电与电生理专题中的 **[HeartGPT (PPG-PT)](ecg_models.md#heartgpt)**。
@@ -560,19 +543,11 @@ Mannas AI · arXiv 2026 · [论文](https://arxiv.org/abs/2610.13435) · [代码
 
 ### SleepFM
 
-斯坦福大学医学院 / DTU · Nature Medicine 2024 / arXiv 2026 · [代码](https://github.com/zou-group/sleepfm-v2-public)
+斯坦福大学 / DTU 等 · [Nature Medicine 2026 临床版](https://doi.org/10.1038/s41591-025-04133-4) · [SleepFM-2 预印本](https://arxiv.org/abs/2609.06849v2) · [临床版代码与权重](https://github.com/zou-group/sleepfm-clinical)
 
-Stanford Medicine（Emmanuel Mignot、James Zou 教授团队）研发的多模态生理基座家族（涵盖 200 余万小时临床多导睡眠监测 PSG），对消费级智能手表算法研发具有直接指导价值（完整数学原理、双流 LOO+MAE 架构及临床 NSRR 数据集请查阅专题文档：[睡眠与心肺多模态基础模型](sleep_models.md#sleepfm)）：
+SleepFM 临床版利用超过 58.5 万小时 PSG 学习多模态表征；SleepFM-2 将开发与评测语料扩展到超过 200 万小时，其中预训练使用 235,865 份记录。二代论文提供的代码地址在本轮检索时返回 404，资源状态应与可获取的临床版分别记录。
 
-1. **SleepFM 1.0：留一对比学习与单夜预测 130+ 疾病**：
-   - 基于 65,000 名受试者近 60 万小时 PSG 数据，提出留一对比学习（LOO-CL），在 30 秒窗口显式建模大脑（EEG）、心血管（ECG/PPG）、呼吸力学与肌电（EMG）的生理因果耦合；单夜特征预测痴呆症（C-index 0.85）、全因死亡率（0.84）、心肌梗死（0.81）与房颤（0.78）。
-2. **SleepFM-2：手腕 PPG 零样本迁移与“物理生理代理通道桥 (Surrogate Channels Bridge)”**：
-   - **架构瘦身**：采用现代 LLaMA 骨干（RMSNorm、SwiGLU、RoPE），编码器参数量缩减至 **2.57M**，Token 步长细化至 1 秒，提取解释 58% 方差的 PC1 通用生理风险轴；
-   - **手腕 PPG 零样本迁移**：针对消费级手表采集的单通道手腕红外 PPG，冻结编码器零样本微调的 5 分类睡眠分期 Macro-F1 达 **0.531**（对比从头训练的 0.175，提升 3 倍以上）；
-   - **手腕 ACC 物理生理代理通道桥**：将手腕三轴加速度在 **0.1～0.6 Hz** 带通滤波提取**呼吸代理通道（Surrogate Respiration）**，在 **3.5～14 Hz** 带通滤波（求 L2 范数后经 0.5～3.5 Hz 滤波）提取**心动冲击代理通道（Surrogate SCG）**，无缝接入 PSG 预训练骨干。在 **UK Biobank 10 万人**腕戴加速度计随访中，针对 390 种疾病发病预测平均 C-index 达 **0.687**，直接打平了专门在 UK Biobank 10 万人加速度计上自监督预训练的专用基础模型（**0.688**）。
-3. **工程落地准则：PPG + ACC 联合检测自主神经微觉醒 (Autonomic Arousals)**：
-   - 临床皮质微觉醒（Cortical Arousals）以脑电高频突变为金标准，纯 ACC 面对“无动微觉醒”在物理上失明且易受翻身伪影干扰；
-   - 工业级腕戴方案应利用 **PPG 捕获交感神经唤醒引发的外周血管急剧收缩（PWA Drop >30%）与瞬时心率突增（HR Surge 10～20 bpm）**，并将 **ACC 作为运动伪影过滤器与伴随体动分型器**。
+二代迁移至腕部 PPG 时冻结编码器并训练预测头，睡眠分期 macro-F1 为 0.531。在 UK Biobank 腕部 ACC 疾病预测中，加入年龄、性别和 BMI 后平均 C-index 为 0.687，专用 ACC 预训练对照为 0.688，配对差异置信区间包含零。这些结果支持特定任务下的表征迁移，不能直接用于宣称腕部设备已经达到临床 PSG 的微觉醒检测能力。输入代理通道、分期评测和事件级微觉醒评测应分别验证。[完整系列分析与迁移限制](sleep_models.md#sleepfm-2)
 
 ---
 
@@ -580,39 +555,18 @@ Stanford Medicine（Emmanuel Mignot、James Zou 教授团队）研发的多模�
 
 ### OpenMHC
 
-斯坦福大学医学院 (Euan Ashley 实验室) / 帝国理工学院 / 柏林夏里特医学院 · arXiv 2026 · [论文](https://arxiv.org/abs/2607.16235) · [代码](https://github.com/AshleyLab/OpenMHC) · [数据集](https://huggingface.co/MyHeartCounts)
+Stanford / Imperial College London 等 · arXiv 2026 · [论文](https://arxiv.org/abs/2607.16235) · [代码](https://github.com/AshleyLab/OpenMHC) · [参考模型权重](https://huggingface.co/MyHeartCounts/models)
 
-![OpenMHC 数据集画像](../figures/openmhc/overview.png)
+![OpenMHC 数据与评测概览](../figures/openmhc/overview.png)
 
-图源：OpenMHC 论文 Fig. 1（*OpenMHC: Accelerating the Science of Wearable Foundation Models*, arXiv:2607.16235）
+图源：OpenMHC 原论文总览图，arXiv 2607.16235。
 
-#### 1. 破局意义：打破科技巨头对穿戴数据的垄断
+OpenMHC 包含 11,894 人、超过 6,000 万小时穿戴记录，统一健康/行为预测、缺失插补与未来预测评测。19 个传感通道主要是心率、步数、睡眠、活动等派生时序，最多关联 169 项健康与生活方式变量。基准提供 LSM-2 与 WBM 的复现或适配实现，使用条件需与工业原模型区分。[论文](https://arxiv.org/abs/2607.16235)
 
-在可穿戴健康 AI 领域，工业界科技巨头（如 Google SensorFM 的 1 万亿分钟、Apple WBM 的百万级 Apple Watch 数据）长期构筑了商业与隐私壁垒，数据与模型权重双闭源，导致学术界长期面临难以在海量真实生活数据上预训练的困境。**OpenMHC（Open MyHeartCounts）是迄今向合格研究人员开放访问的大规模真实世界可穿戴基础模型基准数据集与开源实现**：
-- **数据体量**：包含 **11,894 名**经过知情同意的受试者，横跨美、英、香港等地区，记录了 **>6,700 万小时（282 万人·天）** 的分钟级连续传感器时序（日历时间跨越长达 13 年）；
-- **全景传感器通道**：覆盖 **19 个连续生理与运动通道**（步数、心率、心率变异性、睡眠分期、高强度锻炼能耗等），并与 **169 维深度变量**（自述健康问卷、生活方式、情绪心理及 HealthKit 长期档案）建立严密对应。
+截至 2026-11-04，官方已发布评测代码与参考模型检查点，数据集发布清单仍注明论文接收后开放。Full 约 38 GB，XS 为 593 人、约 1.9 GB 的开发子集；实际访问及 DUA 条件以官方数据页为准。[发布状态](https://github.com/AshleyLab/OpenMHC#release-plan) · [数据专题](../datasets/wearable_datasets.md#openmhc)
 
-#### 2. 三大统一评测赛道 (OpenMHC Benchmark)
+评注。该基准适合统一评估输入缺失、表征迁移与时序预测。官方疾病标签是自报且缺少诊断日期，不能直接将分类表现当作前瞻临床风险证据。[官方用途说明](https://github.com/AshleyLab/OpenMHC#intended-use)
 
-OpenMHC 规范化了可穿戴基础模型的三大核心评估协议：
-1. **Track 1: 预测性任务 (Predictive Tasks)**：包含 32 项涵盖心血管健康、代谢风险与日常行为模式的下游判别任务；
-2. **Track 2A: 生成式多变量插补 (Generative Imputation)**：模拟现实佩戴中因洗澡、充电、断连造成的复杂数据空洞，评估模型重建时序动力学的能力；
-3. **Track 2B: 时序自回归未来预测 (Generative Forecasting)**：评估模型在零样本或少样本条件下推演未来心率与运动趋势的能力。
-
-#### 3. 工业级基础模型开源复现与对齐
-
-OpenMHC 团队不仅开源了数据基准，更在统一框架下完整复现并开源了前沿可穿戴基础模型：
-- **开源版 Apple WBM (Wearable Base Model)** 与 **LSM-2**：让学术界首次能够在统一标准下对标工业级骨干；
-- **跨领域时序大模型接入**：集成了 **Chronos-2** 与 **Toto** 等前沿自回归时序基座；
-- **经典强基线**：配备了提取 495 个手工生理特征的 **XGBoost**、卷积时序分类器 **MultiRocket** 及非均匀缺失时序模型 **GRU-D**。
-
-> [!NOTE]
-> **历史先驱沿革：My Heart Counts (2015) 与 Apple Heart Study (2017) 的交相辉映**  
-> - **My Heart Counts (MHC, 2015)**：苹果发布开源医学研究框架 **ResearchKit** 时的首批 5 款先驱 App 之一，由斯坦福医学院 Euan Ashley 教授主导，率先探索智能手机传感器（三轴加速度计 / 协处理器）在大规模人群中被动采集运动与心肺耐力（6MWT）。这项长达十余年的长程队列最终演进成了今天的 **OpenMHC**。  
-> - **Apple Heart Study (AHS, 2017)**：苹果官方资助、斯坦福医学院执行的 41.9 万人超大型心房颤动（AFib）临床试验，凭借严格的远程心电贴片（ePatch）核验闭环，直接促成 Apple Watch 房颤脉搏预警算法获得美国 FDA 医疗器械认证（NEJM 2019）。  
-> - 两者共同奠定了当今智能手表从“日常计步器”迈向“严肃医学基础模型”的科学基石。
-
----
 
 ### PPG-LM
 
@@ -682,23 +636,11 @@ Stage 2 冻结 / 微调 Stage 1 骨干，引入长程时序动力学聚合模块
    - 针对 256 窗口反向传播显存开销问题，采用 **Feature Cache** 机制（每场就诊仅对 8 个实时窗口反向传播梯度，其余读取缓存）；
    - 引入 Stage 1 冻结权重的余弦距离蒸馏损失（$\mathcal{L}_{\text{dst}}$），防止在学习宏观上下文时遗忘微观脉搏形态表征。
 
-#### 5. 穿戴架构范式横评：固定时间网格 (SensorFM/WBM) vs. 连续物理时间 RoPE (PPG-LM)
+#### 5. 输入时间组织与跨模型对照
 
-在构建智能手表长程健康模型（如 `Watch_LSM` 的 Layer 2 特征基模）时，如何向长程骨干输入一连串碎片化生理特征？业界存在两大主流技术阵营：
+不同模型的时间组织应结合输入与骨干理解。SensorFM 的输入是分钟级特征日窗口，AIM 会移除部分掩码词元并使用注意力掩码。WBM 将指标按小时聚合，以 168 个小时词元输入 Mamba-2。两者的序列长度和计算方式应分别报告。[系列比较](longitudinal_wearable_models.md)
 
-| 评⁠估⁠维⁠度 | 方⁠案 A：固⁠定⁠规⁠整⁠网⁠格⁠派 (Google SensorFM, Apple WBM, OpenMHC) | 方⁠案 B：连⁠续⁠物⁠理⁠时⁠间⁠派 (PPG-LM, 连⁠续⁠时⁠间 Transformer) |
-| :--- | :--- | :--- |
-| **数⁠据⁠组⁠织⁠机⁠制** | 每天切出 1,440 个 1 分钟固定网格；用户脱表、洗澡、充电时填入 `[MASK]` 或置零。 | 仅送入实际观测到的有效窗口（如每天 80 个）；每个窗口自带真实物理时间戳 $t_i$（分钟浮点数）。 |
-| **算⁠力⁠与⁠显⁠存⁠开⁠销** | **开销较大**：用户若一天仅戴表 6 小时，序列中 75% 是无效 Pad/Mask，自注意力依然承受 $O(1440^2)$ 开销。 | **满负荷有效计算**：只计算真实存在的 80 个窗口，注意力开销仅为 $O(80^2)$，算力节约百倍以上。 |
-| **时⁠间⁠分⁠辨⁠率⁠灵⁠活⁠性** | **受限于网格粒度**：分辨率受限于网格大小（如 1 min）；难以原生感知 10 秒瞬时早搏或跨数小时长程空洞。 | **连续分辨率**：时间差是真实物理分钟 / 秒，无需重采样或人工分箱。 |
-| **24h 昼⁠夜⁠节⁠律⁠感⁠知** | **天然对齐**：第 480 个网格永远是早晨 08:00，模型凭绝对网格索引即可直接学习交感神经昼夜节律。 | **需显式时间注入**：RoPE 擅长算相对时间差，对绝对钟表相位（白天 vs. 深夜）需通过外挂绝对时间特征辅助。 |
-| **缺⁠失⁠值⁠生⁠成⁠插⁠补** | **天然支持 Infilling**：预训练（AIM / 掩码自编码）本质就是在填空，开箱即具备全天波形插补能力。 | **偏向判别与表征**：需以特定时间戳作为 Query 探针查询隐空间，插补不如网格直观。 |
-
-##### PPG-LM 的折中工程智慧：兼得两家之长
-PPG-LM 在连续 RoPE 架构上做了精巧的折中设计（值得 `Watch_LSM` 重点吸收）：
-1. **主干使用连续物理时间 RoPE**：仅传递有效观测窗口，摒弃全天冗余 Pad，使反向传播与注意力计算高效运行；
-2. **外挂加性钟表正弦嵌入（Hour-of-Day Embedding）**：给每个窗口附加“一天中的几点几分”与“距离就诊过去了多久”的正弦时间特征，补齐了对 24 小时昼夜节律相位的感知；
-3. **引入中断标记（Gap Token）**：检测到两段波形之间断联超过 10 分钟时，插入一个轻量 Gap Token 显式记录中断时长 $\log(1 + \text{duration})$，既不捏造虚假生理数据，又让模型知晓发生了长时间脱表。
+PPG-LM 的临床波形窗口与这些派生特征属于不同输入层次。评价连续时间编码的收益，需要在相同数据、观察窗口和缺失条件下做消融，直接按理论词元数推算跨模型的实测速度并不充分。
 
 #### 6. 全面评测与下游临床能力越级
 
@@ -727,64 +669,21 @@ Google Research / Google DeepMind / 剑桥大学 · NeurIPS 2025 · [论文](htt
 
 ![SensorLM 架构图](../figures/sensorlm/overview.png)
 
-图源：SensorLM 论文 Fig. 1（*SensorLM: Learning the Language of Wearable Sensors*, NeurIPS 2025）
+图源为 SensorLM 论文 Fig. 1，arXiv 2506.09108。
 
-SensorLM 是在 **5,970 万小时（59.7M hours，涵盖 103,000+ 名真实 Fitbit / Pixel Watch 用户）** 真实野外可穿戴多模态数据上训练的传感器-语言多模态基础模型。
+SensorLM 将分钟级可穿戴特征与语言描述对齐。输入为五类传感器派生的 26 个特征，以 1,440 分钟构成一天的窗口。论文报告 103,000 余名参与者和约 5,970 万小时数据。
 
-#### 1. 双重演进脉络定位：Google 穿戴大模型演化与时序语言三部曲
+**方法**
 
-在整个可穿戴基础模型的技术演进史中，SensorLM 占据了两个关键的“十字路口”地位：
+通过统计、结构和语义三个层次生成配对描述，再使用传感器编码器、文本编码器和多模态解码器训练。统一目标包含对比与描述生成损失，可形成 CLIP、Cap 和 CoCa 变体。模型支持文本标签零样本分类、双向检索和描述生成。
 
-##### 脉络一：Google 自身大穿戴模型 (LSM) 与数字健康体系的完整演化链
-1. **纯数值通用时序基座**：**TimesFM**（ICML 2024），解决无先验的单变量纯数值自回归外推；
-2. **纯物理多模态自监督基座**：**SensorFM**（arXiv 2026），在 1 万亿分钟 Fitbit 数据上用 Patch-Transformer 做掩码重构，建立无标注物理表征，但代码与权重闭源；
-3. **传感器-语言跨模态基础模型**：**SensorLM**（NeurIPS 2025），在 59.7M 小时数据上通过 CoCa 架构**首次打通穿戴硬件波形与人类自然语言的语义映射，且官方开源代码**；
-4. **专病连续监测基座**：**GlucoFM**（2026），针对连续血糖（CGM）设计双流 JEPA 预测；
-5. **顶层健康对话与临床 Agent**：**Personal Health LLM (PH-LLM) / Gemini Health**，在消费级健康场景中执行高级医学推理。
+**结果**
 
-> [!IMPORTANT]
-> **开源生态的关键窗口**：由于 SensorFM 闭源，**SensorLM 是目前学术界与工业界能够直接参考 Google 如何在底层处理 Fitbit / Pixel Watch 多模态物理流、如何构建 Patch Embedding、如何与大模型交互的官方开源代码实现**。
+论文 Table 2 的 20 类活动零样本识别 AUROC 为 0.84，Macro-F1 为 0.29，平衡准确率为 0.31。测试来自论文定义的 Activity 队列，结果应结合该队列与标签构造方式解读。文本生成示例也包含错误内容。[论文第 3-5 节](https://arxiv.org/html/2506.09108v1)
 
-##### 脉络二：可穿戴“时序-语言基础模型”三部曲进化史（SensorLM → PPG-LM → TimeBraid）
-- **第一代：Google SensorLM (NeurIPS 2025, 消费级生活穿戴)**：基于 Fitbit 多传感器流，采用 **CoCa 架构**实现**单向翻译（Sensor → Text Caption）**，解决了“如何看传感器波形用自然语言写出佩戴者行为 / 生理状态”的问题；
-- **第二代：Emory/Google PPG-LM (2026.09, 严肃临床急诊监护)**：从日常生活迈向急诊与 ICU。继承了 SensorLM 的分层打标思想，但**舍弃通用 7B 大模型（改用 8 层从零初始化的因果 Transformer）杜绝医学幻觉**，并引入连续物理时间 RoPE 攻克穿戴严重断流；
-- **第三代：UCSD TimeBraid (2026.09, 通用双向推演全能基座)**：打破了 SensorLM 和 PPG-LM“单向由波形生成文本”的局限。通过**双塔深层交错全局残差注意力（MoT）**，实现 **Text ↔ Time Series 双向全通**，让模型具备**接收自然语言情景假设（如“明天降温 10 度”）、反向生成未来连续生理预测曲线（What-If / Ctrl-F）** 的推演能力。
+**评注**
 
-#### 2. 核心架构：面向异构穿戴传感器的 ViT-CoCa 统一框架
-
-针对穿戴设备传感器采样率不一致（高频 PPG vs. 极低频体温）的物理特性，SensorLM 设计了兼顾对比与生成的模块化架构：
-1. **传感器多模态分块编码器 (Sensor Encoder)**：
-   - 采用 Vision Transformer（ViT-1D/2D）变体作为骨干网络；
-   - 将不同维度的连续时序信号（PPG、三轴 ACC、EDA、皮肤温度、气压计）在时间和通道两个维度上划分为规整的二维 Patch，经过线性投影后拼装为统一长度的 Token 序列，并注入时空位置编码。
-2. **文本编码器 (Text Encoder) 与多模态因果解码器 (Multimodal Decoder)**：
-   - 包含一个单向文本编码器提取描述向量；
-   - 包含一个因果掩码多模态文本解码器，通过 Cross-Attention 层层查询传感器编码器的输出潜变量，自回归解码出长句自然语言。
-3. **CoCa (Contrastive Captioner) 双重预训练目标**：
-   - **对比损失 ($\mathcal{L}_{\text{Contrastive}}$ / InfoNCE)**：拉近配对的传感器多模态信号与文本描述之间的嵌入距离，构建对齐的多模态几何空间；
-   - **生成损失 ($\mathcal{L}_{\text{Captioning}}$)**：最大化给定传感器潜表征条件下生成目标文本的对数似然；
-   - **消融实证**：论文证实，相比于仅做 CLIP 对比学习或仅做自回归 Captioning，**CoCa 联合预训练在零样本人体活动识别与特征提取上取得了全场最优性能**。
-
-#### 3. 自动化分层语料生成流水线 (Hierarchical Caption Generation)
-
-智能手表在日常自由生活（Free-living）中缺乏人工文本标签。Google 设计了自底向上的三层自动标注语料管线，将 5,970 万小时原始波形转化为富语义文本：
-1. **统计层 (Statistical)**：从原始信号中自动解算均值、方差、极值峰值、能量谱密度与局部振幅差；
-2. **结构层 (Structural)**：识别时序的周期性、昼夜节律模式、频域主频、波峰间期（IBI / HRV）波动趋势、步频稳定性以及多传感器间的时延互相关；
-3. **语义层 (Semantic)**：结合设备内置算法判别出的高阶健康事件（如跑步、上坡骑行、深睡阶段、压力应激），组装为富有临床与生理常识的自然语言长文本。
-
-#### 4. 预训练数据与下游评测表现
-
-- **数据底座**：涵盖 **103,000+ 名受试者**、近 **6,000 万小时**的连续真实世界传感器记录；
-- **核心基准表现**：
-  1. **零样本人体活动识别 (Zero-Shot HAR)**：在完全未见过的公开活动数据集（如 Capture-24、PAMAP2）上，直接使用文本 Prompt 进行零样本分类，性能超越传统无监督对比学习模型；
-  2. **跨模态传感器-文本双向检索**：仅凭一段自然语言描述（如“*步频稳定且心率逐步抬升的慢跑*”），能高精度从海量传感器库中检索出对应的多维波形片段；
-  3. **细粒度传感器状态 Captioning**：能够准确用自然语言区分“处于紧张答辩状态的心率激增（无加速度剧烈运动，伴随 EDA 升高）”与“跑步机运动引起的心率激增（伴随高振幅加速度）”。
-
-#### 5. 对开源生态与自建手表模型 (Watch-LSM) 的实战价值
-
-Google SensorLM 的官方开源代码库（`Google-Health/consumer-health-research/sensorlm`）为自建模型提供了可直接复用的工程资产：
-1. **多传感器 Patch 分块实现**：可直接复用其将 5 种不同采样率传感器切分为 Patch 的张量对齐逻辑；
-2. **弱监督分层数据工程流水线**：借鉴其统计 → 结构 → 语义的模板代码，用于在自有未标注穿戴数据上快速孵化多模态微调语料；
-3. **CoCa 对比 + 生成训练脚本**：提供了经过 Google 工业级大规模验证的损失加权与分布式训练超参配置。
+SensorLM 提供与语言连接的建模路线。其关系应与 [LSM-1、LSM-2 和 SensorFM](longitudinal_wearable_models.md) 的数值表征路线分别讨论。迁移到原始波形或其他设备，需要重新定义特征提取与文本配对过程。
 
 ---
 
@@ -810,12 +709,12 @@ Google SensorLM 的官方开源代码库（`Google-Health/consumer-health-resear
 | 维⁠度 / 特⁠征 | SensorFM | SensorLM | OpenMHC (WBM/LSM) | PPG-LM | PPG-Distill | SleepFM-1 / 2 | Huawei Mantis |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **机⁠构⁠团⁠队** | Google Research | Google Research / DeepMind | 斯坦福大学 / 帝国理工 | Emory / UCLA / Google | Emory University | 斯坦福大学医学院 | 华为诺亚方舟实验室 |
-| **核⁠心⁠模⁠态** | PPG+ACC+EDA+Temp | 5 维传感器 (含气压计) | 19 通道腕部 + 169 维变量 | PPG + 结构化临床语言 | 腕戴 PPG | PSG + 腕部 PPG/ACC 代理桥 | 多变量 (ACC / 生理) |
-| **预⁠训⁠练⁠规⁠模** | 1 万亿分钟 (500 万人) | 5,970 万小时 (10.3 万人) | >6,700 万小时 (1.2 万人) | 73,700 小时 (MC-MED 3.6 万人) | 多任务穿戴语料 | 200+ 万小时 (23.5 万人) | 多领域通用分类语料 |
-| **网⁠络⁠骨⁠干** | Patch Transformer | ViT-2D Patch + CoCa 解码器 | WBM / LSM-2 / Chronos-2 | Patch-Conv1D + 6 层 Trans (12.7M) | 紧凑 1D 学生网络 | 2.57M LLaMA Transformer | 8M ViT-1D + TGU |
-| **自⁠监⁠督⁠目⁠标** | 掩码建模 + 跨模态填补 | CoCa 对比对齐 + 自回归生成 | 多任务表征 + 自回归预测 | CoCa 对称对比 + 物理 RoPE 聚合 | 多尺度三级知识蒸馏 | LOO-CL 对比 + 局部 MAE | 几何自监督对比学习 |
-| **抗⁠伪⁠影⁠机⁠制** | 万亿级数据 Scaling | 多传感器交叉互补 (ACC 辅助) | 真实野外全生命周期滤波 | 严格 SQI 分层 + Content-Key 过滤 | 结构化节律形态迁移 | 多器官互信息 + 物理代理桥 | 多尺度差分局部卷积 |
-| **部⁠署⁠延⁠迟** | 云端基座 | 端云协同 (编码器端侧) | 端云协同评测基准 | 极轻量 (波形塔 12.7M，单卡极速) | 极低 (内存降 19×) | 冻结编码器 (轻量 2.57M) | 端侧极低 (约 19.8 ms) |
+| **核⁠心⁠模⁠态** | 五类传感器派生的 34 个分钟级特征 | 五类传感器派生的 26 个分钟级特征 | 19 通道腕部 + 169 维变量 | PPG + 结构化临床语言 | 腕戴 PPG | PSG + 腕部 PPG/ACC 代理桥 | 多变量 (ACC / 生理) |
+| **预⁠训⁠练⁠规⁠模** | 500 万人，超 20 亿多模态数据小时 | 5,970 万小时 (10.3 万人) | >6,700 万小时 (1.2 万人) | 73,700 小时 (MC-MED 3.6 万人) | 多任务穿戴语料 | 200+ 万小时 (23.5 万人) | 多领域通用分类语料 |
+| **网⁠络⁠骨⁠干** | ViT-1D MAE + AIM | ViT 编码器 + CoCa | WBM / LSM-2 / Chronos-2 | Patch-Conv1D + 6 层 Trans (12.7M) | 紧凑 1D 学生网络 | 2.57M LLaMA Transformer | 8M ViT-1D + TGU |
+| **自⁠监⁠督⁠目⁠标** | AIM 缺失感知重构 | CoCa 对比对齐 + 自回归生成 | 多任务表征 + 自回归预测 | CoCa 对称对比 + 物理 RoPE 聚合 | 多尺度三级知识蒸馏 | LOO-CL 对比 + 局部 MAE | 几何自监督对比学习 |
+| **抗⁠伪⁠影⁠机⁠制** | 显式建模真实缺失 | 多特征与文本联合建模 | 真实野外全生命周期滤波 | 严格 SQI 分层 + Content-Key 过滤 | 结构化节律形态迁移 | 多器官互信息 + 物理代理桥 | 多尺度差分局部卷积 |
+| **部⁠署⁠延⁠迟** | 本仓库未记录部署延迟 | 本仓库未记录端侧实测延迟 | 端云协同评测基准 | 极轻量 (波形塔 12.7M，单卡极速) | 极低 (内存降 19×) | 冻结编码器 (轻量 2.57M) | 端侧极低 (约 19.8 ms) |
 | **开⁠源⁠状⁠态** | 仅论文 (闭源) | 代码开源 (GitHub) | 代码 + 权重 + 基准开源 | 论文公开 (arXiv:2609.33516) | 代码开源 (GitHub) | 代码开源 (GitHub) | 代码与权重开源 (HF) |
 
 ---
@@ -835,7 +734,7 @@ Google SensorLM 的官方开源代码库（`Google-Health/consumer-health-resear
 5. **吸收 PPG-LM 的连续时间 RoPE 与多时间尺度对齐**：
    - 用户佩戴智能手表存在大量洗澡、充电、运动暂停导致的断流与不规则采样。借鉴 PPG-LM 的**连续物理时间 RoPE**（将旋转角度绑定在真实物理分钟差上）与 **Perceiver 时间锚点潜变量探针**，可在不进行插值伪造数据的前提下实现优雅的 24 小时任意长度时序聚合。
 6. **吸收 SensorLM 的全传感器异构接入与自底向上分层打标流水线**：
-   - 借鉴 Google SensorLM 官方开源代码，将 PPG、3 轴 ACC、EDA、体温统一在 ViT-2D Patch 空间对齐；
+   - 参考 SensorLM 对分钟级派生特征的分块编码，先明确设备侧特征定义与时间聚合方式。
    - 复用其统计级 → 结构级 → 语义级三层语料自动化生成流程，在无标注海量手表数据上低成本构建用于多模态对齐的高质量指令语料。
 7. **吸收 UniCardio 的动态模态接入与防遗忘思想**：
    - 采用轻量化模态独立编码器结合任务注意力掩码，让用户在增删传感器（如外接胸带、贴片或脱下表带）时免于全模型重训。
@@ -861,7 +760,7 @@ Google SensorLM 的官方开源代码库（`Google-Health/consumer-health-resear
 | **OpenMHC** | 斯坦福大学医学院 | arXiv 2026 | 6,700 万小时真实世界穿戴基础模型基准与生态 · [论文](https://arxiv.org/abs/2607.16235) · [代码](https://github.com/AshleyLab/OpenMHC) |
 | **PPG-LM** | Emory / UCLA / Google | arXiv 2026 | 多时间尺度临床对齐脉搏-语言基础模型 · [论文](https://arxiv.org/abs/2609.33516) |
 | **SensorLM** | Google Research / DeepMind | NeurIPS 2025 | 5,970 万小时智能手表传感器-语言多模态基座 · [论文](https://arxiv.org/abs/2506.09108) · [代码](https://github.com/Google-Health/consumer-health-research/tree/main/sensorlm) |
-| **NormWear** | UMass Amherst | arXiv 2024 | 连续小波变换与任意通道融合可穿戴多模态基座 · [论文](https://arxiv.org/abs/2412.09758) · [代码](https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear) |
+| **NormWear** | UMass Amherst | ACM HEALTH 2026（In Press） | 连续小波变换与任意通道融合可穿戴多模态基座 · [论文](https://arxiv.org/abs/2412.09758) · [代码](https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear) |
 | **LIMU-BERT** | 南洋理工大学 (NTU) | ACM SenSys 2021 | 手腕三轴 IMU 空间运动表征模型 · [代码](https://github.com/dapowan/LIMU-BERT-Public) |
 | **PPG-Bench** | Mannas AI | arXiv 2026 | 9 数据集 26 任务脉搏大模型大一统评测套件 · [论文](https://arxiv.org/abs/2610.13435) · [代码](https://github.com/mannas-ai/ppg-bench) |
 | **PPG 生⁠物⁠年⁠龄⁠横⁠评** | Nabil Brag | arXiv 2026 | 脉搏基础模型血管生物年龄跨域评测基准 · [论文](https://arxiv.org/abs/2603.14030) · [代码](https://github.com/Misterbra/ppg-age-benchmark) |

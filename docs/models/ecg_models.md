@@ -25,6 +25,7 @@
   - [HeartGPT](#heartgpt)
   - [HeartBERT](#heartbert)
 - [5. 消费级脉搏（PPG）与临床心电（ECG）的跨模态桥梁](#5-消费级脉搏ppg与临床心电ecg的跨模态桥梁)
+  - [CSFM](#csfm)
 - [6. 下游心血管临床任务迁移全景](#6-下游心血管临床任务迁移全景)
 - [7. 行业结构性瓶颈与未来演进路线](#7-行业结构性瓶颈与未来演进路线)
 
@@ -58,7 +59,7 @@ MIT 计算生理学实验室 / 首尔大学医学院 / 延世大学 · *npj Digi
 | 模⁠型⁠名⁠称 | 研⁠发⁠机⁠构 | 发⁠表⁠出⁠处 | 模⁠态⁠与⁠采⁠样⁠率 | 骨⁠干⁠架⁠构⁠与⁠参⁠数⁠量 | 预⁠训⁠练⁠范⁠式 | 预⁠训⁠练⁠规⁠模 | 开⁠源⁠资⁠源 |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :---: |
 | [**ECGFounder**](#ecgfounder) | 北京大学 / 哈佛 / Emory | NEJM AI 2025 | 12 导联 / 单导联 ECG (500 Hz) | RegNet1D CNN (31M) | 置信度感知 PU 多标签监督 | 1,070 万条 (HEEDB, 180 万人) | [代码](https://github.com/PKUDigitalHealth/ECGFounder) · [权重](https://huggingface.co/PKUDigitalHealth/ECGFounder) |
-| [**ECG-CPC**](#ecg-cpc) | 奥尔登堡大学 | arXiv 2025 | 12 导联 ECG (240 Hz) | 4 层 CNN + 4 层 S4 (3.3M) | 自回归对比预测编码 (CPC) | 1,070 万条 (HEEDB, 180 万人) | [代码/权重](https://github.com/AI4HealthUOL/ecg-fm-benchmarking) |
+| [**ECG-CPC**](#ecg-cpc) | 奥尔登堡大学 | ICLR 2026 | 12 导联 ECG (240 Hz) | 4 层 CNN + 4 层 S4 (3.3M) | 自回归对比预测编码 (CPC) | 1,070 万条 (HEEDB, 180 万人) | [代码](https://github.com/AI4HealthUOL/ecg-fm-benchmarking) · [权重](https://figshare.com/articles/dataset/ECG-CPC_Checkpoint_zip/30192604) |
 | [**DeepECG-SSL**](#deepecg-ssl) | 蒙特利尔心脏研究所 | Eur Heart J 2026 | 12 导联 ECG (250 Hz) | CNN + Transformer (91M) | SimCLR/CMSC 对比 + 导联掩码 | 190 万条 (MHI + MIMIC-IV + CODE-15%) | [代码/权重](https://github.com/HeartWise-AI/DeepECG_Docker) |
 | [**HuBERT-ECG**](#hubert-ecg) | 罗马生物医学自由大学 | medRxiv 2024 | 12 导联 ECG (100 Hz) | CNN + Transformer (93M) | 迭代聚类伪标签掩码预测 | 910 万条 (整合 10 个公开/受限队列) | [代码](https://github.com/Edoar-do/HuBERT-ECG) · [权重](https://huggingface.co/Edoardo-BS/hubert-ecg-base) |
 | [**ECG-FM**](#ecg-fm) | 多伦多大学 / UHN | arXiv 2024 | 12 导联 ECG (500 Hz) | CNN + Transformer (91M) | 掩码潜表征重构 + 对比学习 | 156 万条 (MIMIC-IV-ECG + UHN) | [代码](https://github.com/kadenmckeen/ecg-fm) · [权重](https://huggingface.co/kadenmckeen/ecg-fm) |
@@ -124,7 +125,7 @@ MIT 计算生理学实验室 / 首尔大学医学院 / 延世大学 · *npj Digi
 
 ### ECG-CPC
 
-奥尔登堡大学 (Nils Strodthoff 团队) · arXiv 2025 · [论文](https://arxiv.org/abs/2509.25095) · [代码](https://github.com/AI4HealthUOL/ecg-fm-benchmarking) · [权重](https://github.com/AI4HealthUOL/ecg-fm-benchmarking)
+奥尔登堡大学 · ICLR 2026 · [论文](https://openreview.net/forum?id=xXRqWpt3Xr) · [代码](https://github.com/AI4HealthUOL/ecg-fm-benchmarking) · [权重](https://figshare.com/articles/dataset/ECG-CPC_Checkpoint_zip/30192604)
 
 ![ECG-CPC 架构概览](../figures/ecg-cpc/overview.png)
 
@@ -374,6 +375,18 @@ VUNO Inc. / 首尔大学 · ICLR 2024 · [论文](https://arxiv.org/abs/2402.046
 ---
 
 ## 5. 消费级脉搏（PPG）与临床心电（ECG）的跨模态桥梁
+
+### CSFM
+
+牛津大学及合作机构 · Nature Machine Intelligence 2026 · [论文](https://doi.org/10.1038/s42256-026-01180-5) · [代码与权重申请说明](https://github.com/guxiao0822/Cardiac-Sensing-FM)
+
+论文 [Fig. 1](https://pmc.ncbi.nlm.nih.gov/articles/PMC12932102/figure/Fig1/) 展示数据来源、传感配置与下游任务，[Fig. 4](https://pmc.ncbi.nlm.nih.gov/articles/PMC12932102/figure/Fig4/) 比较不同表征在心脏监测任务上的表现。
+
+心脏感知基础模型（Cardiac Sensing Foundation Model, CSFM）将不同导联 ECG、PPG 与可用的临床或机器生成报告联合用于预训练。语料来自 MIMIC-III-WDB、MIMIC-IV-ECG 和 CODE-FULL，涉及约 170 万人。Transformer 通过时间与通道掩码学习表征，并评测单导联、少导联、12 导联和 ECG/PPG 组合输入。[论文](https://doi.org/10.1038/s42256-026-01180-5)
+
+作者在受试者级划分下报告 CinC17、PTB-XL 和 SimBand 的最佳 macro-F1 分别为 0.677、0.357 和 0.398。ECG-QA 实验采用模板问题及候选答案的分类式评测。血压实验使用 VitalDB 的校准设置，比较时需要保留这一实验条件。[论文 Results](https://pmc.ncbi.nlm.nih.gov/articles/PMC12932102/)
+
+评注。CSFM 补充了跨设备心脏波形建模路线，可与专用 ECG 模型及 PPG 模型对照。官方代码提供推理和微调入口，当前权重需要学术访问协议和申请，主索引按受限获取记录。[官方获取说明](https://github.com/guxiao0822/Cardiac-Sensing-FM)
 
 ### 5.1 为什么要打通 PPG 与 ECG？
 
