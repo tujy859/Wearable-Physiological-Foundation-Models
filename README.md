@@ -4,9 +4,11 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Style Guide](https://img.shields.io/badge/Docs-Style%20Guide-blue.svg)](docs/STYLE.md)
 
-> 面向 **智能手表、连续血糖监测（CGM）、心电（ECG）及多导睡眠（PSG）** 等可穿戴与临床生理信号基础模型的论文精读、方法对比、开源权重与数据集索引；同时收录通用时间序列基础模型（General TSFM）与系统级多模态健康模型作为对照与延伸。
+> 面向可穿戴与临床生理基础模型的论文研读、方法对比、代码权重与数据集索引。覆盖 **原始信号与测量序列、分钟级多传感器特征、长期行为与健康指标** 三类输入，并整理语言对齐、健康推理与评测基准。
 
-![可穿戴与生理信号基础模型技术分层全景](assets/taxonomy_overview.png)
+![可穿戴与生理基础模型：数据形态、表征学习与健康应用](assets/taxonomy_overview.png)
+
+图中按模型实际接收的数据表示组织研究路线。PPG、ECG、运动信号、CGM 和 PSG 分别标注；睡眠、心血管和代谢属于下游应用。下游能力可跨路线共享，连线仅展示代表关系。完整条目见下方索引。
 
 ---
 
@@ -27,11 +29,12 @@
 
 按使用目的可从以下四条路径切入：
 
-1. **快速建立领域脉络**：先阅读下方“为什么需要生理信号专用基础模型”，再按传感器模态选读代表性工作：
-   - 腕戴 PPG 与多传感器表征：[PaPaGei](docs/models/smartwatch_models.md#papagei)、[Pulse-PPG](docs/models/smartwatch_models.md#pulse-ppg)、[AnyPPG](docs/models/smartwatch_models.md#anyppg)、[HiMAE](docs/models/smartwatch_models.md#himae)、[OpenMHC](docs/models/smartwatch_models.md#openmhc)
-   - 传感器-语言对齐与跨模态生成：[SensorLM](docs/models/smartwatch_models.md#sensorlm)、[PPG-LM](docs/models/smartwatch_models.md#ppg-lm)、[PPGFlowECG](docs/models/smartwatch_models.md#ppgflowecg)、[UniCardio](docs/models/smartwatch_models.md#unicardio)
-   - 12 导联心电与物理锚定推理：[ECG-FM](docs/models/ecg_models.md#ecg-fm)、[ST-MEM](docs/models/ecg_models.md#st-mem)、[GEM](docs/models/health_reasoning_llms.md#gem)
-   - CGM 连续血糖与多导睡眠：[GlucoFM](docs/models/cgm_models.md#glucofm)、[GluFormer](docs/models/cgm_models.md#gluformer)、[CGMformer](docs/models/cgm_models.md#cgmformer)、[SleepFM](docs/models/sleep_models.md#sleepfm)
+1. **快速建立领域脉络**：先阅读下方“为什么需要生理信号专用基础模型”，再按输入与任务选读：
+   - 腕戴原始波形与运动：[PaPaGei](docs/models/smartwatch_models.md#papagei)、[Apple PPG / ECG](docs/models/wearable_transfer_models.md#apple-ppg--ecg)、[HARNet](docs/models/wearable_transfer_models.md#harnet)、[Sensori](docs/models/wearable_transfer_models.md#sensori)
+   - 分钟级多传感器特征：[LSM-1](docs/models/longitudinal_wearable_models.md#lsm-1)、[LSM-2](docs/models/longitudinal_wearable_models.md#lsm-2)、[SensorFM](docs/models/longitudinal_wearable_models.md#sensorfm)
+   - 长期行为与健康指标：[Apple WBM](docs/models/longitudinal_wearable_models.md#wbm)、[OpenMHC 复现与基准](docs/models/smartwatch_models.md#openmhc)；原始波形与周级建模的衔接见 [WavesFM](docs/models/longitudinal_wearable_models.md#wavesfm)
+   - 独立信号专题：[心电 ECG](docs/models/ecg_models.md)、[连续血糖 CGM](docs/models/cgm_models.md)、[多导睡眠 PSG](docs/models/sleep_models.md)、[脑电 EEG](docs/models/eeg_models.md)
+   - 语言对齐、生成与推理：[HiPPT](docs/models/wearable_transfer_models.md#hippt)、[SensorLM](docs/models/smartwatch_models.md#sensorlm)、[PPGFlowECG](docs/models/smartwatch_models.md#ppgflowecg)、[GEM](docs/models/health_reasoning_llms.md#gem)、[跨模型评测](docs/models/physiological_benchmarks.md)
 2. **开源模型与预训练权重选型**：直接查阅 [基础模型与评测基准索引表](#基础模型与评测基准索引表)，按模态、参数量与开源资源筛选可直接加载的权重，点击模型名称跳转至对应精读小节与架构图。
 3. **按模块深入研读**：在 [领域专题文档与技术长文](#领域专题文档与技术长文) 中按研究方向查阅横向对比，或阅读串联多篇工作的专题长文。
 4. **查找训练数据与评测基准**：查阅 [开放数据集与临床队列索引](#开放数据集与临床队列索引) 以及 [数据集文档](docs/datasets/wearable_datasets.md)，获取采样率、样本规模、预处理工具与下载申请入口。
@@ -54,18 +57,24 @@
 
 ### 领域专题文档 (`docs/`)
 
-按传感器模态与认知层级组织的文献拆解与横向对比：
+按输入表示、信号类型与评测任务组织的文献拆解与横向对比：
 
 | 专⁠题⁠文⁠档 | 定⁠位 | 涵盖模型 / 内容 |
 | :--- | :---: | :--- |
+| [纵向可穿戴与行为基础模型](docs/models/longitudinal_wearable_models.md) | 核心主线 | Google LSM-1、LSM-2、SensorFM、WavesFM；Apple WBM；派生特征、波形与多时间尺度建模 |
+| [腕戴波形预训练与运动表征迁移](docs/models/wearable_transfer_models.md) | 核心主线 | Apple PPG / ECG、HiPPT、ACC 蒸馏、RelCon、HARNet、Sensori、Inertia-1 |
 | [智能手表与腕戴生理模型](docs/models/smartwatch_models.md) | 核⁠心⁠主⁠线 | SensorFM、PaPaGei、Pulse-PPG、xMAE、HiMAE、UniCardio、PPGFlowECG、AnyPPG、SigmaPPG、PPG-Distill、PpgAge、PPG-Bench、OpenMHC、PPG-LM、SensorLM、NormWear、LIMU-BERT |
 | [心电与心血管电生理基础模型](docs/models/ecg_models.md) | 核⁠心⁠主⁠线 | ECGFounder、ECG-CPC、DeepECG-SSL、HuBERT-ECG、ECG-FM、ECG-JEPA、ST-MEM、HeartLang、MERL、ESI、MELP、KED、HeartGPT、HeartBERT、HeartBEiT、CLOCS 及 PPG-ECG 跨模态生成对比 |
 | [连续血糖监测（CGM）基础模型](docs/models/cgm_models.md) | 核⁠心⁠主⁠线 | GlucoFM、CGM-JEPA、GluFormer、CGMformer、CGM-LSM、GlucoBench |
 | [睡眠与心肺多模态模型](docs/models/sleep_models.md) | 核⁠心⁠主⁠线 | SleepFM / SleepFM-2、SleepMaMi、U-Sleep 及穿戴睡眠迁移分析 |
+| [脑电基础模型与跨导联迁移](docs/models/eeg_models.md) | 扩展专题 | LaBraM、EEGPT、CBraMod；电极布局、预训练与冻结迁移协议 |
+| [生理信号与健康推理评测](docs/models/physiological_benchmarks.md) | 评测专题 | 跨心电、脑电与生理语言任务的评测协议、数据划分及复现入口 |
 | [可穿戴健康推理与生理大语言模型](docs/models/health_reasoning_llms.md) | 核⁠心⁠主⁠线 | WearableQA、HEARTS、CBPM-LLaMA、GEM 及神经符号 Agent 协同 |
 | [开源数据集与评测基准](docs/datasets/wearable_datasets.md) | 数⁠据⁠底⁠座 | 腕戴多模态、CGM、临床重症与心电、睡眠 PSG、大型人群队列及清洗工具 |
-| [系统级多模态健康模型](docs/models/universal_health_models.md) | 扩⁠展⁠专⁠题 | RisQ 及静态组学与动态穿戴时序的联合建模 |
+| [系统级多模态健康模型](docs/models/universal_health_models.md) | 扩⁠展⁠专⁠题 | RisQ 的结构化临床与遗传风险表征；与可穿戴模型的边界 |
 | [通用时间序列基础模型](docs/models/general_tsfm.md) | 扩⁠展⁠专⁠题 | TimesFM、Chronos、MOMENT、Mantis、MOIRAI、Timestral、Kumo-Forecast、TimeBraid、Time-LLM |
+
+收录依据与待核查候选随各专题维护；文档归属和维护流程见 [贡献规范](CONTRIBUTING.md#文档组织与目录边界)。
 
 ### 专题技术长文 (`blogs/`)
 
@@ -80,7 +89,7 @@
 
 ## 最近更新
 
-以下列表由 `data/models.yaml` 自动生成，展示最近收录或更新的 10 个条目：
+以下列表由 `data/models.yaml` 自动生成，展示最近收录或更新的 10 个条目；日期优先采用 `updated`，否则采用 `added`：
 
 <!-- BEGIN:RECENT_UPDATES -->
 
@@ -103,7 +112,7 @@
 
 ## 基础模型与评测基准索引表
 
-以下表格由 `data/models.yaml` 自动生成，点击模型名称可跳转至对应专题文档中的详细拆解与论文架构图：
+以下表格由 `data/models.yaml` 自动生成，点击模型名称可跳转至专题分析与论文原图。资源栏区分论文、代码、权重和数据；“未列权重”表示本索引未提供下载入口，不能据此判断许可。原作者模型与第三方复现、训练语料总量与实际训练划分均在专题中分别说明。
 
 <!-- BEGIN:MODELS_TABLE -->
 

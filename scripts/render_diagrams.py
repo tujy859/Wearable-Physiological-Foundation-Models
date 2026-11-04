@@ -1,126 +1,264 @@
-"""渲染仓库与博客中的 Mermaid 架构图为 2x Retina PNG。
+"""使用本地 Mermaid CLI 和 Chromium 渲染 2x Retina 图。
+
+运行 python scripts/render_diagrams.py 渲染全部图。
+运行 python scripts/render_diagrams.py --only taxonomy 仅更新首页 PNG/SVG。
+可通过 PUPPETEER_EXECUTABLE_PATH 或 CHROME_PATH 指定浏览器。
 
 遵循学术简明、扁平化与高保真规范：
-- 避免过于花哨的饱和色彩堆叠，采用冷灰色与中性学术配色；
-- 统一样式：rx:8px, ry:8px, stroke-width:1.5px；
+- 首页采用低饱和绿、橙、蓝与板岩灰，分别表示输入、模型、能力与支撑资源；
+- 统一样式：rx:10px, ry:10px, stroke-width:2px；
 - 拒绝垂直过长布局，保持 4:3 至 16:9 对称宽幅。
 """
 
 from __future__ import annotations
 
+import argparse
+import json
 import os
-import sys
+import re
+from pathlib import Path
+import shutil
+import subprocess
+import tempfile
+import xml.etree.ElementTree as ET
 
-sys.path.insert(0, r"C:\Career\Media")
-from src.renderers.diagram_renderer import render_mermaid_string
+ROOT = Path(__file__).resolve().parents[1]
+FONT_FAMILY = "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif"
 
-os.makedirs("assets", exist_ok=True)
-os.makedirs("blogs/images", exist_ok=True)
-os.makedirs("docs/figures/risq", exist_ok=True)
-os.makedirs("docs/figures/health_reasoning", exist_ok=True)
 
-# 1. README 顶层技术架构与模态全景图 (assets/taxonomy_overview.png)
-top_html = (
-    "<div style='width:1080px; text-align:center; padding:10px 0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;'>"
-    "<div style='font-size:14.5px; font-weight:700; color:#0F172A; letter-spacing:0.3px;'>健康认知推理与大语言模型 (Health Reasoning &amp; Multimodal AI)</div>"
-    "<div style='font-size:12px; color:#334155; margin-top:5px; line-height:1.6;'>"
-    "<b>时序-语言跨模态对齐</b>：SensorLM · PPG-LM · TimeBraid &nbsp;|&nbsp; "
-    "<b>生理参数物理锚定</b>：GEM (ECG) · CBPM-LLaMA (BP)<br/>"
-    "<b>全域认知评测与系统健康</b>：WearableQA · HEARTS · RisQ"
-    "</div>"
-    "</div>"
-)
+def browser_options(work: Path) -> dict:
+    browser_paths = [
+        os.environ.get("PUPPETEER_EXECUTABLE_PATH", ""),
+        os.environ.get("CHROME_PATH", ""),
+        r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+        r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+    ]
+    browser = next((path for path in browser_paths if path and Path(path).is_file()), None)
+    options = {
+        "pipe": True,
+        "userDataDir": str(work / "chrome"),
+        "args": [
+            "--no-sandbox", "--disable-gpu",
+            "--disable-crash-reporter", "--disable-features=Crashpad",
+        ],
+    }
+    if browser:
+        options["executablePath"] = browser
+    return options
 
-col1_html = (
-    "<div style='width:290px; text-align:left; padding:10px 12px; font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;'>"
-    "<div style='font-size:13px; font-weight:700; color:#0F172A; border-bottom:1px solid #CBD5E1; padding-bottom:4px; margin-bottom:6px;'>"
-    "腕戴光电与心脏电生理"
-    "</div>"
-    "<div style='font-size:11.5px; line-height:1.65; color:#334155;'>"
-    "• <b>腕部 PPG 与体动感知</b><br/>"
-    "&nbsp;&nbsp;SensorFM · PaPaGei · Pulse-PPG<br/>"
-    "&nbsp;&nbsp;HiMAE · OpenMHC · LIMU-BERT<br/>"
-    "• <b>心脏心电 (ECG)</b><br/>"
-    "&nbsp;&nbsp;ECG-FM · ST-MEM · HeartBEiT · CLOCS<br/>"
-    "• <b>跨模态生成 (PPG→ECG)</b><br/>"
-    "&nbsp;&nbsp;PPGFlowECG · UniCardio · xMAE"
-    "</div>"
-    "</div>"
-)
 
-col2_html = (
-    "<div style='width:290px; text-align:left; padding:10px 12px; font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;'>"
-    "<div style='font-size:13px; font-weight:700; color:#0F172A; border-bottom:1px solid #CBD5E1; padding-bottom:4px; margin-bottom:6px;'>"
-    "连续动态血糖与多导睡眠"
-    "</div>"
-    "<div style='font-size:11.5px; line-height:1.65; color:#334155;'>"
-    "• <b>连续动态血糖 (CGM)</b><br/>"
-    "&nbsp;&nbsp;GlucoFM · CGM-JEPA · GluFormer<br/>"
-    "&nbsp;&nbsp;CGMformer · CGM-LSM<br/>"
-    "• <b>多导睡眠与心肺 (Sleep PSG)</b><br/>"
-    "&nbsp;&nbsp;SleepFM-1/2 · SleepMaMi · U-Sleep<br/>"
-    "• <b>无袖带血压与血流动力</b><br/>"
-    "&nbsp;&nbsp;CAS-BP · CBPM-LLaMA"
-    "</div>"
-    "</div>"
-)
+def render_mermaid_string(source: str, destination: str, scale: int = 2) -> Path:
+    """Render with the installed Mermaid CLI and a local Chromium browser."""
+    executable = shutil.which("mmdc")
+    if not executable:
+        raise RuntimeError("Install @mermaid-js/mermaid-cli and add mmdc to PATH.")
+    command = [executable]
+    if os.name == "nt":
+        cli = Path(executable).parent / "node_modules/@mermaid-js/mermaid-cli/src/cli.js"
+        node = shutil.which("node")
+        if cli.exists() and node:
+            command = [node, str(cli)]
 
-col3_html = (
-    "<div style='width:290px; text-align:left; padding:10px 12px; font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;'>"
-    "<div style='font-size:13px; font-weight:700; color:#334155; border-bottom:1px solid #CBD5E1; padding-bottom:4px; margin-bottom:6px;'>"
-    "通用时序基模与评测对照"
-    "</div>"
-    "<div style='font-size:11.5px; line-height:1.65; color:#475569;'>"
-    "• <b>自回归预测基模</b><br/>"
-    "&nbsp;&nbsp;TimesFM (Google) · Chronos (AWS)<br/>"
-    "• <b>分块多任务掩码建模</b><br/>"
-    "&nbsp;&nbsp;MOMENT · MOIRAI<br/>"
-    "• <b>轻量判别与概率预测</b><br/>"
-    "&nbsp;&nbsp;Mantis (端侧) · Timestral (Mistral)<br/>"
-    "• <b>检索增强与语言重编程</b><br/>"
-    "&nbsp;&nbsp;Kumo-Forecast · Time-LLM"
-    "</div>"
-    "</div>"
-)
+    output = ROOT / destination
+    output.parent.mkdir(parents=True, exist_ok=True)
+    config = {
+        "theme": "base",
+        "look": "classic",
+        "securityLevel": "loose",
+        "fontFamily": FONT_FAMILY,
+        "themeVariables": {
+            "fontFamily": FONT_FAMILY,
+            "fontSize": "20px",
+            "primaryTextColor": "#0F172A",
+            "lineColor": "#64748B",
+            "clusterBkg": "#FFFFFF",
+            "clusterBorder": "#FFFFFF",
+        },
+        "flowchart": {
+            "htmlLabels": True,
+            "curve": "linear",
+            "nodeSpacing": 18,
+            "rankSpacing": 18,
+            "padding": 10,
+            "diagramPadding": 16,
+        },
+        "themeCSS": (
+            ".node rect { filter: none; } "
+            ".cluster-label { font-weight: 700; } "
+            ".flowchartTitleText { font-size: 28px; font-weight: 700; }"
+        ),
+    }
+    with tempfile.TemporaryDirectory(prefix=".mermaid-", dir=output.parent) as directory:
+        work = Path(directory)
+        source_path = work / "diagram.mmd"
+        source_path.write_text(source, encoding="utf-8")
+        config_path = work / "mermaid.json"
+        config_path.write_text(json.dumps(config), encoding="utf-8")
+        args = command + [
+            "-i", str(source_path), "-o", str(output),
+            "-c", str(config_path), "-b", "white", "-s", str(scale),
+        ]
+        browser_config = work / "puppeteer.json"
+        browser_config.write_text(json.dumps(browser_options(work)), encoding="utf-8")
+        args += ["-p", str(browser_config)]
+        environment = os.environ.copy()
+        environment.update({"TEMP": str(work), "TMP": str(work)})
+        subprocess.run(args, check=True, cwd=ROOT, env=environment)
+    return output
 
-data_html = (
-    "<div style='width:1080px; text-align:left; padding:10px 14px; font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;'>"
-    "<div style='font-size:13px; font-weight:700; color:#0F172A; border-bottom:1px solid #CBD5E1; padding-bottom:4px; margin-bottom:6px;'>"
-    "开放数据集与临床队列底座 (Open Datasets &amp; Clinical Cohorts)"
-    "</div>"
-    "<div style='font-size:11.5px; color:#334155; line-height:1.65;'>"
-    "<b>日常穿戴与动态血糖</b>：OpenMHC · PPG-DaLiA · WESAD · CAS-BP · TROIKA · ShanghaiT1D/T2D · CGMacros · GlucoBench<br/>"
-    "<b>临床监护与人群队列</b>：MC-MED · VitalDB · MIMIC-IV-ECG · PTB-XL · CODE-15% · SHHS · MESA · UK Biobank · All of Us"
-    "</div>"
-    "</div>"
-)
 
-mmd_taxonomy = f"""flowchart TB
-    classDef topBrain fill:#F8FAFC,stroke:#334155,stroke-width:1.5px,rx:8px,ry:8px;
-    classDef physioCol fill:#FFFFFF,stroke:#475569,stroke-width:1.5px,rx:8px,ry:8px;
-    classDef tsfmCol fill:#F8FAFC,stroke:#64748B,stroke-width:1.5px,stroke-dasharray: 4 2,rx:8px,ry:8px;
-    classDef bottomData fill:#F8FAFC,stroke:#334155,stroke-width:1.5px,rx:8px,ry:8px;
+def normalize_taxonomy_layout(svg: str) -> str:
+    """Keep Mermaid labels/topology, then place its nodes on a compact 16:9 grid.
 
-    REASONING["{top_html}"]:::topBrain
+    Dagre inserts large, version-dependent gaps between nested subgraphs. This
+    small post-layout pass fixes the publication canvas without shrinking text.
+    The source remains assets/taxonomy_overview.mmd; unexpected topology fails
+    explicitly instead of silently placing a new node in the wrong category.
+    """
+    namespace = "http://www.w3.org/2000/svg"
+    ET.register_namespace("", namespace)
+    ET.register_namespace("html", "http://www.w3.org/1999/xhtml")
+    root = ET.fromstring(svg)
+    q = lambda tag: f"{{{namespace}}}{tag}"
+    positions = {
+        "A1": (210, 157), "A2": (210, 333), "A3": (210, 509),
+        "M1": (640, 157), "M2": (640, 333), "M3": (640, 509),
+        "T": (1035, 333),
+    }
+    found = set()
+    for element in root.iter(q("g")):
+        if "node" in element.get("class", "").split():
+            match = re.search(r"-flowchart-(.+)-\d+$", element.get("id", ""))
+            if not match or match.group(1) not in positions:
+                raise RuntimeError(f"Unexpected taxonomy node: {element.get('id')}")
+            name = match.group(1)
+            rectangle = element.find(q("rect"))
+            expected_size = (270, 510) if name == "T" else (380, 158)
+            if rectangle is None or (
+                float(rectangle.get("width", "0")), float(rectangle.get("height", "0"))
+            ) != expected_size:
+                raise RuntimeError(f"Update the fixed taxonomy grid for resized node {name}.")
+            x, y = positions[name]
+            element.set("transform", f"translate({x}, {y})")
+            found.add(name)
+            if name == "A1":
+                # Mermaid's image CSS makes a floated HTML image a full line.
+                # Preserve the source glyph, placing it beside the title in SVG.
+                for parent in element.iter():
+                    for child in list(parent):
+                        if child.tag == "{http://www.w3.org/1999/xhtml}img":
+                            ET.SubElement(root, q("image"), {
+                                "href": child.get("src", ""), "x": "285", "y": "88",
+                                "width": "90", "height": "27",
+                            })
+                            parent.remove(child)
+    if found != set(positions):
+        raise RuntimeError(f"Unexpected taxonomy nodes: {sorted(found)}")
+    expected_edges = {(f"A{i}", f"M{i}") for i in range(1, 4)} | {
+        (f"M{i}", "T") for i in range(1, 4)
+    }
+    found_edges = set()
+    for path in root.iter(q("path")):
+        match = re.search(r"L_([AM][123])_([AM][123]|T)_\d+$", path.get("id", ""))
+        if match:
+            source, target = match.groups()
+            found_edges.add((source, target))
+            y = positions[source][1]
+            start, end = (400, 446) if source.startswith("A") else (830, 896)
+            path.set("d", f"M{start},{y} L{end},{y}")
+            path.attrib.pop("data-points", None)
+    if found_edges != expected_edges:
+        raise RuntimeError(f"Unexpected taxonomy edges: {sorted(found_edges)}")
+    # Transparent Mermaid clusters retain their semantic labels, aligned here.
+    for parent in root.iter():
+        for child in list(parent):
+            if "clusters" in child.get("class", "").split():
+                parent.remove(child)
+    for element in root.iter(q("text")):
+        if element.get("class") == "flowchartTitleText":
+            element.set("x", "600")
+            element.set("y", "31")
+    for x, label in ((210, "01　输入数据"), (640, "02　基础表征"), (1035, "03　共享下游能力")):
+        heading = ET.SubElement(root, q("text"), {
+            "x": str(x), "y": "65", "text-anchor": "middle",
+            "font-size": "22", "font-weight": "700", "fill": "#0F172A",
+        })
+        heading.text = label
+    root.set("viewBox", "0 0 1200 675")
+    root.set("style", "max-width:1200px; background-color:white;")
+    root.set("width", "1200")
+    root.set("height", "675")
+    result = ET.tostring(root, encoding="unicode")
+    # HTML parsers do not interpret prefixed XHTML tag names inside foreignObject.
+    result = result.replace(' xmlns:html="http://www.w3.org/1999/xhtml"', "")
+    result = result.replace("<html:", "<").replace("</html:", "</")
+    return re.sub(
+        r"(<foreignObject\b[^>]*>)<div\b",
+        r'\1<div xmlns="http://www.w3.org/1999/xhtml"', result,
+    )
 
-    subgraph MODELS[" "]
-        direction LR
-        COL1["{col1_html}"]:::physioCol
-        COL2["{col2_html}"]:::physioCol
-        COL3["{col3_html}"]:::tsfmCol
-    end
 
-    DATA["{data_html}"]:::bottomData
+def render_taxonomy() -> None:
+    """Render a readable 1200 × 675 overview and export its 2x PNG."""
+    svg_path = render_mermaid_string(mmd_taxonomy, "assets/taxonomy_overview.svg")
+    svg = normalize_taxonomy_layout(svg_path.read_text(encoding="utf-8"))
+    footer = (
+        f'<g font-family="{FONT_FAMILY}" font-size="18" fill="#334155">'
+        '<rect x="20" y="601" width="1160" height="62" '
+        'rx="10" fill="#F8FAFC" stroke="#64748B" stroke-width="2"/>'
+        '<text x="36" y="625">'
+        '<tspan font-weight="700">语言对齐与健康推理</tspan>　SensorLM · GEM　　'
+        '<tspan font-weight="700">数据与评测</tspan>　OpenMHC · WearableQA · HEARTS</text>'
+        '<text x="36" y="650">'
+        '<tspan font-weight="700">通用时序对照</tspan>　TimesFM · Chronos　　'
+        '按输入表示组织研究路线，具体能力取决于训练与评测任务。</text></g>'
+    )
+    svg = svg.replace('</svg>', footer + '</svg>')
+    svg_path.write_text(svg, encoding="utf-8")
 
-    REASONING ==> COL1
-    REASONING ==> COL2
-    REASONING ==> COL3
-    COL1 ==> DATA
-    COL2 ==> DATA
-    COL3 ==> DATA
-
-    linkStyle default stroke:#64748B,stroke-width:1.5px;
+    cli = Path(shutil.which("mmdc"))
+    package = cli.parent / "node_modules/@mermaid-js/mermaid-cli/node_modules/puppeteer"
+    if not package.is_dir():
+        npm = shutil.which("npm")
+        if not npm:
+            raise RuntimeError("npm is required to locate Mermaid CLI's Puppeteer dependency.")
+        global_modules = subprocess.check_output([npm, "root", "-g"], text=True).strip()
+        package = Path(global_modules) / "@mermaid-js/mermaid-cli/node_modules/puppeteer"
+    script = r"""
+const fs = require('node:fs');
+const puppeteer = require(process.argv[2]);
+(async () => {
+    const options = JSON.parse(process.argv[3]);
+    const browser = await puppeteer.launch(options);
+    try {
+        const page = await browser.newPage();
+        await page.setViewport({ width: Number(process.argv[6]), height: Number(process.argv[7]), deviceScaleFactor: 2 });
+        const svg = fs.readFileSync(process.argv[4], 'utf8');
+        await page.setContent('<html><body style="margin:0;background:white">' + svg + '</body></html>');
+        await page.evaluate(() => document.fonts.ready);
+        await page.$eval('svg', element => { element.style.maxWidth = 'none'; element.style.width = '100%'; });
+        await page.screenshot({ path: process.argv[5], fullPage: true });
+    } finally {
+        await browser.close();
+    }
+})();
 """
+    with tempfile.TemporaryDirectory(prefix=".mermaid-", dir=svg_path.parent) as directory:
+        work = Path(directory)
+        script_path = work / "rasterize.cjs"
+        script_path.write_text(script, encoding="utf-8")
+        environment = os.environ.copy()
+        environment.update({"TEMP": str(work), "TMP": str(work)})
+        subprocess.run([
+            shutil.which("node"), str(script_path), str(package), json.dumps(browser_options(work)),
+            str(svg_path), str(svg_path.with_suffix(".png")), "1200", "675",
+        ], check=True, env=environment)
+    print("Rendered", svg_path.with_suffix(".png"))
+    print("Rendered", svg_path)
+
+
+# 1. 首页研究地图。声明式源文件与 PNG/SVG 一起维护。
+mmd_taxonomy = (ROOT / "assets/taxonomy_overview.mmd").read_text(encoding="utf-8")
 
 # 2. 博客 2 图 10：端云分层协同的时序-语言健康 Agent 架构 (blogs/images/edge_cloud_health_agent.png)
 mmd_edge_cloud = """flowchart TB
@@ -175,11 +313,14 @@ mmd_hierarchical = """flowchart TB
 """
 
 if __name__ == "__main__":
-    p1 = render_mermaid_string(mmd_taxonomy, "assets/taxonomy_overview.png", scale=2)
-    print("Rendered:", p1)
-    p2 = render_mermaid_string(mmd_edge_cloud, "blogs/images/edge_cloud_health_agent.png", scale=2)
-    print("Rendered:", p2)
-    p3 = render_mermaid_string(mmd_risq, "docs/figures/risq/multimodal_coexistence.png", scale=2)
-    print("Rendered:", p3)
-    p4 = render_mermaid_string(mmd_hierarchical, "docs/figures/health_reasoning/hierarchical_ai_stack.png", scale=2)
-    print("Rendered:", p4)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--only", choices=["taxonomy"], help="Only render the README overview.")
+    args = parser.parse_args()
+    render_taxonomy()
+    if args.only != "taxonomy":
+        for source, destination in (
+            (mmd_edge_cloud, "blogs/images/edge_cloud_health_agent.png"),
+            (mmd_risq, "docs/figures/risq/multimodal_coexistence.png"),
+            (mmd_hierarchical, "docs/figures/health_reasoning/hierarchical_ai_stack.png"),
+        ):
+            print("Rendered", render_mermaid_string(source, destination))
