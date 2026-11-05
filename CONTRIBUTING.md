@@ -15,7 +15,7 @@
 | `docs/figures/<model-id>/` | 存放对应研究的论文图与说明图，正文标明来源；可复用图片不重复存放 |
 | `assets/` | 首页和全仓通用图片；自绘图的声明式源码与渲染结果一起维护；`catalog.html` 与 `article.html` 分别为索引首页和文章模板 |
 | `scripts/` | 索引生成、网页构建、绘图与文档检查工具，不存放研究正文 |
-| `.github/workflows/` | GitHub Actions 配置；`pages.yml` 在推送至 `main` 后构建并发布网页，也支持手动触发 |
+| `.github/workflows/` | GitHub Actions 配置；`pages.yml` 在 PR 中检查内容一致性，在推送至 `main` 后检查并发布网页，也支持手动触发 |
 | `_site/` | 索引首页、站内文章及引用图片的构建产物；不纳入 Git，由现有元数据、Markdown 与模板生成，不作为研究内容维护位置 |
 | `blogs/` | 面向对外阅读的完整技术文章，注明资料截止日期，并链接持续更新的专题 |
 | `CONTRIBUTING.md` | 维护收录标准、贡献流程、目录职责与资料维护规则 |
@@ -50,7 +50,7 @@
 4. **结构化索引更新**：
    - 在 `data/models.yaml`（或 `data/datasets.yaml`）中添加对应条目，`added` 字段填写收录日期（`YYYY-MM-DD`）；修改已有模型时保留 `added`，填写 `updated`，让最近更新表准确反映修订；
    - 在 `docs/models/`（或 `docs/datasets/`）对应专题文档中补充小节与论文架构图（放置在 `docs/figures/<id>/`）；
-   - 运行 `python scripts/build_tables.py` 更新 README 索引表，并运行 `python scripts/lint_md.py` 确保无格式与文风错误。
+   - 运行 `python scripts/build_tables.py` 更新 README 和数据集专题的索引表，将生成结果与元数据一起提交；按下方“本地预览”步骤检查网页和文档。
 
 ### 检索证据与收录判断
 
@@ -77,6 +77,16 @@ README 保留完整索引，网页首页提供关键词搜索、分类筛选和�
 
 首页的“所属专题”按模型记录中 `doc` 指向的主要维护位置筛选，用于定位专题内的条目；它不是完整的模态或任务分类。跨专题寻找评测基准时使用“条目类型”，寻找某种信号或任务时使用关键词搜索。修改主维护位置时同步更新 `doc`，保留其他专题的引用链接。
 
+### 内容同步
+
+- **条目信息**：模型、基准和数据集统一在 `data/` 更新。README 表格和网页卡片分别由同一份元数据生成，资源标签共用规则。
+- **专题正文**：直接修改 `docs/` 或 `blogs/` 的 Markdown；网页在发布时转换这些原文，不维护第二份正文。
+- **首页呈现**：README 的介绍、导航与网页首页的布局文案分别维护，不要求逐字相同；数量和条目等数据由生成器提供。
+
+每次 Pull Request 和发布前运行 `python scripts/build_tables.py --check`。该命令不修改文件，会检查 README 的最近更新、模型索引、数据集索引，以及数据集专题中的生成表格是否与当前元数据一致；过期或缺少生成标记时检查失败。先运行 `python scripts/build_tables.py`，再提交更新后的 Markdown 即可修复。
+
+网页检查还会核对卡片 ID 与元数据是否一一对应，并验证专题链接、小节锚点、图片和站点地图。任何检查失败都会停止此次发布，线上继续保留上次成功版本。检查能发现生成内容的遗漏；研究结论与手写摘要仍需维护者审核。
+
 ### 本地预览
 
 使用 Python 3.10 或更新版本，按以下步骤安装构建依赖、生成页面并检查站内链接：
@@ -84,6 +94,7 @@ README 保留完整索引，网页首页提供关键词搜索、分类筛选和�
 ```bash
 python -m pip install -r scripts/requirements-site.txt
 python scripts/build_tables.py
+python scripts/build_tables.py --check
 python scripts/build_site.py
 python scripts/check_site.py
 python scripts/lint_md.py --errors-only
@@ -92,7 +103,7 @@ python -m http.server 8000 --directory _site --bind 127.0.0.1
 
 在浏览器打开 `http://127.0.0.1:8000`；也可直接打开本地 `_site/index.html`。页面不需要外部脚本、字体或网络接口即可搜索和阅读，公式在构建时转换为 MathML。构建依赖统一维护在 `scripts/requirements-site.txt`，GitHub Actions 使用同一份依赖清单。
 
-修改元数据、Markdown 正文或 `assets/catalog.html`、`assets/article.html` 后重新构建；更新地图后也需构建，以复制最新图片。提交前运行 `scripts/check_site.py` 检查生成页面的站内链接、图片和锚点，并在浏览器检查正文表格、公式和手机宽度下的排版。不手动编辑 `_site/` 内的 HTML。
+修改元数据、Markdown 正文或 `assets/catalog.html`、`assets/article.html` 后重新构建；更新地图后也需构建，以复制最新图片。提交前运行上述检查，并在浏览器检查正文表格、公式和手机宽度下的排版。不手动编辑 `_site/` 内的 HTML。
 
 ### GitHub Pages
 

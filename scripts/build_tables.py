@@ -2,10 +2,12 @@
 
 用法：
     python scripts/build_tables.py
+    python scripts/build_tables.py --check  # 只检查生成区块是否最新，不写文件
 """
 
 from __future__ import annotations
 
+import argparse
 import re
 import sys
 from pathlib import Path
@@ -76,6 +78,10 @@ def protect_cjk_chunks(text: str, chunk_size: int = 5) -> str:
 
 
 def replace_block(text: str, marker: str, content: str) -> str:
+    begin = f"<!-- BEGIN:{marker} -->"
+    end = f"<!-- END:{marker} -->"
+    if text.count(begin) != 1 or text.count(end) != 1:
+        raise RuntimeError(f"标记块 {marker} 必须包含且仅包含一对 BEGIN / END 标记")
     pattern = re.compile(
         rf"(<!-- BEGIN:{re.escape(marker)} -->)(.*?)(<!-- END:{re.escape(marker)} -->)",
         re.DOTALL,
@@ -269,33 +275,40 @@ def build_datasets_table(datasets: list[dict], local_doc_links: bool = False) ->
     return "\n".join(lines)
 
 
-def main() -> int:
-    if not MODELS_YAML.exists() or not DATASETS_YAML.exists():
-        print("等待 data/models.yaml 与 data/datasets.yaml 生成...", file=sys.stderr)
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--check", action="store_true", help="检查索引生成区块是否最新，不写文件")
+    args = parser.parse_args(argv)
+
+    try:
+        models = yaml.safe_load(MODELS_YAML.read_text(encoding="utf-8")) or []
+        datasets = yaml.safe_load(DATASETS_YAML.read_text(encoding="utf-8")) or []
+        # read_text normalizes CRLF/LF, so Windows checkouts compare identically.
+        readme_source = README_PATH.read_text(encoding="utf-8")
+        readme = replace_block(readme_source, "RECENT_UPDATES", build_recent_table(models))
+        readme = replace_block(readme, "MODELS_TABLE", build_models_table(models))
+        readme = replace_block(readme, "DATASETS_TABLE", build_datasets_table(datasets, local_doc_links=False))
+        ds_source = DATASETS_DOC_PATH.read_text(encoding="utf-8")
+        ds_doc = replace_block(ds_source, "DATASETS_DOC_TABLE", build_datasets_table(datasets, local_doc_links=True))
+    except (OSError, RuntimeError, yaml.YAMLError) as error:
+        print(f"索引生成失败：{error}", file=sys.stderr)
         return 1
 
-    models = yaml.safe_load(MODELS_YAML.read_text(encoding="utf-8")) or []
-    datasets = yaml.safe_load(DATASETS_YAML.read_text(encoding="utf-8")) or []
-    readme = README_PATH.read_text(encoding="utf-8")
+    documents = [(README_PATH, readme_source, readme), (DATASETS_DOC_PATH, ds_source, ds_doc)]
+    if args.check:
+        stale = [path.relative_to(ROOT).as_posix() for path, source, generated in documents if source != generated]
+        if stale:
+            print("以下文档的索引生成区块尚未同步：" + "、".join(stale), file=sys.stderr)
+            print("请运行 python scripts/build_tables.py，并提交更新后的文档。", file=sys.stderr)
+            return 1
+        print("Index tables are up to date: README.md and docs/datasets/wearable_datasets.md.")
+        return 0
 
-    readme = replace_block(readme, "RECENT_UPDATES", build_recent_table(models))
-    readme = replace_block(readme, "MODELS_TABLE", build_models_table(models))
-    readme = replace_block(readme, "DATASETS_TABLE", build_datasets_table(datasets, local_doc_links=False))
-
-    README_PATH.write_text(readme, encoding="utf-8")
+    # Validate both documents before writing either one.
+    for path, _, generated in documents:
+        path.write_text(generated, encoding="utf-8")
     print(f"Updated README.md with {len(models)} model entries and {len(datasets)} dataset entries.")
-
-    if DATASETS_DOC_PATH.exists():
-        ds_doc = DATASETS_DOC_PATH.read_text(encoding="utf-8")
-        if "<!-- BEGIN:DATASETS_DOC_TABLE -->" in ds_doc:
-            ds_doc = replace_block(
-                ds_doc,
-                "DATASETS_DOC_TABLE",
-                build_datasets_table(datasets, local_doc_links=True),
-            )
-            DATASETS_DOC_PATH.write_text(ds_doc, encoding="utf-8")
-            print(f"Updated {DATASETS_DOC_PATH.relative_to(ROOT)} with {len(datasets)} dataset entries.")
-
+    print(f"Updated {DATASETS_DOC_PATH.relative_to(ROOT)} with {len(datasets)} dataset entries.")
     return 0
 
 

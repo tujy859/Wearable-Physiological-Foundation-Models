@@ -87,8 +87,17 @@ def check_site(output: Path) -> tuple[int, int, int]:
         expected = output / source.relative_to(ROOT).with_suffix(".html")
         if expected.resolve() not in pages:
             problems.append(f"Missing article {expected.relative_to(output)}")
-    for metadata in ("models.yaml", "datasets.yaml"):
-        for item in yaml.safe_load((ROOT / "data" / metadata).read_text(encoding="utf-8")):
+    homepage = pages.get(output / "index.html")
+    if homepage is None:
+        problems.append("Missing index.html")
+    for metadata, prefix in (("models.yaml", "model-"), ("datasets.yaml", "dataset-")):
+        entries = yaml.safe_load((ROOT / "data" / metadata).read_text(encoding="utf-8"))
+        expected_ids = {prefix + str(item["id"]) for item in entries}
+        if homepage is not None:
+            actual_ids = {value for value in homepage.ids if value.startswith(prefix)}
+            if actual_ids != expected_ids:
+                problems.append(f"{metadata}: homepage card mismatch; missing {sorted(expected_ids - actual_ids)}, extra {sorted(actual_ids - expected_ids)}")
+        for item in entries:
             doc, _, anchor = item.get("doc", "").partition("#")
             if not doc:
                 continue

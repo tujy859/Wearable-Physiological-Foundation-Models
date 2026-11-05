@@ -18,7 +18,7 @@ def site_base_url() -> str:
     default = f"https://{owner.lower()}.github.io/"
     if repository.lower() != f"{owner.lower()}.github.io":
         default += repository + "/"
-    value = os.environ.get("CATALOG_SITE_URL", default).strip()
+    value = os.environ.get("CATALOG_SITE_URL", "").strip() or default
     parsed = urlsplit(value)
     if (parsed.scheme not in {"http", "https"} or not parsed.hostname
             or parsed.username or parsed.password or parsed.query or parsed.fragment):
