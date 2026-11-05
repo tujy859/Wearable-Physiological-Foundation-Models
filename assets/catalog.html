@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="检索可穿戴与生理时序基础模型、评测基准和数据集，查阅论文、代码、权重与专题文章。">
+  <title>可穿戴与生理基础模型 · 研究索引</title>
+  <link rel="canonical" href="@@CANONICAL_URL@@">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:title" content="可穿戴与生理基础模型 · 研究索引">
+  <meta property="og:description" content="检索可穿戴与生理时序基础模型、评测基准和数据集，查阅论文、代码、权重与专题文章。">
+  <meta property="og:url" content="@@CANONICAL_URL@@">
+  <meta property="og:image" content="@@SOCIAL_IMAGE@@">
+  <style>
+    :root { color-scheme: light; --ink:#182b2a; --muted:#5f6b69; --accent:#246458; --soft:#edf4f1; --line:#dce3df; --paper:#fff; --canvas:#f7f8f5; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none !important; }
+    body { margin:0; background:var(--canvas); color:var(--ink); font:15px/1.65 system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif; }
+    a { color:var(--accent); text-decoration:none; text-underline-offset:4px; }
+    a:hover { text-decoration:underline; }
+    button,input,select { font:inherit; }
+    button,select,summary { cursor:pointer; }
+    a,button,input,select,summary { -webkit-tap-highlight-color:transparent; }
+    :focus-visible { outline:3px solid #4b8a77; outline-offset:4px; }
+    .skip { position:fixed; z-index:5; top:8px; left:12px; padding:10px 18px; background:var(--paper); transform:translateY(-150%); }
+    .skip:focus { transform:none; }
+    .shell { max-width:1280px; margin:auto; padding:0 42px; }
+    .topbar { border-bottom:1px solid var(--line); background:var(--paper); }
+    .topbar .shell { min-height:72px; display:flex; align-items:center; justify-content:space-between; gap:24px; }
+    .brand { font-size:13px; font-weight:700; letter-spacing:.08em; color:var(--ink); }
+    .brand-mark { display:inline-block; width:10px; height:10px; background:var(--accent); margin-right:10px; border-radius:2px; }
+    .top-links { display:flex; gap:26px; font-size:13px; }
+    .hero { padding:58px 0 32px; }
+    .overline { color:var(--accent); font-size:12px; font-weight:700; letter-spacing:.12em; margin:0 0 14px; }
+    h1 { font-size:clamp(30px,3.3vw,46px); line-height:1.3; font-weight:650; letter-spacing:-.035em; margin:0 0 18px; }
+    .hero-row { display:flex; align-items:flex-end; justify-content:space-between; gap:40px; }
+    .hero-description { max-width:630px; margin:0; color:var(--muted); font-size:16px; line-height:1.8; }
+    .stats { display:flex; flex-shrink:0; gap:32px; }
+    .stat { min-width:80px; }
+    .stat b { display:block; font-size:30px; line-height:1.2; font-weight:550; font-variant-numeric:tabular-nums; }
+    .stat span { color:var(--muted); font-size:12px; }
+    .map { margin:26px 0 34px; background:var(--paper); border:1px solid var(--line); border-radius:12px; }
+    .map summary { padding:14px 20px; font-weight:600; }
+    .map summary span { float:right; color:var(--muted); font-size:12px; font-weight:400; }
+    .map a { display:block; padding:0 10px 10px; }
+    .map img { width:100%; height:auto; display:block; border-radius:8px; }
+    .workspace { display:grid; grid-template-columns:218px minmax(0,1fr); gap:34px; padding-bottom:60px; }
+    .sidebar h2 { font-size:13px; margin:0 0 14px; color:var(--muted); font-weight:600; }
+    .topic-links { display:grid; gap:2px; }
+    .topic-links a { color:var(--muted); font-size:13px; padding:8px 0; display:flex; justify-content:space-between; gap:8px; }
+    .topic-links a:hover { color:var(--accent); }
+    .topic-links span { color:#95a29c; }
+    .sidebar-note { border-top:1px solid var(--line); margin-top:22px; padding-top:18px; font-size:12px; color:var(--muted); }
+    .sidebar .reading-title { margin-top:28px; }
+    .topic-reading { font-size:13px; margin:16px 0 0; }
+    .tabs { display:flex; gap:24px; border-bottom:1px solid var(--line); margin-bottom:22px; }
+    .tab { border:0; border-bottom:2px solid transparent; background:none; padding:0 0 12px; color:var(--muted); font-weight:600; }
+    .tab[aria-pressed="true"] { border-color:var(--accent); color:var(--accent); }
+    .tab span { font-size:12px; font-weight:400; margin-left:5px; }
+    .search-box { display:block; margin-bottom:12px; }
+    .search-box span { display:block; font-size:12px; color:var(--muted); margin-bottom:5px; }
+    input[type="search"] { width:100%; height:48px; background:var(--paper); border:1px solid #b9c9c0; border-radius:8px; padding:10px 14px; color:var(--ink); }
+    input::placeholder { color:#6b7772; }
+    .filters { display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; }
+    .filters label { flex:1; min-width:130px; font-size:12px; color:var(--muted); }
+    .filters select { display:block; margin-top:5px; width:100%; min-height:41px; border:1px solid var(--line); border-radius:7px; padding:7px 28px 7px 10px; color:var(--ink); background:var(--paper); }
+    .reset { min-height:41px; border:1px solid var(--line); border-radius:7px; color:var(--accent); background:transparent; padding:7px 12px; font-size:13px; }
+    .result-line { display:flex; justify-content:space-between; gap:12px; margin:22px 0 15px; color:var(--muted); font-size:12px; }
+    #results-count { margin:0; }
+    .collection-heading { margin:20px 0 16px; font-size:19px; }
+    .enhanced .collection-heading { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip-path:inset(50%); }
+    .entries { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; align-items:start; }
+    .entry { min-width:0; padding:20px; border:1px solid var(--line); border-radius:10px; background:var(--paper); }
+    .entry-top { display:flex; justify-content:space-between; gap:10px; align-items:center; margin-bottom:10px; }
+    .eyebrow { color:var(--muted); font-size:11px; }
+    .kind { background:var(--soft); color:var(--accent); font-size:10px; line-height:1.5; border-radius:4px; padding:2px 6px; white-space:nowrap; }
+    .entry h3 { font-size:21px; line-height:1.3; font-weight:600; letter-spacing:-.02em; margin:0 0 8px; overflow-wrap:anywhere; }
+    .entry h3 a { color:var(--ink); }
+    .entry-meta { font-size:12px; color:var(--muted); margin:0 0 15px; line-height:1.7; overflow-wrap:anywhere; }
+    .modality { font-size:13px; margin:0 0 15px; line-height:1.7; }
+    .entry-details { border-top:1px solid #edf0ed; padding-top:11px; font-size:12px; }
+    .entry-details summary { color:var(--muted); }
+    .entry-details dl { margin:12px 0 0; }
+    .entry-details dl div { margin-bottom:12px; }
+    .entry-details dt { color:var(--muted); font-size:11px; margin-bottom:3px; }
+    .entry-details dd { margin:0; overflow-wrap:anywhere; }
+    .resources { display:flex; flex-wrap:wrap; gap:7px 16px; margin-top:15px; font-size:12px; }
+    .resources a { font-weight:600; }
+    .resource-note { color:var(--muted); }
+    .empty { border:1px dashed #b9c9c0; border-radius:10px; padding:46px 20px; text-align:center; }
+    .empty h3 { margin:0 0 8px; font-size:18px; }
+    .empty p { color:var(--muted); margin:0 0 18px; font-size:13px; }
+    footer { border-top:1px solid var(--line); padding:22px 0 28px; color:var(--muted); font-size:12px; }
+    footer .shell { display:flex; justify-content:space-between; gap:18px; flex-wrap:wrap; }
+    @media (max-width:1000px) { .shell { padding:0 26px; } .workspace { grid-template-columns:180px minmax(0,1fr); gap:24px; } .entries { grid-template-columns:1fr; } .stats { gap:22px; } }
+    @media (max-width:700px) {
+      .shell { padding:0 18px; } .topbar .shell { min-height:62px; gap:12px; } .brand { font-size:10px; letter-spacing:.02em; } .top-links { gap:14px; font-size:11px; } .top-links a:first-child { display:none; }
+      .hero { padding:36px 0 20px; } .hero-row { display:block; } .hero-description { font-size:14px; } .stats { margin-top:24px; } .stat b { font-size:25px; }
+      .map { margin:18px 0 25px; } .map summary { padding:13px 15px; font-size:13px; } .map summary span { float:none; display:block; padding-left:16px; font-size:11px; }
+      .workspace { display:flex; flex-direction:column-reverse; gap:30px; } .sidebar { border-top:1px solid var(--line); padding-top:24px; } .topic-links { grid-template-columns:repeat(2,minmax(0,1fr)); gap:2px 22px; } .topic-links a { font-size:12px; }
+      .tabs { gap:22px; } .tab { font-size:14px; } .filters label { min-width:130px; } .entry { padding:18px; } .result-line { font-size:11px; } .sort-note { display:none; }
+    }
+    @media (prefers-reduced-motion:no-preference) { .entry { transition:border-color .15s; } .entry:hover { border-color:#a5bbb0; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#catalog">跳到研究索引</a>
+  <header class="topbar"><div class="shell"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span>WEARABLE · PHYSIOLOGICAL FM</a><nav class="top-links" aria-label="项目导航"><a href="#topics">专题阅读</a><a href="@@REPOSITORY@@">GitHub ↗</a></nav></div></header>
+  <main class="shell">
+    <section class="hero" aria-labelledby="page-title">
+      <p class="overline">RESEARCH COLLECTION / 研究索引</p>
+      <h1 id="page-title">从生理信号，到健康表征</h1>
+      <div class="hero-row"><p class="hero-description">可穿戴与生理时序基础模型的论文、代码、权重与数据。<br>沿着输入信号与研究问题，找到适合深入阅读的工作。</p><div class="stats"><div class="stat"><b>@@MODEL_COUNT@@</b><span>模型、基准与综述</span></div><div class="stat"><b>@@DATASET_COUNT@@</b><span>数据集与队列</span></div></div></div>
+    </section>
+    <details class="map"><summary>研究地图<span>原始采样 · 分钟级特征 · 长期行为</span></summary><a href="assets/taxonomy_overview.png" aria-label="打开完整研究地图"><img src="assets/taxonomy_overview.png" alt="可穿戴与生理基础模型研究地图，按输入表示列出代表模型、下游能力及跨路线研究" loading="lazy"></a></details>
+    <div class="workspace">
+      <aside class="sidebar" id="topics" aria-labelledby="topics-title"><h2 id="topics-title">专题阅读</h2><nav class="topic-links" aria-label="研究专题">@@TOPICS@@</nav><h2 class="reading-title">技术长文</h2><nav class="topic-links" aria-label="技术长文">@@BLOGS@@</nav><p class="sidebar-note">从条目名称进入专题中的模型小节，阅读方法分析、实验结果与论文配图。</p></aside>
+      <section id="catalog" aria-label="检索文献与数据集">
+        <div id="interactive-controls" hidden>
+          <div class="tabs" role="group" aria-label="索引类型"><button class="tab" type="button" data-tab="models" aria-pressed="true">研究条目 <span>@@MODEL_COUNT@@</span></button><button class="tab" type="button" data-tab="datasets" aria-pressed="false">数据集与队列 <span>@@DATASET_COUNT@@</span></button></div>
+          <form id="filters" role="search">
+            <label class="search-box" for="query"><span>搜索条目</span><input id="query" type="search" placeholder="模型名、机构、信号或任务，例如 PPG、睡眠、Google" autocomplete="off"></label>
+            <div class="filters">
+              <label for="topic"><span id="topic-name">所属专题</span><select id="topic"><option value="">全部专题</option></select></label>
+              <label for="kind" id="kind-label">条目类型<select id="kind"><option value="">全部类型</option><option value="model">模型</option><option value="benchmark">基准</option><option value="survey">综述</option></select></label>
+              <label for="resource" id="resource-label">资源<select id="resource"><option value="">全部资源</option></select></label>
+              <button class="reset" id="reset" type="button">清空筛选</button>
+            </div>
+          </form>
+        </div>
+        <noscript><p>全部条目已列在下方。启用 JavaScript 可搜索和筛选，也可用浏览器的页面查找功能。</p></noscript>
+        <p class="topic-reading" id="topic-reading" hidden><a id="topic-reading-link" href="index.html">阅读本专题 →</a></p>
+        <div class="result-line"><p id="results-count" role="status" aria-live="polite" aria-atomic="true">共 @@TOTAL_COUNT@@ 个条目</p><span class="sort-note" id="sort-note">模型按最近收录更新排序</span></div>
+        <div id="collections">@@CARDS@@</div>
+        <div class="empty" id="empty" hidden><h3>没有符合条件的条目</h3><p>试试更短的关键词，或减少筛选条件。</p><button class="reset" type="button" id="empty-reset">清空筛选</button></div>
+      </section>
+    </div>
+  </main>
+  <footer><div class="shell"><span>Wearable &amp; Physiological Foundation Models · 更新于 @@UPDATED@@</span><span><a href="CONTRIBUTING.html">参与共建</a> · <a href="@@REPOSITORY@@/issues">补充与勘误</a></span></div></footer>
+  <script>
+    (() => {
+      'use strict';
+      const cards = [...document.querySelectorAll('.entry')];
+      const collections = [...document.querySelectorAll('[data-collection]')];
+      const tabs = [...document.querySelectorAll('[data-tab]')];
+      const topicLinks = [...document.querySelectorAll('.topic-links a[data-topic]')];
+      const query = document.querySelector('#query');
+      const topic = document.querySelector('#topic');
+      const kind = document.querySelector('#kind');
+      const resource = document.querySelector('#resource');
+      const counts = document.querySelector('#results-count');
+      const empty = document.querySelector('#empty');
+      let group = 'models';
+      const normalize = value => value.normalize('NFKC').toLocaleLowerCase().replace(/[\u2060\u200b]/g, '');
+      const searchable = new Map(cards.map(card => [card, normalize(card.dataset.search)]));
+      const option = (value, label) => new Option(label, value);
+      function options() {
+        // Model topics follow the navigation, independently of card update dates.
+        const topics = group === 'models'
+          ? topicLinks.map(link => link.dataset.topic)
+          : [...new Set(cards.filter(card => card.dataset.group === group).map(card => card.dataset.topic))];
+        topic.replaceChildren(option('', group === 'models' ? '全部专题' : '全部类别'), ...topics.map(value => option(value, value)));
+        document.querySelector('#topic-name').textContent = group === 'models' ? '所属专题' : '数据类别';
+        const resources = group === 'models' ? [['code', '有代码链接'], ['weights', '有权重链接'], ['data', '有数据链接']] : [['open', '开放获取'], ['request', '注册 / 申请获取'], ['planned', '待发布']];
+        resource.replaceChildren(option('', '全部资源'), ...resources.map(([value, label]) => option(value, label)));
+        document.querySelector('#kind-label').hidden = group === 'datasets';
+        kind.value = '';
+        tabs.forEach(tab => tab.setAttribute('aria-pressed', String(tab.dataset.tab === group)));
+        document.querySelector('#sort-note').textContent = group === 'models' ? '按最近收录更新排序' : '按数据集专题顺序排列';
+      }
+      function syncUrl() {
+        const params = new URLSearchParams();
+        if (group !== 'models') params.set('view', group);
+        if (query.value.trim()) params.set('q', query.value.trim());
+        if (topic.value) params.set('topic', topic.value);
+        if (kind.value && group === 'models') params.set('type', kind.value);
+        if (resource.value) params.set('resource', resource.value);
+        const suffix = params.size ? '?' + params.toString() : '';
+        try { history.replaceState(null, '', location.pathname + suffix + location.hash); } catch (_) { /* file previews may restrict history */ }
+      }
+      function filter(updateUrl = true) {
+        const terms = normalize(query.value).trim().split(/\s+/).filter(Boolean);
+        let visible = 0;
+        let total = 0;
+        for (const card of cards) {
+          if (card.dataset.group === group) total++;
+          const match = card.dataset.group === group && (!topic.value || card.dataset.topic === topic.value)
+            && (group === 'datasets' || !kind.value || card.dataset.kind === kind.value)
+            && (!resource.value || card.dataset.resources.split(' ').includes(resource.value))
+            && terms.every(term => searchable.get(card).includes(term));
+          card.hidden = !match;
+          if (match) visible++;
+        }
+        collections.forEach(collection => collection.hidden = collection.dataset.collection !== group);
+        counts.textContent = '显示 ' + visible + ' / ' + total + ' 个条目';
+        empty.hidden = visible !== 0;
+        const reading = document.querySelector('#topic-reading');
+        const readingLink = document.querySelector('#topic-reading-link');
+        const selectedTopic = topicLinks.find(link => link.dataset.topic === topic.value);
+        reading.hidden = group === 'models' && !selectedTopic;
+        if (!reading.hidden) {
+          readingLink.href = group === 'datasets' ? 'docs/datasets/wearable_datasets.html' : selectedTopic.getAttribute('href');
+          readingLink.textContent = group === 'datasets' ? '阅读数据集专题 →' : '阅读本专题：' + topic.value + ' →';
+        }
+        if (updateUrl) syncUrl();
+      }
+      function reset() { query.value = ''; topic.value = ''; kind.value = ''; resource.value = ''; filter(); query.focus(); }
+      function readUrl() {
+        const params = new URLSearchParams(location.search);
+        group = params.get('view') === 'datasets' ? 'datasets' : 'models';
+        options();
+        query.value = params.get('q') || '';
+        for (const [select, key] of [[topic, 'topic'], [kind, 'type'], [resource, 'resource']]) {
+          const value = params.get(key) || '';
+          select.value = [...select.options].some(item => item.value === value) ? value : '';
+        }
+        filter(false);
+      }
+      tabs.forEach(tab => tab.addEventListener('click', () => { group = tab.dataset.tab; options(); filter(); }));
+      query.addEventListener('input', () => filter());
+      [topic, kind, resource].forEach(select => select.addEventListener('change', () => filter()));
+      document.querySelector('#filters').addEventListener('submit', event => { event.preventDefault(); filter(); });
+      document.querySelector('#reset').addEventListener('click', reset);
+      document.querySelector('#empty-reset').addEventListener('click', reset);
+      window.addEventListener('popstate', readUrl);
+      readUrl();
+      document.documentElement.classList.add('enhanced');
+      document.querySelector('#interactive-controls').hidden = false;
+    })();
+  </script>
+</body>
+</html>

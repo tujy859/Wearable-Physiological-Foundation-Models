@@ -13,7 +13,10 @@
 | `docs/models/` | 按输入表示、模态或研究任务维护模型、方法与评测专题；同一主题在原文件中持续更新，候选与收录判断随专题维护 |
 | `docs/datasets/` | 维护数据集、队列、访问条件和使用协议说明；结构化索引与 YAML 同步 |
 | `docs/figures/<model-id>/` | 存放对应研究的论文图与说明图，正文标明来源；可复用图片不重复存放 |
-| `assets/` | 首页和全仓通用图片；自绘图的声明式源码与渲染结果一起维护 |
+| `assets/` | 首页和全仓通用图片；自绘图的声明式源码与渲染结果一起维护；`catalog.html` 与 `article.html` 分别为索引首页和文章模板 |
+| `scripts/` | 索引生成、网页构建、绘图与文档检查工具，不存放研究正文 |
+| `.github/workflows/` | GitHub Actions 配置；`pages.yml` 在推送至 `main` 后构建并发布网页，也支持手动触发 |
+| `_site/` | 索引首页、站内文章及引用图片的构建产物；不纳入 Git，由现有元数据、Markdown 与模板生成，不作为研究内容维护位置 |
 | `blogs/` | 面向对外阅读的完整技术文章，注明资料截止日期，并链接持续更新的专题 |
 | `CONTRIBUTING.md` | 维护收录标准、贡献流程、目录职责与资料维护规则 |
 | `docs/STYLE.md` | 维护写作、排版、图表及引用格式，不另存一套收录或目录规则 |
@@ -23,6 +26,8 @@
 跨模态综述、方法原理和评测协议可以形成 `docs/models/` 中的主题文档。先在相关专题内补充小节；只有内容形成独立阅读问题时再拆分文件。模型与基准保留一个主要分析位置，其他专题用简要说明和链接引用，避免多份结论逐渐不一致。
 
 当前不设 `docs/surveys/` 与 `docs/principles/`。日期命名的检索更新记录属于本地维护过程；项目原则由已有规范文件承载。目录名称本身不构成新增理由。
+
+网页构建使用独立的 `_site/`，便于仅发布网页所需文件，避免把工作目录和内部记录带入站点；研究内容仍保存在 `data/`、`docs/` 和 `blogs/`。`.github/workflows/` 是 GitHub 识别的自动化配置位置，不能由 `scripts/` 替代。两者的入口与维护步骤见下文“网页浏览与发布”。
 
 ### 新增目录的条件
 
@@ -63,3 +68,48 @@
 - 首页研究地图源文件为 `assets/taxonomy_overview.mmd`；运行 `python scripts/render_diagrams.py --only taxonomy` 同步生成 PNG/SVG，并在首页实际阅读宽度检查文字。
 - 请勿在 Git 仓库中提交模型权重文件（`.pth`、`.bin`、`.safetensors` 等）、原始数据集文件或论文 PDF 原件。
 - 论文插图请标注来源（如 `图源：PaPaGei 论文 Fig. 1（arXiv:2410.20542）`），单张图片控制在 500 KB 以内。
+
+## 网页浏览与发布
+
+README 保留完整索引，网页首页提供关键词搜索、分类筛选和折叠详情；专题与技术长文在同一站点内阅读。两种索引都读取 `data/models.yaml` 和 `data/datasets.yaml`，资源标签共用 `scripts/build_tables.py` 中的 `model_resources`。最近更新按 `updated` 排序，缺省时使用 `added`。
+
+模型的详细分析仍写在所属专题的 Markdown 小节中，技术长文仍写在 `blogs/`，不为网页另存一份正文或拆成每个模型一个文件。构建时将公开 Markdown 转为对应的 HTML 页面，转换文章互链和小节锚点，并复制实际引用的图片；模型卡片直接跳到站内专题的小节。文章提供页内目录、返回索引与 GitHub 源文件入口。
+
+首页的“所属专题”按模型记录中 `doc` 指向的主要维护位置筛选，用于定位专题内的条目；它不是完整的模态或任务分类。跨专题寻找评测基准时使用“条目类型”，寻找某种信号或任务时使用关键词搜索。修改主维护位置时同步更新 `doc`，保留其他专题的引用链接。
+
+### 本地预览
+
+使用 Python 3.10 或更新版本，按以下步骤安装构建依赖、生成页面并检查站内链接：
+
+```bash
+python -m pip install -r scripts/requirements-site.txt
+python scripts/build_tables.py
+python scripts/build_site.py
+python scripts/check_site.py
+python scripts/lint_md.py --errors-only
+python -m http.server 8000 --directory _site --bind 127.0.0.1
+```
+
+在浏览器打开 `http://127.0.0.1:8000`；也可直接打开本地 `_site/index.html`。页面不需要外部脚本、字体或网络接口即可搜索和阅读，公式在构建时转换为 MathML。构建依赖统一维护在 `scripts/requirements-site.txt`，GitHub Actions 使用同一份依赖清单。
+
+修改元数据、Markdown 正文或 `assets/catalog.html`、`assets/article.html` 后重新构建；更新地图后也需构建，以复制最新图片。提交前运行 `scripts/check_site.py` 检查生成页面的站内链接、图片和锚点，并在浏览器检查正文表格、公式和手机宽度下的排版。不手动编辑 `_site/` 内的 HTML。
+
+### GitHub Pages
+
+站点地址：[可穿戴与生理基础模型研究索引](https://tujy859.github.io/Wearable-Physiological-Foundation-Models/)。README 顶部和仓库 About 的 Website 字段提供入口。
+
+此项目只依赖静态 HTML、CSS 和 JavaScript，通过 [GitHub Pages 自定义工作流](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)部署。向 `main` 推送后自动构建、检查并发布；也可在 **Actions → Publish research catalog → Run workflow** 中手动触发。首次启用或部署 Fork 时，在 **Settings → Pages → Build and deployment** 中将 **Source** 设为 **GitHub Actions**，并按实际默认分支调整工作流中的 `push.branches`。
+
+首页、专题和技术长文都发布到同一个站点。工作流仅上传 `_site/`，不上传源码仓库、论文原件或本地工作记录。构建和发布失败可在同一工作流查看日志。工作流读取 Pages 的实际地址，通过 `CATALOG_SITE_URL` 生成页面规范地址与站点地图；Fork 使用自身仓库与默认分支生成 GitHub 源文件和编辑链接，同时需更新 README 和仓库 About 中的网页入口。
+
+### 搜索引擎收录
+
+页面正文在构建时生成，搜索引擎无需执行筛选脚本即可读取索引和文章。构建同时生成页面摘要、规范地址（canonical）和 [sitemap.xml](https://tujy859.github.io/Wearable-Physiological-Foundation-Models/sitemap.xml)，后续新增公开文章会随构建更新站点地图。
+
+Google 可以通过公开链接自动发现网站，手动提交并非收录前提。维护者可使用 [Google Search Console](https://search.google.com/search-console/) 查看抓取、收录和搜索表现：
+
+1. 添加“网址前缀”资源，填写完整站点地址 `https://tujy859.github.io/Wearable-Physiological-Foundation-Models/`。
+2. 选择 HTML 标记验证，将该账号获得的 `google-site-verification` 标记加入 `assets/catalog.html` 的 `<head>`，提交并等待 Pages 发布成功，再回到 Search Console 验证。保留该标记，以便后续验证持续有效。
+3. 在“站点地图”中提交 `sitemap.xml`；可用“网址检查”查看首页与专题页并请求编入索引。
+
+提交站点地图有助于发现页面，是否收录及何时展示由搜索引擎决定。参见 Google 的[搜索工作原理](https://developers.google.com/search/docs/fundamentals/how-search-works)、[所有权验证](https://support.google.com/webmasters/answer/9008080)和[站点地图说明](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap)。

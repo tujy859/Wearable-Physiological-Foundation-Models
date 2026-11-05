@@ -5,7 +5,7 @@
 可通过 PUPPETEER_EXECUTABLE_PATH 或 CHROME_PATH 指定浏览器。
 
 遵循学术简明、扁平化与高保真规范：
-- 首页采用低饱和绿、橙、蓝与板岩灰，分别表示输入、模型、能力与支撑资源；
+- 首页采用中性灰阶与单一墨绿强调色，以嵌套卡片区分层级；
 - 统一样式：rx:10px, ry:10px, stroke-width:2px；
 - 拒绝垂直过长布局，保持 4:3 至 16:9 对称宽幅。
 """
@@ -120,38 +120,33 @@ def normalize_taxonomy_layout(svg: str) -> str:
     ET.register_namespace("html", "http://www.w3.org/1999/xhtml")
     root = ET.fromstring(svg)
     q = lambda tag: f"{{{namespace}}}{tag}"
-    positions = {
-        "A1": (210, 157), "A2": (210, 333), "A3": (210, 509),
-        "M1": (640, 157), "M2": (640, 333), "M3": (640, 509),
-        "T": (1035, 333),
+    # Sizes include Mermaid's horizontal (40px) and vertical (20px) padding.
+    boxes = {
+        "A1": (160, 185, 280, 190), "M1": (593, 185, 530, 190),
+        "A2": (160, 353, 280, 114), "M2": (593, 353, 530, 114),
+        "A3": (160, 483, 280, 114), "M3": (593, 483, 530, 114),
+        "T": (1040, 315, 280, 450),
+        "F1": (210, 622, 380, 84),
+        "F2": (600, 622, 376, 84),
+        "F3": (990, 622, 380, 84),
     }
+    positions = {name: box[:2] for name, box in boxes.items()}
     found = set()
     for element in root.iter(q("g")):
         if "node" in element.get("class", "").split():
             match = re.search(r"-flowchart-(.+)-\d+$", element.get("id", ""))
-            if not match or match.group(1) not in positions:
+            if not match or match.group(1) not in boxes:
                 raise RuntimeError(f"Unexpected taxonomy node: {element.get('id')}")
             name = match.group(1)
             rectangle = element.find(q("rect"))
-            expected_size = (270, 510) if name == "T" else (380, 158)
-            if rectangle is None or (
+            x, y, width, height = boxes[name]
+            actual = None if rectangle is None else (
                 float(rectangle.get("width", "0")), float(rectangle.get("height", "0"))
-            ) != expected_size:
-                raise RuntimeError(f"Update the fixed taxonomy grid for resized node {name}.")
-            x, y = positions[name]
+            )
+            if actual != (width, height):
+                raise RuntimeError(f"Update the fixed taxonomy grid for resized node {name}: {actual} != {(width, height)}")
             element.set("transform", f"translate({x}, {y})")
             found.add(name)
-            if name == "A1":
-                # Mermaid's image CSS makes a floated HTML image a full line.
-                # Preserve the source glyph, placing it beside the title in SVG.
-                for parent in element.iter():
-                    for child in list(parent):
-                        if child.tag == "{http://www.w3.org/1999/xhtml}img":
-                            ET.SubElement(root, q("image"), {
-                                "href": child.get("src", ""), "x": "285", "y": "88",
-                                "width": "90", "height": "27",
-                            })
-                            parent.remove(child)
     if found != set(positions):
         raise RuntimeError(f"Unexpected taxonomy nodes: {sorted(found)}")
     expected_edges = {(f"A{i}", f"M{i}") for i in range(1, 4)} | {
@@ -164,8 +159,12 @@ def normalize_taxonomy_layout(svg: str) -> str:
             source, target = match.groups()
             found_edges.add((source, target))
             y = positions[source][1]
-            start, end = (400, 446) if source.startswith("A") else (830, 896)
-            path.set("d", f"M{start},{y} L{end},{y}")
+            start, end = (300, 324) if source.startswith("A") else (858, 896)
+            if source.startswith("A"):
+                path.set("d", f"M{start},{y} L{end},{y}")
+            else:
+                # All routes feed the task group, not its individually aligned cards.
+                path.set("d", f"M{start},{y} H880 V315 H{end}")
             path.attrib.pop("data-points", None)
     if found_edges != expected_edges:
         raise RuntimeError(f"Unexpected taxonomy edges: {sorted(found_edges)}")
@@ -178,12 +177,16 @@ def normalize_taxonomy_layout(svg: str) -> str:
         if element.get("class") == "flowchartTitleText":
             element.set("x", "600")
             element.set("y", "31")
-    for x, label in ((210, "01　输入数据"), (640, "02　基础表征"), (1035, "03　共享下游能力")):
+    for x, label in ((160, "01　输入表示"), (593, "02　代表模型"), (1040, "03　下游能力")):
         heading = ET.SubElement(root, q("text"), {
             "x": str(x), "y": "65", "text-anchor": "middle",
-            "font-size": "22", "font-weight": "700", "fill": "#0F172A",
+            "font-size": "20", "font-weight": "700", "fill": "#0F766E",
         })
         heading.text = label
+    heading = ET.SubElement(root, q("text"), {
+        "x": "20", "y": "566", "font-size": "18", "font-weight": "700", "fill": "#64748B",
+    })
+    heading.text = "横向专题"
     root.set("viewBox", "0 0 1200 675")
     root.set("style", "max-width:1200px; background-color:white;")
     root.set("width", "1200")
@@ -202,18 +205,6 @@ def render_taxonomy() -> None:
     """Render a readable 1200 × 675 overview and export its 2x PNG."""
     svg_path = render_mermaid_string(mmd_taxonomy, "assets/taxonomy_overview.svg")
     svg = normalize_taxonomy_layout(svg_path.read_text(encoding="utf-8"))
-    footer = (
-        f'<g font-family="{FONT_FAMILY}" font-size="18" fill="#334155">'
-        '<rect x="20" y="601" width="1160" height="62" '
-        'rx="10" fill="#F8FAFC" stroke="#64748B" stroke-width="2"/>'
-        '<text x="36" y="625">'
-        '<tspan font-weight="700">语言对齐与健康推理</tspan>　SensorLM · GEM　　'
-        '<tspan font-weight="700">数据与评测</tspan>　OpenMHC · WearableQA · HEARTS</text>'
-        '<text x="36" y="650">'
-        '<tspan font-weight="700">通用时序对照</tspan>　TimesFM · Chronos　　'
-        '按输入表示组织研究路线，具体能力取决于训练与评测任务。</text></g>'
-    )
-    svg = svg.replace('</svg>', footer + '</svg>')
     svg_path.write_text(svg, encoding="utf-8")
 
     cli = Path(shutil.which("mmdc"))
@@ -222,7 +213,7 @@ def render_taxonomy() -> None:
         npm = shutil.which("npm")
         if not npm:
             raise RuntimeError("npm is required to locate Mermaid CLI's Puppeteer dependency.")
-        global_modules = subprocess.check_output([npm, "root", "-g"], text=True).strip()
+        global_modules = subprocess.check_output([npm, "root", "-g"], text=True, shell=os.name == "nt").strip()
         package = Path(global_modules) / "@mermaid-js/mermaid-cli/node_modules/puppeteer"
     script = r"""
 const fs = require('node:fs');

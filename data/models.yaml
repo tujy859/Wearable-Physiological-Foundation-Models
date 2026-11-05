@@ -12,7 +12,6 @@
   paper: https://arxiv.org/abs/2410.13638
   code: ''
   weights: ''
-  weights_status: 未列原始权重
   access: closed
   doc: docs/models/longitudinal_wearable_models.md#lsm-1
   type: model
@@ -27,11 +26,10 @@
   modality_short: 分钟级多传感器特征
   method: ViT-1D + AIM 真实缺失与人工掩码联合建模，24 小时窗口
   params: 25M
-  data: 60,440 人；原文报告 4,000 万小时，统计口径见专题
+  data: 60,440 人；原文报告 4,000 万小时
   paper: https://arxiv.org/abs/2506.05321
   code: ''
   weights: ''
-  weights_status: 未列原始权重
   access: closed
   doc: docs/models/longitudinal_wearable_models.md#lsm-2
   type: model
@@ -54,7 +52,6 @@
   added: '2026-10-12'
   org_short: Google
   modality_short: 分钟级多传感器特征
-  weights_status: 未列原始权重
   updated: '2026-11-04'
 - id: wbm
   name: WBM
@@ -64,13 +61,12 @@
   date: 2025-06
   modality: 27 个小时聚合的 HealthKit 行为与健康指标
   modality_short: 小时级行为与健康指标
-  method: TST 词元化 + Mamba-2 个体级对比学习，7 天窗口
-  params: 总参数量未明确报告（24 层骨干）
+  method: TST 词元化 + 24 层 Mamba-2 骨干与个体级对比学习，7 天窗口
+  params: ''
   data: 全部数据 161,855 人、1,514 万人周；按人划分 80%/10%/10%
   paper: https://arxiv.org/abs/2507.00191
   code: ''
   weights: ''
-  weights_status: 原始权重未公开
   access: closed
   doc: docs/models/longitudinal_wearable_models.md#wbm
   type: model
@@ -91,15 +87,14 @@
   doc: docs/models/wearable_transfer_models.md#apple-ppg--ecg
   type: model
   added: '2026-11-04'
-  weights_status: 未公开权重
 - id: apple-accel-kd
   name: Apple ACC 蒸馏
   org: Apple
   venue: arXiv 2025 修订版
   date: 2024-12
   modality: 低运动 ACC（训练配对 PPG）
-  method: PPG-MAE 教师 + Transformer ACC 学生跨模态表征蒸馏
-  params: 8 层 Transformer（主实验）
+  method: PPG-MAE 教师 + Transformer ACC 学生跨模态表征蒸馏（主实验 8 层）
+  params: ''
   data: 2,000 万对一分钟片段 / 17.2 万人（AHMS，80% 参与者用于训练）
   paper: https://arxiv.org/abs/2412.11276
   code: ''
@@ -108,7 +103,6 @@
   doc: docs/models/wearable_transfer_models.md#apple-acc-蒸馏
   type: model
   added: '2026-11-04'
-  weights_status: 未公开权重
 - id: harnet
   name: HARNet / SSL-Wearables
   org: 牛津大学
@@ -160,7 +154,6 @@
   doc: docs/models/wearable_transfer_models.md#inertia-1
   type: benchmark
   added: '2026-11-04'
-  weights_status: 未列权重
   venue_short: NeurIPS 2026（接收）
 - id: relcon
   name: RelCon
@@ -169,12 +162,11 @@
   date: 2024-11
   modality: 三轴 ACC
   method: 运动模式距离学习 + 1D ResNet 相对对比预训练
-  params: 1D ResNet 编码器
+  params: ''
   data: AHMS 87,376 人 / 10 亿片段
   paper: https://arxiv.org/abs/2411.18822
   code: https://github.com/maxxu05/relcon
   weights: ''
-  weights_status: 未公开权重
   access: open
   doc: docs/models/wearable_transfer_models.md#relcon
   type: model
@@ -218,7 +210,7 @@
   date: 2024-05
   modality: PPG + ECG (跨模态虚拟传感)
   method: 跨模态掩码自编码 (Cross-Modal MAE)
-  params: 紧凑级
+  params: ''
   data: 9,400 小时同步配对 ECG-PPG 数据
   paper: https://openreview.net/forum?id=VjI72R3gJq
   code: ''
@@ -265,8 +257,8 @@
   venue: arXiv 2025-2026
   date: 2025-02
   modality: PPG → 诊断级 ECG
-  method: CardioAlign 潜空间对齐 + 潜空间整流流 (Rectified Flow)
-  params: 紧凑级 (1-4 步 ODE 快速采样)
+  method: CardioAlign 潜空间对齐 + 潜空间整流流，1-4 步 ODE 采样
+  params: ''
   data: MC-MED (11.8 万人 / 1000 万对急诊样本)
   paper: https://arxiv.org/abs/2502.14856
   code: https://github.com/PKUDigitalHealth/PPGFlowECG
@@ -298,7 +290,7 @@
   date: 2026-01
   modality: 单通道 PPG
   method: 统计先验引导强化学习对抗掩码 + 向量量化语义一致性
-  params: 紧凑级
+  params: ''
   data: 120,000+ 小时公开 PPG 语料 (MIMIC-III, VitalDB 等)
   paper: https://arxiv.org/abs/2601.21031
   code: https://github.com/ZonghengGuo/SigmaPPG
@@ -313,8 +305,8 @@
   venue: 2025
   date: 2025-06
   modality: 腕部 PPG
-  method: 预测级 + 特征级 + 形态节律三级多尺度蒸馏
-  params: 紧凑 1D 学生网络 (内存降低 19x)
+  method: 1D 学生网络；预测级 + 特征级 + 形态节律三级多尺度蒸馏
+  params: ''
   data: 多中心公开穿戴语料
   paper: https://arxiv.org/abs/2509.19215
   code: https://github.com/LingFengGold/PPG-Distill
@@ -330,7 +322,7 @@
   date: 2025-09
   modality: 腕戴日常 PPG
   method: 深度时序表征与血管生理年龄预测 (PPG Age Gap)
-  params: 工业级
+  params: ''
   data: Apple Health Study (213,593 名真实佩戴者)
   paper: https://doi.org/10.1038/s41467-025-64275-4
   code: ''
@@ -347,7 +339,7 @@
   added: '2026-10-19'
   modality: 腕部与指尖 PPG
   method: 4 级探针微调协议 (跨 5 大脉搏基模评测)
-  params: 评测套件
+  params: ''
   data: 论文 9 数据集、26 项任务；代码列 17 项主要任务
   doc: docs/models/smartwatch_models.md#ppg-bench
   paper: https://arxiv.org/abs/2610.13435
@@ -364,7 +356,7 @@
   added: '2026-10-19'
   modality: 腕戴 PPG
   method: 脉搏基础模型血管生物年龄跨域横评
-  params: 评测基准
+  params: ''
   data: PulseDB (906 人, 41,104 段) vs UKB
   doc: docs/models/smartwatch_models.md#开源脉搏基础模型生物年龄横评
   paper: https://arxiv.org/abs/2603.14030
@@ -379,8 +371,8 @@
   date: 2026-07
   modality: 19 通道派生穿戴时序 + 最多 169 项关联变量
   method: 下游预测、插补与外推基准；LSM-2/WBM 开放复现
-  params: 评测基准与参考模型
-  data: 11,894 人、超 6,000 万小时；数据发布状态见专题
+  params: ''
+  data: 11,894 人、超 6,000 万小时
   paper: https://arxiv.org/abs/2607.16235
   code: https://github.com/AshleyLab/OpenMHC
   weights: https://huggingface.co/MyHeartCounts/models
@@ -423,7 +415,6 @@
   added: '2026-10-12'
   org_short: Google / 剑桥大学
   modality_short: 分钟级特征 + 文本
-  weights_status: 未列原始权重
   updated: '2026-11-04'
 - id: limu-bert
   name: LIMU-BERT
@@ -432,7 +423,7 @@
   date: 2021-11
   modality: 手腕三轴 ACC + 陀螺仪
   method: 掩码传感器建模 (Masked Sensor Modeling)
-  params: 紧凑级
+  params: ''
   data: 公开 IMU 运动数据集
   paper: https://dl.acm.org/doi/10.1145/3485730.3485938
   code: https://github.com/dapowan/LIMU-BERT-Public
@@ -448,7 +439,7 @@
   date: 2024-12
   modality: 多模态可穿戴生理 (PPG, ECG, EEG, EDA, IMU)
   method: 连续小波变换 (CWT) 词元化 + 通道感知注意力与混合 MAE
-  params: 紧凑级
+  params: ''
   data: 10.6 万段多源公开穿戴记录 (15 个数据集)
   paper: https://arxiv.org/abs/2412.09758
   code: https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear
@@ -466,7 +457,7 @@
   date: 2026-08
   modality: ECG + PPG
   method: 综述与开源生态绘制
-  params: '-'
+  params: ''
   data: 覆盖数十个公开基准
   paper: https://doi.org/10.1038/s41746-026-03101-7
   code: ''
@@ -723,7 +714,7 @@
   date: 2020-05
   modality: 多导联 ECG
   method: 时空多导联对比学习
-  params: 轻量级
+  params: ''
   data: PhysioNet 2017 + Chapman
   paper: https://proceedings.neurips.cc/paper/2020/hash/da65ae7d09f25745b85e0546cb7ee3b4-Abstract.html
   code: https://github.com/danikiyasseh/CLOCS
@@ -741,14 +732,14 @@
   date: 2026-02
   modality: 多导联 ECG + PPG + 临床或机器生成文本
   modality_short: ECG / PPG / 文本
-  method: Transformer 跨通道与时间掩码预训练
-  params: Tiny / Base / Large
+  method: Transformer 跨通道与时间掩码预训练，Tiny / Base / Large 三种规格
+  params: ''
   data: 约 170 万人 (MIMIC-III-WDB、MIMIC-IV-ECG、CODE-FULL)
   paper: https://doi.org/10.1038/s42256-026-01180-5
   code: https://github.com/guxiao0822/Cardiac-Sensing-FM
   weights: ''
-  weights_status: 权重需学术协议申请
   access: gated
+  access_note: 权重需学术协议申请
   doc: docs/models/ecg_models.md#csfm
   type: model
   added: '2026-11-04'
@@ -775,7 +766,7 @@
   date: 2026-05
   modality: CGM 血糖与 Glucodensity 分布视图
   method: JEPA 潜空间预测 + 跨视图分布目标
-  params: 未统一报告
+  params: ''
   data: 228 人约 38.9 万读数；临床评测公开子集 27 人与 17 人
   paper: https://arxiv.org/abs/2605.00933
   code: https://github.com/cruiseresearchgroup/CGM-JEPA
@@ -805,7 +796,6 @@
   added: '2026-09-08'
   org_short: 魏茨曼 / NVIDIA
   updated: '2026-11-04'
-  weights_status: 未列预训练权重
 - id: cgmformer
   name: CGMformer
   org: 中国科学院 / 上海六院
@@ -823,7 +813,6 @@
   type: model
   added: '2026-09-08'
   venue_short: NSR 2025
-  weights_label: 检查点入口
   updated: '2026-11-04'
 - id: cgm-lsm
   name: CGM-LSM
@@ -832,7 +821,7 @@
   date: 2024-12
   modality: CGM 血糖
   method: 12 层 GPT-2 式解码器 + 离散血糖词元自回归
-  params: 总参数量未报告
+  params: ''
   data: 592 人，正文约 1,596 万有效实例（与摘要口径不一致）
   paper: https://doi.org/10.1038/s44401-025-00039-y
   code: https://github.com/JHU-CDHAI/cgmlsm
@@ -842,7 +831,6 @@
   type: model
   added: '2026-09-08'
   venue_short: npj Health Syst 2025
-  weights_status: 未列预训练权重
   updated: '2026-11-04'
 - id: glucobench
   name: GlucoBench
@@ -851,7 +839,7 @@
   date: 2024-01
   modality: CGM 血糖
   method: 标准化评测基准套件
-  params: '-'
+  params: ''
   data: 多队列基准集成
   paper: https://openreview.net/forum?id=u4UaZq1Goi
   code: https://github.com/IrinaStatsLab/GlucoBench
@@ -888,7 +876,7 @@
   date: 2026-02
   modality: PSG (EEG、EOG、ECG、EMG、呼吸、血氧)
   method: 共享/私有 Transformer + 双向 Mamba；掩码重构与人口统计引导对比
-  params: 未统一报告
+  params: ''
   data: 20,964 份 PSG 记录，158,028 小时
   paper: https://proceedings.mlr.press/v306/park26n.html
   code: https://github.com/keondopark/SleepMaMi
@@ -898,7 +886,6 @@
   type: model
   added: '2026-10-12'
   modality_short: 多导睡眠 PSG
-  weights_label: 检查点入口
   updated: '2026-11-04'
 - id: u-sleep
   name: U-Sleep
@@ -931,8 +918,8 @@
   paper: https://arxiv.org/abs/2609.06849v2
   code: ''
   weights: ''
-  weights_status: 代码入口待恢复，未列权重
   access: closed
+  access_note: 论文提供的代码入口当前不可访问
   doc: docs/models/sleep_models.md#sleepfm-2
   type: model
   added: '2026-11-04'
@@ -1010,7 +997,7 @@
   date: 2025-08
   modality: 多通道 EEG
   method: 冻结、全参数与 LoRA 适配；单/多任务及梯度表征分析
-  params: 评测基准
+  params: ''
   data: 14 数据集、10 类范式；7 个 EEG 基模与 2 个通用时序模型
   paper: https://proceedings.mlr.press/v306/xiong26f.html
   code: https://github.com/xw1216/EEG-FM-Bench
@@ -1026,7 +1013,7 @@
   date: 2026-09
   modality: 日级穿戴指标 + 血液标志物 + 人口信息
   method: 数据/健康推理与单/跨信号两轴；十选一问答
-  params: 评测基准
+  params: ''
   data: 200 人、每人最长约 500 天；4,084 道题
   paper: https://arxiv.org/abs/2609.05405
   code: https://github.com/facebookresearch/WearableQA
@@ -1044,7 +1031,7 @@
   date: 2026-03
   modality: 20 种健康时序模态 (含 ECG、EEG、PPG、CGM)
   method: 感知、推断、生成、演绎四类任务；含 CodeAct 评测框架
-  params: 评测基准
+  params: ''
   data: 16 数据集、110 任务、20,226 个评测样本
   paper: https://arxiv.org/abs/2603.06638
   code: https://github.com/yang-ai-lab/HEARTS
@@ -1072,7 +1059,6 @@
   type: model
   added: '2026-10-15'
   dataset: https://github.com/zdzdliu/CAS-BP
-  weights_status: 未列权重
   updated: '2026-11-04'
 - id: gem
   name: GEM
@@ -1099,7 +1085,7 @@
   date: 2026-07
   modality: 临床变量 + 用药 + 诊断史 + 遗传
   method: Transformer 健康表征与疾病/时间条件查询；临床风险扩展参考
-  params: 未在索引统一参数口径
+  params: ''
   data: UKB 488,170 人用于训练/验证；AoU 257,538 人外部评测
   paper: https://doi.org/10.64898/2026.07.07.26357373
   code: https://github.com/RisQ-Lab/RisQ
@@ -1108,7 +1094,6 @@
   doc: docs/models/universal_health_models.md#risq
   type: model
   added: '2026-09-20'
-  weights_status: 未列权重
   updated: '2026-11-04'
 - id: timesfm
   name: TimesFM
@@ -1262,13 +1247,12 @@
   date: 2026-10
   modality: 腕戴 PPG + 模板形态与上下文文本
   modality_short: 腕戴 PPG + 文本
-  method: Transformer；记录级形态与跨记录上下文对齐，波形引导文本建模
-  params: 总参数量未报告（PPG 编码器 12 层、512 维）
+  method: 12 层、512 维 PPG Transformer；记录级形态与跨记录上下文对齐，波形引导文本建模
+  params: ''
   data: HBPM-BG 约 130 万条 + VS 约 300 万条一分钟记录，约 20.2 万人；模型输入 12 秒
   paper: https://arxiv.org/abs/2610.14489
   code: ''
   weights: ''
-  weights_status: 代码与权重待发布
   access: planned
   access_note: arXiv v2 承诺发布代码与预训练权重，未提供下载入口；预训练数据未公开
   doc: docs/models/wearable_transfer_models.md#hippt
@@ -1282,15 +1266,14 @@
   date: 2026-05
   modality: 原始 PPG + ACC 模长，15 秒片段与周级表示
   modality_short: 原始 PPG + ACC
-  method: EfficientNet-B7 片段对比预训练 + 周级 Transformer 掩码重构
-  params: 总参数量未报告（第二阶段 6 层、256 维）
+  method: EfficientNet-B7 片段对比预训练 + 6 层、256 维周级 Transformer 掩码重构
+  params: ''
   data: 第一阶段 32.4 万人、680 万小时；第二阶段 1 万人、530 万小时；5 分钟表示组成 7 天窗口
   paper: https://arxiv.org/abs/2605.09173
   code: ''
   weights: ''
-  weights_status: 未列代码与权重
   access: closed
-  access_note: 论文未提供可确认的官方代码、权重和数据入口；原文人数与块长口径差异见专题
+  access_note: 论文未提供官方代码、权重或数据链接
   doc: docs/models/longitudinal_wearable_models.md#wavesfm
   type: model
   added: '2026-11-04'

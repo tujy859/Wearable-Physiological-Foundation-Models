@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>@@TITLE@@ · 生理基础模型研究索引</title>
+  <meta name="description" content="@@DESCRIPTION@@">
+  <link rel="canonical" href="@@CANONICAL_URL@@">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:title" content="@@TITLE@@ · 生理基础模型研究索引">
+  <meta property="og:description" content="@@DESCRIPTION@@">
+  <meta property="og:url" content="@@CANONICAL_URL@@">
+  <meta property="og:image" content="@@SOCIAL_IMAGE@@">
+  <style>
+    :root { color-scheme:light; --ink:#182b2a; --muted:#5f6b69; --accent:#246458; --line:#dce3df; --paper:#fff; --canvas:#f7f8f5; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--canvas); font:16px/1.85 system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif; }
+    a { color:var(--accent); text-underline-offset:4px; text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    :focus-visible { outline:3px solid #4b8a77; outline-offset:4px; }
+    .skip { position:fixed; top:8px; left:12px; z-index:5; background:white; padding:8px 14px; transform:translateY(-150%); }
+    .skip:focus { transform:none; }
+    .topbar { background:var(--paper); border-bottom:1px solid var(--line); }
+    .shell { max-width:1320px; padding:0 40px; margin:auto; }
+    .topbar .shell { min-height:68px; display:flex; justify-content:space-between; align-items:center; gap:20px; }
+    .brand { font-size:13px; font-weight:700; letter-spacing:.06em; color:var(--ink); }
+    .brand::before { content:""; display:inline-block; width:10px; height:10px; border-radius:2px; background:var(--accent); margin-right:10px; }
+    .topbar nav { display:flex; gap:22px; font-size:13px; flex-shrink:0; }
+    .breadcrumb { display:flex; gap:10px; align-items:center; padding-top:24px; color:var(--muted); font-size:13px; }
+    .reading-layout { display:grid; grid-template-columns:minmax(0,1fr) 210px; gap:38px; align-items:start; padding-top:20px; padding-bottom:64px; }
+    .reading-pane { min-width:0; }
+    .reading-actions { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:18px; font-size:13px; }
+    .reading-actions .source-links { display:flex; gap:16px; }
+    .article { min-width:0; padding:34px 38px 40px; border:1px solid var(--line); border-radius:12px; background:var(--paper); overflow-wrap:anywhere; }
+    .article > :first-child { margin-top:0; }
+    .article h1 { font-size:clamp(26px,2.6vw,36px); line-height:1.4; letter-spacing:-.02em; margin-bottom:28px; }
+    .article h2 { font-size:24px; margin:42px 0 20px; padding-bottom:10px; border-bottom:1px solid var(--line); line-height:1.5; }
+    .article h3 { font-size:21px; margin:32px 0 14px; line-height:1.5; }
+    .article h4 { font-size:18px; margin:26px 0 12px; }
+    .article :is(h1,h2,h3,h4,h5,h6,[id]) { scroll-margin-top:24px; }
+    .article :is(h2,h3):target { background:#edf4f1; border-radius:5px; }
+    .article p { margin:16px 0; }
+    .article li { margin:6px 0; }
+    .article ul,.article ol { padding-left:1.6em; }
+    .article img { display:block; max-width:100%; height:auto; margin:22px auto; border-radius:6px; }
+    .article blockquote { margin:24px 0; padding:4px 20px; border-left:3px solid #9bbcaf; color:#485d57; background:#f7faf8; }
+    .article hr { height:1px; border:0; background:var(--line); margin:32px 0; }
+    .article table { display:block; width:max-content; max-width:100%; overflow-x:auto; border-collapse:collapse; font-size:13px; line-height:1.65; margin:22px 0; }
+    .table-scroll { max-width:100%; overflow-x:auto; margin:22px 0; }
+    .table-scroll table { display:table; max-width:none; margin:0; }
+    .article th,.article td { padding:10px 13px; border:1px solid var(--line); min-width:95px; max-width:440px; vertical-align:top; }
+    .article th { font-weight:600; background:#eff4f1; text-align:left; }
+    .article td { overflow-wrap:normal; }
+    .article tr:nth-child(even) { background:#fafcfb; }
+    .article code { font: .88em/1.6 ui-monospace,Consolas,monospace; background:#f0f3f1; padding:.15em .35em; border-radius:4px; }
+    .article pre { background:#f4f6f4; border:1px solid var(--line); border-radius:8px; padding:18px; overflow-x:auto; line-height:1.6; }
+    .article pre code { padding:0; background:none; white-space:pre; }
+    .article math[display="block"],.article .math-block { display:block; max-width:100%; overflow-x:auto; padding:12px 0; }
+    .page-toc { position:sticky; top:24px; min-width:0; max-height:calc(100vh - 48px); overflow:auto; font-size:12px; color:var(--muted); }
+    .page-toc summary { font-size:13px; font-weight:600; cursor:pointer; padding:0 0 12px; }
+    .page-toc ul { list-style:none; padding:0; margin:0; }
+    .page-toc ul ul { padding-left:12px; border-left:1px solid var(--line); margin-left:3px; }
+    .page-toc .toc-h3 { padding-left:12px; border-left:1px solid var(--line); margin-left:3px; }
+    .page-toc a { display:block; color:var(--muted); padding:5px 0; overflow-wrap:anywhere; }
+    .page-toc a:hover { color:var(--accent); }
+    .article-footer { display:flex; justify-content:space-between; gap:18px; padding:24px 0; font-size:13px; }
+    footer { border-top:1px solid var(--line); padding:20px 0; color:var(--muted); font-size:12px; }
+    @media(max-width:1000px) { .shell { padding:0 24px; } .reading-layout { gap:24px; grid-template-columns:minmax(0,1fr) 170px; } .article { padding:26px; } }
+    @media(max-width:760px) {
+      .shell { padding:0 16px; } .topbar .shell { min-height:60px; } .brand { font-size:10px; letter-spacing:0; } .topbar nav { gap:12px; font-size:12px; }
+      .topbar nav a:first-child { display:none; } .breadcrumb { padding-top:18px; }
+      .reading-layout { display:flex; flex-direction:column; padding-top:16px; gap:16px; } .reading-pane { width:100%; }
+      .page-toc { order:-1; width:100%; position:static; max-height:240px; border:1px solid var(--line); background:white; border-radius:8px; padding:12px 16px; }
+      .page-toc summary { padding-bottom:0; } .page-toc[open] summary { padding-bottom:10px; }
+      .article { padding:24px 18px; font-size:15px; } .article h2 { font-size:22px; } .article h3 { font-size:19px; }
+      .article th,.article td { min-width:100px; } .reading-actions { font-size:12px; } .source-links { gap:12px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#article">跳到正文</a>
+  <header class="topbar"><div class="shell"><a class="brand" href="@@ROOT_PREFIX@@index.html">WEARABLE · PHYSIOLOGICAL FM</a><nav aria-label="项目导航"><a href="@@ROOT_PREFIX@@index.html#topics">专题阅读</a><a href="@@ROOT_PREFIX@@index.html#catalog">返回索引</a></nav></div></header>
+  <main class="shell">
+    <nav class="breadcrumb" aria-label="当前位置"><a href="@@ROOT_PREFIX@@index.html">研究索引</a><span aria-hidden="true">/</span><span>@@SECTION@@</span></nav>
+    <div class="reading-layout">
+      <div class="reading-pane">
+        <div class="reading-actions"><a href="@@CATALOG_URL@@">@@CATALOG_LABEL@@ →</a><span class="source-links"><a href="@@SOURCE_URL@@">GitHub 原文 ↗</a><a href="@@EDIT_URL@@">编辑此页 ↗</a></span></div>
+        <article class="article" id="article">@@CONTENT@@</article>
+        <nav class="article-footer" aria-label="阅读导航"><a href="@@CATALOG_URL@@">← @@CATALOG_LABEL@@</a><a href="#article">回到正文顶部 ↑</a></nav>
+      </div>
+      <details class="page-toc" open><summary>本页目录</summary><nav aria-label="本页目录">@@TOC@@</nav></details>
+    </div>
+  </main>
+  <footer><div class="shell">Wearable &amp; Physiological Foundation Models · <a href="@@ROOT_PREFIX@@CONTRIBUTING.html">参与共建</a></div></footer>
+</body>
+</html>

@@ -104,37 +104,44 @@ def format_modality(m: dict) -> str:
     return protect_cjk_chunks(text, chunk_size=4).replace(NBSP, " ")
 
 
-def format_model_resources(m: dict, inline: bool = False) -> str:
-    links: list[str] = []
+def model_resources(m: dict) -> list[tuple[str, str | None]]:
+    """为 Markdown 与网页提供统一的资源标签、链接及明确的获取状态。"""
+    resources: list[tuple[str, str | None]] = []
     if m.get("paper"):
         paper_label = (
             "报告"
             if any(k in m["paper"] for k in ["mistral.ai", "developer.nvidia.com"])
             else "论文"
         )
-        links.append(f"[{nowrap(paper_label)}]({m['paper']})")
+        resources.append((paper_label, m["paper"]))
 
     if m.get("code"):
-        links.append(f"[{nowrap('代码')}]({m['code']})")
+        resources.append(("代码", m["code"]))
     dataset = str(m.get("dataset") or "").strip()
     weights = str(m.get("weights") or "").strip()
     # 兼容旧条目误放在 weights 中的 Hugging Face 数据集，避免生成“权重”标签。
     dataset_in_weights = "/datasets/" in weights
     if dataset:
-        links.append(f"[{nowrap('数据')}]({dataset})")
+        resources.append(("数据", dataset))
     if dataset_in_weights and weights != dataset:
-        links.append(f"[{nowrap('数据')}]({weights})")
+        resources.append(("数据", weights))
     if weights and not dataset_in_weights:
-        links.append(f"[{nowrap(m.get('weights_label') or '权重')}]({weights})")
-    elif m.get("weights_status"):
-        links.append(protect_cjk_chunks(str(m["weights_status"]), chunk_size=4))
+        label = m.get("weights_label") or ("权重需申请" if m.get("access") == "gated" else "权重")
+        resources.append((label, weights))
     elif m.get("access") == "gated":
-        links.append(nowrap("需申请"))
-    elif m.get("type") == "model":
-        links.append(nowrap("未列权重"))
-    elif not m.get("code") and not dataset and not dataset_in_weights:
-        links.append(nowrap("未列资源"))
+        resources.append(("权重需申请", None))
+    elif m.get("access") == "planned" and m.get("type") == "model":
+        label = "权重待发布" if m.get("code") else "代码与权重待发布"
+        resources.append((label, None))
+    # 缺少链接不代表作者确认未公开；资源栏只展示已有入口或明确的获取状态。
+    return resources
 
+
+def format_model_resources(m: dict, inline: bool = False) -> str:
+    links = [
+        f"[{nowrap(label)}]({url})" if url else nowrap(label)
+        for label, url in model_resources(m)
+    ]
     return " · ".join(links) if inline else "<br>".join(links)
 
 

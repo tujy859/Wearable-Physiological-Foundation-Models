@@ -49,5 +49,8 @@ blog_drafts/
 # Internal Strategy & Discussion Documents (Local only)
 internal_strategy/
 
+# Generated site (rebuild from YAML, Markdown and assets templates)
+/_site/
+
 
 
