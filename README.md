@@ -6,7 +6,7 @@
 
 面向可穿戴与临床生理基础模型的论文研读、方法对比、代码权重与数据集索引。覆盖 **原始信号与测量序列、分钟级多传感器特征、长期行为与健康指标** 三类输入，并整理语言对齐、健康推理与评测基准。
 
-> ### [打开交互式网页版 →](https://tujy859.github.io/Wearable-Physiological-Foundation-Models/)
+> ### [🌐 打开交互式网页版 →](https://tujy859.github.io/Wearable-Physiological-Foundation-Models/)
 >
 > 搜索模型与数据集，组合筛选条件，在网页中阅读完整专题。
 

@@ -175,14 +175,17 @@ def lint_file(path: Path, rep: Report, cache: dict) -> None:
     check_words = r not in WORD_CHECK_EXEMPT and not r.startswith(WORD_CHECK_EXEMPT_DIRS)
     prev_blank = True
     for no, raw, clean in iter_content_lines(text):
+        # Only the README's interactive website entry may use one globe icon.
+        web_entry = r == "README.md" and re.fullmatch(r"> ### \[🌐 打开交互式网页版 →\]\(https://[^\s()]+\)", clean)
+        emoji_text = clean.replace("🌐", "", 1) if web_entry else clean
         heading = re.match(r"\s{0,3}#{1,6}\s+(.*)", clean)
         if heading:
             if EMOJI.search(heading.group(1)):
                 rep.add("error", path, no, "heading-emoji", "标题中不要使用 emoji")
             if "**" in heading.group(1):
                 rep.add("error", path, no, "heading-bold", "标题中不要加粗")
-        elif EMOJI.search(clean):
-            rep.add("error", path, no, "emoji", f"不要使用 emoji：{''.join(sorted(set(EMOJI.findall(clean))))}")
+        elif EMOJI.search(emoji_text):
+            rep.add("error", path, no, "emoji", f"不要使用 emoji：{''.join(sorted(set(EMOJI.findall(emoji_text))))}")
 
         check_bold(path, no, clean, rep)
 
