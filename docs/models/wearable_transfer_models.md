@@ -10,13 +10,13 @@ Apple 的波形模型与跨模态蒸馏展示了如何从消费级设备的短�
 
 | 工作 | 架构与输入 | 训练数据口径 | 主要机制 | 论文结果及评测条件 | 代码与权重 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| Apple PPG / ECG | 独立 EfficientNet 式 1D 编码器，PPG 3.3M、ECG 2.5M | AHMS 的 PPG 约 1,985 万段、14.1 万人，ECG 约 374 万段、10.7 万人，随后按参与者划分训练集 | 参与者级正样本、正则化 InfoNCE、动量编码器 | 参与者级线性探测，年龄 MAE 分别为 3.19 年和 6.33 年 | 官方研究页未提供代码与权重 |
-| Apple ACC 蒸馏 | PPG 教师与 ACC 学生，主实验为 8 层 Transformer，并有模型压缩实验 | 约 2,000 万对一分钟 PPG-ACC 片段、17.2 万人，80% 参与者用于训练 | 先预训练 PPG，再冻结教师进行表征蒸馏 | 全量标签线性探测心率 MAE 为 1.19 bpm，ACC 对比学习基线为 2.33 bpm | 官方研究页未提供代码与权重 |
-| [HiPPT](#hippt) | 12 层、512 维 PPG Transformer 与 PubMedBERT 文本分支；250 Hz、12 秒模型输入；总参数量未报告 | HBPM-BG 约 130 万条、1,086 人；VS 约 300 万条、20.05 万人，均为一分钟采集记录 | 单记录形态对齐、按元数据分组的跨记录上下文对齐、波形引导文本恢复 | 线性探测 SBP MAE 11.67 mmHg、cfPWV PR-AUC 0.84；PPG-DaLiA 心率 MAE 7.65 bpm | [预印本](https://arxiv.org/abs/2610.14489) 承诺发布代码与权重，当前未提供下载入口 |
-| HARNet / SSL-Wearables | 18 层 1D ResNet-V2，约 10M，公开模型采用 30 Hz ACC | UK Biobank 约 10 万人、70 万人天 | 预测时序变换的多任务自监督预训练 | 期刊版在 8 个活动识别数据集上报告 F1 相对提升中位数 24.4% | [代码与预训练加载入口](https://github.com/OxWearables/ssl-wearables) |
-| Sensori | 1D CNN + 8 层 Transformer，40M，24 小时三轴 ACC | 预训练为 UKB/CKB 的 91,037 人、502,823 人天 | 五分钟表征掩码预测与跨日参与者对比学习 | 加入临床协变量后，52/102 项现患疾病分类改善，改善项目的 ΔAUROC 中位数 0.060 | [代码](https://github.com/OxWearables/Sensori) · [学术用途权重](https://huggingface.co/light156/Sensori) |
-| RelCon | 1D ResNet 编码器，三轴 ACC | AHMS 87,376 人、10 亿片段 | 学习运动模式距离，再以相对对比目标保留片段相似度排序 | 覆盖 6 个数据集、4 类任务；活动分类与步态回归按各表协议比较 | [代码](https://github.com/maxxu05/relcon)，作者明确不公开预训练权重与数据 |
-| Inertia-1 | 多种 CNN、GRU、Transformer 与预训练方法，模型规模实验覆盖约 10M-100M | 研究覆盖 1,822 万小时、115,450 人、15 个数据集 | 控制输入表示、目标、规模和下游协议的比较框架 | 覆盖活动识别、冻结步态及疾病预测，具体指标应按任务表读取 | [MIT 代码](https://github.com/yang-ai-lab/Inertia-1)，官方 README 未提供预训练权重入口 |
+| [**Apple PPG / ECG**](#apple-ppg--ecg) | 独立 EfficientNet 式 1D 编码器，PPG 3.3M、ECG 2.5M | AHMS 的 PPG 约 1,985 万段、14.1 万人，ECG 约 374 万段、10.7 万人，随后按参与者划分训练集 | 参与者级正样本、正则化 InfoNCE、动量编码器 | 参与者级线性探测，年龄 MAE 分别为 3.19 年和 6.33 年 | 官方研究页未提供代码与权重 |
+| [**Apple ACC 蒸馏**](#apple-acc-蒸馏) | PPG 教师与 ACC 学生，主实验为 8 层 Transformer，并有模型压缩实验 | 约 2,000 万对一分钟 PPG-ACC 片段、17.2 万人，80% 参与者用于训练 | 先预训练 PPG，再冻结教师进行表征蒸馏 | 全量标签线性探测心率 MAE 为 1.19 bpm，ACC 对比学习基线为 2.33 bpm | 官方研究页未提供代码与权重 |
+| [**HiPPT**](#hippt) | 12 层、512 维 PPG Transformer 与 PubMedBERT 文本分支；250 Hz、12 秒模型输入；总参数量未报告 | HBPM-BG 约 130 万条、1,086 人；VS 约 300 万条、20.05 万人，均为一分钟采集记录 | 单记录形态对齐、按元数据分组的跨记录上下文对齐、波形引导文本恢复 | 线性探测 SBP MAE 11.67 mmHg、cfPWV PR-AUC 0.84；PPG-DaLiA 心率 MAE 7.65 bpm | [预印本](https://arxiv.org/abs/2610.14489) 承诺发布代码与权重，当前未提供下载入口 |
+| [**HARNet / SSL-Wearables**](#harnet) | 18 层 1D ResNet-V2，约 10M，公开模型采用 30 Hz ACC | UK Biobank 约 10 万人、70 万人天 | 预测时序变换的多任务自监督预训练 | 期刊版在 8 个活动识别数据集上报告 F1 相对提升中位数 24.4% | [代码与预训练加载入口](https://github.com/OxWearables/ssl-wearables) |
+| [**Sensori**](#sensori) | 1D CNN + 8 层 Transformer，40M，24 小时三轴 ACC | 预训练为 UKB/CKB 的 91,037 人、502,823 人天 | 五分钟表征掩码预测与跨日参与者对比学习 | 加入临床协变量后，52/102 项现患疾病分类改善，改善项目的 ΔAUROC 中位数 0.060 | [代码](https://github.com/OxWearables/Sensori) · [学术用途权重](https://huggingface.co/light156/Sensori) |
+| [**RelCon**](#relcon) | 1D ResNet 编码器，三轴 ACC | AHMS 87,376 人、10 亿片段 | 学习运动模式距离，再以相对对比目标保留片段相似度排序 | 覆盖 6 个数据集、4 类任务；活动分类与步态回归按各表协议比较 | [代码](https://github.com/maxxu05/relcon)，作者明确不公开预训练权重与数据 |
+| [**Inertia-1**](#inertia-1) | 多种 CNN、GRU、Transformer 与预训练方法，模型规模实验覆盖约 10M-100M | 研究覆盖 1,822 万小时、115,450 人、15 个数据集 | 控制输入表示、目标、规模和下游协议的比较框架 | 覆盖活动识别、冻结步态及疾病预测，具体指标应按任务表读取 | [MIT 代码](https://github.com/yang-ai-lab/Inertia-1)，官方 README 未提供预训练权重入口 |
 
 表中指标来自各论文内部评测，各研究使用的标签、参与者划分和传感器条件不同。训练规模区分数据集总量与实际预训练划分，跨论文比较应同时读取这些条件。[Apple 波形论文](https://arxiv.org/abs/2312.05409) · [Apple 蒸馏论文](https://arxiv.org/abs/2412.11276) · [HARNet 期刊版](https://doi.org/10.1038/s41746-024-01062-3) · [Sensori 论文](https://arxiv.org/abs/2608.29494) · [Inertia-1 论文](https://arxiv.org/abs/2607.06617)
 
@@ -78,7 +78,7 @@ PPG 编码器为 12 层 Transformer，隐藏维 512、8 个注意力头。文本
 
 以下均为冻结 PPG 编码器后训练线性任务头的结果，对照来自同一论文表格，排除 HiPPT 自身的累计消融；不是跨论文统一排名。
 
-| 任务与数据 | HiPPT | 论文表中最强其他对照 | 协议与解释 |
+| 任务与数据 | [**HiPPT**](#hippt) | 论文表中最强其他对照 | 协议与解释 |
 | :--- | :--- | :--- | :--- |
 | 收缩压，HBPM-X | MAE 11.67 ± 0.48 mmHg | SimCLR 11.89 ± 0.69 mmHg | 按记录评测，改善幅度较小，未报告显著性检验 |
 | 血管僵硬，cfPWV | PR-AUC 0.84 ± 0.03 | 多任务监督 0.81 ± 0.03 | 以 cfPWV ≥10 m/s 划为异常，属于参与者级分类 |

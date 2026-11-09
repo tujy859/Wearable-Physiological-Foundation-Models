@@ -8,11 +8,11 @@
 
 | 工作 | 架构或协议 | 数据规模 | 主要机制 | 代表评测与限制 | 资源 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| [WearableQA](#wearableqa) | 十选一健康问答 | 200 人、每人最长约 500 天；4,084 题 | 数据/健康推理与单/跨信号两轴 | 14 个模型准确率 19.6%-72.9%，随机基线 10%；论文版本内比较 | [代码与数据](https://github.com/facebookresearch/WearableQA) |
-| [HEARTS](#hearts) | 感知、推断、生成、演绎四类任务 | 16 数据集、20 模态、110 任务、20,226 样本 | 固定测试样例与工具型 Agent 框架 | 按任务使用专门指标；不压缩成单一临床能力分数 | [代码](https://github.com/yang-ai-lab/HEARTS) · [数据](https://huggingface.co/datasets/yang-ai-lab/HEARTS) |
-| [CBPM-LLaMA](#cbpm-llama) | 31 维生理特征文本化与 LLM 指令微调 | CAS-BP 1,272 人、12,624 条有效记录 | 领域知识、人口信息与 MAP/PP 目标 | LLaMA-3-8B 的 SBP MAE 7.08 mmHg，属于含个体基线校准的论文设置 | [论文](https://doi.org/10.1145/3698587.3701447) · [数据申请](https://github.com/zdzdliu/CAS-BP) |
-| [GEM](#gem) | ECG 时序/图像双编码器与 7B 语言骨干 | ECG-Instruct 1,156,110 对话；新增 ECG-Grounding 30,000 对话 | 跨模态对齐与特征锚定指令 | CSN 准确率 92.6%，同表 PULSE 85.2%；为特定模型变体与数据集结果 | [代码](https://github.com/lanxiang1017/GEM) · [权重](https://huggingface.co/LANSG/GEM) |
-| [PHA](#pha) | 三个专长代理与动态协调器 | 11 项评测、7,000 余份人工标注 | 个人数据计算、健康解释与多轮辅导 | 评测对话质量与短期任务表现；属于应用系统 | [正式论文](https://doi.org/10.1038/s41586-026-11161-8) · [代码](https://github.com/Google-Health/consumer-health-research/tree/main/personal_health_agent) |
+| [**WearableQA**](#wearableqa) | 十选一健康问答 | 200 人、每人最长约 500 天；4,084 题 | 数据/健康推理与单/跨信号两轴 | 14 个模型准确率 19.6%-72.9%，随机基线 10%；论文版本内比较 | [代码与数据](https://github.com/facebookresearch/WearableQA) |
+| [**HEARTS**](#hearts) | 感知、推断、生成、演绎四类任务 | 16 数据集、20 模态、110 任务、20,226 样本 | 固定测试样例与工具型 Agent 框架 | 按任务使用专门指标；不压缩成单一临床能力分数 | [代码](https://github.com/yang-ai-lab/HEARTS) · [数据](https://huggingface.co/datasets/yang-ai-lab/HEARTS) |
+| [**CBPM-LLaMA**](#cbpm-llama) | 31 维生理特征文本化与 LLM 指令微调 | CAS-BP 1,272 人、12,624 条有效记录 | 领域知识、人口信息与 MAP/PP 目标 | LLaMA-3-8B 的 SBP MAE 7.08 mmHg，属于含个体基线校准的论文设置 | [论文](https://doi.org/10.1145/3698587.3701447) · [数据申请](https://github.com/zdzdliu/CAS-BP) |
+| [**GEM**](#gem) | ECG 时序/图像双编码器与 7B 语言骨干 | ECG-Instruct 1,156,110 对话；新增 ECG-Grounding 30,000 对话 | 跨模态对齐与特征锚定指令 | CSN 准确率 92.6%，同表 PULSE 85.2%；为特定模型变体与数据集结果 | [代码](https://github.com/lanxiang1017/GEM) · [权重](https://huggingface.co/LANSG/GEM) |
+| [**PHA**](#pha) | 三个专长代理与动态协调器 | 11 项评测、7,000 余份人工标注 | 个人数据计算、健康解释与多轮辅导 | 评测对话质量与短期任务表现；属于应用系统 | [正式论文](https://doi.org/10.1038/s41586-026-11161-8) · [代码](https://github.com/Google-Health/consumer-health-research/tree/main/personal_health_agent) |
 
 这些工作比较的是不同能力：数值计算、标签预测、生成报告与长程解释。选择基准时应先确定输入是否为原始波形、派生指标或人工特征，再记录受试者划分、上下文长度、工具预算及评分方法。
 
@@ -99,8 +99,8 @@ Google Research / Google DeepMind / Columbia University 等 · Nature 2026 · [�
 | 路线 | 可用组件 | 需要控制的实验条件 |
 | :--- | :--- | :--- |
 | 数值工具与语言模型组合 | 信号处理、统计代码、可穿戴编码器与 CodeAct 接口 | 工具预算、信号质量、失败处理、计算结果是否忠实进入答案 |
-| 时序/图像与语言联合模型 | GEM、[SensorLM](smartwatch_models.md#sensorlm) 等 | 预训练数据重叠、输入模态、冻结或微调协议、缺失模态 |
-| 纵向指标表征与问答 | [LSM / SensorFM / WBM](longitudinal_wearable_models.md)、WearableQA | 时间窗口、个人与人群基线、缺失数据、未来信息泄漏 |
+| 时序/图像与语言联合模型 | [**GEM**](#gem)、[**SensorLM**](smartwatch_models.md#sensorlm) 等 | 预训练数据重叠、输入模态、冻结或微调协议、缺失模态 |
+| 纵向指标表征与问答 | [**LSM**](longitudinal_wearable_models.md#lsm-1) / [**SensorFM**](longitudinal_wearable_models.md#sensorfm) / [**WBM**](longitudinal_wearable_models.md#wbm)、[**WearableQA**](#wearableqa) | 时间窗口、个人与人群基线、缺失数据、未来信息泄漏 |
 
 比较上述路线时，除任务指标外，还需记录输入长度、模型规模、工具调用量和部署硬件，以解释推理成本的差异。
 

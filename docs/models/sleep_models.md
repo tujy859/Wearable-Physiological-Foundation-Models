@@ -62,9 +62,9 @@ SleepFM 系列逐步扩大了多导睡眠记录的表征范围。2024 年工作�
 
 | 工作 | 数据与计数口径 | 方法与结果 | 证据入口 |
 | :--- | :--- | :--- | :--- |
-| SleepFM 2024 | 超过 14,000 名参与者，超过 10 万小时 PSG | 留一模态对比学习，睡眠分期 macro AUROC 0.88，睡眠呼吸障碍 AUROC 0.85 | [论文与实现](https://arxiv.org/abs/2405.17766) |
-| SleepFM 临床版 | 约 65,000 名参与者，超过 585,000 小时 PSG | 多配置通道表征，130 个疾病结局达到 C-index ≥ 0.75 且通过多重比较校正 | [Nature Medicine 2026](https://doi.org/10.1038/s41591-025-04133-4) |
-| SleepFM-2 | 开发与评测共 282,511 份记录、26 个队列，其中预训练 235,865 份记录、24 个队列，总语料超过 200 万小时 | LOO 对比与 MAE 联合训练，PSG 表征结合年龄、性别和 BMI 后，188 个表型在两个测试队列均达到预设标准 | [arXiv v2](https://arxiv.org/abs/2609.06849v2) |
+| [**SleepFM 2024**](#sleepfm) | 超过 14,000 名参与者，超过 10 万小时 PSG | 留一模态对比学习，睡眠分期 macro AUROC 0.88，睡眠呼吸障碍 AUROC 0.85 | [论文与实现](https://arxiv.org/abs/2405.17766) |
+| [**SleepFM 临床版**](#sleepfm) | 约 65,000 名参与者，超过 585,000 小时 PSG | 多配置通道表征，130 个疾病结局达到 C-index ≥ 0.75 且通过多重比较校正 | [Nature Medicine 2026](https://doi.org/10.1038/s41591-025-04133-4) |
+| [**SleepFM-2**](#sleepfm-2) | 开发与评测共 282,511 份记录、26 个队列，其中预训练 235,865 份记录、24 个队列，总语料超过 200 万小时 | LOO 对比与 MAE 联合训练，PSG 表征结合年龄、性别和 BMI 后，188 个表型在两个测试队列均达到预设标准 | [arXiv v2](https://arxiv.org/abs/2609.06849v2) |
 
 临床版仓库提供基础编码器、疾病预测和睡眠分期检查点，采用 CC BY-NC 4.0 许可。复现需要区分论文完整预训练语料与仓库的 MESA 示例训练流程；官方说明该示例不复现论文主结果。[官方使用与许可说明](https://github.com/zou-group/sleepfm-clinical)
 
@@ -133,11 +133,11 @@ U-Sleep（*U-Sleep: resilient high-frequency sleep staging*）是公开的端到
 
 | 数⁠据⁠集⁠名⁠称 | 主⁠导⁠机⁠构 | 样⁠本⁠规⁠模 | 涵⁠盖⁠模⁠态⁠通⁠道 | 核⁠心⁠特⁠色⁠与⁠临⁠床⁠价⁠值 | 获⁠取⁠途⁠径 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **[SHHS](../datasets/wearable_datasets.md#shhs)** (Sleep Heart Health Study) | 美国 NIH / NHLBI | 5,804 名中老年人（>15 年随访） | 完整 PSG（EEG, EOG, EMG, ECG, 胸腹呼吸, $\text{SpO}_2$） | 研究睡眠呼吸障碍与心衰、卒中、全因死亡率关联的金标准流行病学队列 | NSRR 签约免费申请 |
-| **[MESA](../datasets/wearable_datasets.md#mesa)** (Multi-Ethnic Study of Atherosclerosis) | 美国 NHLBI 多中心 | 2,237 名四族裔成年人 | 完整 PSG + **连续 7 天腕部体动仪 Actigraphy** | 兼具多族裔代表性、心血管钙化硬终点与“临床 PSG + 腕戴体动”配对记录 | NSRR 签约免费申请 |
-| **[Sleep-EDF Expanded](../datasets/wearable_datasets.md#sleep-edf)** | 荷兰神经研究所 / PhysioNet | 197 份整夜记录 | 2 通道 EEG (Fpz-Cz / Pz-Oz), EOG, EMG, 口鼻呼吸 | 睡眠分期领域引用最广的免审批基准，适合算法快速原型验证 | PhysioNet 直接下载 |
+| [**SHHS**](../datasets/wearable_datasets.md#shhs) (Sleep Heart Health Study) | 美国 NIH / NHLBI | 5,804 名中老年人（>15 年随访） | 完整 PSG（EEG, EOG, EMG, ECG, 胸腹呼吸, $\text{SpO}_2$） | 研究睡眠呼吸障碍与心衰、卒中、全因死亡率关联的金标准流行病学队列 | NSRR 签约免费申请 |
+| [**MESA**](../datasets/wearable_datasets.md#mesa) (Multi-Ethnic Study of Atherosclerosis) | 美国 NHLBI 多中心 | 2,237 名四族裔成年人 | 完整 PSG + **连续 7 天腕部体动仪 Actigraphy** | 兼具多族裔代表性、心血管钙化硬终点与“临床 PSG + 腕戴体动”配对记录 | NSRR 签约免费申请 |
+| [**Sleep-EDF Expanded**](../datasets/wearable_datasets.md#sleep-edf) | 荷兰神经研究所 / PhysioNet | 197 份整夜记录 | 2 通道 EEG (Fpz-Cz / Pz-Oz), EOG, EMG, 口鼻呼吸 | 睡眠分期领域引用最广的免审批基准，适合算法快速原型验证 | PhysioNet 直接下载 |
 | **ISRUC-Sleep** | 葡萄牙科英布拉大学 | 118 例受试者（含睡眠呼吸暂停与健康对照） | 6 通道 EEG, 2 通道 EOG, 3 通道 EMG, ECG, 呼吸 | 提供多位资深技师独立给出的双盲睡眠分期与微觉醒标注，常用于评测观察者间一致性 | 官方网站公开下载 |
-| **[Stanford Sleep Bench](https://arxiv.org/abs/2512.09591)** | 斯坦福大学 / DTU | 17,467 份记录，超过 163,000 小时 | 多模态 PSG | 比较睡眠分期、呼吸暂停、年龄及 13 个疾病/死亡结局 | 按论文与数据平台的访问条件获取 |
+| [**Stanford Sleep Bench**](https://arxiv.org/abs/2512.09591) | 斯坦福大学 / DTU | 17,467 份记录，超过 163,000 小时 | 多模态 PSG | 比较睡眠分期、呼吸暂停、年龄及 13 个疾病/死亡结局 | 按论文与数据平台的访问条件获取 |
 
 > [!NOTE]
 > **美国国家睡眠研究资源库（[National Sleep Research Resource, sleepdata.org](https://sleepdata.org/)）** 是获取 SHHS、MESA、MrOS、WSC、CFS 等数十万小时临床 PSG 数据的核心枢纽，学术研究者在线签署标准数据使用协议（DUA）后通常数日内即可获批高速下载。
@@ -146,7 +146,7 @@ U-Sleep（*U-Sleep: resilient high-frequency sleep staging*）是公开的端到
 
 ## 4. 核心睡眠基础模型横向对比全景矩阵
 
-| 评⁠估⁠维⁠度 | SleepFM 临床版 | Stanford SleepFM-2 | 首⁠尔⁠大⁠学 SleepMaMi | 哥⁠本⁠哈⁠根⁠大⁠学 U-Sleep |
+| 评⁠估⁠维⁠度 | [**SleepFM 临床版**](#sleepfm) | Stanford [**SleepFM-2**](#sleepfm-2) | 首尔大学 [**SleepMaMi**](#sleepmami) | 哥本哈根大学 [**U-Sleep**](#u-sleep) |
 | :--- | :--- | :--- | :--- | :--- |
 | **核⁠心⁠定⁠位** | 多器官耦合对比学习基座 | 多模态睡眠与跨设备表征 | 宏微观分层双编码器基座 | 全卷积端到端高频分期基准 |
 | **骨⁠干⁠架⁠构** | 1D-CNN + 标准 Transformer | 两阶段 Transformer（RMSNorm / SwiGLU / RoPE） | 共享/私有 Transformer + 双向 Mamba | 1D 全卷积深层 U-Net |

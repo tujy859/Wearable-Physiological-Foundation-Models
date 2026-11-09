@@ -248,7 +248,7 @@ HiMAE 在预训练后冻结骨干，通过对 5 个不同层级的隐空间特�
 
 研究直接在 **Samsung Galaxy Watch 8（搭载 Exynos W1000 手表 CPU，FP32 未量化）** 上进行了实机全量评测，对比主流穿戴基础模型基准：
 
-| 评⁠测⁠维⁠度 | LSM-Base (1D-ViT) | 1D Swin-Transformer | EfficientNet-B1 | **Samsung HiMAE (本⁠文)** | 优⁠势⁠收⁠益 |
+| 评⁠测⁠维⁠度 | LSM-Base (1D-ViT) | 1D Swin-Transformer | EfficientNet-B1 | Samsung [**HiMAE**](#himae) (本文) | 优⁠势⁠收⁠益 |
 | :--- | :---: | :---: | :---: | :---: | :--- |
 | **参⁠数⁠量 (Parameters)** | 110.0 M | 110.0 M | 7.8 M | **0.31 M (编码器) / 1.2M (全网)** | **参数量缩减约 355×** |
 | **计⁠算⁠复⁠杂⁠度 (FLOPs/10s)** | 15.94 G | 11.90 G | 0.85 G | **0.065 G** | **计算量降低约 246×** |
@@ -475,12 +475,12 @@ Apple PpgAge（21.3 万人）与 UK Biobank AI-PPG（21.2 万人）确立了光�
 | **Demographics** | 全套人口学+血流动力学 (6 维: 性别, 身高, 体重, BMI, SBP, DBP) | 10.04 | - | - |
 | **HR/HRV + Demographics** | 传统特征联合建模 (13 维) | 9.59 | - | - |
 | **AI-PPG Age (Zero-shot)** | 21.2 万人 UKB 监督训练模型直接推理 | **11.50** | 0.043 | 0.313 |
-| **PaPaGei-S (Linear Probe)** | 冻结 512 维潜表征 + 岭回归 | 9.80 ± 0.34 | 0.313 | 0.583 |
+| [**PaPaGei-S**](#papagei) (Linear Probe) | 冻结 512 维潜表征 + 岭回归 | 9.80 ± 0.34 | 0.313 | 0.583 |
 | **AI-PPG Age (Linear Probe)** | 提取倒数第二层 192 维卷积激活 + 岭回归 | 9.72 ± 0.37 | 0.310 | 0.563 |
-| **Pulse-PPG (Linear Probe)** | 冻结 512 维潜表征 + 岭回归 | **9.28 ± 0.44** | **0.388** | **0.645** |
-| **PaPaGei-S + Demographics** | 512 维潜表征 + 6 维人口学特征拼接 | 8.56 ± 0.22 | 0.477 | 0.696 |
+| [**Pulse-PPG**](#pulse-ppg) (Linear Probe) | 冻结 512 维潜表征 + 岭回归 | **9.28 ± 0.44** | **0.388** | **0.645** |
+| [**PaPaGei-S**](#papagei) + Demographics | 512 维潜表征 + 6 维人口学特征拼接 | 8.56 ± 0.22 | 0.477 | 0.696 |
 | **AI-PPG Age + Demographics** | 192 维潜表征 + 6 维人口学特征拼接 | 8.58 ± 0.25 | 0.440 | 0.664 |
-| **Pulse-PPG + Demographics (最⁠优)** | 512 维潜表征 + 6 维人口学特征拼接 | **8.22 ± 0.25** | **0.517** | **0.725** |
+| [**Pulse-PPG**](#pulse-ppg) + Demographics (最优) | 512 维潜表征 + 6 维人口学特征拼接 | **8.22 ± 0.25** | **0.517** | **0.725** |
 
 #### 3. 关键技术洞察与“两大反转”机理解构
 
@@ -738,7 +738,7 @@ Google Research / Beth Israel Deaconess Medical Center / Harvard Medical School 
 
 美国五中心独立前瞻研究招募 296 人，最终分析 196 人；参与者无已知心血管疾病且未服用降压药。使用 Pixel Watch 3 进行约 7 天自由生活佩戴，以 ABPM 为参考。独立验证 AUROC 为 0.856；初筛工作点结果如下，括号内为 95% 置信区间。[Nature 论文](https://doi.org/10.1038/s41586-026-11336-3) · [研究报告](https://static-content.springer.com/esm/art%3A10.1038%2Fs41586-026-11336-3/MediaObjects/41586_2026_11336_MOESM2_ESM.pdf)
 
-| 指标 | AI-PPG-ACC-HTN | 初次诊室血压筛查 |
+| 指标 | [**AI-PPG-ACC-HTN**](#ai-ppg-acc-htn) | 初次诊室血压筛查 |
 | :--- | :--- | :--- |
 | 敏感性 | 65.8%（54.0%-76.3%） | 55.3%（43.4%-66.7%） |
 | 特异性 | 90.0%（83.2%-94.7%） | 90.0%（83.2%-94.7%） |
@@ -750,7 +750,7 @@ Google Research / Beth Israel Deaconess Medical Center / Harvard Medical School 
 
 [WavesFM](longitudinal_wearable_models.md#wavesfm) 与该研究有多位共同作者，并连接到同一 Health Guardian 血压趋势功能：Google 产品介绍明确链接 WavesFM，同段的临床验证链接指向这篇高血压预印本；Nature 作者介绍也说明该研究帮助形成该功能。高血压预印本发表于 2025 年 12 月，早于 2026 年 5 月公开的 WavesFM。[产品介绍](https://blog.google/products-and-platforms/products/google-health/pixel-watch-health-guardian/) · [作者介绍](https://research.google/blog/detecting-signs-of-hypertension-using-wearable-sensors/)
 
-| 比较项 | AI-PPG-ACC-HTN | WavesFM |
+| 比较项 | [**AI-PPG-ACC-HTN**](#ai-ppg-acc-htn) | [**WavesFM**](longitudinal_wearable_models.md#wavesfm) |
 | :--- | :--- | :--- |
 | 局部编码与目标 | 预印本为 EfficientNet-B1，约 5.1M 参数；15 秒 PPG＋ACC，受试者对比学习 | EfficientNet-B7，15 秒 PPG＋ACC；第一阶段受试者对比学习 |
 | 跨日处理 | 按日内小时跨日取均值，再汇为个体表示；身高加逻辑回归 | 5 分钟表示组成一周序列；6 层 Transformer，第二阶段掩码预测被遮挡的表示 |
@@ -774,7 +774,7 @@ Google Research / Beth Israel Deaconess Medical Center / Harvard Medical School 
 
 ### 表 1：脉搏波与心血管多模态基础模型
 
-| 维⁠度 / 特⁠征 | PaPaGei | Pulse-PPG | AnyPPG | PPGFlowECG | UniCardio | Samsung xMAE / HiMAE |
+| 维⁠度 / 特⁠征 | [**PaPaGei**](#papagei) | [**Pulse-PPG**](#pulse-ppg) | [**AnyPPG**](#anyppg) | [**PPGFlowECG**](#ppgflowecg) | [**UniCardio**](#unicardio) | Samsung [**xMAE**](#xmae) / [**HiMAE**](#himae) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **机⁠构⁠团⁠队** | Nokia Bell Labs | UIUC / 孟菲斯大学 | 北京大学数字健康实验室 | 北京大学数字健康实验室 | 清华大学 / 安贞医院 | Samsung Research / UCLA |
 | **核⁠心⁠模⁠态** | 单通道 PPG | 腕部高噪 PPG | PPG (心电引导) | PPG → 诊断级 ECG | PPG + ECG + 动脉血压 (BP) | PPG → 虚拟 ECG / 绿光 PPG |
@@ -787,7 +787,7 @@ Google Research / Beth Israel Deaconess Medical Center / Harvard Medical School 
 
 ### 表 2：全传感器、空间运动与时序语言多模态基础模型
 
-| 维⁠度 / 特⁠征 | SensorFM | SensorLM | OpenMHC (WBM/LSM) | PPG-LM | PPG-Distill | SleepFM-1 / 2 | Huawei Mantis |
+| 维⁠度 / 特⁠征 | [**SensorFM**](#sensorfm) | [**SensorLM**](#sensorlm) | [**OpenMHC**](#openmhc) (WBM/LSM) | [**PPG-LM**](#ppg-lm) | [**PPG-Distill**](#ppg-distill) | [**SleepFM-1**](sleep_models.md#sleepfm) / [**SleepFM-2**](sleep_models.md#sleepfm-2) | Huawei [**Mantis**](general_tsfm.md#mantis) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **机⁠构⁠团⁠队** | Google Research | Google Research / DeepMind | 斯坦福大学 / 帝国理工 | Emory / UCLA / Google | Emory University | 斯坦福大学医学院 | 华为诺亚方舟实验室 |
 | **核⁠心⁠模⁠态** | 五类传感器派生的 34 个分钟级特征 | 五类传感器派生的 26 个分钟级特征 | 19 通道腕部 + 169 维变量 | PPG + 结构化临床语言 | 腕戴 PPG | PSG + 腕部 PPG/ACC 代理桥 | 多变量 (ACC / 生理) |
@@ -828,22 +828,22 @@ Google Research / Beth Israel Deaconess Medical Center / Harvard Medical School 
 
 | 项⁠目 / 论⁠文⁠名⁠称 | 主⁠要⁠机⁠构 | 发⁠表⁠情⁠况 | 核⁠心⁠定⁠位⁠与⁠资⁠源 |
 | :--- | :--- | :--- | :--- |
-| [PPG 深度学习范围综述](#ppg-深度学习范围综述) | 北京大学 / HeartVoice | Health Data Science 2026 | 460 篇接触式 PPG 研究的任务、模型与数据梳理 · [论文](https://doi.org/10.34133/hds.0474) · [文献清单](https://github.com/Ngk03/DL_PPG_Review) |
-| [AI-PPG-ACC-HTN](#ai-ppg-acc-htn) | Google / BIDMC / Harvard | Nature 2026 | 自监督波形表征与多日高血压筛查，独立前瞻验证 196 人 · [论文](https://doi.org/10.1038/s41586-026-11336-3) |
-| **SensorFM** | Google / Fitbit Health AI | arXiv 2026 | 1 万亿分钟消费级穿戴多模态基座 · [论文](https://arxiv.org/abs/2605.22759) |
-| **PaPaGei** | Nokia Bell Labs | ICLR 2025 | 开源形态感知脉搏波基础模型 · [论文](https://arxiv.org/abs/2410.20542) · [代码](https://github.com/Nokia-Bell-Labs/papagei-foundation-model) |
-| **Pulse-PPG** | 孟菲斯大学 / UIUC | UbiComp 2025 | 野外非受限生活场景脉搏基座 · [代码](https://github.com/maxxu05/pulseppg) |
-| **HiMAE** | Samsung Research / UCLA | ICLR 2026 | 手表端侧亚毫秒级分层掩码自编码基座 · [论文](https://arxiv.org/abs/2510.25785) · [代码](https://github.com/Simonlee711/HiMAE) |
-| **UniCardio** | 清华大学 / 安贞医院 | Nat Mach Intell 2025/2026 | 统一心血管多模态扩散基础模型 · [论文](https://doi.org/10.1038/s42256-025-01147-y) · [代码](https://github.com/chen-zehua/UniCardio) |
-| **PPGFlowECG** | 北京大学健康医疗大数据国家研究院 | arXiv 2025-2026 | 潜空间整流流 PPG 转 ECG 跨模态生成 · [论文](https://arxiv.org/abs/2502.14856) · [代码](https://github.com/PKUDigitalHealth/PPGFlowECG) |
-| **AnyPPG** | 北京大学健康医疗大数据国家研究院 | ACM SIGKDD 2026 | 心电引导预训练的光电多器官基座大模型 · [论文](https://arxiv.org/abs/2511.01747) · [代码](https://github.com/Ngk03/AnyPPG) |
-| **SigmaPPG** | 米兰理工大学 / 浙江大学 / Emory | ICML 2026 | 统计先验引导强化学习对抗掩码与向量量化 PPG 基座 · [论文](https://arxiv.org/abs/2601.21031) · [代码](https://github.com/ZonghengGuo/SigmaPPG) · [权重](https://huggingface.co/zonhengu/sigmappg) |
-| **PPG-Distill** | Emory University | 2025 | 脉搏波基础模型多层次端侧知识蒸馏 · [代码](https://github.com/LingFengGold/PPG-Distill) |
-| **PpgAge** | Apple Health | Nat Commun 2025 | 21.3 万人腕部脉搏波血管生物年龄研究 · [论文](https://doi.org/10.1038/s41467-025-64275-4) |
-| **OpenMHC** | 斯坦福大学医学院 | arXiv 2026 | 6,700 万小时真实世界穿戴基础模型基准与生态 · [论文](https://arxiv.org/abs/2607.16235) · [代码](https://github.com/AshleyLab/OpenMHC) |
-| **PPG-LM** | Emory / UCLA / Google | arXiv 2026 | 多时间尺度临床对齐脉搏-语言基础模型 · [论文](https://arxiv.org/abs/2609.33516) |
-| **SensorLM** | Google Research / DeepMind | NeurIPS 2025 | 5,970 万小时智能手表传感器-语言多模态基座 · [论文](https://arxiv.org/abs/2506.09108) · [代码](https://github.com/Google-Health/consumer-health-research/tree/main/sensorlm) |
-| **NormWear** | UMass Amherst | ACM HEALTH 2026（In Press） | 连续小波变换与任意通道融合可穿戴多模态基座 · [论文](https://arxiv.org/abs/2412.09758) · [代码](https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear) |
-| **LIMU-BERT** | 南洋理工大学 (NTU) | ACM SenSys 2021 | 手腕三轴 IMU 空间运动表征模型 · [代码](https://github.com/dapowan/LIMU-BERT-Public) |
-| **PPG-Bench** | Mannas AI | arXiv 2026 | 9 数据集 26 任务脉搏大模型大一统评测套件 · [论文](https://arxiv.org/abs/2610.13435) · [代码](https://github.com/mannas-ai/ppg-bench) |
-| **PPG 生⁠物⁠年⁠龄⁠横⁠评** | Nabil Brag | arXiv 2026 | 脉搏基础模型血管生物年龄跨域评测基准 · [论文](https://arxiv.org/abs/2603.14030) · [代码](https://github.com/Misterbra/ppg-age-benchmark) |
+| [**PPG 深度学习范围综述**](#ppg-深度学习范围综述) | 北京大学 / HeartVoice | Health Data Science 2026 | 460 篇接触式 PPG 研究的任务、模型与数据梳理 · [论文](https://doi.org/10.34133/hds.0474) · [文献清单](https://github.com/Ngk03/DL_PPG_Review) |
+| [**AI-PPG-ACC-HTN**](#ai-ppg-acc-htn) | Google / BIDMC / Harvard | Nature 2026 | 自监督波形表征与多日高血压筛查，独立前瞻验证 196 人 · [论文](https://doi.org/10.1038/s41586-026-11336-3) |
+| [**SensorFM**](#sensorfm) | Google / Fitbit Health AI | arXiv 2026 | 1 万亿分钟消费级穿戴多模态基座 · [论文](https://arxiv.org/abs/2605.22759) |
+| [**PaPaGei**](#papagei) | Nokia Bell Labs | ICLR 2025 | 开源形态感知脉搏波基础模型 · [论文](https://arxiv.org/abs/2410.20542) · [代码](https://github.com/Nokia-Bell-Labs/papagei-foundation-model) |
+| [**Pulse-PPG**](#pulse-ppg) | 孟菲斯大学 / UIUC | UbiComp 2025 | 野外非受限生活场景脉搏基座 · [代码](https://github.com/maxxu05/pulseppg) |
+| [**HiMAE**](#himae) | Samsung Research / UCLA | ICLR 2026 | 手表端侧亚毫秒级分层掩码自编码基座 · [论文](https://arxiv.org/abs/2510.25785) · [代码](https://github.com/Simonlee711/HiMAE) |
+| [**UniCardio**](#unicardio) | 清华大学 / 安贞医院 | Nat Mach Intell 2025/2026 | 统一心血管多模态扩散基础模型 · [论文](https://doi.org/10.1038/s42256-025-01147-y) · [代码](https://github.com/chen-zehua/UniCardio) |
+| [**PPGFlowECG**](#ppgflowecg) | 北京大学健康医疗大数据国家研究院 | arXiv 2025-2026 | 潜空间整流流 PPG 转 ECG 跨模态生成 · [论文](https://arxiv.org/abs/2502.14856) · [代码](https://github.com/PKUDigitalHealth/PPGFlowECG) |
+| [**AnyPPG**](#anyppg) | 北京大学健康医疗大数据国家研究院 | ACM SIGKDD 2026 | 心电引导预训练的光电多器官基座大模型 · [论文](https://arxiv.org/abs/2511.01747) · [代码](https://github.com/Ngk03/AnyPPG) |
+| [**SigmaPPG**](#sigmappg) | 米兰理工大学 / 浙江大学 / Emory | ICML 2026 | 统计先验引导强化学习对抗掩码与向量量化 PPG 基座 · [论文](https://arxiv.org/abs/2601.21031) · [代码](https://github.com/ZonghengGuo/SigmaPPG) · [权重](https://huggingface.co/zonhengu/sigmappg) |
+| [**PPG-Distill**](#ppg-distill) | Emory University | 2025 | 脉搏波基础模型多层次端侧知识蒸馏 · [代码](https://github.com/LingFengGold/PPG-Distill) |
+| [**PpgAge**](#ppgage) | Apple Health | Nat Commun 2025 | 21.3 万人腕部脉搏波血管生物年龄研究 · [论文](https://doi.org/10.1038/s41467-025-64275-4) |
+| [**OpenMHC**](#openmhc) | 斯坦福大学医学院 | arXiv 2026 | 6,700 万小时真实世界穿戴基础模型基准与生态 · [论文](https://arxiv.org/abs/2607.16235) · [代码](https://github.com/AshleyLab/OpenMHC) |
+| [**PPG-LM**](#ppg-lm) | Emory / UCLA / Google | arXiv 2026 | 多时间尺度临床对齐脉搏-语言基础模型 · [论文](https://arxiv.org/abs/2609.33516) |
+| [**SensorLM**](#sensorlm) | Google Research / DeepMind | NeurIPS 2025 | 5,970 万小时智能手表传感器-语言多模态基座 · [论文](https://arxiv.org/abs/2506.09108) · [代码](https://github.com/Google-Health/consumer-health-research/tree/main/sensorlm) |
+| [**NormWear**](#normwear) | UMass Amherst | ACM HEALTH 2026（In Press） | 连续小波变换与任意通道融合可穿戴多模态基座 · [论文](https://arxiv.org/abs/2412.09758) · [代码](https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear) |
+| [**LIMU-BERT**](#limu-bert) | 南洋理工大学 (NTU) | ACM SenSys 2021 | 手腕三轴 IMU 空间运动表征模型 · [代码](https://github.com/dapowan/LIMU-BERT-Public) |
+| [**PPG-Bench**](#ppg-bench) | Mannas AI | arXiv 2026 | 9 数据集 26 任务脉搏大模型大一统评测套件 · [论文](https://arxiv.org/abs/2610.13435) · [代码](https://github.com/mannas-ai/ppg-bench) |
+| [**PPG 生物年龄横评**](#开源脉搏基础模型生物年龄横评) | Nabil Brag | arXiv 2026 | 脉搏基础模型血管生物年龄跨域评测基准 · [论文](https://arxiv.org/abs/2603.14030) · [代码](https://github.com/Misterbra/ppg-age-benchmark) |

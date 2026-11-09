@@ -169,7 +169,7 @@ GlucoBench 针对早期血糖预测研究数据集切分不一、评价指标单
 
 ## 3. 核心 CGM 基础模型与基准横向对比
 
-| 对⁠比⁠维⁠度 | Google GlucoFM | CRUISE CGM-JEPA | Pheno.AI GluFormer | 中⁠科⁠院 CGMformer | JHU CGM-LSM |
+| 对⁠比⁠维⁠度 | Google [**GlucoFM**](#glucofm) | CRUISE [**CGM-JEPA**](#cgm-jepa) | Pheno.AI [**GluFormer**](#gluformer) | 中⁠科⁠院 [**CGMformer**](#cgmformer) | JHU [**CGM-LSM**](#cgm-lsm) |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **发⁠表⁠来⁠源** | arXiv 2026 | arXiv 2026 | Nature 2026 | NSR 2025 | npj Health Systems 2025 |
 | **学⁠习⁠范⁠式** | 双流 JEPA 潜空间预测 | JEPA 潜空间预测与 Glucodensity 跨视图扩展 | GPT 式因果自回归生成 | BERT 式 MLM 掩码重构 | GPT-2 式因果自回归 |
@@ -224,9 +224,9 @@ CGMacros 多模态实验从 45 人中留出 9 人测试，覆盖 1,903 个预测
 | 方法 | 输入设置 | 30 min | 60 min | 90 min | 120 min |
 | :--- | :--- | ---: | ---: | ---: | ---: |
 | Chronos-2 | 完整血糖历史 | 17.329 | 23.853 | 26.464 | 27.553 |
-| GlucoAgent | 完整血糖历史 | 17.416 | 24.187 | 26.584 | 27.661 |
+| [**GlucoAgent**](#glucoagent) | 完整血糖历史 | 17.416 | 24.187 | 26.584 | 27.661 |
 | Chronos-2 | 多模态个人上下文 | 17.246 | 23.711 | 26.052 | 26.866 |
-| GlucoAgent | 多模态个人上下文 | 16.357 | 22.132 | 25.163 | 26.450 |
+| [**GlucoAgent**](#glucoagent) | 多模态个人上下文 | 16.357 | 22.132 | 25.163 | 26.450 |
 
 四个跨度的平均 RMSE 为 22.5 mg/dL，Chronos-2 为 23.5 mg/dL；只用完整血糖历史时两者接近。餐后子集的 60 分钟预测中，加入多模态上下文使 GlucoAgent 的 RMSE 从约 31.0 降至 26.5 mg/dL。Chronos-2 接收对齐的数值协变量，Agent 接收含静态健康档案的 JSON，二者的输入组织方式不同。[论文 §4.2–4.3 与附录 D](https://arxiv.org/html/2611.04126v1#S4.SS2)
 

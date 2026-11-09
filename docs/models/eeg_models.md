@@ -12,9 +12,9 @@ LaBraM 用离散神经词元学习跨数据集表征，EEGPT 联合优化潜空�
 
 | 模型 | 架构与参数口径 | 预训练数据 | 学习机制 | 原论文代表结果 | 开源资源 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| [LaBraM](#labram) | 通道分块 Transformer，Base 5.8M，另评测 46M / 369M | 2,534.78 小时，多来源 EEG | 频谱预测词元器与离散词元掩码预测 | TUAB AUROC 0.9022 ± 0.0009，Base 全量微调 | [代码](https://github.com/935963004/LaBraM) · [Base 与词元器检查点](https://github.com/935963004/LaBraM/tree/main/checkpoints) |
-| [EEGPT](#eegpt) | 分层编码器、预测器和重构器，Large 完整预训练网络 101M，TUAB 下游表列 25M | PhysioMI、HGD、TSU、SEED、M3CV 五个数据集 | 动量表征对齐与掩码重构 | TUAB AUROC 0.8718 ± 0.0050，冻结编码器加可训练适配层 | [代码](https://github.com/BINE022/EEGPT) · [权重](https://figshare.com/s/e37df4f8a907a866df4b) |
-| [CBraMod](#cbramod) | 时空交叉注意力 Transformer，4.0M | TUEG 清洗后超过 9,000 小时，约 111 万个片段 | 时域与频域分块编码、非对称位置编码、掩码重构 | CHB-MIT AUROC 0.8892 ± 0.0154，全量微调 | [代码](https://github.com/wjq-learning/CBraMod) · [权重](https://huggingface.co/weighting666/CBraMod) |
+| [**LaBraM**](#labram) | 通道分块 Transformer，Base 5.8M，另评测 46M / 369M | 2,534.78 小时，多来源 EEG | 频谱预测词元器与离散词元掩码预测 | TUAB AUROC 0.9022 ± 0.0009，Base 全量微调 | [代码](https://github.com/935963004/LaBraM) · [Base 与词元器检查点](https://github.com/935963004/LaBraM/tree/main/checkpoints) |
+| [**EEGPT**](#eegpt) | 分层编码器、预测器和重构器，Large 完整预训练网络 101M，TUAB 下游表列 25M | PhysioMI、HGD、TSU、SEED、M3CV 五个数据集 | 动量表征对齐与掩码重构 | TUAB AUROC 0.8718 ± 0.0050，冻结编码器加可训练适配层 | [代码](https://github.com/BINE022/EEGPT) · [权重](https://figshare.com/s/e37df4f8a907a866df4b) |
+| [**CBraMod**](#cbramod) | 时空交叉注意力 Transformer，4.0M | TUEG 清洗后超过 9,000 小时，约 111 万个片段 | 时域与频域分块编码、非对称位置编码、掩码重构 | CHB-MIT AUROC 0.8892 ± 0.0154，全量微调 | [代码](https://github.com/wjq-learning/CBraMod) · [权重](https://huggingface.co/weighting666/CBraMod) |
 
 表中结果保留各自数据集和适配协议，供查找原实验使用。跨论文比较还需统一数据切分、通道配置和训练预算。EEGPT 摘要的参数描述、完整预训练网络和下游评测表采用不同口径，比较模型规模时需对应具体版本与组件。[LaBraM 论文](https://arxiv.org/abs/2405.18765) · [EEGPT 论文](https://proceedings.neurips.cc/paper_files/paper/2024/hash/4540d267eeec4e5dbd9dae9448f0b739-Abstract-Conference.html) · [CBraMod 论文](https://arxiv.org/abs/2412.07236)
 

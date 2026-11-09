@@ -8,12 +8,12 @@
 
 | 基准 | 评测架构或输入 | 数据规模 | 主要协议 | 结果应如何读取 | 开源入口 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| BenchECG / xECG | ECG，含 PPG 跨模态迁移；xECG 为双向 xLSTM + SimDINOv2 | 8 个数据集、421,171 人、1,674,704 份记录 | 10 项分类、检测、分割、回归及生存任务；线性探测与微调 | 期刊版报告 xECG 综合分 0.838；该分数是基准内聚合指标 | [评测代码](https://github.com/dlaskalab/bench-xecg) · [xECG 权重](https://huggingface.co/riccardolunelli/xECG_base_model_v1) |
-| EEG-FM-Bench | 7 个 EEG 基模与 Mantis、MOMENT；可更换分类头 | 14 个数据集、10 类 EEG 范式 | 冻结、全参数、LoRA；单任务与多任务；梯度及表征分析 | 按数据集和适配策略读取 Balanced Accuracy、F1 等；排名依赖协议 | [评测代码](https://github.com/xw1216/EEG-FM-Bench) |
-| [PPG-Bench](smartwatch_models.md#ppg-bench) | PPG 基模与简单 PRV、通用时序对照 | 论文 9 个数据集、26 项任务；公开代码列 17 项主要任务 | 四级下游适配协议 | 固定代码版本，同时报告简单基线与跨受试者划分 | [代码](https://github.com/mannas-ai/ppg-bench) |
-| [OpenMHC](smartwatch_models.md#openmhc) | 纵向穿戴指标 | 多年人群记录 | 预测、插补、外推与公开基线复现 | 区分原始工业模型与开放复现 | [代码](https://github.com/AshleyLab/OpenMHC) |
-| [HEARTS](health_reasoning_llms.md#hearts) | 高频波形至长期指标 | 16 个数据集、110 项任务、20,226 个样本 | 感知、推断、生成、演绎；含工具型 Agent | 分层、分任务比较，保留工具及输入格式 | [代码与数据入口](https://github.com/yang-ai-lab/HEARTS) |
-| [WearableQA](health_reasoning_llms.md#wearableqa) | 个人穿戴历史、血检与人口信息 | 200 人、最长约 500 天、4,084 道十选一题 | 数据/健康推理与单/跨信号两轴 | 随机基线为 10%；记录缺失、上下文长度与序列化方式 | [代码与数据](https://github.com/facebookresearch/WearableQA) |
+| [**BenchECG / xECG**](#benchecg) | ECG，含 PPG 跨模态迁移；xECG 为双向 xLSTM + SimDINOv2 | 8 个数据集、421,171 人、1,674,704 份记录 | 10 项分类、检测、分割、回归及生存任务；线性探测与微调 | 期刊版报告 xECG 综合分 0.838；该分数是基准内聚合指标 | [评测代码](https://github.com/dlaskalab/bench-xecg) · [xECG 权重](https://huggingface.co/riccardolunelli/xECG_base_model_v1) |
+| [**EEG-FM-Bench**](#eeg-fm-bench) | 7 个 EEG 基模与 Mantis、MOMENT；可更换分类头 | 14 个数据集、10 类 EEG 范式 | 冻结、全参数、LoRA；单任务与多任务；梯度及表征分析 | 按数据集和适配策略读取 Balanced Accuracy、F1 等；排名依赖协议 | [评测代码](https://github.com/xw1216/EEG-FM-Bench) |
+| [**PPG-Bench**](smartwatch_models.md#ppg-bench) | PPG 基模与简单 PRV、通用时序对照 | 论文 9 个数据集、26 项任务；公开代码列 17 项主要任务 | 四级下游适配协议 | 固定代码版本，同时报告简单基线与跨受试者划分 | [代码](https://github.com/mannas-ai/ppg-bench) |
+| [**OpenMHC**](smartwatch_models.md#openmhc) | 纵向穿戴指标 | 多年人群记录 | 预测、插补、外推与公开基线复现 | 区分原始工业模型与开放复现 | [代码](https://github.com/AshleyLab/OpenMHC) |
+| [**HEARTS**](health_reasoning_llms.md#hearts) | 高频波形至长期指标 | 16 个数据集、110 项任务、20,226 个样本 | 感知、推断、生成、演绎；含工具型 Agent | 分层、分任务比较，保留工具及输入格式 | [代码与数据入口](https://github.com/yang-ai-lab/HEARTS) |
+| [**WearableQA**](health_reasoning_llms.md#wearableqa) | 个人穿戴历史、血检与人口信息 | 200 人、最长约 500 天、4,084 道十选一题 | 数据/健康推理与单/跨信号两轴 | 随机基线为 10%；记录缺失、上下文长度与序列化方式 | [代码与数据](https://github.com/facebookresearch/WearableQA) |
 
 本表用于选择评测入口，不将不同基准的分数直接横向排序。模型表征质量、下游头容量、上下文长度、语言提示和工具能力分别影响结果。
 
@@ -55,7 +55,7 @@ BenchECG 将短程多导联心电、长程单/双导联记录、运动心电和�
 
 | 工作 | 研究方向 | 数据与适用范围 |
 | :--- | :--- | :--- |
-| [PhysioBench](https://arxiv.org/abs/2609.20836) | 生理信号问答，覆盖 ECG、EEG、PPG 与 PSG | 论文摘要报告 22 数据集、30 任务和约 6,140 万问答；[官方实现与资源说明](https://github.com/Leanna97/PhysioBench)中的公开 QA 包覆盖 18 数据集，原始波形须分别按许可获取，完整基准与公开包的覆盖范围不同 |
-| [WEQA](https://arxiv.org/abs/2606.18147) | 查询自适应 Agent 与可穿戴问答 | 比较结果时需同时考虑任务划分和代理调用预算 |
-| [HealthLoopQA](https://openreview.net/pdf?id=7mHfFopx4t) | 糖尿病穿戴解释与模拟故障评测 | 所引材料为投稿版本，正式发表状态与数据获取方式尚不明确 |
-| [CLIMB](https://proceedings.mlr.press/v267/dai25b.html) | 多模态临床评测 | 覆盖影像、语言、时序和图等临床数据，适合作为范围更广的评测参考 |
+| [**PhysioBench**](https://arxiv.org/abs/2609.20836) | 生理信号问答，覆盖 ECG、EEG、PPG 与 PSG | 论文摘要报告 22 数据集、30 任务和约 6,140 万问答；[官方实现与资源说明](https://github.com/Leanna97/PhysioBench)中的公开 QA 包覆盖 18 数据集，原始波形须分别按许可获取，完整基准与公开包的覆盖范围不同 |
+| [**WEQA**](https://arxiv.org/abs/2606.18147) | 查询自适应 Agent 与可穿戴问答 | 比较结果时需同时考虑任务划分和代理调用预算 |
+| [**HealthLoopQA**](https://openreview.net/pdf?id=7mHfFopx4t) | 糖尿病穿戴解释与模拟故障评测 | 所引材料为投稿版本，正式发表状态与数据获取方式尚不明确 |
+| [**CLIMB**](https://proceedings.mlr.press/v267/dai25b.html) | 多模态临床评测 | 覆盖影像、语言、时序和图等临床数据，适合作为范围更广的评测参考 |

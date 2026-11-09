@@ -12,7 +12,7 @@ TUM / Helmholtz Munich 等 · medRxiv 2026 · [论文](https://doi.org/10.64898/
 
 | 研究 | 架构与机制 | 数据口径 | 原论文代表结果 | 开放资源 |
 | :--- | :--- | :--- | :--- | :--- |
-| RisQ | Transformer 编码健康信息，交叉注意力解码器接收疾病和预测时间条件 | UKB 488,170 人用于训练/验证，其中训练 420,760 人；AoU 257,538 人用于外部评测 | UKB 生存评测 C-index 0.760，95% CI 0.754-0.766；留出 ICD 章节的零样本 C-index 0.667 | [MIT 代码](https://github.com/RisQ-Lab/RisQ)，预训练权重的获取方式尚不明确；队列数据另行申请 |
+| [**RisQ**](#risq) | Transformer 编码健康信息，交叉注意力解码器接收疾病和预测时间条件 | UKB 488,170 人用于训练/验证，其中训练 420,760 人；AoU 257,538 人用于外部评测 | UKB 生存评测 C-index 0.760，95% CI 0.754-0.766；留出 ICD 章节的零样本 C-index 0.667 | [MIT 代码](https://github.com/RisQ-Lab/RisQ)，预训练权重的获取方式尚不明确；队列数据另行申请 |
 
 ### 输入与查询机制
 
@@ -34,9 +34,9 @@ UKB 划分为 420,760 人训练、33,705 人验证与 33,705 人测试。论文�
 
 | 对象 | 输入层次 | 主要评测问题 | 比较时的边界 |
 | :--- | :--- | :--- | :--- |
-| [LSM / SensorFM / WBM](longitudinal_wearable_models.md) | 分钟级多传感器特征或派生行为指标 | 可迁移健康与行为表征 | 原始波形、聚合特征和长期行为指标的输入条件不同 |
-| [OpenMHC](smartwatch_models.md#openmhc) | 19 通道派生穿戴时序及关联问卷信息 | 预测、插补与外推 | 自报疾病标签没有诊断日期，不能直接解释成前瞻风险终点 |
-| RisQ | 临床变量与诊断史等多源记录 | 跨疾病、跨时间风险预测 | 临床随访与删失处理是其评测条件的一部分 |
-| [WearableQA / HEARTS](health_reasoning_llms.md) | 个人指标历史或健康时序 | 数据计算、信号理解与问答 | 问答正确率和疾病风险预测准确度属于不同指标 |
+| [**LSM**](longitudinal_wearable_models.md#lsm-1) / [**SensorFM**](longitudinal_wearable_models.md#sensorfm) / [**WBM**](longitudinal_wearable_models.md#wbm) | 分钟级多传感器特征或派生行为指标 | 可迁移健康与行为表征 | 原始波形、聚合特征和长期行为指标的输入条件不同 |
+| [**OpenMHC**](smartwatch_models.md#openmhc) | 19 通道派生穿戴时序及关联问卷信息 | 预测、插补与外推 | 自报疾病标签没有诊断日期，不能直接解释成前瞻风险终点 |
+| [**RisQ**](#risq) | 临床变量与诊断史等多源记录 | 跨疾病、跨时间风险预测 | 临床随访与删失处理是其评测条件的一部分 |
+| [**WearableQA**](health_reasoning_llms.md#wearableqa) / [**HEARTS**](health_reasoning_llms.md#hearts) | 个人指标历史或健康时序 | 数据计算、信号理解与问答 | 问答正确率和疾病风险预测准确度属于不同指标 |
 
 评注。把穿戴表征加入临床风险模型属于进一步研究方向。实验应先固定观察窗口与未来终点，在人口统计、传统穿戴特征和临床协变量基线上分别测量新增表征的收益，并保留独立队列验证。
