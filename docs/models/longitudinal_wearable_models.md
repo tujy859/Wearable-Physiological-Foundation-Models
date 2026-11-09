@@ -125,6 +125,8 @@ WavesFM 将短时波形表征与周内时间结构连接，使原始信号预训
 
 第一阶段用约 32.4 万人的 680 万小时片段，第二阶段用其中约 1 万人的 530 万小时纵向记录，共 6.12 万条周长记录。模型总参数量未报告。第二阶段学习的是嵌入序列，不是再次输入整天原始波形；五分钟内的顺序被均值汇聚，不能描述为无损保留长时原始信号。[方法与附录 B/C](https://arxiv.org/html/2605.09173v1)
 
+同团队的 [AI-PPG-ACC-HTN](smartwatch_models.md#ai-ppg-acc-htn) 将短波形对比预训练用于高血压筛查，随后按日内小时跨日汇聚并训练逻辑回归。WavesFM 在片段对比学习之后增加表征序列的掩码预测；其 32.4 万人第一阶段与高血压研究的 2,109 人预训练使用不同数据池。两项研究的训练目标、规模与临床验证条件对照见该小节。
+
 作者在 58 个个体级二分类任务上报告平均 AUROC 0.766，形态表示直接平均为 0.748，19 个手工特征加同配置时间编码器为 0.728。两类基线由作者在同源数据上构造，不是原版 LSM、SensorFM 或 Apple WBM。下游以自报健康、生活方式等标签为目标，冻结编码器并训练逻辑回归。评测把每人的全部可用周级向量平均，因此主结果不能直接解释为只观察一周的表现。[第 4 节及 Table 8](https://arxiv.org/html/2605.09173v1)
 
 **评注**
@@ -156,7 +158,9 @@ WavesFM 将工作日与周末差异作为一周窗口的动机，但未报告控
 
 Google 在 2026 年 8 月的产品介绍中明确将血压趋势功能关联到 WavesFM，并将胰岛素抵抗趋势功能的基础模型链接指向 SensorFM 官方介绍。两条路线因而具有不同的产品落点，不能把整个 Google Health 归结为一个模型。[Health Guardian 产品介绍](https://blog.google/products-and-platforms/products/google-health/pixel-watch-health-guardian/) · [SensorFM 官方介绍](https://research.google/blog/sensorfm-towards-a-general-intelligence-and-interface-for-wearable-health-data/)
 
-该证据说明功能采用的模型路线，没有公开生产检查点、推理窗口、聚合实现或手表、手机与云端的计算分工。论文中的窗口与评测协议不能直接视为产品实现，也不能把健康趋势功能等同于论文之外的实时临床测量能力。
+该产品页血压段落的验证链接指向 [AI-PPG-ACC-HTN](smartwatch_models.md#ai-ppg-acc-htn) 预印本，该研究随后发表于 Nature。作者介绍同样说明其研究帮助形成血压趋势功能，构成两项工作的直接产品关联。高血压论文报告的是跨日均值汇聚系统，WavesFM 则包含周级时序编码；公开材料没有说明二者使用同一检查点或完整模型。[Nature 研究介绍](https://research.google/blog/detecting-signs-of-hypertension-using-wearable-sensors/)
+
+这些资料说明了研究与功能的关联，但未给出生产检查点、推理窗口、聚合实现或手表、手机与云端的计算分工。产品页面将血压趋势定位为健康信息功能；论文中的筛查准确性对应其研究队列与协议，不等同于产品的实时临床测量能力。
 
 ## 选型与评测建议
 

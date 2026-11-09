@@ -1,9 +1,12 @@
 # 智能手表与腕戴生理基础模型深度解析
 
+![可穿戴与生理基础模型的输入、表征与应用](../../assets/taxonomy_overview.png)
+
 腕戴设备（智能手表、智能手环）已成为普及度最高的消费级生理监测终端。本专题深入解构针对光电容积脉搏波（PPG）、三轴加速度计（ACC/IMU）及微弱体表心电（ECG）研发的专用时序基础模型，梳理其对抗运动伪影、多速率对齐、跨模态生成以及端侧轻量化部署的底层技术演进。
 
 ## 目录
 
+- [PPG 深度学习范围综述](#ppg-深度学习范围综述)
 - [1. 腕戴生理时序的独特性与核心技术挑战](#1-腕戴生理时序的独特性与核心技术挑战)
 - [2. 经典多模态与波形形态基础模型](#2-经典多模态与波形形态基础模型)
   - [SensorFM](#sensorfm)
@@ -29,9 +32,35 @@
   - [OpenMHC](#openmhc)
   - [PPG-LM](#ppg-lm)
   - [SensorLM](#sensorlm)
+- [临床筛查应用](#临床筛查应用)
+  - [AI-PPG-ACC-HTN](#ai-ppg-acc-htn)
 - [6. 核心基础模型横向对比矩阵](#6-核心基础模型横向对比矩阵)
 - [7. 对自建手表大模型 (Watch-LSM) 的工程架构启示](#7-对自建手表大模型-watch-lsm-的工程架构启示)
 - [8. 核心文献与资源汇总](#8-核心文献与资源汇总)
+
+---
+
+## PPG 深度学习范围综述
+
+北京大学 / HeartVoice Medical Technology · Health Data Science 2026，6:0474 · [论文](https://doi.org/10.34133/hds.0474) · [全文](https://pmc.ncbi.nlm.nih.gov/articles/PMC13724833/) · [作者文献清单](https://github.com/Ngk03/DL_PPG_Review)
+
+![PPG 深度学习的任务、模型与数据版图](../figures/ppg-dl-scoping-review/overview.png)
+
+图源：Nie et al., *A Scoping Review of Deep Learning Methods for Photoplethysmography Data*，Fig. 1（[arXiv:2401.12783v3](https://arxiv.org/abs/2401.12783v3)），直接裁剪原论文。
+
+范围综述（scoping review）通过系统检索与分类描述研究覆盖面、方法特点和证据空白。这篇综述纳入 2017 年 1 月至 2025 年 12 月发表的 **460 篇接触式 PPG 深度学习研究**，按任务、模型与数据三个视角组织。检索覆盖 Google Scholar、PubMed 和 Dimensions；研究对象包括临床监护与腕戴设备，不包含非接触式视频 rPPG。[论文 Methods](https://pmc.ncbi.nlm.nih.gov/articles/PMC13724833/)
+
+| 视角 | 主要内容 | 阅读用途 |
+| :--- | :--- | :--- |
+| 任务 | 11 类任务，包含血压、心血管监测、睡眠、心理健康、呼吸、血糖、信号处理、身份识别、ECG 重建、活动识别及其他应用 | 按目标任务定位研究；一篇论文可归入多个类别 |
+| 模型 | CNN、循环网络、Transformer、自编码器、生成模型，以及自监督与基础模型路线 | 比较输入表示、训练目标和迁移方式，而非按架构名称排名 |
+| 数据 | 临床指端、腕戴与睡眠等采集场景；数据规模、设备、预处理及质量筛选差异 | 识别训练与实际佩戴条件之间的分布差异 |
+
+综述讨论了 [PaPaGei](#papagei)、[Pulse-PPG](#pulse-ppg)、[AnyPPG](#anyppg) 等预训练工作，并强调真实环境数据、跨人群泛化和预处理透明度。其范围比[心电与脉搏开源基础模型综述](ecg_models.md#1-领域综述导读心电与脉搏波开源基础模型及数据集全景)更广，包含大量单任务模型；文献覆盖数不代表基础模型数量。文中未在共同数据划分下重跑各模型，性能比较仍需回到原始研究的队列与协议。
+
+**评注**
+
+该综述适合作为 PPG 任务导航和数据选型入口。信号质量筛选尤其值得与下游结果一起阅读：过滤规则可能改变病理波形的保留比例，临床指端数据上的结果也需要腕戴场景验证。作者 GitHub 提供按任务整理的文献清单；其用途是检索和阅读，不是模型训练实现。统计检索截止 2025 年，讨论部分另引用了后续工作。
 
 ---
 
@@ -687,6 +716,58 @@ SensorLM 提供与语言连接的建模路线。其关系应与 [LSM-1、LSM-2 �
 
 ---
 
+## 临床筛查应用
+
+### AI-PPG-ACC-HTN
+
+Google Research / Beth Israel Deaconess Medical Center / Harvard Medical School · Nature 2026 · [论文](https://doi.org/10.1038/s41586-026-11336-3) · [作者介绍](https://research.google/blog/detecting-signs-of-hypertension-using-wearable-sensors/)
+
+![AI-PPG-ACC-HTN 的波形编码、跨日汇聚与高血压分类](../figures/ai-ppg-acc-htn/overview.png)
+
+图源：Di Achille et al., *Opportunistically Detecting Signs of Hypertension on a Consumer Smartwatch*，Fig. 1A（[medRxiv v1，2025-12-15](https://www.medrxiv.org/content/10.64898/2025.12.10.25341972v1)），直接裁剪预印本。
+
+该研究利用消费级手表的原始 PPG 与加速度计（ACC）波形，识别多日佩戴数据反映的高血压状态。预测输出为个体高血压概率，无需个人袖带校准；监督标签与临床验证仍依赖袖带测量。论文于 2026 年 11 月 5 日以 Nature 接受稿发表，之前的 [medRxiv 版本](https://doi.org/10.64898/2025.12.10.25341972)为同一研究。
+
+**方法**
+
+- **波形预训练**：在多个自由生活研究汇集的 2,109 人、492,347 小时无标签数据上训练一维 CNN。输入为同步的 15 秒 PPG 与 ACC 模长片段，输出 256 维表示。同一人不同时刻的联合片段作为正样本，不同人的片段作为负样本，采用受试者对比学习；PPG 与 ACC 本身不是一对跨模态正样本。预印本实现采用约 5.1M 参数的 EfficientNet-B1。[预印本 Methods](https://www.medrxiv.org/content/10.64898/2025.12.10.25341972v1)
+- **个体汇聚**：先按日内小时跨天平均有效片段表示，再平均小时表示，得到个体向量；拼接标准化身高后形成 257 维输入，以 L2 正则化逻辑回归分类。ACC 同时提供运动和心冲击图（BCG）相关信息。
+- **参考标签**：以 24 小时动态血压监测（ABPM）的平均收缩压 ≥130 mmHg 或舒张压 ≥80 mmHg 定义高血压。该任务是状态筛查，输出不包含逐时刻的收缩压或舒张压估计。[方法与伪代码](https://static-content.springer.com/esm/art%3A10.1038%2Fs41586-026-11336-3/MediaObjects/41586_2026_11336_MOESM1_ESM.pdf)
+
+**临床结果**
+
+美国五中心独立前瞻研究招募 296 人，最终分析 196 人；参与者无已知心血管疾病且未服用降压药。使用 Pixel Watch 3 进行约 7 天自由生活佩戴，以 ABPM 为参考。独立验证 AUROC 为 0.856；初筛工作点结果如下，括号内为 95% 置信区间。[Nature 论文](https://doi.org/10.1038/s41586-026-11336-3) · [研究报告](https://static-content.springer.com/esm/art%3A10.1038%2Fs41586-026-11336-3/MediaObjects/41586_2026_11336_MOESM2_ESM.pdf)
+
+| 指标 | AI-PPG-ACC-HTN | 初次诊室血压筛查 |
+| :--- | :--- | :--- |
+| 敏感性 | 65.8%（54.0%-76.3%） | 55.3%（43.4%-66.7%） |
+| 特异性 | 90.0%（83.2%-94.7%） | 90.0%（83.2%-94.7%） |
+| 阳性预测值 | 80.6%（68.6%-89.6%） | 77.8%（64.4%-88.0%） |
+
+七天观察下仍有约三分之一的 ABPM 阳性者未被模型检出；阳性预测值还随目标人群患病率变化。招募者与最终分析者之间的差额涉及 ABPM、手表数据缺失或记录不足。作者在同行评议回复中报告，验证队列仅 58.3% 的被动片段达到 SQI >0.5；该数值为片段有效率，不是受试者覆盖率，也不适用于换算预训练时长。[同行评议与作者回复](https://static-content.springer.com/esm/art%3A10.1038%2Fs41586-026-11336-3/MediaObjects/41586_2026_11336_MOESM3_ESM.pdf)
+
+**与 WavesFM 的关系**
+
+[WavesFM](longitudinal_wearable_models.md#wavesfm) 与该研究有多位共同作者，并连接到同一 Health Guardian 血压趋势功能：Google 产品介绍明确链接 WavesFM，同段的临床验证链接指向这篇高血压预印本；Nature 作者介绍也说明该研究帮助形成该功能。高血压预印本发表于 2025 年 12 月，早于 2026 年 5 月公开的 WavesFM。[产品介绍](https://blog.google/products-and-platforms/products/google-health/pixel-watch-health-guardian/) · [作者介绍](https://research.google/blog/detecting-signs-of-hypertension-using-wearable-sensors/)
+
+| 比较项 | AI-PPG-ACC-HTN | WavesFM |
+| :--- | :--- | :--- |
+| 局部编码与目标 | 预印本为 EfficientNet-B1，约 5.1M 参数；15 秒 PPG＋ACC，受试者对比学习 | EfficientNet-B7，15 秒 PPG＋ACC；第一阶段受试者对比学习 |
+| 跨日处理 | 按日内小时跨日取均值，再汇为个体表示；身高加逻辑回归 | 5 分钟表示组成一周序列；6 层 Transformer，第二阶段掩码预测被遮挡的表示 |
+| 预训练规模 | 2,109 人、492,347 小时 | 第一阶段约 32.4 万人、680 万小时；第二阶段为其中约 1 万人的纵向子集、530 万小时 |
+| 评测对象与结果 | ABPM 标签；独立前瞻验证 196 人，AUROC 0.856 | 58 项个体级二分类任务，主要为自报信息；平均 AUROC 0.766 |
+| 论文与复现资源 | [论文](https://doi.org/10.1038/s41586-026-11336-3)及补充伪代码；临床汇总数据可申请 | [论文](https://arxiv.org/abs/2605.09173)；官方代码与权重获取方式尚不明确 |
+
+两者共享短波形对比预训练思路，WavesFM 另学习跨日时间结构。其第一阶段从约 32.4 万人中每人抽取 5,000 个 15 秒片段；第二阶段使用纵向子集，两阶段时长不能相加为独立数据总量。相近的输入规格与不同的数据池并不矛盾。论文没有报告两项研究之间的权重继承关系，也没有固定数据、标签与评测队列比较预训练扩容和时序编码各自的收益。[WavesFM 第 3-4 节与附录 B](https://arxiv.org/html/2605.09173v1)
+
+**评注与资源**
+
+这项工作的价值在于把自监督波形表征、跨日汇聚与 ABPM 参考的前瞻验证连接起来。它提供特定筛查任务的证据；治疗中的血压变化监测与其他疾病迁移仍需各自评测。补充中的 UK Biobank 分析使用另训的 PPG 单模态模型和指端波形，属于不同模型、输入及结局分析，应与腕部 PPG＋ACC 筛查结果分别阅读。
+
+研究报告说明临床人口学信息、各方法的平均血压、模型分数和预测可申请获取，UK Biobank 数据按其申请流程访问。补充提供伪代码，完整训练实现、原始手表波形与预训练权重的公开获取方式尚不明确。[数据与代码说明](https://static-content.springer.com/esm/art%3A10.1038%2Fs41586-026-11336-3/MediaObjects/41586_2026_11336_MOESM2_ESM.pdf)
+
+---
+
 ## 6. 核心基础模型横向对比矩阵
 
 以下分别比较脉搏波模型与其他穿戴多模态模型：
@@ -747,6 +828,8 @@ SensorLM 提供与语言连接的建模路线。其关系应与 [LSM-1、LSM-2 �
 
 | 项⁠目 / 论⁠文⁠名⁠称 | 主⁠要⁠机⁠构 | 发⁠表⁠情⁠况 | 核⁠心⁠定⁠位⁠与⁠资⁠源 |
 | :--- | :--- | :--- | :--- |
+| [PPG 深度学习范围综述](#ppg-深度学习范围综述) | 北京大学 / HeartVoice | Health Data Science 2026 | 460 篇接触式 PPG 研究的任务、模型与数据梳理 · [论文](https://doi.org/10.34133/hds.0474) · [文献清单](https://github.com/Ngk03/DL_PPG_Review) |
+| [AI-PPG-ACC-HTN](#ai-ppg-acc-htn) | Google / BIDMC / Harvard | Nature 2026 | 自监督波形表征与多日高血压筛查，独立前瞻验证 196 人 · [论文](https://doi.org/10.1038/s41586-026-11336-3) |
 | **SensorFM** | Google / Fitbit Health AI | arXiv 2026 | 1 万亿分钟消费级穿戴多模态基座 · [论文](https://arxiv.org/abs/2605.22759) |
 | **PaPaGei** | Nokia Bell Labs | ICLR 2025 | 开源形态感知脉搏波基础模型 · [论文](https://arxiv.org/abs/2410.20542) · [代码](https://github.com/Nokia-Bell-Labs/papagei-foundation-model) |
 | **Pulse-PPG** | 孟菲斯大学 / UIUC | UbiComp 2025 | 野外非受限生活场景脉搏基座 · [代码](https://github.com/maxxu05/pulseppg) |

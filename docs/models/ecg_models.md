@@ -33,6 +33,8 @@
 
 ## 1. 领域综述导读：心电与脉搏波开源基础模型及数据集全景
 
+按任务、模型与数据梳理接触式 PPG 研究，可结合 [Health Data Science 的 PPG 深度学习范围综述](smartwatch_models.md#ppg-深度学习范围综述)阅读；本节聚焦 ECG 与 PPG 的开放基础模型及波形数据资源。
+
 MIT 计算生理学实验室 / 首尔大学医学院 / 延世大学 · *npj Digital Medicine* 2026 · [论文](https://doi.org/10.1038/s41746-026-03101-7)
 
 - **论文题目**：*Review of open foundation models and datasets for ECG and PPG waveforms*

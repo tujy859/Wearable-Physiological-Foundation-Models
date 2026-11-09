@@ -99,15 +99,15 @@
 | 更⁠新⁠日⁠期 | 研⁠究⁠条⁠目 | 机⁠构<br>与⁠发⁠表 | 传⁠感⁠模⁠态 | 核⁠心⁠机⁠制<br>与⁠资⁠源 |
 | :---: | :--- | :--- | :--- | :--- |
 | 2026‑11‑09 | `方法` [**GlucoAgent**](docs/models/cgm_models.md#glucoagent) | Meta<br>Yale<br>NeurIPS 2026 Workshop | CGM +<br>穿⁠戴⁠指⁠标 +<br>饮⁠食⁠与⁠档案 | LLM 在预测时编写并执行代码，检索个人历史、拟合与回测预测方法<br>规模 CGMacros 留出 9 人、1,903 个预测时点；预测未来 30-120 分钟<br>[论⁠文](https://arxiv.org/abs/2611.04126) |
+| 2026‑11‑09 | `综述` [**PPG 深度学习范围综述**](docs/models/smartwatch_models.md#ppg-深度学习范围综述) | 北⁠京⁠大⁠学<br>HeartVoice<br>Health Data Science<br>2026 | 接⁠触⁠式 PPG | 按任务、模型与数据梳理 PPG 深度学习研究，覆盖 11 类任务<br>规模 460 篇研究；检索范围为 2017-2025 年<br>[论⁠文](https://doi.org/10.34133/hds.0474) |
+| 2026‑11‑09 | [**AI-PPG-ACC-HTN**](docs/models/smartwatch_models.md#ai-ppg-acc-htn) | Google<br>BIDMC<br>Harvard<br>Nature 2026 | 腕⁠戴 PPG +<br>ACC +<br>身⁠高 | 15 秒波形受试者对比预训练，跨日均值汇聚与逻辑回归；无个人袖带校准的高血压状态筛查<br>规模 无标签预训练 2,109 人、492,347 小时；独立前瞻验证 196 人、约 7 天，参考为 24 小时 ABPM<br>[论⁠文](https://doi.org/10.1038/s41586-026-11336-3) |
+| 2026‑11‑09 | [**WavesFM**](docs/models/longitudinal_wearable_models.md#wavesfm) | Google<br>MIT<br>华⁠盛⁠顿⁠大学<br>arXiv 2026 | 原⁠始 PPG +<br>ACC | EfficientNet-B7 片段对比预训练 + 6 层、256 维周级 Transformer 掩码重构<br>规模 第一阶段 32.4 万人、680 万小时；第二阶段 1 万人、530 万小时；5 分钟表示组成 7 天窗口<br>[论⁠文](https://arxiv.org/abs/2605.09173) |
 | 2026‑11‑09 | `方法` [**CBPM-LLaMA**](docs/models/health_reasoning_llms.md#cbpm-llama) | 中⁠科⁠院⁠深圳⁠先⁠进⁠院<br>香⁠港⁠理⁠工大⁠学<br>ACM‑BCB 2024 | ECG / PPG 的 31 维⁠派⁠生⁠特征 +<br>人⁠口⁠信⁠息 | 医学知识增强 Prompt 与指令微调；MAP/PP 目标及个体基线校准<br>规模 CAS-BP 1,272 人、12,624 条有效测量；任务适配案例<br>[论⁠文](https://doi.org/10.1145/3698587.3701447) · [数⁠据](https://github.com/zdzdliu/CAS-BP) |
 | 2026‑11‑09 | `方法` [**Time-LLM**](docs/models/general_tsfm.md#time-llm) | Monash<br>蚂⁠蚁⁠集⁠团<br>HKUST<br>ICLR 2024 | 通⁠用⁠一⁠维时⁠序 | 文本原型跨注意力重编程 + 提示词前缀增强<br>规模 多领域通用时序基准 (M4, ETT 等)<br>[论⁠文](https://arxiv.org/abs/2310.01728) · [代⁠码](https://github.com/KimMeen/Time-LLM) |
 | 2026‑11‑04 | `基准` [**PPG-Bench**](docs/models/smartwatch_models.md#ppg-bench) | Mannas AI<br>arXiv 2026 | 腕⁠部⁠与⁠指尖 PPG | 4 级探针微调协议 (跨 5 大脉搏基模评测)<br>规模 论文 9 数据集、26 项任务；代码列 17 项主要任务<br>[论⁠文](https://arxiv.org/abs/2610.13435) · [代⁠码](https://github.com/mannas-ai/ppg-bench) |
 | 2026‑11‑04 | [**HiPPT**](docs/models/wearable_transfer_models.md#hippt) | 东⁠南⁠大⁠学<br>OPPO 等<br>arXiv 2026 | 腕⁠戴 PPG +<br>文⁠本 | 12 层、512 维 PPG Transformer；记录级形态与跨记录上下文对齐，波形引导文本建模<br>规模 HBPM-BG 约 130 万条 + VS 约 300 万条一分钟记录，约 20.2 万人；模型输入 12 秒<br>[论⁠文](https://arxiv.org/abs/2610.14489) · 代⁠码⁠与⁠权⁠重⁠待⁠发⁠布 |
 | 2026‑11‑04 | [**SleepFM-2**](docs/models/sleep_models.md#sleepfm-2) | Stanford<br>DTU<br>arXiv 2026 | 多⁠导⁠睡⁠眠 PSG | 两阶段时空 Transformer + 留一对比与局部掩码重构<br>规模 总语料超过 200 万小时；预训练 235,865 份记录、24 队列<br>[论⁠文](https://arxiv.org/abs/2609.06849v2) |
 | 2026‑11‑04 | `基准` [**WearableQA**](docs/models/health_reasoning_llms.md#wearableqa) | Meta AI<br>Reality Labs<br>arXiv 2026 | 日⁠级⁠穿⁠戴指⁠标 +<br>血⁠液⁠标⁠志物 +<br>人⁠口⁠信⁠息 | 数据/健康推理与单/跨信号两轴；十选一问答<br>规模 200 人、每人最长约 500 天；4,084 道题<br>[论⁠文](https://arxiv.org/abs/2609.05405) · [代⁠码](https://github.com/facebookresearch/WearableQA) · [数⁠据](https://huggingface.co/datasets/facebook/WearableQA) |
-| 2026‑11‑04 | [**Sensori**](docs/models/wearable_transfer_models.md#sensori) | 牛⁠津⁠大⁠学<br>北⁠京⁠大⁠学<br>UCL 等<br>arXiv 2026 | 24 小⁠时⁠三⁠轴 ACC（10 Hz） | CNN-Transformer + 五分钟掩码预测与跨日参与者对比<br>规模 预训练 91,037 人 / 502,823 人天（UKB + CKB）<br>[论⁠文](https://arxiv.org/abs/2608.29494) · [代⁠码](https://github.com/OxWearables/Sensori) · [学⁠术⁠用⁠途⁠权⁠重](https://huggingface.co/light156/Sensori) |
-| 2026‑11‑04 | `基准` [**Inertia-1**](docs/models/wearable_transfer_models.md#inertia-1) | UCLA<br>Duke<br>Johns Hopkins<br>NeurIPS 2026（接收） | 腕⁠戴 ACC，跨⁠位⁠置 / GYR / MAG 迁⁠移 | 多方法受控预训练、传感配置与规模比较框架<br>规模 研究覆盖 1,822 万小时 / 115,450 人 / 15 数据集<br>[论⁠文](https://arxiv.org/abs/2607.06617) · [代⁠码](https://github.com/yang-ai-lab/Inertia-1) |
-| 2026‑11‑04 | `基准` [**OpenMHC**](docs/models/smartwatch_models.md#openmhc) | Stanford<br>Imperial College London 等<br>arXiv 2026 | 19 通⁠道⁠派⁠生穿⁠戴⁠时⁠序 +<br>最⁠多 169 项⁠关⁠联⁠变量 | 下游预测、插补与外推基准；LSM-2/WBM 开放复现<br>规模 11,894 人、超 6,000 万小时<br>[论⁠文](https://arxiv.org/abs/2607.16235) · [代⁠码](https://github.com/AshleyLab/OpenMHC) · [权⁠重](https://huggingface.co/MyHeartCounts/models) |
 
 <!-- END:RECENT_UPDATES -->
 
@@ -199,6 +199,7 @@
 | [**HiPPT**](docs/models/wearable_transfer_models.md#hippt) | 东⁠南⁠大⁠学<br>OPPO 等<br>arXiv 2026 | 腕⁠戴 PPG +<br>文⁠本 | 12 层、512 维 PPG Transformer；记录级形态与跨记录上下文对齐，波形引导文本建模<br>规模 HBPM-BG 约 130 万条 + VS 约 300 万条一分钟记录，约 20.2 万人；模型输入 12 秒 | [论⁠文](https://arxiv.org/abs/2610.14489)<br>代⁠码⁠与⁠权⁠重⁠待⁠发⁠布 |
 | [**WavesFM**](docs/models/longitudinal_wearable_models.md#wavesfm) | Google<br>MIT<br>华⁠盛⁠顿⁠大学<br>arXiv 2026 | 原⁠始 PPG +<br>ACC | EfficientNet-B7 片段对比预训练 + 6 层、256 维周级 Transformer 掩码重构<br>规模 第一阶段 32.4 万人、680 万小时；第二阶段 1 万人、530 万小时；5 分钟表示组成 7 天窗口 | [论⁠文](https://arxiv.org/abs/2605.09173) |
 | `方法` [**GlucoAgent**](docs/models/cgm_models.md#glucoagent) | Meta<br>Yale<br>NeurIPS 2026 Workshop | CGM +<br>穿⁠戴⁠指⁠标 +<br>饮⁠食⁠与⁠档案 | LLM 在预测时编写并执行代码，检索个人历史、拟合与回测预测方法<br>规模 CGMacros 留出 9 人、1,903 个预测时点；预测未来 30-120 分钟 | [论⁠文](https://arxiv.org/abs/2611.04126) |
+| [**AI-PPG-ACC-HTN**](docs/models/smartwatch_models.md#ai-ppg-acc-htn) | Google<br>BIDMC<br>Harvard<br>Nature 2026 | 腕⁠戴 PPG +<br>ACC +<br>身⁠高 | 15 秒波形受试者对比预训练，跨日均值汇聚与逻辑回归；无个人袖带校准的高血压状态筛查<br>参数 约 5.1M（预印本实现）<br>规模 无标签预训练 2,109 人、492,347 小时；独立前瞻验证 196 人、约 7 天，参考为 24 小时 ABPM | [论⁠文](https://doi.org/10.1038/s41586-026-11336-3) |
 
 <!-- END:MODELS_TABLE -->
 
@@ -262,6 +263,10 @@
 ---
 
 ## 领域综述参考
+
+- **A Scoping Review of Deep Learning Methods for Photoplethysmography Data**
+  - **来源**：*Health Data Science*（2026，6:0474）· [论文](https://doi.org/10.34133/hds.0474) · [作者文献清单](https://github.com/Ngk03/DL_PPG_Review)
+  - **主要内容**：梳理 2017-2025 年的 460 篇接触式 PPG 深度学习研究，按任务、模型和数据组织 11 类应用，覆盖自监督与基础模型路线。详见 [PPG 范围综述导读](docs/models/smartwatch_models.md#ppg-深度学习范围综述)。
 
 - **Review of open foundation models and datasets for ECG and PPG waveforms**
   - **来源**：*npj Digital Medicine* (2026) · [DOI: 10.1038/s41746-026-03101-7](https://doi.org/10.1038/s41746-026-03101-7)

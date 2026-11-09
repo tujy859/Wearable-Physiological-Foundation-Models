@@ -1278,6 +1278,7 @@
   doc: docs/models/longitudinal_wearable_models.md#wavesfm
   type: model
   added: '2026-11-04'
+  updated: '2026-11-09'
 - id: glucoagent
   name: GlucoAgent
   org: Meta Reality Labs Research / Yale University
@@ -1297,4 +1298,42 @@
   access_note: arXiv v1 给出提示词、工具接口与评测协议；作者实现的公开获取方式尚不明确
   doc: docs/models/cgm_models.md#glucoagent
   type: method
+  added: '2026-11-09'
+- id: ppg-dl-scoping-review
+  name: PPG 深度学习范围综述
+  org: 北京大学 / HeartVoice Medical Technology
+  org_short: 北京大学 / HeartVoice
+  venue: Health Data Science 2026
+  date: 2026-11
+  modality: 接触式 PPG（临床监护与可穿戴设备）
+  modality_short: 接触式 PPG
+  method: 按任务、模型与数据梳理 PPG 深度学习研究，覆盖 11 类任务
+  params: ''
+  data: 460 篇研究；检索范围为 2017-2025 年
+  paper: https://doi.org/10.34133/hds.0474
+  code: ''
+  weights: ''
+  access: ''
+  access_note: 作者提供分类文献清单；该资源不含新模型训练代码或权重
+  doc: docs/models/smartwatch_models.md#ppg-深度学习范围综述
+  type: survey
+  added: '2026-11-09'
+- id: ai-ppg-acc-htn
+  name: AI-PPG-ACC-HTN
+  org: Google Research / Beth Israel Deaconess Medical Center / Harvard Medical School
+  org_short: Google / BIDMC / Harvard
+  venue: Nature 2026
+  date: 2026-11
+  modality: 腕戴原始 PPG + ACC + 身高
+  modality_short: 腕戴 PPG + ACC + 身高
+  method: 15 秒波形受试者对比预训练，跨日均值汇聚与逻辑回归；无个人袖带校准的高血压状态筛查
+  params: 约 5.1M（预印本实现）
+  data: 无标签预训练 2,109 人、492,347 小时；独立前瞻验证 196 人、约 7 天，参考为 24 小时 ABPM
+  paper: https://doi.org/10.1038/s41586-026-11336-3
+  code: ''
+  weights: ''
+  access: ''
+  access_note: 补充材料含伪代码；临床汇总数据与预测可申请；完整训练代码、原始波形及权重的公开获取方式尚不明确
+  doc: docs/models/smartwatch_models.md#ai-ppg-acc-htn
+  type: model
   added: '2026-11-09'
