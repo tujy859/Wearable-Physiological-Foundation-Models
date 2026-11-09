@@ -1299,6 +1299,26 @@
   doc: docs/models/cgm_models.md#glucoagent
   type: method
   added: '2026-11-09'
+- id: within-person-postprandial
+  name: Within-person modeling
+  org: 京都先端科学大学 / 东京大学
+  org_short: KUAS / 东京大学
+  venue: Frontiers in Digital Health 2026
+  venue_short: Front Digit Health 2026
+  date: '2026-06-12'
+  modality: CGM + 饮食营养 + 餐后腕部 ACC 特征
+  modality_short: CGM + 饮食 + ACC 特征
+  method: 个体内中心化与标准化、随机截距混合效应回归；分析餐后峰值、达峰时间与超阈值面积
+  params: ''
+  data: BIG IDEAs 10 人、485 餐；267 餐进入完整案例回归
+  paper: https://doi.org/10.3389/fdgth.2026.1847884
+  dataset: https://physionet.org/content/big-ideas-glycemic-wearable/1.1.3/
+  code: ''
+  weights: ''
+  access: ''
+  doc: docs/models/cgm_models.md#within-person-modeling
+  type: method
+  added: '2026-11-09'
 - id: ppg-dl-scoping-review
   name: PPG 深度学习范围综述
   org: 北京大学 / HeartVoice Medical Technology

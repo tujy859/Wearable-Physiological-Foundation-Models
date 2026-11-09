@@ -18,6 +18,8 @@
 - [4. CGM 基础模型设计空间实证洞察](#4-cgm-基础模型设计空间实证洞察)
 - [5. Agent 预测方法](#5-agent-预测方法)
   - [GlucoAgent](#glucoagent)
+- [6. 个体内餐后血糖建模方法](#6-个体内餐后血糖建模方法)
+  - [Within-person modeling](#within-person-modeling)
 
 ---
 
@@ -239,3 +241,29 @@ CGMacros 多模态实验从 45 人中留出 9 人测试，覆盖 1,903 个预测
 - 主配置每个时点执行 Python 的中位数为 7 次，性能随语言模型与推理预算变化；精度比较需同时记录调用量、延迟和失败处理。[论文 §4.4–4.5 与附录 C](https://arxiv.org/html/2611.04126v1#S4.SS4)
 
 论文附录提供提示词、工具接口与评测协议，GlucoAgent 实现的公开获取方式尚不明确。论文中的 CGM-LSM 仓库链接对应对照方法。[论文附录 A](https://arxiv.org/html/2611.04126v1#A1)
+
+---
+
+## 6. 个体内餐后血糖建模方法
+
+### Within-person modeling
+
+Zilu Liang · 京都先端科学大学 / 东京大学 · Frontiers in Digital Health，2026-06-12 · [论文](https://doi.org/10.3389/fdgth.2026.1847884) · [BIG IDEAs 数据](https://physionet.org/content/big-ideas-glycemic-wearable/1.1.3/)
+
+*Within-person modeling of postprandial glucose using multimodal wearable data* 是餐次级关联研究，可作为个体化 CGM 分析的统计参考。作者分析 BIG IDEAs 中 10 人的 485 餐，排除特征缺失后以 **267 餐**拟合回归。
+
+[![个体内餐后血糖研究的结局、营养与上下文变量分布](../figures/within-person-postprandial/distributions.png)](../figures/within-person-postprandial/distributions.png)
+
+图源：Liang 论文 Fig. 1（DOI:10.3389/fdgth.2026.1847884，CC BY），由原论文裁取。横轴为参与者；每人的箱线图展示不同餐次的分布，不是模型预测结果。点击图片可查看原尺寸。
+
+**方法与结果**
+
+连续输入先减去各人的平均值，再做标准化；混合效应模型使用个人随机截距和共享斜率，估计跨参与者汇总的平均人内关联，并控制进餐时段。输入包括营养、餐前血糖、进餐间隔和餐后 30 分钟三轴加速度（ACC）的腕部运动变异。三个结局均取餐后两小时：绝对峰值、从进餐至达峰的时间、超过 140 mg/dL 的曲线面积（AUC₁₄₀）。
+
+作者报告净碳水与更高峰值相关（β = 12.77 mg/dL），脂肪与更晚达峰相关（β = 4.47 min），腕部运动变异与较低峰值相关（β = −5.43 mg/dL）。这些是标准化输入的关联系数，不能按每克营养素解释。留一参与者（LOPO）分析检查系数稳健性，随机斜率扩展则探索碳水响应的个体差异。[论文 §2–3](https://www.frontiersin.org/journals/digital-health/articles/10.3389/fdgth.2026.1847884/full)
+
+**评注**
+
+可借鉴之处是区分人内餐次变化与稳定的人际差异，并分别定义血糖幅度、时间和超阈值暴露。样本仅 10 人，主模型共享斜率；LOPO 未建立独立人群预测增益。腕部输入来自餐后 30 分钟，适用于回顾性关联或餐后更新，不能直接作为开餐时的已知输入；腕部动作变异也不等同于运动强度或因果干预效果。
+
+复现还需明确实际数据版本：论文引用 v1.0.0，而官方从 v1.1.0 加入饮食日志、v1.1.3 修正饮食日期错位。该引用不足以确定作者使用的文件及日期对齐处理。公开数据采用 Open Data Commons Attribution License v1.0。[数据版本与许可](https://physionet.org/content/big-ideas-glycemic-wearable/1.1.3/)
