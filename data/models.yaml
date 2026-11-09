@@ -1294,7 +1294,7 @@
   code: ''
   weights: ''
   access: ''
-  access_note: arXiv v1 给出提示词、工具接口与评测协议；本次未找到作者实现入口
+  access_note: arXiv v1 给出提示词、工具接口与评测协议；作者实现的公开获取方式尚不明确
   doc: docs/models/cgm_models.md#glucoagent
   type: method
   added: '2026-11-09'

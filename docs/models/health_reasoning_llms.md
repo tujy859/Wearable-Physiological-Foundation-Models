@@ -60,7 +60,7 @@ HEARTS 整合 16 个数据集、12 个健康领域、20 种模态，覆盖 110 �
 
 论文第 4.2 节的校准公式为“最终预测 = 0.3 × 模型预测 + 0.7 × 个体基线”。Table 3 报告 LLaMA-3-8B 的 SBP MAE 为 7.08 mmHg、DBP MAE 为 5.31 mmHg，应按该校准协议读取。无校准表现需要单独实验，不能从上述结果直接推导。[论文第 4.2 节与 Table 3](https://arxiv.org/abs/2406.18069)
 
-评注。比较时需要同时保留只输出个人基线的基准，并考察跨日期变化能否被模型捕捉。MAP/PP 是可逆目标变换，不能仅凭这个设计就称其为统计独立或正交解耦。CAS-BP 仓库提供样例、读取说明与完整数据申请入口，本次未在该仓库找到 CBPM-LLaMA 微调代码或权重，不能把数据仓库标为模型代码。[CAS-BP 官方说明](https://github.com/zdzdliu/CAS-BP)
+评注。比较时需要同时保留只输出个人基线的基准，并考察跨日期变化能否被模型捕捉。MAP/PP 是可逆目标变换，不能仅凭这个设计就称其为统计独立或正交解耦。CAS-BP 仓库提供样例、读取说明与完整数据申请入口；CBPM-LLaMA 微调代码与权重的获取方式尚不明确，数据仓库不作为模型实现入口。[CAS-BP 官方说明](https://github.com/zdzdliu/CAS-BP)
 
 ### GEM
 
@@ -92,9 +92,9 @@ Google Research / Google DeepMind / Columbia University 等 · Nature 2026 · [�
 
 与基础模型的连接见 [SensorFM](longitudinal_wearable_models.md#sensorfm)：该研究将预测头输出加入健康摘要上下文，在 31 人的静态、单轮摘要上收集 1,860 次医生评分。这项实验与 PHA 原论文的多轮系统评测应分别阅读；它检验预测信息对摘要的帮助，未验证长期健康改善。[SensorFM 方法 M.6](https://arxiv.org/abs/2605.22759v3)
 
-另一类系统直接面向未来数值预测。[GlucoAgent](cgm_models.md#glucoagent) 通过代码分析个人多模态历史并提交血糖预测，其方法、餐后结果与评测边界统一在 CGM 专题维护。
+另一类系统直接面向未来数值预测。[GlucoAgent](cgm_models.md#glucoagent) 通过代码分析个人多模态历史并提交血糖预测，其方法、餐后结果与评测条件见 CGM 专题。
 
-## 工程路线与候选处理
+## 工程路线
 
 | 路线 | 可用组件 | 需要控制的实验条件 |
 | :--- | :--- | :--- |
@@ -102,13 +102,10 @@ Google Research / Google DeepMind / Columbia University 等 · Nature 2026 · [�
 | 时序/图像与语言联合模型 | GEM、[SensorLM](smartwatch_models.md#sensorlm) 等 | 预训练数据重叠、输入模态、冻结或微调协议、缺失模态 |
 | 纵向指标表征与问答 | [LSM / SensorFM / WBM](longitudinal_wearable_models.md)、WearableQA | 时间窗口、个人与人群基线、缺失数据、未来信息泄漏 |
 
-这是可供比较的实现路线，不表示所有研究都运行在端侧，也不表示统一由一个 LLM 调度。传感器模型的推理成本应由其具体输入、模型规模和部署实验确定。
+比较上述路线时，除任务指标外，还需记录输入长度、模型规模、工具调用量和部署硬件，以解释推理成本的差异。
 
-本轮按健康时序推理、信号问答、多模态基准及准确模型名检索论文和作者仓库。WearableQA、HEARTS 与 GEM 沿用并修正现有条目；CBPM-LLaMA 保留为任务适配案例。[PhysioBench](https://arxiv.org/abs/2609.20836) 列为高价值候选：摘要报告 22 数据集、30 任务与约 6,140 万问答，官方 README 说明公开 QA 包仅覆盖 18 数据集，原始波形需分别获取。本轮未取得完整论文，暂不登记模型排名和细粒度实验结论。其数据发布范围与后续核查项见 [评测专题](physiological_benchmarks.md)。
+## 相关研究
 
-[ECG-R1](https://arxiv.org/abs/2602.04279) 也保留为推理方向候选，后续核查任务构造、推理预算、数据访问与完整实现后再决定是否单列。候选状态截至 2026-11-04。
+[PhysioBench](https://arxiv.org/abs/2609.20836) 将生理信号任务组织为问答，用于评测模型的信号理解与指令遵循能力；数据规模与公开资源范围见 [生理信号评测专题](physiological_benchmarks.md#相关评测)。
 
----
-
-> **欢迎交流与共建**<br>
-> 本文由开源知识库项目 [Wearable-Physiological-Foundation-Models](https://github.com/tujy859/Wearable-Physiological-Foundation-Models) 整理策划。该项目持续追踪全球在智能手表、连续血糖监测（CGM）以及多模态生理健康基础模型领域的最新突破。如果您对可穿戴生理计算、时序健康基模与数字生物标志物有任何想法，欢迎在仓库提 Issue 交流！
+[ECG-R1](https://arxiv.org/abs/2602.04279) 研究基于心电诊断协议的指令数据、波形与图像模态适配，以及诊断证据奖励驱动的强化学习，可作为证据约束型心电解释的延伸阅读。

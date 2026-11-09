@@ -1,6 +1,6 @@
 # 生理信号基础模型评测基准
 
-检索更新日期：2026-11-04。本专题补充 ECG 与 EEG 的统一评测协议，并对照仓库已有的 PPG、纵向穿戴和健康推理基准。收录重点是可复用的任务定义、数据划分与评测实现。
+本专题介绍 ECG 与 EEG 的统一评测协议，并对照 PPG、纵向穿戴和健康推理基准，重点比较可复用的任务定义、数据划分与评测实现。
 
 ![可穿戴与生理信号研究路线](../../assets/taxonomy_overview.png)
 
@@ -49,20 +49,13 @@ BenchECG 将短程多导联心电、长程单/双导联记录、运动心电和�
 
 该工作适合配合 [EEG 模型专题](eeg_models.md) 使用：先匹配输入通道与采样率，再比较冻结和可训练编码器的差异。协议内的结果可以指导实验配置，但不能单凭平均排名推断新设备上的表现。
 
-## 检索与收录判断
+## 相关评测
 
-本轮使用两组检索：`physiological foundation model benchmark`、`biosignal multimodal benchmark`、`wearable health reasoning benchmark`，以及 BenchECG、EEG-FM-Bench、PhysioBench 等精确名称。来源包括 PMLR、期刊、arXiv 与作者仓库，并沿论文参考文献回溯。它是截至本次日期的增量检索，未覆盖全部临床或脑科学评测。
+以下工作提供其他任务组织方式和评测范围，作为延伸阅读。
 
-| 工作 | 本轮处理 | 理由与后续核对项 |
+| 工作 | 研究方向 | 数据与适用范围 |
 | :--- | :--- | :--- |
-| BenchECG / xECG | 新增基准条目 | 正式论文、可复用评测代码和配套权重齐备，补足 ECG 任务广度 |
-| EEG-FM-Bench | 新增基准条目 | 正式会议论文与诊断分析实现齐备，补足 EEG 统一适配协议 |
-| [PhysioBench](https://arxiv.org/abs/2609.20836) | 保留高价值候选 | 摘要报告 22 数据集、30 任务和约 6,140 万 QA；[官方代码](https://github.com/Leanna97/PhysioBench)可访问，但本轮未取得完整论文，暂不登记模型排名或完整评测结论。官方 README 明确公开 QA 包仅覆盖 18 数据集，原始波形须自行按许可获取 |
-| [WEQA](https://arxiv.org/abs/2606.18147) | 保留候选 | 以查询自适应 Agent 处理穿戴问答；需继续核对任务划分、代理预算与完整实现 |
-| [HealthLoopQA](https://openreview.net/pdf?id=7mHfFopx4t) | 保留候选 | 糖尿病穿戴解释与模拟故障相关；本轮检索页为投稿版本，尚未完成发表和数据入口核对 |
-| [CLIMB](https://proceedings.mlr.press/v267/dai25b.html) | 扩展参考 | 覆盖影像、语言、时序和图等临床数据，范围超出本轮可穿戴生理基模主线 |
-
----
-
-> **欢迎交流与共建**  
-> 本文由开源知识库项目 [Wearable-Physiological-Foundation-Models](https://github.com/tujy859/Wearable-Physiological-Foundation-Models) 整理策划。该项目持续追踪全球在智能手表、连续血糖监测（CGM）以及多模态生理健康基础模型领域的最新突破。如果您对可穿戴生理计算、时序健康基模与数字生物标志物有任何想法，欢迎在仓库提 Issue 交流！
+| [PhysioBench](https://arxiv.org/abs/2609.20836) | 生理信号问答，覆盖 ECG、EEG、PPG 与 PSG | 论文摘要报告 22 数据集、30 任务和约 6,140 万问答；[官方实现与资源说明](https://github.com/Leanna97/PhysioBench)中的公开 QA 包覆盖 18 数据集，原始波形须分别按许可获取，完整基准与公开包的覆盖范围不同 |
+| [WEQA](https://arxiv.org/abs/2606.18147) | 查询自适应 Agent 与可穿戴问答 | 比较结果时需同时考虑任务划分和代理调用预算 |
+| [HealthLoopQA](https://openreview.net/pdf?id=7mHfFopx4t) | 糖尿病穿戴解释与模拟故障评测 | 所引材料为投稿版本，正式发表状态与数据获取方式尚不明确 |
+| [CLIMB](https://proceedings.mlr.press/v267/dai25b.html) | 多模态临床评测 | 覆盖影像、语言、时序和图等临床数据，适合作为范围更广的评测参考 |

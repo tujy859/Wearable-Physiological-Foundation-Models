@@ -104,7 +104,7 @@ CGM-JEPA 预测被遮蔽片段的潜在表示，X-CGM-JEPA 进一步加入 Gluco
 > **发表信息**：Nature 2026（预印本 arXiv 2024） · [论文](https://www.nature.com/articles/s41586-025-09925-9) · [代码](https://github.com/Guylu/GluFormer)<br>
 > **机构**：Pheno.AI / 魏茨曼科学研究所 (Weizmann Institute) / NVIDIA  
 > **预训练数据**：10,812 名非糖尿病及前驱糖尿病受试者（超 1,000 万条连续血糖读数，人类表型组计划 HPP）  
-> **开源状态**：官方仓库提供训练、评估与特征提取代码；本轮未找到预训练权重下载入口
+> **开源状态**：官方仓库提供训练、评估与特征提取代码；预训练权重的获取方式尚不明确
 
 ![GluFormer 架构与训练流程](../figures/gluformer/overview.png)
 
@@ -146,7 +146,7 @@ CGM-LSM 的正式论文为 *A large sensor foundation model pretrained on contin
 
 正文列出 592 名参与者和 15,961,183 个有效样本，以参与者与观察时间构成一个实例，每例对应 26 小时窗口。摘要却写 160 万条记录，Methods 又将同一计数称为 glucose records，统计名称与数量存在不一致。本仓库采用正文的 592 人、约 1,596 万个有效实例口径，避免把重叠窗口数换算成独立观测时长。[论文 Results 与 Methods](https://pmc.ncbi.nlm.nih.gov/articles/PMC13354170/)
 
-期刊版在 OhioT1DM 外部评估中报告，1 小时预测 RMSE 为 15.90 mg/dL，相对论文选取的基线降低 48.51%；该百分比对应这一预测时距，不能扩写为所有预测窗口均降低相同比例。官方仓库提供训练和评测流程，此次未找到预训练权重下载入口。[期刊论文](https://doi.org/10.1038/s44401-025-00039-y) · [官方仓库](https://github.com/JHU-CDHAI/cgmlsm)
+期刊版在 OhioT1DM 外部评估中报告，1 小时预测 RMSE 为 15.90 mg/dL，相对论文选取的基线降低 48.51%；该百分比对应这一预测时距，不能扩写为所有预测窗口均降低相同比例。官方仓库提供训练和评测流程，预训练权重的获取方式尚不明确。[期刊论文](https://doi.org/10.1038/s44401-025-00039-y) · [官方仓库](https://github.com/JHU-CDHAI/cgmlsm)
 
 ---
 
@@ -209,13 +209,13 @@ GlucoBench 针对早期血糖预测研究数据集切分不一、评价指标单
 
 ### GlucoAgent
 
-Meta Reality Labs Research / Yale University · GenAI for Health Workshop @ NeurIPS 2026 · [论文](https://arxiv.org/abs/2611.04126) · 核查版本：arXiv v1，2026-11-09。
+Meta Reality Labs Research / Yale University · GenAI for Health Workshop @ NeurIPS 2026 · [论文](https://arxiv.org/abs/2611.04126) · 版本：arXiv v1。
 
 ![GlucoAgent 多模态个人上下文、代码执行与血糖预测流程](../figures/glucoagent/overview.png)
 
 图源：GlucoAgent 论文 Fig. 1（arXiv:2611.04126v1，CC BY 4.0），由原论文裁取。
 
-GlucoAgent 是基于大语言模型（LLM）的预测方法。在每个预测时点，Agent 根据该人的 CGM、心率、活动、饮食记录与健康档案编写并运行 Python，按执行结果继续分析，最后提交血糖预测、理由和计算证据。它可以检索相似历史餐次、拟合统计或生理模型并回测；环境只提供通用数值工具，不预置血糖预测器。主实验采用 Claude Opus 5 的高推理预算配置，每次最多 16 轮，未另行预训练生理基础模型。原始餐食照片不在本次输入中。[论文 §3 与附录 A](https://arxiv.org/html/2611.04126v1#S3)
+GlucoAgent 是基于大语言模型（LLM）的预测方法。在每个预测时点，Agent 根据该人的 CGM、心率、活动、饮食记录与健康档案编写并运行 Python，按执行结果继续分析，最后提交血糖预测、理由和计算证据。它可以检索相似历史餐次、拟合统计或生理模型并回测；环境只提供通用数值工具，不预置血糖预测器。主实验采用 Claude Opus 5 的高推理预算配置，每次最多 16 轮，未另行预训练生理基础模型。论文实验输入不含原始餐食照片。[论文 §3 与附录 A](https://arxiv.org/html/2611.04126v1#S3)
 
 **实验与结果**
 
@@ -232,15 +232,10 @@ CGMacros 多模态实验从 45 人中留出 9 人测试，覆盖 1,903 个预测
 
 **评注**
 
-收录价值在于比较“预训练预测器”和“预测时组织个人分析”两种路线。复现需要保留以下条件：
+这项工作可用于比较“预训练预测器”和“预测时组织个人分析”两种路线。复现需要保留以下条件：
 
 - 餐后标签由预测时点之前的进食与活动定义；预测时可能已观察到部分餐后血糖变化，与进餐前预测整段餐后反应的任务不同。
 - 多模态主结果来自 9 人测试集。其他血糖基准使用固定抽样时点，应与相同受试者和时点上的基线比较，不能混用不同划分的论文分数。
 - 主配置每个时点执行 Python 的中位数为 7 次，性能随语言模型与推理预算变化；精度比较需同时记录调用量、延迟和失败处理。[论文 §4.4–4.5 与附录 C](https://arxiv.org/html/2611.04126v1#S4.SS4)
 
-论文附录提供提示词、工具接口与评测协议。截至上述核查日期，未找到作者实现的公开入口；论文中的 CGM-LSM 仓库链接属于对照方法，不作为 GlucoAgent 代码入口。[论文附录 A](https://arxiv.org/html/2611.04126v1#A1)
-
----
-
-> **欢迎交流与共建**<br>
-> 本文由开源知识库项目 [Wearable-Physiological-Foundation-Models](https://github.com/tujy859/Wearable-Physiological-Foundation-Models) 整理策划。该项目持续追踪全球在智能手表、连续血糖监测（CGM）以及多模态生理健康基础模型领域的最新突破。如果您对可穿戴生理计算、时序健康基模与数字生物标志物有任何想法，欢迎在仓库提 Issue 交流！
+论文附录提供提示词、工具接口与评测协议，GlucoAgent 实现的公开获取方式尚不明确。论文中的 CGM-LSM 仓库链接对应对照方法。[论文附录 A](https://arxiv.org/html/2611.04126v1#A1)
