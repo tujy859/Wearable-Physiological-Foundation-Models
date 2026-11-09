@@ -98,6 +98,7 @@
 
 | 更⁠新⁠日⁠期 | 研⁠究⁠条⁠目 | 机⁠构<br>与⁠发⁠表 | 传⁠感⁠模⁠态 | 核⁠心⁠机⁠制<br>与⁠资⁠源 |
 | :---: | :--- | :--- | :--- | :--- |
+| 2026‑11‑09 | [**SensorWM**](docs/models/longitudinal_wearable_models.md#sensorwm) | Google<br>UCLA<br>arXiv 2026 | 周⁠级⁠生⁠理与⁠行⁠为⁠指标 | MLP 潜状态编码与行为条件二阶动力学预训练；多周预测、CHA 评分与计划筛选<br>规模 预训练队列 96,957 人、228 万人周；182,797 个有效 12 周窗口<br>[论⁠文](https://arxiv.org/abs/2611.08568) |
 | 2026‑11‑09 | `方法` [**GlucoAgent**](docs/models/cgm_models.md#glucoagent) | Meta<br>Yale<br>NeurIPS 2026 Workshop | CGM +<br>穿⁠戴⁠指⁠标 +<br>饮⁠食⁠与⁠档案 | LLM 在预测时编写并执行代码，检索个人历史、拟合与回测预测方法<br>规模 CGMacros 留出 9 人、1,903 个预测时点；预测未来 30-120 分钟<br>[论⁠文](https://arxiv.org/abs/2611.04126) |
 | 2026‑11‑09 | `综述` [**PPG 深度学习范围综述**](docs/models/smartwatch_models.md#ppg-深度学习范围综述) | 北⁠京⁠大⁠学<br>HeartVoice<br>Health Data Science<br>2026 | 接⁠触⁠式 PPG | 按任务、模型与数据梳理 PPG 深度学习研究，覆盖 11 类任务<br>规模 460 篇研究；检索范围为 2017-2025 年<br>[论⁠文](https://doi.org/10.34133/hds.0474) |
 | 2026‑11‑09 | [**AI-PPG-ACC-HTN**](docs/models/smartwatch_models.md#ai-ppg-acc-htn) | Google<br>BIDMC<br>Harvard<br>Nature 2026 | 腕⁠戴 PPG +<br>ACC +<br>身⁠高 | 15 秒波形受试者对比预训练，跨日均值汇聚与逻辑回归；无个人袖带校准的高血压状态筛查<br>规模 无标签预训练 2,109 人、492,347 小时；独立前瞻验证 196 人、约 7 天，参考为 24 小时 ABPM<br>[论⁠文](https://doi.org/10.1038/s41586-026-11336-3) |
@@ -107,7 +108,6 @@
 | 2026‑11‑09 | `方法` [**Time-LLM**](docs/models/general_tsfm.md#time-llm) | Monash<br>蚂⁠蚁⁠集⁠团<br>HKUST<br>ICLR 2024 | 通⁠用⁠一⁠维时⁠序 | 文本原型跨注意力重编程 + 提示词前缀增强<br>规模 多领域通用时序基准 (M4, ETT 等)<br>[论⁠文](https://arxiv.org/abs/2310.01728) · [代⁠码](https://github.com/KimMeen/Time-LLM) |
 | 2026‑11‑04 | `基准` [**PPG-Bench**](docs/models/smartwatch_models.md#ppg-bench) | Mannas AI<br>arXiv 2026 | 腕⁠部⁠与⁠指尖 PPG | 4 级探针微调协议 (跨 5 大脉搏基模评测)<br>规模 论文 9 数据集、26 项任务；代码列 17 项主要任务<br>[论⁠文](https://arxiv.org/abs/2610.13435) · [代⁠码](https://github.com/mannas-ai/ppg-bench) |
 | 2026‑11‑04 | [**HiPPT**](docs/models/wearable_transfer_models.md#hippt) | 东⁠南⁠大⁠学<br>OPPO 等<br>arXiv 2026 | 腕⁠戴 PPG +<br>文⁠本 | 12 层、512 维 PPG Transformer；记录级形态与跨记录上下文对齐，波形引导文本建模<br>规模 HBPM-BG 约 130 万条 + VS 约 300 万条一分钟记录，约 20.2 万人；模型输入 12 秒<br>[论⁠文](https://arxiv.org/abs/2610.14489) · 代⁠码⁠与⁠权⁠重⁠待⁠发⁠布 |
-| 2026‑11‑04 | [**SleepFM-2**](docs/models/sleep_models.md#sleepfm-2) | Stanford<br>DTU<br>arXiv 2026 | 多⁠导⁠睡⁠眠 PSG | 两阶段时空 Transformer + 留一对比与局部掩码重构<br>规模 总语料超过 200 万小时；预训练 235,865 份记录、24 队列<br>[论⁠文](https://arxiv.org/abs/2609.06849v2) |
 
 <!-- END:RECENT_UPDATES -->
 
@@ -201,6 +201,7 @@
 | `方法` [**GlucoAgent**](docs/models/cgm_models.md#glucoagent) | Meta<br>Yale<br>NeurIPS 2026 Workshop | CGM +<br>穿⁠戴⁠指⁠标 +<br>饮⁠食⁠与⁠档案 | LLM 在预测时编写并执行代码，检索个人历史、拟合与回测预测方法<br>规模 CGMacros 留出 9 人、1,903 个预测时点；预测未来 30-120 分钟 | [论⁠文](https://arxiv.org/abs/2611.04126) |
 | `方法` [**Within-person modeling**](docs/models/cgm_models.md#within-person-modeling) | KUAS<br>东⁠京⁠大⁠学<br>Front Digit Health<br>2026 | CGM +<br>饮⁠食 +<br>ACC 特⁠征 | 个体内中心化与标准化、随机截距混合效应回归；分析餐后峰值、达峰时间与超阈值面积<br>规模 BIG IDEAs 10 人、485 餐；267 餐进入完整案例回归 | [论⁠文](https://doi.org/10.3389/fdgth.2026.1847884)<br>[数⁠据](https://physionet.org/content/big-ideas-glycemic-wearable/1.1.3/) |
 | [**AI-PPG-ACC-HTN**](docs/models/smartwatch_models.md#ai-ppg-acc-htn) | Google<br>BIDMC<br>Harvard<br>Nature 2026 | 腕⁠戴 PPG +<br>ACC +<br>身⁠高 | 15 秒波形受试者对比预训练，跨日均值汇聚与逻辑回归；无个人袖带校准的高血压状态筛查<br>参数 约 5.1M（预印本实现）<br>规模 无标签预训练 2,109 人、492,347 小时；独立前瞻验证 196 人、约 7 天，参考为 24 小时 ABPM | [论⁠文](https://doi.org/10.1038/s41586-026-11336-3) |
+| [**SensorWM**](docs/models/longitudinal_wearable_models.md#sensorwm) | Google<br>UCLA<br>arXiv 2026 | 周⁠级⁠生⁠理与⁠行⁠为⁠指标 | MLP 潜状态编码与行为条件二阶动力学预训练；多周预测、CHA 评分与计划筛选<br>规模 预训练队列 96,957 人、228 万人周；182,797 个有效 12 周窗口 | [论⁠文](https://arxiv.org/abs/2611.08568) |
 
 <!-- END:MODELS_TABLE -->
 

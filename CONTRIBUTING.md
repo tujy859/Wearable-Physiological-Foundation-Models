@@ -25,6 +25,8 @@
 
 跨模态综述、方法原理和评测协议可以形成 `docs/models/` 中的主题文档。先在相关专题内补充小节；只有内容形成独立阅读问题时再拆分文件。模型与基准保留一个主要分析位置，其他专题用简要说明和链接引用，避免多份结论逐渐不一致。
 
+`docs/figures/sensorwm/` 按上述模型配图约定存放 SensorWM 原论文架构裁图，供纵向可穿戴模型专题阅读；模型 ID 子目录用于隔离不同论文的同名图片。其入口为[SensorWM 小节](docs/models/longitudinal_wearable_models.md#sensorwm)，图源与裁剪范围随正文维护、随论文版本核查；全仓通用图仍放在 `assets/`，原论文 PDF 留在不纳入 Git 的 `papers/`。
+
 当前不设 `docs/surveys/` 与 `docs/principles/`。日期命名的检索更新记录属于本地维护过程；项目原则由已有规范文件承载。目录名称本身不构成新增理由。
 
 网页构建使用独立的 `_site/`，便于仅发布网页所需文件，避免把工作目录和内部记录带入站点；研究内容仍保存在 `data/`、`docs/` 和 `blogs/`。`.github/workflows/` 是 GitHub 识别的自动化配置位置，不能由 `scripts/` 替代。两者的入口与维护步骤见下文“网页浏览与发布”。

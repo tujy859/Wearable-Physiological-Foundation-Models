@@ -1357,3 +1357,22 @@
   doc: docs/models/smartwatch_models.md#ai-ppg-acc-htn
   type: model
   added: '2026-11-09'
+- id: sensorwm
+  name: SensorWM
+  org: Google Research / University of California, Los Angeles
+  org_short: Google / UCLA
+  venue: arXiv 2026
+  date: '2026-11-05'
+  modality: 周级聚合的生理指标与步数、睡眠、心肺运动行为
+  modality_short: 周级生理与行为指标
+  method: MLP 潜状态编码与行为条件二阶动力学预训练；多周预测、CHA 评分与计划筛选
+  params: ''
+  data: 预训练队列 96,957 人、228 万人周；182,797 个有效 12 周窗口
+  paper: https://arxiv.org/abs/2611.08568
+  code: ''
+  weights: ''
+  access: ''
+  access_note: 作者计划在发表时发布 CHA、SensorWM 和统计分析代码；权重获取方式尚不明确；纵向 Fitbit 预训练数据受隐私限制
+  doc: docs/models/longitudinal_wearable_models.md#sensorwm
+  type: model
+  added: '2026-11-09'

@@ -94,6 +94,8 @@ Google Research / Google DeepMind / Columbia University 等 · Nature 2026 · [�
 
 另一类系统直接面向未来数值预测。[GlucoAgent](cgm_models.md#glucoagent) 通过代码分析个人多模态历史并提交血糖预测，其方法、餐后结果与评测条件见 CGM 专题。
 
+[SensorWM 与 CHA](longitudinal_wearable_models.md#sensorwm) 将周级生理指标预测用于行为方案比较：先模拟候选步数、睡眠与心肺运动条件下的未来指标，再结合健康年龄评分和执行难度筛选路径，交给 LLM 生成计划。其专家偏好实验同时加入了 CHA、模拟与方案排序，尚未单独验证世界模型相对于直接 CHA 规划的教练增益。
+
 ## 工程路线
 
 | 路线 | 可用组件 | 需要控制的实验条件 |
