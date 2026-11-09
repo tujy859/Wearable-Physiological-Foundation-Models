@@ -40,7 +40,7 @@ TOPICS = {
     "universal_health_models": "系统级健康模型",
     "general_tsfm": "通用时间序列",
 }
-TYPES = {"model": "模型", "benchmark": "基准", "survey": "综述"}
+TYPES = {"model": "模型", "method": "方法", "benchmark": "基准", "survey": "综述"}
 
 
 def text(value: object) -> str:
@@ -146,7 +146,7 @@ def main() -> None:
         if len(set(ids)) != len(ids):
             raise ValueError("Catalogue IDs must be unique within each collection.")
     models.sort(key=lambda item: (text(item.get("updated") or item.get("added")), text(item.get("date"))), reverse=True)
-    cards = '<section class="collection" data-collection="models" aria-labelledby="models-heading"><h2 class="collection-heading" id="models-heading">模型、基准与综述</h2><div class="entries">' + "\n".join(map(model_card, models)) + '</div></section>'
+    cards = '<section class="collection" data-collection="models" aria-labelledby="models-heading"><h2 class="collection-heading" id="models-heading">研究条目</h2><div class="entries">' + "\n".join(map(model_card, models)) + '</div></section>'
     cards += '<section class="collection" data-collection="datasets" aria-labelledby="datasets-heading"><h2 class="collection-heading" id="datasets-heading">数据集与队列</h2><div class="entries">' + "\n".join(map(dataset_card, datasets)) + '</div></section>'
     topics = "".join(f'<a data-topic="{esc(label)}" href="{doc_url(f"docs/models/{key}.md")}">{esc(label)}<span aria-hidden="true">→</span></a>' for key, label in TOPICS.items())
     topics += f'<a href="{doc_url("docs/datasets/wearable_datasets.md")}">数据集与队列<span aria-hidden="true">→</span></a>'

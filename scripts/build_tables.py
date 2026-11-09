@@ -155,6 +155,8 @@ def format_model_name(m: dict) -> str:
     tag = "`基准` " if m.get("type") == "benchmark" else ""
     if m.get("type") == "survey":
         tag = "`综述` "
+    elif m.get("type") == "method":
+        tag = "`方法` "
     name = str(m.get("name", "")).strip()
     if m.get("doc"):
         return f"{tag}[**{name}**]({m['doc']})"
@@ -169,7 +171,7 @@ def build_recent_table(models: list[dict], limit: int = 10) -> str:
     )[:limit]
     headers = [
         nowrap("更新日期"),
-        nowrap("模型 / 基准"),
+        nowrap("研究条目"),
         nowrap("机构") + "<br>" + nowrap("与发表"),
         nowrap("传感模态"),
         nowrap("核心机制") + "<br>" + nowrap("与资源"),
@@ -195,7 +197,7 @@ def build_recent_table(models: list[dict], limit: int = 10) -> str:
 
 def build_models_table(models: list[dict]) -> str:
     headers = [
-        nowrap("模型 / 基准"),
+        nowrap("研究条目"),
         nowrap("机构") + "<br>" + nowrap("与发表"),
         nowrap("传感模态"),
         nowrap("核心机制") + "<br>" + nowrap("与数据规模"),
@@ -307,7 +309,7 @@ def main(argv: list[str] | None = None) -> int:
     # Validate both documents before writing either one.
     for path, _, generated in documents:
         path.write_text(generated, encoding="utf-8")
-    print(f"Updated README.md with {len(models)} model entries and {len(datasets)} dataset entries.")
+    print(f"Updated README.md with {len(models)} research entries and {len(datasets)} dataset entries.")
     print(f"Updated {DATASETS_DOC_PATH.relative_to(ROOT)} with {len(datasets)} dataset entries.")
     return 0
 

@@ -112,19 +112,19 @@
     <section class="hero" aria-labelledby="page-title">
       <p class="overline">RESEARCH COLLECTION / 研究索引</p>
       <h1 id="page-title">从生理信号，到健康表征</h1>
-      <div class="hero-row"><p class="hero-description">可穿戴与生理时序基础模型的论文、代码、权重与数据。<br>沿着输入信号与研究问题，找到适合深入阅读的工作。</p><div class="stats"><div class="stat"><b>@@MODEL_COUNT@@</b><span>模型、基准与综述</span></div><div class="stat"><b>@@DATASET_COUNT@@</b><span>数据集与队列</span></div></div></div>
+      <div class="hero-row"><p class="hero-description">可穿戴与生理时序基础模型的论文、代码、权重与数据。<br>沿着输入信号与研究问题，找到适合深入阅读的工作。</p><div class="stats"><div class="stat"><b>@@MODEL_COUNT@@</b><span>研究条目</span></div><div class="stat"><b>@@DATASET_COUNT@@</b><span>数据集与队列</span></div></div></div>
     </section>
     <details class="map"><summary>研究地图<span>原始采样 · 分钟级特征 · 长期行为</span></summary><a href="assets/taxonomy_overview.png" aria-label="打开完整研究地图"><img src="assets/taxonomy_overview.png" alt="可穿戴与生理基础模型研究地图，按输入表示列出代表模型、下游能力及跨路线研究" loading="lazy"></a></details>
     <div class="workspace">
-      <aside class="sidebar" id="topics" aria-labelledby="topics-title"><h2 id="topics-title">专题阅读</h2><nav class="topic-links" aria-label="研究专题">@@TOPICS@@</nav><h2 class="reading-title">技术长文</h2><nav class="topic-links" aria-label="技术长文">@@BLOGS@@</nav><p class="sidebar-note">从条目名称进入专题中的模型小节，阅读方法分析、实验结果与论文配图。</p></aside>
+      <aside class="sidebar" id="topics" aria-labelledby="topics-title"><h2 id="topics-title">专题阅读</h2><nav class="topic-links" aria-label="研究专题">@@TOPICS@@</nav><h2 class="reading-title">技术长文</h2><nav class="topic-links" aria-label="技术长文">@@BLOGS@@</nav><p class="sidebar-note">从条目名称进入专题中的条目小节，阅读方法分析、实验结果与论文配图。</p></aside>
       <section id="catalog" aria-label="检索文献与数据集">
         <div id="interactive-controls" hidden>
           <div class="tabs" role="group" aria-label="索引类型"><button class="tab" type="button" data-tab="models" aria-pressed="true">研究条目 <span>@@MODEL_COUNT@@</span></button><button class="tab" type="button" data-tab="datasets" aria-pressed="false">数据集与队列 <span>@@DATASET_COUNT@@</span></button></div>
           <form id="filters" role="search">
-            <label class="search-box" for="query"><span>搜索条目</span><input id="query" type="search" placeholder="模型名、机构、信号或任务，例如 PPG、睡眠、Google" autocomplete="off"></label>
+            <label class="search-box" for="query"><span>搜索条目</span><input id="query" type="search" placeholder="条目名、机构、信号或任务，例如 PPG、睡眠、Google" autocomplete="off"></label>
             <div class="filters">
               <label for="topic"><span id="topic-name">所属专题</span><select id="topic"><option value="">全部专题</option></select></label>
-              <label for="kind" id="kind-label">条目类型<select id="kind"><option value="">全部类型</option><option value="model">模型</option><option value="benchmark">基准</option><option value="survey">综述</option></select></label>
+              <label for="kind" id="kind-label">条目类型<select id="kind"><option value="">全部类型</option><option value="model">模型</option><option value="method">方法</option><option value="benchmark">基准</option><option value="survey">综述</option></select></label>
               <label for="resource" id="resource-label">资源<select id="resource"><option value="">全部资源</option></select></label>
               <button class="reset" id="reset" type="button">清空筛选</button>
             </div>
@@ -132,7 +132,7 @@
         </div>
         <noscript><p>全部条目已列在下方。启用 JavaScript 可搜索和筛选，也可用浏览器的页面查找功能。</p></noscript>
         <p class="topic-reading" id="topic-reading" hidden><a id="topic-reading-link" href="index.html">阅读本专题 →</a></p>
-        <div class="result-line"><p id="results-count" role="status" aria-live="polite" aria-atomic="true">共 @@TOTAL_COUNT@@ 个条目</p><span class="sort-note" id="sort-note">模型按最近收录更新排序</span></div>
+        <div class="result-line"><p id="results-count" role="status" aria-live="polite" aria-atomic="true">共 @@TOTAL_COUNT@@ 个条目</p><span class="sort-note" id="sort-note">研究条目按最近收录更新排序</span></div>
         <div id="collections">@@CARDS@@</div>
         <div class="empty" id="empty" hidden><h3>没有符合条件的条目</h3><p>试试更短的关键词，或减少筛选条件。</p><button class="reset" type="button" id="empty-reset">清空筛选</button></div>
       </section>
@@ -168,7 +168,7 @@
         document.querySelector('#kind-label').hidden = group === 'datasets';
         kind.value = '';
         tabs.forEach(tab => tab.setAttribute('aria-pressed', String(tab.dataset.tab === group)));
-        document.querySelector('#sort-note').textContent = group === 'models' ? '按最近收录更新排序' : '按数据集专题顺序排列';
+        document.querySelector('#sort-note').textContent = group === 'models' ? '研究条目按最近收录更新排序' : '按数据集专题顺序排列';
       }
       function syncUrl() {
         const params = new URLSearchParams();

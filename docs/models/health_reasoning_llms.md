@@ -1,6 +1,6 @@
 # 可穿戴健康推理与生理大语言模型
 
-生理模型处理的输入层次不同：PaPaGei 学习 PPG 波形，GlucoFM 处理低频血糖序列，SensorFM 学习分钟级多传感器派生特征。健康推理研究进一步考察如何利用这些记录进行数据计算、跨指标解释和问答。本文区分评测基准、任务适配与多模态模型，检索截至 2026-11-04。
+生理模型处理的输入层次不同：PaPaGei 学习 PPG 波形，GlucoFM 处理低频血糖序列，SensorFM 学习分钟级多传感器派生特征。健康推理研究进一步考察如何利用这些记录进行数据计算、跨指标解释和问答。本文区分评测基准、任务适配、多模态模型与应用系统，资料更新截至 2026-11-09。
 
 ![可穿戴生理基础模型的数据与任务层次](../../assets/taxonomy_overview.png)
 
@@ -12,6 +12,7 @@
 | [HEARTS](#hearts) | 感知、推断、生成、演绎四类任务 | 16 数据集、20 模态、110 任务、20,226 样本 | 固定测试样例与工具型 Agent 框架 | 按任务使用专门指标；不压缩成单一临床能力分数 | [代码](https://github.com/yang-ai-lab/HEARTS) · [数据](https://huggingface.co/datasets/yang-ai-lab/HEARTS) |
 | [CBPM-LLaMA](#cbpm-llama) | 31 维生理特征文本化与 LLM 指令微调 | CAS-BP 1,272 人、12,624 条有效记录 | 领域知识、人口信息与 MAP/PP 目标 | LLaMA-3-8B 的 SBP MAE 7.08 mmHg，属于含个体基线校准的论文设置 | [论文](https://doi.org/10.1145/3698587.3701447) · [数据申请](https://github.com/zdzdliu/CAS-BP) |
 | [GEM](#gem) | ECG 时序/图像双编码器与 7B 语言骨干 | ECG-Instruct 1,156,110 对话；新增 ECG-Grounding 30,000 对话 | 跨模态对齐与特征锚定指令 | CSN 准确率 92.6%，同表 PULSE 85.2%；为特定模型变体与数据集结果 | [代码](https://github.com/lanxiang1017/GEM) · [权重](https://huggingface.co/LANSG/GEM) |
+| [PHA](#pha) | 三个专长代理与动态协调器 | 11 项评测、7,000 余份人工标注 | 个人数据计算、健康解释与多轮辅导 | 评测对话质量与短期任务表现；属于应用系统 | [正式论文](https://doi.org/10.1038/s41586-026-11161-8) · [代码](https://github.com/Google-Health/consumer-health-research/tree/main/personal_health_agent) |
 
 这些工作比较的是不同能力：数值计算、标签预测、生成报告与长程解释。选择基准时应先确定输入是否为原始波形、派生指标或人工特征，再记录受试者划分、上下文长度、工具预算及评分方法。
 
@@ -74,6 +75,24 @@ GEM 结合 ECG 时序编码器、心电图像编码器和语言骨干，通过�
 Table 2 中 GEM 的 SFT LLaVA 变体在 CSN 上准确率为 92.6%，PULSE 为 85.2%，相差 7.4 个百分点。不同 GEM 变体在其他数据集上的收益不同，论文摘要的 7.4% 不能作为所有诊断任务的统一提升。部分解释评测采用模型评分，需结合评分协议解读。[论文 Table 1-2](https://arxiv.org/abs/2503.06073)
 
 评注。特征锚定能够让报告更便于检查，但生成文字中的数值与导联依据仍应独立复核。面向腕戴单导联 ECG 时，要另行验证导联减少、设备噪声与图纸布局变化，不能直接沿用 12 导联的实验结论。
+
+## 应用系统
+
+### PHA
+
+Google Research / Google DeepMind / Columbia University 等 · Nature 2026 · [正式论文](https://doi.org/10.1038/s41586-026-11161-8) · [预印本](https://arxiv.org/abs/2508.20148) · [代码](https://github.com/Google-Health/consumer-health-research/tree/main/personal_health_agent)
+
+![PHA 的专长代理协作、反思与记忆更新](../figures/pha/overview.png)
+
+图源：PHA 预印本 Fig. 6a（arXiv:2508.20148），裁取系统流程部分。
+
+个人健康代理（Personal Health Agent，PHA）以可穿戴记录、血检与个人背景为输入，由数据科学代理计算趋势，领域专家代理解释健康证据，健康教练代理组织建议；协调器分派任务、整合结果并更新对话记忆。它提供生理数据分析的应用系统，未新增生理时序预训练模型。正式论文涵盖 11 项评测，主要衡量数据解读和多轮交互质量。[正式论文](https://doi.org/10.1038/s41586-026-11161-8)
+
+官方实现包含代理、提示词、Python 执行工具与合成样例，采用 Apache 2.0 许可；样例不等于原研究队列。它适合研究已有记录和模型输出如何进入可检查的健康解释。[实现与数据说明](https://github.com/Google-Health/consumer-health-research/tree/main/personal_health_agent)
+
+与基础模型的连接见 [SensorFM](longitudinal_wearable_models.md#sensorfm)：该研究将预测头输出加入健康摘要上下文，在 31 人的静态、单轮摘要上收集 1,860 次医生评分。这项实验与 PHA 原论文的多轮系统评测应分别阅读；它检验预测信息对摘要的帮助，未验证长期健康改善。[SensorFM 方法 M.6](https://arxiv.org/abs/2605.22759v3)
+
+另一类系统直接面向未来数值预测。[GlucoAgent](cgm_models.md#glucoagent) 通过代码分析个人多模态历史并提交血糖预测，其方法、餐后结果与评测边界统一在 CGM 专题维护。
 
 ## 工程路线与候选处理
 

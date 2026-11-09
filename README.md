@@ -22,7 +22,7 @@
 - [为什么需要生理信号专用基础模型](#为什么需要生理信号专用基础模型)
 - [领域专题文档与技术长文](#领域专题文档与技术长文)
 - [最近更新](#最近更新)
-- [基础模型与评测基准索引表](#基础模型与评测基准索引表)
+- [基础模型、相关方法与评测基准索引](#基础模型相关方法与评测基准索引)
 - [开放数据集与临床队列索引](#开放数据集与临床队列索引)
 - [领域综述参考](#领域综述参考)
 - [关联实验工程与参与贡献](#关联实验工程与参与贡献)
@@ -39,7 +39,7 @@
    - 长期行为与健康指标：[Apple WBM](docs/models/longitudinal_wearable_models.md#wbm)、[OpenMHC 复现与基准](docs/models/smartwatch_models.md#openmhc)；原始波形与周级建模的衔接见 [WavesFM](docs/models/longitudinal_wearable_models.md#wavesfm)
    - 独立信号专题：[心电 ECG](docs/models/ecg_models.md)、[连续血糖 CGM](docs/models/cgm_models.md)、[多导睡眠 PSG](docs/models/sleep_models.md)、[脑电 EEG](docs/models/eeg_models.md)
    - 语言对齐、生成与推理：[HiPPT](docs/models/wearable_transfer_models.md#hippt)、[SensorLM](docs/models/smartwatch_models.md#sensorlm)、[PPGFlowECG](docs/models/smartwatch_models.md#ppgflowecg)、[GEM](docs/models/health_reasoning_llms.md#gem)、[跨模型评测](docs/models/physiological_benchmarks.md)
-2. **开源模型与预训练权重选型**：直接查阅 [基础模型与评测基准索引表](#基础模型与评测基准索引表)，按模态、参数量与开源资源筛选可直接加载的权重，点击模型名称跳转至对应精读小节与架构图。
+2. **开源模型与预训练权重选型**：直接查阅 [基础模型、相关方法与评测基准索引](#基础模型相关方法与评测基准索引)，按模态、参数量与开源资源筛选可直接加载的权重，点击条目名称跳转至对应精读小节与架构图。
 3. **按模块深入研读**：在 [领域专题文档与技术长文](#领域专题文档与技术长文) 中按研究方向查阅横向对比，或阅读串联多篇工作的专题长文。
 4. **查找训练数据与评测基准**：查阅 [开放数据集与临床队列索引](#开放数据集与临床队列索引) 以及 [数据集文档](docs/datasets/wearable_datasets.md)，获取采样率、样本规模、预处理工具与下载申请入口。
 
@@ -69,11 +69,11 @@
 | [腕戴波形预训练与运动表征迁移](docs/models/wearable_transfer_models.md) | 核心主线 | Apple PPG / ECG、HiPPT、ACC 蒸馏、RelCon、HARNet、Sensori、Inertia-1 |
 | [智能手表与腕戴生理模型](docs/models/smartwatch_models.md) | 核⁠心⁠主⁠线 | SensorFM、PaPaGei、Pulse-PPG、xMAE、HiMAE、UniCardio、PPGFlowECG、AnyPPG、SigmaPPG、PPG-Distill、PpgAge、PPG-Bench、OpenMHC、PPG-LM、SensorLM、NormWear、LIMU-BERT |
 | [心电与心血管电生理基础模型](docs/models/ecg_models.md) | 核⁠心⁠主⁠线 | ECGFounder、ECG-CPC、DeepECG-SSL、HuBERT-ECG、ECG-FM、ECG-JEPA、ST-MEM、HeartLang、MERL、ESI、MELP、KED、HeartGPT、HeartBERT、HeartBEiT、CLOCS 及 PPG-ECG 跨模态生成对比 |
-| [连续血糖监测（CGM）基础模型](docs/models/cgm_models.md) | 核⁠心⁠主⁠线 | GlucoFM、CGM-JEPA、GluFormer、CGMformer、CGM-LSM、GlucoBench |
+| [连续血糖监测（CGM）基础模型](docs/models/cgm_models.md) | 核⁠心⁠主⁠线 | GlucoFM、CGM-JEPA、GluFormer、CGMformer、CGM-LSM、GlucoBench；GlucoAgent 预测方法 |
 | [睡眠与心肺多模态模型](docs/models/sleep_models.md) | 核⁠心⁠主⁠线 | SleepFM / SleepFM-2、SleepMaMi、U-Sleep 及穿戴睡眠迁移分析 |
 | [脑电基础模型与跨导联迁移](docs/models/eeg_models.md) | 扩展专题 | LaBraM、EEGPT、CBraMod；电极布局、预训练与冻结迁移协议 |
 | [生理信号与健康推理评测](docs/models/physiological_benchmarks.md) | 评测专题 | 跨心电、脑电与生理语言任务的评测协议、数据划分及复现入口 |
-| [可穿戴健康推理与生理大语言模型](docs/models/health_reasoning_llms.md) | 核⁠心⁠主⁠线 | WearableQA、HEARTS、CBPM-LLaMA、GEM 及神经符号 Agent 协同 |
+| [可穿戴健康推理与生理大语言模型](docs/models/health_reasoning_llms.md) | 核⁠心⁠主⁠线 | WearableQA、HEARTS、CBPM-LLaMA、GEM；PHA 应用系统案例 |
 | [开源数据集与评测基准](docs/datasets/wearable_datasets.md) | 数⁠据⁠底⁠座 | 腕戴多模态、CGM、临床重症与心电、睡眠 PSG、大型人群队列及清洗工具 |
 | [系统级多模态健康模型](docs/models/universal_health_models.md) | 扩⁠展⁠专⁠题 | RisQ 的结构化临床与遗传风险表征；与可穿戴模型的边界 |
 | [通用时间序列基础模型](docs/models/general_tsfm.md) | 扩⁠展⁠专⁠题 | TimesFM、Chronos、MOMENT、Mantis、MOIRAI、Timestral、Kumo-Forecast、TimeBraid、Time-LLM |
@@ -96,8 +96,11 @@
 
 <!-- BEGIN:RECENT_UPDATES -->
 
-| 更⁠新⁠日⁠期 | 模⁠型 / 基⁠准 | 机⁠构<br>与⁠发⁠表 | 传⁠感⁠模⁠态 | 核⁠心⁠机⁠制<br>与⁠资⁠源 |
+| 更⁠新⁠日⁠期 | 研⁠究⁠条⁠目 | 机⁠构<br>与⁠发⁠表 | 传⁠感⁠模⁠态 | 核⁠心⁠机⁠制<br>与⁠资⁠源 |
 | :---: | :--- | :--- | :--- | :--- |
+| 2026‑11‑09 | `方法` [**GlucoAgent**](docs/models/cgm_models.md#glucoagent) | Meta<br>Yale<br>NeurIPS 2026 Workshop | CGM +<br>穿⁠戴⁠指⁠标 +<br>饮⁠食⁠与⁠档案 | LLM 在预测时编写并执行代码，检索个人历史、拟合与回测预测方法<br>规模 CGMacros 留出 9 人、1,903 个预测时点；预测未来 30-120 分钟<br>[论⁠文](https://arxiv.org/abs/2611.04126) |
+| 2026‑11‑09 | `方法` [**CBPM-LLaMA**](docs/models/health_reasoning_llms.md#cbpm-llama) | 中⁠科⁠院⁠深圳⁠先⁠进⁠院<br>香⁠港⁠理⁠工大⁠学<br>ACM‑BCB 2024 | ECG / PPG 的 31 维⁠派⁠生⁠特征 +<br>人⁠口⁠信⁠息 | 医学知识增强 Prompt 与指令微调；MAP/PP 目标及个体基线校准<br>规模 CAS-BP 1,272 人、12,624 条有效测量；任务适配案例<br>[论⁠文](https://doi.org/10.1145/3698587.3701447) · [数⁠据](https://github.com/zdzdliu/CAS-BP) |
+| 2026‑11‑09 | `方法` [**Time-LLM**](docs/models/general_tsfm.md#time-llm) | Monash<br>蚂⁠蚁⁠集⁠团<br>HKUST<br>ICLR 2024 | 通⁠用⁠一⁠维时⁠序 | 文本原型跨注意力重编程 + 提示词前缀增强<br>规模 多领域通用时序基准 (M4, ETT 等)<br>[论⁠文](https://arxiv.org/abs/2310.01728) · [代⁠码](https://github.com/KimMeen/Time-LLM) |
 | 2026‑11‑04 | `基准` [**PPG-Bench**](docs/models/smartwatch_models.md#ppg-bench) | Mannas AI<br>arXiv 2026 | 腕⁠部⁠与⁠指尖 PPG | 4 级探针微调协议 (跨 5 大脉搏基模评测)<br>规模 论文 9 数据集、26 项任务；代码列 17 项主要任务<br>[论⁠文](https://arxiv.org/abs/2610.13435) · [代⁠码](https://github.com/mannas-ai/ppg-bench) |
 | 2026‑11‑04 | [**HiPPT**](docs/models/wearable_transfer_models.md#hippt) | 东⁠南⁠大⁠学<br>OPPO 等<br>arXiv 2026 | 腕⁠戴 PPG +<br>文⁠本 | 12 层、512 维 PPG Transformer；记录级形态与跨记录上下文对齐，波形引导文本建模<br>规模 HBPM-BG 约 130 万条 + VS 约 300 万条一分钟记录，约 20.2 万人；模型输入 12 秒<br>[论⁠文](https://arxiv.org/abs/2610.14489) · 代⁠码⁠与⁠权⁠重⁠待⁠发⁠布 |
 | 2026‑11‑04 | [**SleepFM-2**](docs/models/sleep_models.md#sleepfm-2) | Stanford<br>DTU<br>arXiv 2026 | 多⁠导⁠睡⁠眠 PSG | 两阶段时空 Transformer + 留一对比与局部掩码重构<br>规模 总语料超过 200 万小时；预训练 235,865 份记录、24 队列<br>[论⁠文](https://arxiv.org/abs/2609.06849v2) |
@@ -105,21 +108,20 @@
 | 2026‑11‑04 | [**Sensori**](docs/models/wearable_transfer_models.md#sensori) | 牛⁠津⁠大⁠学<br>北⁠京⁠大⁠学<br>UCL 等<br>arXiv 2026 | 24 小⁠时⁠三⁠轴 ACC（10 Hz） | CNN-Transformer + 五分钟掩码预测与跨日参与者对比<br>规模 预训练 91,037 人 / 502,823 人天（UKB + CKB）<br>[论⁠文](https://arxiv.org/abs/2608.29494) · [代⁠码](https://github.com/OxWearables/Sensori) · [学⁠术⁠用⁠途⁠权⁠重](https://huggingface.co/light156/Sensori) |
 | 2026‑11‑04 | `基准` [**Inertia-1**](docs/models/wearable_transfer_models.md#inertia-1) | UCLA<br>Duke<br>Johns Hopkins<br>NeurIPS 2026（接收） | 腕⁠戴 ACC，跨⁠位⁠置 / GYR / MAG 迁⁠移 | 多方法受控预训练、传感配置与规模比较框架<br>规模 研究覆盖 1,822 万小时 / 115,450 人 / 15 数据集<br>[论⁠文](https://arxiv.org/abs/2607.06617) · [代⁠码](https://github.com/yang-ai-lab/Inertia-1) |
 | 2026‑11‑04 | `基准` [**OpenMHC**](docs/models/smartwatch_models.md#openmhc) | Stanford<br>Imperial College London 等<br>arXiv 2026 | 19 通⁠道⁠派⁠生穿⁠戴⁠时⁠序 +<br>最⁠多 169 项⁠关⁠联⁠变量 | 下游预测、插补与外推基准；LSM-2/WBM 开放复现<br>规模 11,894 人、超 6,000 万小时<br>[论⁠文](https://arxiv.org/abs/2607.16235) · [代⁠码](https://github.com/AshleyLab/OpenMHC) · [权⁠重](https://huggingface.co/MyHeartCounts/models) |
-| 2026‑11‑04 | [**RisQ**](docs/models/universal_health_models.md#risq) | TUM<br>Helmholtz Munich 等<br>medRxiv 2026 | 临⁠床⁠变⁠量 +<br>用⁠药 +<br>诊⁠断⁠史 +<br>遗⁠传 | Transformer 健康表征与疾病/时间条件查询；临床风险扩展参考<br>规模 UKB 488,170 人用于训练/验证；AoU 257,538 人外部评测<br>[论⁠文](https://doi.org/10.64898/2026.07.07.26357373) · [代⁠码](https://github.com/RisQ-Lab/RisQ) |
-| 2026‑11‑04 | [**SensorFM**](docs/models/longitudinal_wearable_models.md#sensorfm) | Google<br>arXiv 2026 | 分⁠钟⁠级⁠多传⁠感⁠器⁠特征 | ViT-1D MAE + AIM 缺失感知重构，24 小时窗口<br>规模 500 万人，超 20 亿多模态数据小时（另报超 1 万亿传感器分钟）<br>[论⁠文](https://arxiv.org/abs/2605.22759) |
-| 2026‑11‑04 | [**CGM-JEPA / X-CGM-JEPA**](docs/models/cgm_models.md#cgm-jepa) | UNSW<br>Google<br>arXiv 2026 | CGM / 血⁠糖⁠分⁠布 | JEPA 潜空间预测 + 跨视图分布目标<br>规模 228 人约 38.9 万读数；临床评测公开子集 27 人与 17 人<br>[论⁠文](https://arxiv.org/abs/2605.00933) · [代⁠码](https://github.com/cruiseresearchgroup/CGM-JEPA) · [权⁠重](https://huggingface.co/CRUISEResearchGroup/CGM-JEPA) |
 
 <!-- END:RECENT_UPDATES -->
 
 ---
 
-## 基础模型与评测基准索引表
+<a id="基础模型与评测基准索引表"></a>
+
+## 基础模型、相关方法与评测基准索引
 
 按输入模态、方法与训练规模浏览，点击名称阅读专题分析和论文配图。论文、代码、权重与数据入口列于右侧。
 
 <!-- BEGIN:MODELS_TABLE -->
 
-| 模⁠型 / 基⁠准 | 机⁠构<br>与⁠发⁠表 | 传⁠感⁠模⁠态 | 核⁠心⁠机⁠制<br>与⁠数⁠据⁠规⁠模 | 论⁠文<br>与⁠资⁠源 |
+| 研⁠究⁠条⁠目 | 机⁠构<br>与⁠发⁠表 | 传⁠感⁠模⁠态 | 核⁠心⁠机⁠制<br>与⁠数⁠据⁠规⁠模 | 论⁠文<br>与⁠资⁠源 |
 | :--- | :--- | :--- | :--- | :---: |
 | [**LSM-1**](docs/models/longitudinal_wearable_models.md#lsm-1) | Google<br>华⁠盛⁠顿⁠大学<br>ICLR 2025 | 分⁠钟⁠级⁠多传⁠感⁠器⁠特征 | ViT MAE 二维分块与掩码重构，5 小时窗口<br>参数 2M-328M（Base 110M）<br>规模 165,090 人；主要实验 660 万训练小时，扩展最高 4,000 万小时 | [论⁠文](https://arxiv.org/abs/2410.13638) |
 | [**LSM-2**](docs/models/longitudinal_wearable_models.md#lsm-2) | Google<br>UIUC<br>arXiv 2025 | 分⁠钟⁠级⁠多传⁠感⁠器⁠特征 | ViT-1D + AIM 真实缺失与人工掩码联合建模，24 小时窗口<br>参数 25M<br>规模 60,440 人；原文报告 4,000 万小时 | [论⁠文](https://arxiv.org/abs/2506.05321) |
@@ -182,7 +184,7 @@
 | `基准` [**EEG-FM-Bench**](docs/models/physiological_benchmarks.md#eeg-fm-bench) | 同⁠济⁠大⁠学<br>上⁠海⁠市⁠养志⁠康⁠复⁠医院<br>ICML 2026 | 多⁠通⁠道 EEG | 冻结、全参数与 LoRA 适配；单/多任务及梯度表征分析<br>规模 14 数据集、10 类范式；7 个 EEG 基模与 2 个通用时序模型 | [论⁠文](https://proceedings.mlr.press/v306/xiong26f.html)<br>[代⁠码](https://github.com/xw1216/EEG-FM-Bench) |
 | `基准` [**WearableQA**](docs/models/health_reasoning_llms.md#wearableqa) | Meta AI<br>Reality Labs<br>arXiv 2026 | 日⁠级⁠穿⁠戴指⁠标 +<br>血⁠液⁠标⁠志物 +<br>人⁠口⁠信⁠息 | 数据/健康推理与单/跨信号两轴；十选一问答<br>规模 200 人、每人最长约 500 天；4,084 道题 | [论⁠文](https://arxiv.org/abs/2609.05405)<br>[代⁠码](https://github.com/facebookresearch/WearableQA)<br>[数⁠据](https://huggingface.co/datasets/facebook/WearableQA) |
 | `基准` [**HEARTS**](docs/models/health_reasoning_llms.md#hearts) | UCLA<br>Google Research<br>ICML 2026 | 20 种⁠健⁠康⁠时序⁠模⁠态<br>(含 ECG、EEG、PPG、CGM) | 感知、推断、生成、演绎四类任务；含 CodeAct 评测框架<br>规模 16 数据集、110 任务、20,226 个评测样本 | [论⁠文](https://arxiv.org/abs/2603.06638)<br>[代⁠码](https://github.com/yang-ai-lab/HEARTS)<br>[数⁠据](https://huggingface.co/datasets/yang-ai-lab/HEARTS) |
-| [**CBPM-LLaMA**](docs/models/health_reasoning_llms.md#cbpm-llama) | 中⁠科⁠院⁠深圳⁠先⁠进⁠院<br>香⁠港⁠理⁠工大⁠学<br>ACM‑BCB 2024 | ECG / PPG 的 31 维⁠派⁠生⁠特征 +<br>人⁠口⁠信⁠息 | 医学知识增强 Prompt 与指令微调；MAP/PP 目标及个体基线校准<br>参数 代表骨干 LLaMA-3-8B<br>规模 CAS-BP 1,272 人、12,624 条有效测量；任务适配案例 | [论⁠文](https://doi.org/10.1145/3698587.3701447)<br>[数⁠据](https://github.com/zdzdliu/CAS-BP) |
+| `方法` [**CBPM-LLaMA**](docs/models/health_reasoning_llms.md#cbpm-llama) | 中⁠科⁠院⁠深圳⁠先⁠进⁠院<br>香⁠港⁠理⁠工大⁠学<br>ACM‑BCB 2024 | ECG / PPG 的 31 维⁠派⁠生⁠特征 +<br>人⁠口⁠信⁠息 | 医学知识增强 Prompt 与指令微调；MAP/PP 目标及个体基线校准<br>参数 代表骨干 LLaMA-3-8B<br>规模 CAS-BP 1,272 人、12,624 条有效测量；任务适配案例 | [论⁠文](https://doi.org/10.1145/3698587.3701447)<br>[数⁠据](https://github.com/zdzdliu/CAS-BP) |
 | [**GEM**](docs/models/health_reasoning_llms.md#gem) | 新⁠加⁠坡⁠国立⁠大⁠学<br>北⁠京⁠大⁠学<br>NeurIPS 2025 | 12 导⁠联 ECG 波⁠形 +<br>图⁠像 +<br>文⁠本 | 双编码器与跨模态对齐；波形特征锚定指令微调<br>参数 7B 语言骨干<br>规模 ECG-Instruct 115.6 万对话 + ECG-Grounding 3 万对话 | [论⁠文](https://arxiv.org/abs/2503.06073)<br>[代⁠码](https://github.com/lanxiang1017/GEM)<br>[数⁠据](https://huggingface.co/datasets/LANSG/ECG-Grounding)<br>[权⁠重](https://huggingface.co/LANSG/GEM) |
 | [**RisQ**](docs/models/universal_health_models.md#risq) | TUM<br>Helmholtz Munich 等<br>medRxiv 2026 | 临⁠床⁠变⁠量 +<br>用⁠药 +<br>诊⁠断⁠史 +<br>遗⁠传 | Transformer 健康表征与疾病/时间条件查询；临床风险扩展参考<br>规模 UKB 488,170 人用于训练/验证；AoU 257,538 人外部评测 | [论⁠文](https://doi.org/10.64898/2026.07.07.26357373)<br>[代⁠码](https://github.com/RisQ-Lab/RisQ) |
 | [**TimesFM**](docs/models/general_tsfm.md#timesfm) | Google Research<br>ICML 2024 | 通⁠用⁠一⁠维时⁠序 | 纯解码器自回归 (Decoder-Only) + 连续 Patch<br>参数 200M / 500M<br>规模 1000 亿+ 时间点 (Google Trends, Wikipedia 等) | [论⁠文](https://arxiv.org/abs/2310.10688)<br>[代⁠码](https://github.com/google-research/timesfm)<br>[权⁠重](https://huggingface.co/google/timesfm-1.0-200m) |
@@ -193,9 +195,10 @@
 | [**Timestral**](docs/models/general_tsfm.md#timestral) | Mistral AI<br>2026 | 通⁠用⁠单/多⁠变⁠量⁠时序 | 解耦预测跨度 (DHF) + 21 分位数概率预测<br>参数 5M - 209M<br>规模 大规模多领域时序语料 | [报⁠告](https://mistral.ai/news/timestral/)<br>[代⁠码](https://github.com/mistralai/timestral)<br>[权⁠重](https://huggingface.co/mistralai/Timestral-209M) |
 | [**Kumo-Forecast**](docs/models/general_tsfm.md#kumo-forecast) | NVIDIA<br>2026 | 通⁠用⁠多⁠变量⁠时⁠序 / 结⁠构⁠化⁠数据 | 冻结 MOMENT + DARR 时序检索增强与原生可解释层<br>参数 约 340M<br>规模 企业级多变量时序与结构化数据集 | [报⁠告](https://developer.nvidia.com/blog/advancing-tabular-and-time-series-ai-with-nvidia-kumo/)<br>[代⁠码](https://github.com/NVIDIA/Kumo-TS)<br>[权⁠重](https://huggingface.co/nvidia/Kumo-Forecast) |
 | [**TimeBraid**](docs/models/general_tsfm.md#timebraid) | UC San Diego<br>USC<br>Aether AI<br>arXiv 2026 | 时⁠序⁠数⁠值 +<br>自⁠然⁠语⁠言文⁠本 | 双塔深度交错残差注意力 (MoT) + 统一 Prompt<br>参数 1.2B - 6.7B<br>规模 跨模态时序-语言对齐数据集 | [论⁠文](https://arxiv.org/abs/2609.29792)<br>[代⁠码](https://github.com/Aether-AI/TimeBraid) |
-| [**Time-LLM**](docs/models/general_tsfm.md#time-llm) | Monash<br>蚂⁠蚁⁠集⁠团<br>HKUST<br>ICLR 2024 | 通⁠用⁠一⁠维时⁠序 | 文本原型跨注意力重编程 + 提示词前缀增强<br>参数 冻结 7B LLM (微调 <1%)<br>规模 多领域通用时序基准 (M4, ETT 等) | [论⁠文](https://arxiv.org/abs/2310.01728)<br>[代⁠码](https://github.com/KimMeen/Time-LLM) |
+| `方法` [**Time-LLM**](docs/models/general_tsfm.md#time-llm) | Monash<br>蚂⁠蚁⁠集⁠团<br>HKUST<br>ICLR 2024 | 通⁠用⁠一⁠维时⁠序 | 文本原型跨注意力重编程 + 提示词前缀增强<br>参数 冻结 7B LLM (微调 <1%)<br>规模 多领域通用时序基准 (M4, ETT 等) | [论⁠文](https://arxiv.org/abs/2310.01728)<br>[代⁠码](https://github.com/KimMeen/Time-LLM) |
 | [**HiPPT**](docs/models/wearable_transfer_models.md#hippt) | 东⁠南⁠大⁠学<br>OPPO 等<br>arXiv 2026 | 腕⁠戴 PPG +<br>文⁠本 | 12 层、512 维 PPG Transformer；记录级形态与跨记录上下文对齐，波形引导文本建模<br>规模 HBPM-BG 约 130 万条 + VS 约 300 万条一分钟记录，约 20.2 万人；模型输入 12 秒 | [论⁠文](https://arxiv.org/abs/2610.14489)<br>代⁠码⁠与⁠权⁠重⁠待⁠发⁠布 |
 | [**WavesFM**](docs/models/longitudinal_wearable_models.md#wavesfm) | Google<br>MIT<br>华⁠盛⁠顿⁠大学<br>arXiv 2026 | 原⁠始 PPG +<br>ACC | EfficientNet-B7 片段对比预训练 + 6 层、256 维周级 Transformer 掩码重构<br>规模 第一阶段 32.4 万人、680 万小时；第二阶段 1 万人、530 万小时；5 分钟表示组成 7 天窗口 | [论⁠文](https://arxiv.org/abs/2605.09173) |
+| `方法` [**GlucoAgent**](docs/models/cgm_models.md#glucoagent) | Meta<br>Yale<br>NeurIPS 2026 Workshop | CGM +<br>穿⁠戴⁠指⁠标 +<br>饮⁠食⁠与⁠档案 | LLM 在预测时编写并执行代码，检索个人历史、拟合与回测预测方法<br>规模 CGMacros 留出 9 人、1,903 个预测时点；预测未来 30-120 分钟 | [论⁠文](https://arxiv.org/abs/2611.04126) |
 
 <!-- END:MODELS_TABLE -->
 

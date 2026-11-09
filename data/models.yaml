@@ -1056,10 +1056,10 @@
   weights: ''
   access: closed
   doc: docs/models/health_reasoning_llms.md#cbpm-llama
-  type: model
+  type: method
   added: '2026-10-15'
   dataset: https://github.com/zdzdliu/CAS-BP
-  updated: '2026-11-04'
+  updated: '2026-11-09'
 - id: gem
   name: GEM
   org: 新加坡国立大学 / 北京大学
@@ -1237,8 +1237,9 @@
   weights: ''
   access: open
   doc: docs/models/general_tsfm.md#time-llm
-  type: model
+  type: method
   added: '2026-10-12'
+  updated: '2026-11-09'
 - id: hippt
   name: HiPPT
   org: 东南大学 / OPPO / 深圳技术大学 / 北京大学
@@ -1277,3 +1278,23 @@
   doc: docs/models/longitudinal_wearable_models.md#wavesfm
   type: model
   added: '2026-11-04'
+- id: glucoagent
+  name: GlucoAgent
+  org: Meta Reality Labs Research / Yale University
+  org_short: Meta / Yale
+  venue: GenAI for Health Workshop @ NeurIPS 2026
+  venue_short: NeurIPS 2026 Workshop
+  date: 2026-11
+  modality: CGM + 心率与活动 + 饮食记录 + 健康档案
+  modality_short: CGM + 穿戴指标 + 饮食与档案
+  method: LLM 在预测时编写并执行代码，检索个人历史、拟合与回测预测方法
+  params: ''
+  data: CGMacros 留出 9 人、1,903 个预测时点；预测未来 30-120 分钟
+  paper: https://arxiv.org/abs/2611.04126
+  code: ''
+  weights: ''
+  access: ''
+  access_note: arXiv v1 给出提示词、工具接口与评测协议；本次未找到作者实现入口
+  doc: docs/models/cgm_models.md#glucoagent
+  type: method
+  added: '2026-11-09'
