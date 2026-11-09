@@ -1,6 +1,6 @@
 # 脑电基础模型与跨导联迁移
 
-脑电（EEG）为头带、耳内传感和多导睡眠记录提供直接的神经活动测量。本专题收录具有多任务预训练、公开实现和可复用权重的代表工作，作为腕戴与临床生理模型的扩展路线。检索截至 2026-11-04。
+脑电（EEG）为头带、耳内传感和多导睡眠记录提供直接的神经活动测量。本专题介绍具有多任务预训练、公开实现和可复用权重的代表工作，作为腕戴与临床生理模型的扩展路线。
 
 ![生理基础模型领域总览，EEG 属于信号与测量序列路线](../../assets/taxonomy_overview.png)
 
@@ -16,7 +16,7 @@ LaBraM 用离散神经词元学习跨数据集表征，EEGPT 联合优化潜空�
 | [EEGPT](#eegpt) | 分层编码器、预测器和重构器，Large 完整预训练网络 101M，TUAB 下游表列 25M | PhysioMI、HGD、TSU、SEED、M3CV 五个数据集 | 动量表征对齐与掩码重构 | TUAB AUROC 0.8718 ± 0.0050，冻结编码器加可训练适配层 | [代码](https://github.com/BINE022/EEGPT) · [权重](https://figshare.com/s/e37df4f8a907a866df4b) |
 | [CBraMod](#cbramod) | 时空交叉注意力 Transformer，4.0M | TUEG 清洗后超过 9,000 小时，约 111 万个片段 | 时域与频域分块编码、非对称位置编码、掩码重构 | CHB-MIT AUROC 0.8892 ± 0.0154，全量微调 | [代码](https://github.com/wjq-learning/CBraMod) · [权重](https://huggingface.co/weighting666/CBraMod) |
 
-表中结果保留各自数据集和适配协议，供查找原实验使用。跨论文比较还需统一数据切分、通道配置和训练预算。EEGPT 摘要的参数描述、完整预训练网络和下游评测表采用不同口径，因此索引保留版本与组件说明。[LaBraM 论文](https://arxiv.org/abs/2405.18765) · [EEGPT 论文](https://proceedings.neurips.cc/paper_files/paper/2024/hash/4540d267eeec4e5dbd9dae9448f0b739-Abstract-Conference.html) · [CBraMod 论文](https://arxiv.org/abs/2412.07236)
+表中结果保留各自数据集和适配协议，供查找原实验使用。跨论文比较还需统一数据切分、通道配置和训练预算。EEGPT 摘要的参数描述、完整预训练网络和下游评测表采用不同口径，比较模型规模时需对应具体版本与组件。[LaBraM 论文](https://arxiv.org/abs/2405.18765) · [EEGPT 论文](https://proceedings.neurips.cc/paper_files/paper/2024/hash/4540d267eeec4e5dbd9dae9448f0b739-Abstract-Conference.html) · [CBraMod 论文](https://arxiv.org/abs/2412.07236)
 
 ## 模型分析
 
@@ -70,19 +70,13 @@ TUEG 与 TUAB、TUEV 存在来源关系。论文分别报告包含这些子集�
 
 后续选型可以围绕三项实验展开。同一受试者划分下比较冻结表征与全量微调，逐步删减至目标硬件的实际导联，再检验跨中心和跨设备迁移。记录小时数、通道数和受试者数应分开统计，多通道累计小时与整段记录时长也应分别注明。
 
-## 检索与收录边界
+## 相关研究与版本辨析
 
-本轮以 ICLR、NeurIPS 论文集、arXiv 和作者代码仓为入口，检索 EEG foundation model、cross-channel pretraining、LaBraM、EEGPT 与 CBraMod，并回查论文附录和检查点来源。三项正式条目分别代表离散词元、潜空间预测和时空结构建模，选取依据为跨任务预训练及可复用实现。这是围绕可穿戴迁移的增量整理，不声称穷尽脑电基础模型。
+以下工作可用于扩展脑电预训练与规模研究的比较。复现时需分别记录预训练和评测数据重叠、导联配置、实际检查点与适配预算。
 
-| 工作 | 本轮处理 | 依据与待补证据 |
+| 工作 | 研究范围 | 相关资料 |
 | :--- | :--- | :--- |
-| LaBraM、EEGPT、CBraMod | 纳入主索引 | 有同行评审论文、跨任务实验与作者提供的检查点入口；保留各自适配协议 |
-| REVE / LUNA | 候选追踪 | 后续核对预训练与评测数据重叠、导联迁移、检查点及适配预算，再决定是否新增独立条目。[REVE 项目](https://brain-bzh.github.io/reve/) · [LUNA 代码](https://github.com/pulp-bio/biofoundation) |
-| LaBraM at Scale | 候选追踪 | 2026-11-02 发布预印本，扩展至 5.8M-1.97B 编码器和 25,067-79,910 小时数据；值得跟进，正式条目仍需逐项核对数据重叠、检查点与适配设置。[论文](https://arxiv.org/abs/2611.03165) |
+| REVE / LUNA | 脑电预训练与迁移 | [REVE 项目](https://brain-bzh.github.io/reve/) · [LUNA 代码](https://github.com/pulp-bio/biofoundation) |
+| LaBraM at Scale | 预训练规模扩展 | 2026-11-02 发布的预印本，编码器规模覆盖 5.8M-1.97B，数据规模覆盖 25,067-79,910 小时。[论文](https://arxiv.org/abs/2611.03165) |
 
-这里的 EEGPT 指 NeurIPS 2024 的 *Pretrained Transformer for Universal and Reliable Representation of EEG Signals*。另有早期使用 EEGPT 名称、2025 年修订版题名改为 BrainGPT 的自回归预训练论文，检索时应以完整标题和论文编号区分，不能混用其数据规模与参数量。[BrainGPT 论文与版本记录](https://arxiv.org/abs/2410.19779)
-
----
-
-> **欢迎交流与共建**<br>
-> 本文由开源知识库项目 [Wearable-Physiological-Foundation-Models](https://github.com/tujy859/Wearable-Physiological-Foundation-Models) 整理策划。该项目持续追踪全球在智能手表、连续血糖监测（CGM）以及多模态生理健康基础模型领域的最新突破。如果您对可穿戴生理计算、时序健康基模与数字生物标志物有任何想法，欢迎在仓库提 Issue 交流！
+这里的 EEGPT 指 NeurIPS 2024 的 *Pretrained Transformer for Universal and Reliable Representation of EEG Signals*。另有早期使用 EEGPT 名称、2025 年修订版题名改为 BrainGPT 的自回归预训练论文，应以完整标题和论文编号区分，不能混用其数据规模与参数量。[BrainGPT 论文与版本记录](https://arxiv.org/abs/2410.19779)

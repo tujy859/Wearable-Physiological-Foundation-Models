@@ -144,7 +144,7 @@ JHU / Welldoc · npj Health Systems 2025 · [期刊论文](https://doi.org/10.10
 
 CGM-LSM 的正式论文为 *A large sensor foundation model pretrained on continuous glucose monitor data for diabetes management*。模型使用 12 层、12 头、隐藏维度 768 的 GPT-2 式解码器，将 400 个整数血糖值和 17 个特殊标记组成词表，以 24 小时历史预测未来 2 小时。论文未明确给出总参数量，不沿用原始 GPT-2 语言模型的参数数目。[论文 Methods](https://doi.org/10.1038/s44401-025-00039-y)
 
-正文列出 592 名参与者和 15,961,183 个有效样本，以参与者与观察时间构成一个实例，每例对应 26 小时窗口。摘要却写 160 万条记录，Methods 又将同一计数称为 glucose records，统计名称与数量存在不一致。本仓库采用正文的 592 人、约 1,596 万个有效实例口径，避免把重叠窗口数换算成独立观测时长。[论文 Results 与 Methods](https://pmc.ncbi.nlm.nih.gov/articles/PMC13354170/)
+正文列出 592 名参与者和 15,961,183 个有效样本，以参与者与观察时间构成一个实例，每例对应 26 小时窗口。摘要却写 160 万条记录，Methods 又将同一计数称为 glucose records，统计名称与数量存在不一致。下表的 592 人、约 1,596 万个有效实例对应正文口径；重叠窗口数不能直接换算成独立观测时长。[论文 Results 与 Methods](https://pmc.ncbi.nlm.nih.gov/articles/PMC13354170/)
 
 期刊版在 OhioT1DM 外部评估中报告，1 小时预测 RMSE 为 15.90 mg/dL，相对论文选取的基线降低 48.51%；该百分比对应这一预测时距，不能扩写为所有预测窗口均降低相同比例。官方仓库提供训练和评测流程，预训练权重的获取方式尚不明确。[期刊论文](https://doi.org/10.1038/s44401-025-00039-y) · [官方仓库](https://github.com/JHU-CDHAI/cgmlsm)
 

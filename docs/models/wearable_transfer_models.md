@@ -1,12 +1,12 @@
 # 腕戴波形预训练与运动表征迁移
 
-检索更新日期为 2026-11-04。本专题补充从原始 PPG、ECG 和加速度信号学习可迁移表征的研究，重点比较训练目标、时间窗口、跨人群评测与可复现资源。分钟级多传感器指标和长期行为指标另见 [纵向可穿戴模型专题](longitudinal_wearable_models.md)。
+本专题介绍从原始 PPG、ECG 和加速度信号学习可迁移表征的研究，重点比较训练目标、时间窗口、跨人群评测与可复现资源。分钟级多传感器指标和长期行为指标另见 [纵向可穿戴模型专题](longitudinal_wearable_models.md)。
 
 ![可穿戴生理模型的数据形态与研究路线](../../assets/taxonomy_overview.png)
 
-## 研究路线与收录理由
+## 研究路线
 
-Apple 的波形模型与跨模态蒸馏展示了如何从消费级设备的短片段中学习健康信息。HiPPT 补充 PPG 与生理描述的多范围对齐，将单段形态和同背景多记录分别作为监督证据。OxWearables 的 HARNet 与 Sensori 分别覆盖短时活动识别和全天运动健康表征。Inertia-1 则提供对采样率、佩戴位置、预训练目标及规模的受控比较。RelCon 补充以相对语义距离学习运动表征的路线。本专题将 Inertia-1 记为评测与方法研究框架，其余独立预训练工作记为模型。
+Apple 的波形模型与跨模态蒸馏展示了如何从消费级设备的短片段中学习健康信息。HiPPT 研究 PPG 与生理描述的多范围对齐，将单段形态和同背景多记录分别作为监督证据。OxWearables 的 HARNet 与 Sensori 分别覆盖短时活动识别和全天运动健康表征。Inertia-1 是评测与方法研究框架，提供对采样率、佩戴位置、预训练目标及规模的受控比较。RelCon 则以相对语义距离学习运动表征。
 
 | 工作 | 架构与输入 | 训练数据口径 | 主要机制 | 论文结果及评测条件 | 代码与权重 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -36,7 +36,7 @@ Apple · ICLR 2024 · *Large-scale Training of Foundation Models for Wearable Bi
 
 **评注**
 
-这项工作补齐 Apple 波形模型、ACC 蒸馏和 WBM 之间的方法脉络。同人不同片段的正样本设计适合提取稳定个体特征，瞬时状态任务还需评估其对短期变化的保留程度。原始 AHMS 数据、官方训练代码与预训练权重的可获取性限制了独立复现。官方研究入口截至本次检索未列出代码与权重下载。[官方研究页](https://machinelearning.apple.com/research/large-scale-training)
+同人不同片段的正样本设计适合提取稳定个体特征，瞬时状态任务还需评估其对短期变化的保留程度。原始 AHMS 数据、官方训练代码与预训练权重的可获取性限制了独立复现。截至 2026-11-04，官方研究页未列出代码与权重下载入口。[官方研究页](https://machinelearning.apple.com/research/large-scale-training)
 
 ### Apple ACC 蒸馏
 
@@ -52,7 +52,7 @@ Apple · arXiv 2024，2025 年修订 · *Wearable Accelerometer Foundation Model
 
 **评注**
 
-收录价值在于传感器间知识迁移和低功耗感知。研究明确聚焦低运动 ACC 中的细微心血管成分，应用到跑步、强运动或其他佩戴位置时需要新的验证。论文与官方研究页没有提供可下载模型，本仓库保留方法比较入口。[论文讨论](https://arxiv.org/html/2412.11276v2) · [官方研究页](https://machinelearning.apple.com/research/wearable-accelerometer-foundation-models)
+这项研究为传感器间知识迁移和低功耗感知提供了方法参考。研究明确聚焦低运动 ACC 中的细微心血管成分，应用到跑步、强运动或其他佩戴位置时需要新的验证。论文与官方研究页没有提供可下载模型。[论文讨论](https://arxiv.org/html/2412.11276v2) · [官方研究页](https://machinelearning.apple.com/research/wearable-accelerometer-foundation-models)
 
 ## 生理语义与文本对齐
 
@@ -93,7 +93,7 @@ PPG 编码器为 12 层 Transformer，隐藏维 512、8 个注意力头。文本
 
 **评注**
 
-收录价值在于用已有形态算法与常见元数据组织规模化语义监督，并以多任务线性探测检验表征迁移。它可与短时波形对比学习形成方法对照，但跨记录汇聚不等于长期有序时序建模；与 [WavesFM](longitudinal_wearable_models.md#wavesfm) 的周内有序建模应分开比较。
+HiPPT 用已有形态算法与常见元数据组织规模化语义监督，并以多任务线性探测检验表征迁移。它可与短时波形对比学习形成方法对照，但跨记录汇聚不等于长期有序时序建模；与 [WavesFM](longitudinal_wearable_models.md#wavesfm) 的周内有序建模应分开比较。
 
 从消费级设备算法研发的角度，这篇 OPPO 参与的研究把传统形态特征和用户元数据转化成了预训练监督，值得关注的是如何组织已有数据及其可靠证据范围。该判断来自论文设计，不能当作 OPPO 产品部署或整体技术路线的证据。若面向自有研发，宜在相同数据和骨干下比较模板文本、数值元数据、分组对比与直接多任务监督，再检查运动条件、硬件和人群差异。
 
@@ -109,7 +109,7 @@ University of Oxford · npj Digital Medicine 2024 · *Self-supervised learning f
 
 图源：[HARNet 作者仓库的自监督学习示意图](https://github.com/OxWearables/ssl-wearables/blob/main/plots/imgs/ssl_diagram.jpg)。
 
-HARNet 使用 UK Biobank 腕戴加速度记录预训练 1D ResNet-V2，通过识别时间反转、片段置换和时间扭曲等变换学习活动表征。期刊最终版在八个外部活动识别数据集上报告 F1 相对改善范围 2.5%-130.9%，中位数 24.4%。项目网页和 arXiv 摘要仍保留较早版本的七数据集结果，本专题采用期刊口径。[期刊论文](https://doi.org/10.1038/s41746-024-01062-3) · [早期项目页](https://oxwearables.github.io/ssl-wearables/)
+HARNet 使用 UK Biobank 腕戴加速度记录预训练 1D ResNet-V2，通过识别时间反转、片段置换和时间扭曲等变换学习活动表征。期刊最终版在八个外部活动识别数据集上报告 F1 相对改善范围 2.5%-130.9%，中位数 24.4%。项目网页和 arXiv 摘要仍保留较早版本的七数据集结果，与期刊版的评测范围不同。[期刊论文](https://doi.org/10.1038/s41746-024-01062-3) · [早期项目页](https://oxwearables.github.io/ssl-wearables/)
 
 官方仓库提供 `harnet5`、`harnet10` 和 `harnet30` 的 Torch Hub 加载入口，对应 30 Hz 下的 5、10、30 秒三轴输入。加载后的特征提取器经过预训练，分类头需要用下游标签训练。当前仓库采用 Academic Use Licence，许可范围为内部学术、非商业研究，商业用途需另行联系。[官方代码与使用说明](https://github.com/OxWearables/ssl-wearables) · [许可全文](https://github.com/OxWearables/ssl-wearables/blob/main/LICENSE.md)
 
@@ -157,28 +157,18 @@ UCLA / Duke / Johns Hopkins · 作者公告已获 NeurIPS 2026 接收 · *Inerti
 
 Inertia-1 比较多种预训练方法及监督基线，控制采样率、窗口长度、三轴与模长表示、传感器位置、模型容量和语料规模。论文覆盖活动识别、冻结步态与疾病预测，汇总语料约 1,822 万小时。该数值描述研究覆盖的数据规模，单次实验训练量随设置变化。[论文第 3 节](https://arxiv.org/html/2607.06617v1)
 
-作者观察到不同任务偏好的目标不同，固定语料下扩大编码器的收益有限，增加训练人群和数据多样性的改善更稳定。论文在正文与项目页对任务总数存在不同表述，本专题按任务家族和具体实验表引用结果，未将其压缩为统一胜率。[论文第 4 节](https://arxiv.org/html/2607.06617v1) · [项目页](https://yang-ai-lab.github.io/Inertia-1/paper/)
+作者观察到不同任务偏好的目标不同，固定语料下扩大编码器的收益有限，增加训练人群和数据多样性的改善更稳定。论文正文与项目页对任务总数存在不同表述，结果应按任务家族和具体实验表读取。[论文第 4 节](https://arxiv.org/html/2607.06617v1) · [项目页](https://yang-ai-lab.github.io/Inertia-1/paper/)
 
 **评注**
 
-该框架适合指导腕戴模型的公平比较，因此以基准条目收录。官方 MIT 仓库公开训练和评测代码，疾病预测示例使用占位数据加载器，复现需准备对应队列与标签。此次检查未在官方 README 找到预训练权重下载入口，索引中的权重字段留空。[官方仓库](https://github.com/yang-ai-lab/Inertia-1)
+该框架适合指导腕戴模型的公平比较。官方仓库以 MIT 许可公开训练和评测代码，疾病预测示例使用占位数据加载器，复现需准备对应队列与标签。预训练权重的获取方式尚不明确。[官方仓库](https://github.com/yang-ai-lab/Inertia-1)
 
-## 检索范围与候选处理
+## 相关研究与应用资源
 
-本轮检索覆盖 Apple 官方研究页、OxWearables 与 Yang AI Lab 作者项目页、arXiv、期刊 DOI、官方 GitHub 和模型卡。查询组合包括 wearable biosignal foundation model、PPG accelerometer knowledge distillation、population-scale accelerometer pretraining、wearable motion foundation model 和 sensor-language foundation model，并沿上述论文的相关工作进行回溯。这是可追溯的增量检索，范围侧重腕戴和运动信号。
+其他腕戴表征方法见 [智能手表专题](smartwatch_models.md)，包括 SensorLM、NormWear、LIMU-BERT、PaPaGei、Pulse-PPG、HiMAE 与 xMAE。以下工作提供周长活动建模、计步应用和表征解释的延伸阅读。
 
-| 候选或系列 | 本轮处理 | 判断依据 |
+| 工作 | 研究或应用方向 | 资料与使用条件 |
 | :--- | :--- | :--- |
-| Apple PPG / ECG 与 ACC 蒸馏 | 新增 | 补齐 Apple 原始信号与跨传感器迁移路线，方法和评测有完整论文支撑 |
-| HiPPT | 新增 | 补充形态与上下文文本监督及多任务迁移；标明预印本、代码权重待发布与评测划分边界 |
-| HARNet、Sensori、RelCon | 新增 | 提供短时、全天及运动语义预训练比较；HARNet 与 Sensori 标注学术用途许可，RelCon 标注权重未公开 |
-| Inertia-1 | 新增为基准 | 受控分析传感配置和训练目标，公开训练评测框架 |
-| SensorLM、NormWear、LIMU-BERT、PaPaGei、Pulse-PPG、HiMAE、xMAE | 沿用现有条目 | 仓库已覆盖相应方法，避免同论文重复登记 |
-| PAT | 保留候选 | JBHI 2026 已在线发表，官方仓库介绍了 NHANES 21,538 人的分钟级周长活动序列；本轮未完成全文协议及权重核对。[正式论文](https://doi.org/10.1109/JBHI.2026.3694809) · [作者仓库](https://github.com/njacobsonlab/Pretrained-Actigraphy-Transformer) |
-| OxWearables stepcount | 作为应用资源 | 官方工具使用已有 SSL-Wearables 编码器并针对计步微调，可作为模型应用入口。[官方工具](https://github.com/OxWearables/stepcount) |
-| Apple 健康表征符号分解 | 延伸方法参考 | ICML 2026 机制可解释性 Workshop 工作，对冻结的 PPG/ACC 表征做后训练分解与跨模态对齐；不重复登记为新基础模型。[官方研究页](https://machinelearning.apple.com/research/health-foundation-models) |
-
----
-
-> **欢迎交流与共建**  
-> 本文由开源知识库项目 [Wearable-Physiological-Foundation-Models](https://github.com/tujy859/Wearable-Physiological-Foundation-Models) 整理策划。该项目持续追踪全球在智能手表、连续血糖监测（CGM）以及多模态生理健康基础模型领域的最新突破。如果您对可穿戴生理计算、时序健康基模与数字生物标志物有任何想法，欢迎在仓库提 Issue 交流！
+| PAT | 分钟级周长活动序列表征 | JBHI 2026；官方仓库介绍了 NHANES 21,538 人的活动序列。[正式论文](https://doi.org/10.1109/JBHI.2026.3694809) · [作者仓库](https://github.com/njacobsonlab/Pretrained-Actigraphy-Transformer) |
+| OxWearables stepcount | 计步工具 | 使用已有 SSL-Wearables 编码器并针对计步微调。[官方工具](https://github.com/OxWearables/stepcount) |
+| Apple 健康表征符号分解 | 冻结表征的后训练解释 | ICML 2026 机制可解释性 Workshop 工作，对冻结的 PPG/ACC 表征做后训练分解与跨模态对齐。[官方研究页](https://machinelearning.apple.com/research/health-foundation-models) |

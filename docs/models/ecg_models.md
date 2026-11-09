@@ -386,7 +386,7 @@ VUNO Inc. / 首尔大学 · ICLR 2024 · [论文](https://arxiv.org/abs/2402.046
 
 作者在受试者级划分下报告 CinC17、PTB-XL 和 SimBand 的最佳 macro-F1 分别为 0.677、0.357 和 0.398。ECG-QA 实验采用模板问题及候选答案的分类式评测。血压实验使用 VitalDB 的校准设置，比较时需要保留这一实验条件。[论文 Results](https://pmc.ncbi.nlm.nih.gov/articles/PMC12932102/)
 
-评注。CSFM 补充了跨设备心脏波形建模路线，可与专用 ECG 模型及 PPG 模型对照。官方代码提供推理和微调入口，当前权重需要学术访问协议和申请，主索引按受限获取记录。[官方获取说明](https://github.com/guxiao0822/Cardiac-Sensing-FM)
+评注。CSFM 提供跨设备心脏波形建模路线，可与专用 ECG 模型及 PPG 模型对照。官方代码提供推理和微调入口，权重获取需要学术访问协议和申请。[官方获取说明](https://github.com/guxiao0822/Cardiac-Sensing-FM)
 
 ### 5.1 为什么要打通 PPG 与 ECG？
 
@@ -432,8 +432,3 @@ VUNO Inc. / 首尔大学 · ICLR 2024 · [论文](https://arxiv.org/abs/2402.046
    - 未来演进一方面可采用紧凑状态空间架构（如 3.3M 的 [ECG-CPC](#ecg-cpc)）或轻量因果模型（如 0.44M 的 [HeartGPT](#heartgpt)），另一方面可结合结构化通道剪枝与跨层知识蒸馏（如 [PPG-Distill](smartwatch_models.md#ppg-distill)），将推理功耗压降至毫瓦级微控制器（MCU / NPU）水平。
 4. **电生理波形级归因与临床可解释性（Waveform Grounding & Trust）**：
    - 临床医生的诊断决策建立在 P 波极性、PR 间期、QRS 时限、QTc 间期与重搏切迹等明确物理量纲之上。通过多粒度心拍-句子对齐（如 [MELP](#melp)）、注意力相位可解释映射（如 [HeartGPT](#heartgpt)）以及波形物理测量值锚定（如 [GEM](health_reasoning_llms.md#gem)），是将自监督表征转化为临床可信决策辅助的关键路径。
-
----
-
-> **欢迎交流与共建**  
-> 本文由开源知识库项目 [Wearable-Physiological-Foundation-Models](https://github.com/tujy859/Wearable-Physiological-Foundation-Models) 整理策划。该项目持续追踪全球在智能手表、连续血糖监测（CGM）以及多模态生理健康基础模型领域的最新突破。如果您对可穿戴生理计算、时序健康基模与数字生物标志物有任何想法，欢迎在仓库提 Issue 交流！

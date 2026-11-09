@@ -919,7 +919,7 @@
   code: ''
   weights: ''
   access: closed
-  access_note: 论文提供的代码入口当前不可访问
+  access_note: 论文提供的代码入口在 2026-11-04 返回 404；代码与二代预训练权重的获取方式尚不明确
   doc: docs/models/sleep_models.md#sleepfm-2
   type: model
   added: '2026-11-04'
