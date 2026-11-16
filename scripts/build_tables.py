@@ -208,8 +208,6 @@ def build_models_table(models: list[dict]) -> str:
         "| :--- | :--- | :--- | :--- | :---: |",
     ]
     for m in models:
-        if m.get("type") == "survey":
-            continue
         name_cell = format_model_name(m)
         org_venue_cell = format_org_venue(m)
         modality_cell = format_modality(m)

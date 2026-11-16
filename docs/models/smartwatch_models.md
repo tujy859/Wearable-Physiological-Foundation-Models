@@ -7,6 +7,11 @@
 ## 目录
 
 - [PPG 深度学习范围综述](#ppg-深度学习范围综述)
+- [无袖带血压估计](#无袖带血压估计)
+  - [从 PPG 到血压](#从-ppg-到血压)
+  - [袖带校准](#袖带校准)
+  - [PulseDB 跨人评测](#pulsedb-跨人评测)
+  - [临床验证](#临床验证)
 - [1. 腕戴生理时序的独特性与核心技术挑战](#1-腕戴生理时序的独特性与核心技术挑战)
 - [2. 经典多模态与波形形态基础模型](#2-经典多模态与波形形态基础模型)
   - [SensorFM](#sensorfm)
@@ -61,6 +66,48 @@
 **评注**
 
 该综述适合作为 PPG 任务导航和数据选型入口。信号质量筛选尤其值得与下游结果一起阅读：过滤规则可能改变病理波形的保留比例，临床指端数据上的结果也需要腕戴场景验证。作者 GitHub 提供按任务整理的文献清单；其用途是检索和阅读，不是模型训练实现。统计检索截止 2025 年，讨论部分另引用了后续工作。
+
+---
+
+## 无袖带血压估计
+
+Min、An、Lee 等，*Wearable blood pressure sensors for cardiovascular monitoring and machine learning algorithms for blood pressure estimation*。KAIST / 西北大学 / 加州大学圣迭戈分校等 · Nature Reviews Cardiology 2025，22:629–648。 [综述](https://doi.org/10.1038/s41569-025-01127-0) · [全文](https://pmc.ncbi.nlm.nih.gov/articles/PMC13200057/)
+
+综述涵盖机械电传感、光学、超声和心电四类采集原理，并梳理脉搏波分析、脉搏波速度和动脉壁动力学三条估压路线。它汇集了不同设备和模型的研究，性能数据来自各原始研究的队列与协议。本节聚焦腕戴光电容积脉搏波（photoplethysmography，PPG），并结合后续基准讨论跨人泛化。
+
+### 从 PPG 到血压
+
+- **脉搏波分析（pulse wave analysis，PWA）**：从单点 PPG 提取上升时间、峰值和斜率等特征，用线性回归、支持向量回归或随机森林估计收缩压（SBP）与舒张压（DBP）。PPG 反映局部搏动性血容量变化，血管张力、局部灌注和传感器的接触压力也会改变波形。
+- **基于传播时间的估计**：同步 ECG 与外周 PPG 可以估计脉搏到达时间（pulse arrival time，PAT）。从 ECG R 峰计时的 PAT 包含射血前期与脉搏传导时间（pulse transit time，PTT）。PTT 可由两个动脉位置的脉搏测得，再结合路径长度估算脉搏波速度。射血前期本身也会变化，因此以 PAT 代替 PTT 会引入额外变异。 [PAT 原始研究](https://doi.org/10.1152/japplphysiol.00980.2011)
+- **深度学习**：综述图 4 用 LSTM 与时频 CNN 展示直接回归血压数值的路线，用 KD-Informer、U-Net 和 CycleGAN 展示从 PPG 重建动脉血压波形（arterial blood pressure，ABP）的路线。从重建波形可进一步计算 SBP、DBP 和平均动脉压（MAP）。评估时应同时看波形形态和以 mmHg 表示的压力误差。 [综述图 4](https://pmc.ncbi.nlm.nih.gov/articles/PMC13200057/) · [U-Net 原始研究](https://doi.org/10.3390/s21051867)
+
+![一维 U-Net 将指尖 PPG 映射为动脉血压波形](../figures/cuffless-bp-review/unet-architecture.png)
+
+图源为 Athaya 与 Choi 的指尖 PPG 波形重建研究图 8，Min 等在综述图 4d 中改编了这张图。 [原论文](https://doi.org/10.3390/s21051867) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
+
+### 袖带校准
+
+无袖带设备可以在采集期间连续输出估计值，部分设备仍需用参考袖带读数拟合个体映射，并按设备规定复校。Min 等在综述图 5 引用的压电腕戴原型先用三次袖带读数标定线性回归，随后在 35 人、175 对读数上报告相对袖带的平均偏差 ± 标准差，SBP 为 −0.89 ± 6.19 mmHg，DBP 为 −0.32 ± 5.28 mmHg。该原型用机械脉搏波估压，结果对应这套校准协议。 [压电腕戴原型](https://doi.org/10.1002/adma.202301627)
+
+评测需要记录允许使用的参考读数数量、校准与测试的时间间隔，以及测试时的体位和活动。用最近一次袖带读数或仅用校准值与时间等变量构建基线，可以检验波形对后续变化的额外贡献。Aurora-BP 研究中，实验室听诊参考下，光学模型和不使用波形的静态基线的 SBP 误差标准差分别为 10.0 和 10.2 mmHg。 [Aurora-BP，表 V](https://doi.org/10.1109/JBHI.2022.3153259)
+
+### PulseDB 跨人评测
+
+[**PulseDB**](../datasets/wearable_datasets.md#pulsedb) 来自 MIMIC-III 重症监护数据与 VitalDB 围术期数据，含 5,361 人的约 524.5 万段 10 秒记录，包含指尖 PPG、ECG 与有创 ABP。Moulaeifard 等比较五种深度网络，下表为其正式发表版本报告的单 PPG 模型 XResNet1d101 的平均绝对误差（mean absolute error，MAE）。 [PulseDB 论文](https://doi.org/10.3389/fdgth.2022.1090854) · [独立基准](https://doi.org/10.1088/3049-477X/ae01a8)
+
+| 评测协议 | SBP MAE（mmHg） | DBP MAE（mmHg） |
+| :--- | ---: | ---: |
+| PulseDB `Calib`（同人跨片段） | 9.0 | 5.8 |
+| PulseDB `CalibFree`（受试者独立） | 13.9 | 8.5 |
+| 外部数据集（无个体校准） | 10.0–18.6 | 5.9–10.3 |
+
+`Calib` 允许模型训练时接触测试受试者的其他片段。`CalibFree` 的训练和测试受试者完全独立。两组结果的差值包含跨人泛化的影响。估计少量袖带读数带来的收益，需要先留出新受试者，再从其记录中划出专用于校准的参考读数，使用之后独立采集的数据测试。按人划分应先于切窗，预处理参数也应只用训练集拟合。 [基准评测协议](https://pmc.ncbi.nlm.nih.gov/articles/PMC12435175/#sec3) · [数据泄漏实验](https://doi.org/10.1038/s41598-024-68862-1)
+
+### 临床验证
+
+PulseDB 的指尖 PPG 和有创参考适合离线评测。日常腕戴还涉及佩戴松紧、运动伪影、腕部相对心脏的高度、睡眠与长期校准漂移。腕戴研究应同时报告 SBP/DBP 偏差及误差分布、个体内血压变化的跟踪误差，以及剔除低质量片段后的有效读数覆盖率。高血压概率筛查的证据可参见 [AI-PPG-ACC-HTN](#ai-ppg-acc-htn)，该研究使用多日佩戴数据估计个体状态。
+
+欧洲高血压学会（ESH）针对间歇式无袖带设备提出六类验证，覆盖静息绝对值、设备位置、治疗引起的血压下降、清醒与睡眠变化、运动引起的血压上升和复校前稳定性。连续自动测量设备另有 ISO 81060-3 的临床验证要求。2025 年 AHA/ACC 指南建议在精度和可靠性得到充分验证之前，避免将无袖带设备用于诊断或管理高血压。 [ESH 验证建议](https://doi.org/10.1097/HJH.0000000000003483) · [ISO 81060-3](https://www.iso.org/standard/71161.html) · [AHA/ACC 指南](https://doi.org/10.1161/CIR.0000000000001356)
 
 ---
 
@@ -258,12 +305,9 @@ HiMAE 在预训练后冻结骨干，通过对 5 个不同层级的隐空间特�
 
 - **综合性能**：在参数缩小超 300 倍的前提下，HiMAE 在下游 12 项分类任务和多项生成式插补任务上**全面逼平或超越 110M 的 LSM-Base**。
 
-#### 7. 客观去伪存真：连续血压回归的 10 mmHg 物理物理上限
+#### 7. 腕部 PPG 血压回归结果
 
-在连续收缩压（SBP）与舒张压（DBP）回归任务中，论文给出了极为清醒的结论：
-- 无论是 0.31M 的 HiMAE 还是 110M 的 ViT LSM-Base，手腕单导联 PPG 的 MAE 误差均停留在 **约 10 mmHg** 左右；
-- 哪怕经过全量下游微调，Bland-Altman 图上的一致性界限仍普遍超过 $\pm 20\text{ mmHg}$；
-- **行业警示**：单导联腕部 PPG 缺乏近心端脉搏传导时间（PWTT）与绝对血流动力学阻抗基准，单靠光学波形堆砌大模型在无袖带血压绝对值预测上存在**物理信息缺失硬瓶颈**，无法达到医疗级替代标准。
+HiMAE 论文在实验室诱发血压变化和日常佩戴数据上比较了多个模型。图 15 的血压回归 MAE 在 **10 mmHg 量级**，图 16 显示微调降低了偏差并收窄一致性界限，但仍有误差超过 20 mmHg 的样本。这个结果对应论文的信号、队列与评测设置。跨人划分、校准和其他设备的验证见[无袖带血压估计](#无袖带血压估计)。 [HiMAE 附录 G.6–G.7](https://arxiv.org/html/2510.25785#A7.SS6)
 
 ---
 
@@ -380,7 +424,7 @@ HiMAE 在预训练后冻结骨干，通过对 5 个不同层级的隐空间特�
   - 包含 7 个卷积阶段（Convolutional Stages），层层抽取微血管收缩峰、重搏切迹及脉冲波传导时间（PWTT）多尺度特征；
   - 经过全局平均池化（Global Mean Pooling）后输出 **1024 维**的高阶特征向量。
 - **轻量投影头与对比表征**：
-  - 采用双层 MLP 投影头：$\text{Linear}(1024 \to 512) \to \text{GELU} \to \text{Linear}(512 \to 256)$；
+  - 双层 MLP 投影头依次使用 1024 → 512 的线性层、GELU 和 512 → 256 的线性层。
   - 输出 $\ell_2$ 归一化的 256 维潜表征用于跨模态 InfoNCE 对比损失计算。在端侧推理时仅需保留 PPG 单分支（约 5.85M），即插即用。
 
 #### 4. 突破性多器官表型评测 (Beyond Cardiovascular)
@@ -829,6 +873,7 @@ Google Research / Beth Israel Deaconess Medical Center / Harvard Medical School 
 | 项⁠目 / 论⁠文⁠名⁠称 | 主⁠要⁠机⁠构 | 发⁠表⁠情⁠况 | 核⁠心⁠定⁠位⁠与⁠资⁠源 |
 | :--- | :--- | :--- | :--- |
 | [**PPG 深度学习范围综述**](#ppg-深度学习范围综述) | 北京大学 / HeartVoice | Health Data Science 2026 | 460 篇接触式 PPG 研究的任务、模型与数据梳理 · [论文](https://doi.org/10.34133/hds.0474) · [文献清单](https://github.com/Ngk03/DL_PPG_Review) |
+| [**无袖带血压估计综述**](#无袖带血压估计) | KAIST / 西北大学 / UC San Diego 等 | Nat Rev Cardiol 2025 | PPG 估压、袖带校准、跨人评测与临床验证 · [论文](https://doi.org/10.1038/s41569-025-01127-0) |
 | [**AI-PPG-ACC-HTN**](#ai-ppg-acc-htn) | Google / BIDMC / Harvard | Nature 2026 | 自监督波形表征与多日高血压筛查，独立前瞻验证 196 人 · [论文](https://doi.org/10.1038/s41586-026-11336-3) |
 | [**SensorFM**](#sensorfm) | Google / Fitbit Health AI | arXiv 2026 | 1 万亿分钟消费级穿戴多模态基座 · [论文](https://arxiv.org/abs/2605.22759) |
 | [**PaPaGei**](#papagei) | Nokia Bell Labs | ICLR 2025 | 开源形态感知脉搏波基础模型 · [论文](https://arxiv.org/abs/2410.20542) · [代码](https://github.com/Nokia-Bell-Labs/papagei-foundation-model) |

@@ -22,7 +22,7 @@
 - [为什么需要生理信号专用基础模型](#为什么需要生理信号专用基础模型)
 - [领域专题文档与技术长文](#领域专题文档与技术长文)
 - [最近更新](#最近更新)
-- [基础模型、相关方法与评测基准索引](#基础模型相关方法与评测基准索引)
+- [研究条目总表](#研究条目总表)
 - [开放数据集与临床队列索引](#开放数据集与临床队列索引)
 - [领域综述参考](#领域综述参考)
 - [关联实验工程与参与贡献](#关联实验工程与参与贡献)
@@ -39,7 +39,7 @@
    - 长期行为与健康指标：[Apple WBM](docs/models/longitudinal_wearable_models.md#wbm)、[OpenMHC 复现与基准](docs/models/smartwatch_models.md#openmhc)；原始波形与周级建模的衔接见 [WavesFM](docs/models/longitudinal_wearable_models.md#wavesfm)
    - 独立信号专题：[心电 ECG](docs/models/ecg_models.md)、[连续血糖 CGM](docs/models/cgm_models.md)、[多导睡眠 PSG](docs/models/sleep_models.md)、[脑电 EEG](docs/models/eeg_models.md)
    - 语言对齐、生成与推理：[HiPPT](docs/models/wearable_transfer_models.md#hippt)、[SensorLM](docs/models/smartwatch_models.md#sensorlm)、[PPGFlowECG](docs/models/smartwatch_models.md#ppgflowecg)、[GEM](docs/models/health_reasoning_llms.md#gem)、[跨模型评测](docs/models/physiological_benchmarks.md)
-2. **开源模型与预训练权重选型**：直接查阅 [基础模型、相关方法与评测基准索引](#基础模型相关方法与评测基准索引)，按模态、参数量与开源资源筛选可直接加载的权重，点击条目名称跳转至对应精读小节与架构图。
+2. **开源模型与预训练权重选型**：查阅 [研究条目总表](#研究条目总表)，按模态、参数量与开源资源筛选可直接加载的权重，点击条目名称跳转至对应精读小节与架构图。
 3. **按模块深入研读**：在 [领域专题文档与技术长文](#领域专题文档与技术长文) 中按研究方向查阅横向对比，或阅读串联多篇工作的专题长文。
 4. **查找训练数据与评测基准**：查阅 [开放数据集与临床队列索引](#开放数据集与临床队列索引) 以及 [数据集文档](docs/datasets/wearable_datasets.md)，获取采样率、样本规模、预处理工具与下载申请入口。
 
@@ -67,7 +67,7 @@
 | :--- | :---: | :--- |
 | [纵向可穿戴与行为基础模型](docs/models/longitudinal_wearable_models.md) | 核心主线 | Google LSM-1、LSM-2、SensorFM、WavesFM；Apple WBM；派生特征、波形与多时间尺度建模 |
 | [腕戴波形预训练与运动表征迁移](docs/models/wearable_transfer_models.md) | 核心主线 | Apple PPG / ECG、HiPPT、ACC 蒸馏、RelCon、HARNet、Sensori、Inertia-1 |
-| [智能手表与腕戴生理模型](docs/models/smartwatch_models.md) | 核⁠心⁠主⁠线 | SensorFM、PaPaGei、Pulse-PPG、xMAE、HiMAE、UniCardio、PPGFlowECG、AnyPPG、SigmaPPG、PPG-Distill、PpgAge、PPG-Bench、OpenMHC、PPG-LM、SensorLM、NormWear、LIMU-BERT |
+| [智能手表与腕戴生理模型](docs/models/smartwatch_models.md) | 核⁠心⁠主⁠线 | SensorFM、PaPaGei、Pulse-PPG、xMAE、HiMAE、UniCardio、PPGFlowECG、AnyPPG、SigmaPPG、PPG-Distill、PpgAge、PPG-Bench、OpenMHC、PPG-LM、SensorLM、NormWear、LIMU-BERT；[无袖带血压估计](docs/models/smartwatch_models.md#无袖带血压估计) |
 | [心电与心血管电生理基础模型](docs/models/ecg_models.md) | 核⁠心⁠主⁠线 | ECGFounder、ECG-CPC、DeepECG-SSL、HuBERT-ECG、ECG-FM、ECG-JEPA、ST-MEM、HeartLang、MERL、ESI、MELP、KED、HeartGPT、HeartBERT、HeartBEiT、CLOCS 及 PPG-ECG 跨模态生成对比 |
 | [连续血糖监测（CGM）基础模型](docs/models/cgm_models.md) | 核⁠心⁠主⁠线 | GlucoFM、CGM-JEPA、GluFormer、CGMformer、CGM-LSM、GlucoBench；GlucoAgent 预测方法 |
 | [睡眠与心肺多模态模型](docs/models/sleep_models.md) | 核⁠心⁠主⁠线 | SleepFM / SleepFM-2、SleepMaMi、U-Sleep 及穿戴睡眠迁移分析 |
@@ -98,6 +98,7 @@
 
 | 更⁠新⁠日⁠期 | 研⁠究⁠条⁠目 | 机⁠构<br>与⁠发⁠表 | 传⁠感⁠模⁠态 | 核⁠心⁠机⁠制<br>与⁠资⁠源 |
 | :---: | :--- | :--- | :--- | :--- |
+| 2026‑11‑16 | `综述` [**无袖带血压估计综述**](docs/models/smartwatch_models.md#无袖带血压估计) | KAIST<br>Northwestern<br>UC San Diego<br>Nat Rev Cardiol<br>2025 | PPG / ECG / 机⁠械⁠脉⁠搏波 / 超⁠声 | 脉搏波分析、传播时间与动脉壁动力学；综述血压回归、波形重建和袖带校准<br>[论⁠文](https://doi.org/10.1038/s41569-025-01127-0) |
 | 2026‑11‑09 | [**SensorWM**](docs/models/longitudinal_wearable_models.md#sensorwm) | Google<br>UCLA<br>arXiv 2026 | 周⁠级⁠生⁠理与⁠行⁠为⁠指标 | MLP 潜状态编码与行为条件二阶动力学预训练；多周预测、CHA 评分与计划筛选<br>规模 预训练队列 96,957 人、228 万人周；182,797 个有效 12 周窗口<br>[论⁠文](https://arxiv.org/abs/2611.08568) |
 | 2026‑11‑09 | `方法` [**GlucoAgent**](docs/models/cgm_models.md#glucoagent) | Meta<br>Yale<br>NeurIPS 2026 Workshop | CGM +<br>穿⁠戴⁠指⁠标 +<br>饮⁠食⁠与⁠档案 | LLM 在预测时编写并执行代码，检索个人历史、拟合与回测预测方法<br>规模 CGMacros 留出 9 人、1,903 个预测时点；预测未来 30-120 分钟<br>[论⁠文](https://arxiv.org/abs/2611.04126) |
 | 2026‑11‑09 | `综述` [**PPG 深度学习范围综述**](docs/models/smartwatch_models.md#ppg-深度学习范围综述) | 北⁠京⁠大⁠学<br>HeartVoice<br>Health Data Science<br>2026 | 接⁠触⁠式 PPG | 按任务、模型与数据梳理 PPG 深度学习研究，覆盖 11 类任务<br>规模 460 篇研究；检索范围为 2017-2025 年<br>[论⁠文](https://doi.org/10.34133/hds.0474) |
@@ -107,17 +108,17 @@
 | 2026‑11‑09 | `方法` [**CBPM-LLaMA**](docs/models/health_reasoning_llms.md#cbpm-llama) | 中⁠科⁠院⁠深圳⁠先⁠进⁠院<br>香⁠港⁠理⁠工大⁠学<br>ACM‑BCB 2024 | ECG / PPG 的 31 维⁠派⁠生⁠特征 +<br>人⁠口⁠信⁠息 | 医学知识增强 Prompt 与指令微调；MAP/PP 目标及个体基线校准<br>规模 CAS-BP 1,272 人、12,624 条有效测量；任务适配案例<br>[论⁠文](https://doi.org/10.1145/3698587.3701447) · [数⁠据](https://github.com/zdzdliu/CAS-BP) |
 | 2026‑11‑09 | `方法` [**Time-LLM**](docs/models/general_tsfm.md#time-llm) | Monash<br>蚂⁠蚁⁠集⁠团<br>HKUST<br>ICLR 2024 | 通⁠用⁠一⁠维时⁠序 | 文本原型跨注意力重编程 + 提示词前缀增强<br>规模 多领域通用时序基准 (M4, ETT 等)<br>[论⁠文](https://arxiv.org/abs/2310.01728) · [代⁠码](https://github.com/KimMeen/Time-LLM) |
 | 2026‑11‑04 | `基准` [**PPG-Bench**](docs/models/smartwatch_models.md#ppg-bench) | Mannas AI<br>arXiv 2026 | 腕⁠部⁠与⁠指尖 PPG | 4 级探针微调协议 (跨 5 大脉搏基模评测)<br>规模 论文 9 数据集、26 项任务；代码列 17 项主要任务<br>[论⁠文](https://arxiv.org/abs/2610.13435) · [代⁠码](https://github.com/mannas-ai/ppg-bench) |
-| 2026‑11‑04 | [**HiPPT**](docs/models/wearable_transfer_models.md#hippt) | 东⁠南⁠大⁠学<br>OPPO 等<br>arXiv 2026 | 腕⁠戴 PPG +<br>文⁠本 | 12 层、512 维 PPG Transformer；记录级形态与跨记录上下文对齐，波形引导文本建模<br>规模 HBPM-BG 约 130 万条 + VS 约 300 万条一分钟记录，约 20.2 万人；模型输入 12 秒<br>[论⁠文](https://arxiv.org/abs/2610.14489) · 代⁠码⁠与⁠权⁠重⁠待⁠发⁠布 |
 
 <!-- END:RECENT_UPDATES -->
 
 ---
 
 <a id="基础模型与评测基准索引表"></a>
+<a id="基础模型相关方法与评测基准索引"></a>
 
-## 基础模型、相关方法与评测基准索引
+## 研究条目总表
 
-按输入模态、方法与训练规模浏览，点击名称阅读专题分析和论文配图。论文、代码、权重与数据入口列于右侧。
+总表收录模型、方法、评测基准与综述。点击名称阅读专题分析和论文配图，右侧列出论文、代码、权重与数据入口。
 
 <!-- BEGIN:MODELS_TABLE -->
 
@@ -150,6 +151,7 @@
 | [**SensorLM**](docs/models/smartwatch_models.md#sensorlm) | Google<br>剑⁠桥⁠大⁠学<br>NeurIPS 2025 | 分⁠钟⁠级⁠特征 +<br>文⁠本 | ViT + 分层描述生成；对比与描述生成联合目标，24 小时窗口<br>参数 传感器编码器 3M-1.27B，文本与解码器另计 12M-1.45B<br>规模 103,643 人，约 5,970 万小时 | [论⁠文](https://arxiv.org/abs/2506.09108)<br>[代⁠码](https://github.com/Google-Health/consumer-health-research/tree/main/sensorlm) |
 | [**LIMU-BERT**](docs/models/smartwatch_models.md#limu-bert) | 南⁠洋⁠理⁠工大⁠学 (NTU)<br>ACM SenSys<br>2021 | 手⁠腕⁠三⁠轴 ACC +<br>陀⁠螺⁠仪 | 掩码传感器建模 (Masked Sensor Modeling)<br>规模 公开 IMU 运动数据集 | [论⁠文](https://dl.acm.org/doi/10.1145/3485730.3485938)<br>[代⁠码](https://github.com/dapowan/LIMU-BERT-Public)<br>[权⁠重](https://github.com/dapowan/LIMU-BERT-Public) |
 | [**NormWear**](docs/models/smartwatch_models.md#normwear) | UMass Amherst<br>ACM HEALTH<br>2026 | 多⁠模⁠态⁠可穿⁠戴⁠生⁠理<br>(PPG, ECG, EEG, EDA, IMU) | 连续小波变换 (CWT) 词元化 + 通道感知注意力与混合 MAE<br>规模 10.6 万段多源公开穿戴记录 (15 个数据集) | [论⁠文](https://arxiv.org/abs/2412.09758)<br>[代⁠码](https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear)<br>[权⁠重](https://huggingface.co/mosaic-laboratory/normwear) |
+| `综述` [**Review of Open FM for ECG & PPG**](docs/models/ecg_models.md#1-领域综述导读心电与脉搏波开源基础模型及数据集全景) | MIT<br>SNU<br>Yonsei<br>npj Digital Medicine<br>2026 | ECG +<br>PPG | 综述与开源生态绘制<br>规模 覆盖数十个公开基准 | [论⁠文](https://doi.org/10.1038/s41746-026-03101-7) |
 | [**ECGFounder**](docs/models/ecg_models.md#ecgfounder) | 北⁠京⁠大⁠学 (洪⁠申⁠达⁠团队)<br>哈⁠佛⁠大⁠学<br>Emory<br>NEJM AI 2025 | 12 导⁠联⁠与⁠单导⁠联 ECG | RegNet1D 阶段式瓶颈卷积 + 置信度感知正未标记多标签预训练<br>参数 31M<br>规模 1,070 万条临床心电 (HEEDB, 180 万患者, 150 类诊断标签) | [论⁠文](https://arxiv.org/abs/2410.04133)<br>[代⁠码](https://github.com/PKUDigitalHealth/ECGFounder)<br>[权⁠重](https://huggingface.co/PKUDigitalHealth/ECGFounder) |
 | [**ECG-CPC**](docs/models/ecg_models.md#ecg-cpc) | 奥⁠尔⁠登⁠堡大⁠学<br>ICLR 2026 | 12 导⁠联 ECG | 4 层 CNN + 4 层 S4 状态空间模型 + 自回归对比预测编码<br>参数 3.3M<br>规模 1,070 万条心电 (HEEDB)；8 模型、12 公开集、26 任务横评 | [论⁠文](https://openreview.net/forum?id=xXRqWpt3Xr)<br>[代⁠码](https://github.com/AI4HealthUOL/ecg-fm-benchmarking)<br>[权⁠重](https://figshare.com/articles/dataset/ECG-CPC_Checkpoint_zip/30192604) |
 | [**DeepECG-SSL**](docs/models/ecg_models.md#deepecg-ssl) | 蒙⁠特⁠利⁠尔心⁠脏⁠研⁠究所 (HeartWise-AI)<br>European Heart Journal<br>2026 | 12 导⁠联 ECG | WCR 卷积-Transformer + SimCLR/CMSC 双层对比与随机导联掩码<br>参数 91M<br>规模 190 万条 12 导联心电 (MHI, MIMIC-IV-ECG, CODE-15%) | [论⁠文](https://doi.org/10.1093/eurheartj/ehaf1119)<br>[代⁠码](https://github.com/HeartWise-AI/DeepECG_Docker)<br>[权⁠重](https://github.com/HeartWise-AI/DeepECG_Docker) |
@@ -200,8 +202,10 @@
 | [**WavesFM**](docs/models/longitudinal_wearable_models.md#wavesfm) | Google<br>MIT<br>华⁠盛⁠顿⁠大学<br>arXiv 2026 | 原⁠始 PPG +<br>ACC | EfficientNet-B7 片段对比预训练 + 6 层、256 维周级 Transformer 掩码重构<br>规模 第一阶段 32.4 万人、680 万小时；第二阶段 1 万人、530 万小时；5 分钟表示组成 7 天窗口 | [论⁠文](https://arxiv.org/abs/2605.09173) |
 | `方法` [**GlucoAgent**](docs/models/cgm_models.md#glucoagent) | Meta<br>Yale<br>NeurIPS 2026 Workshop | CGM +<br>穿⁠戴⁠指⁠标 +<br>饮⁠食⁠与⁠档案 | LLM 在预测时编写并执行代码，检索个人历史、拟合与回测预测方法<br>规模 CGMacros 留出 9 人、1,903 个预测时点；预测未来 30-120 分钟 | [论⁠文](https://arxiv.org/abs/2611.04126) |
 | `方法` [**Within-person modeling**](docs/models/cgm_models.md#within-person-modeling) | KUAS<br>东⁠京⁠大⁠学<br>Front Digit Health<br>2026 | CGM +<br>饮⁠食 +<br>ACC 特⁠征 | 个体内中心化与标准化、随机截距混合效应回归；分析餐后峰值、达峰时间与超阈值面积<br>规模 BIG IDEAs 10 人、485 餐；267 餐进入完整案例回归 | [论⁠文](https://doi.org/10.3389/fdgth.2026.1847884)<br>[数⁠据](https://physionet.org/content/big-ideas-glycemic-wearable/1.1.3/) |
+| `综述` [**PPG 深度学习范围综述**](docs/models/smartwatch_models.md#ppg-深度学习范围综述) | 北⁠京⁠大⁠学<br>HeartVoice<br>Health Data Science<br>2026 | 接⁠触⁠式 PPG | 按任务、模型与数据梳理 PPG 深度学习研究，覆盖 11 类任务<br>规模 460 篇研究；检索范围为 2017-2025 年 | [论⁠文](https://doi.org/10.34133/hds.0474) |
 | [**AI-PPG-ACC-HTN**](docs/models/smartwatch_models.md#ai-ppg-acc-htn) | Google<br>BIDMC<br>Harvard<br>Nature 2026 | 腕⁠戴 PPG +<br>ACC +<br>身⁠高 | 15 秒波形受试者对比预训练，跨日均值汇聚与逻辑回归；无个人袖带校准的高血压状态筛查<br>参数 约 5.1M（预印本实现）<br>规模 无标签预训练 2,109 人、492,347 小时；独立前瞻验证 196 人、约 7 天，参考为 24 小时 ABPM | [论⁠文](https://doi.org/10.1038/s41586-026-11336-3) |
 | [**SensorWM**](docs/models/longitudinal_wearable_models.md#sensorwm) | Google<br>UCLA<br>arXiv 2026 | 周⁠级⁠生⁠理与⁠行⁠为⁠指标 | MLP 潜状态编码与行为条件二阶动力学预训练；多周预测、CHA 评分与计划筛选<br>规模 预训练队列 96,957 人、228 万人周；182,797 个有效 12 周窗口 | [论⁠文](https://arxiv.org/abs/2611.08568) |
+| `综述` [**无袖带血压估计综述**](docs/models/smartwatch_models.md#无袖带血压估计) | KAIST<br>Northwestern<br>UC San Diego<br>Nat Rev Cardiol<br>2025 | PPG / ECG / 机⁠械⁠脉⁠搏波 / 超⁠声 | 脉搏波分析、传播时间与动脉壁动力学；综述血压回归、波形重建和袖带校准 | [论⁠文](https://doi.org/10.1038/s41569-025-01127-0) |
 
 <!-- END:MODELS_TABLE -->
 
@@ -265,6 +269,9 @@
 ---
 
 ## 领域综述参考
+
+- **Wearable blood pressure sensors for cardiovascular monitoring and machine learning algorithms for blood pressure estimation**
+  - Min 等在 *Nature Reviews Cardiology*（2025）梳理传感原理、估压方法与设备验证。腕戴场景中的校准和跨人评测见 [无袖带血压估计](docs/models/smartwatch_models.md#无袖带血压估计)。 [论文](https://doi.org/10.1038/s41569-025-01127-0)
 
 - **A Scoping Review of Deep Learning Methods for Photoplethysmography Data**
   - **来源**：*Health Data Science*（2026，6:0474）· [论文](https://doi.org/10.34133/hds.0474) · [作者文献清单](https://github.com/Ngk03/DL_PPG_Review)

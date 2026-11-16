@@ -1376,3 +1376,18 @@
   doc: docs/models/longitudinal_wearable_models.md#sensorwm
   type: model
   added: '2026-11-09'
+- id: cuffless-bp-review
+  name: 无袖带血压估计综述
+  title: Wearable blood pressure sensors for cardiovascular monitoring and machine learning algorithms for blood pressure estimation
+  org: 韩国科学技术院 / 西北大学 / 加州大学圣迭戈分校等
+  org_short: KAIST / Northwestern / UC San Diego
+  venue: Nature Reviews Cardiology 2025
+  venue_short: Nat Rev Cardiol 2025
+  date: '2025-02-18'
+  modality: PPG、ECG、机械脉搏波与超声
+  modality_short: PPG / ECG / 机械脉搏波 / 超声
+  method: 脉搏波分析、传播时间与动脉壁动力学；综述血压回归、波形重建和袖带校准
+  paper: https://doi.org/10.1038/s41569-025-01127-0
+  doc: docs/models/smartwatch_models.md#无袖带血压估计
+  type: survey
+  added: '2026-11-16'
