@@ -181,13 +181,13 @@ def build_articles(root: Path, output: Path, repository: str, branch: str, topic
         images.update(rewritten.images)
         relative = source.relative_to(root)
         prefix = "../" * (len(relative.parts) - 1)
-        section, label = "阅读指南", "浏览研究索引"
+        section, label = "阅读指南", "返回首页"
         catalog = prefix + "index.html#catalog"
         if relative.parent.as_posix() == "docs/models":
             section, label = "专题阅读", "查看本专题条目"
             catalog = prefix + "index.html?" + urlencode({"topic": topics[source.stem]}) + "#catalog"
         elif relative.parent.as_posix() == "docs/datasets":
-            section, label = "数据集与队列", "查看数据集索引"
+            section, label = "数据集与队列", "查看全部数据集"
             catalog = prefix + "index.html?view=datasets#catalog"
         elif relative.parts[0] == "blogs":
             section = "技术长文"

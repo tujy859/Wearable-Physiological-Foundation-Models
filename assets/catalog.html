@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="google-site-verification" content="o6UtQj_AOsymYpxbKwN823KBMkamW2cMLYGkfmBxzwo">
   <meta name="description" content="检索可穿戴与生理时序基础模型、评测基准和数据集，查阅论文、代码、权重与专题文章。">
-  <title>可穿戴与生理基础模型 · 研究索引</title>
+  <title>可穿戴生理信号基础模型</title>
   <link rel="canonical" href="@@CANONICAL_URL@@">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="zh_CN">
-  <meta property="og:title" content="可穿戴与生理基础模型 · 研究索引">
+  <meta property="og:title" content="可穿戴生理信号基础模型">
   <meta property="og:description" content="检索可穿戴与生理时序基础模型、评测基准和数据集，查阅论文、代码、权重与专题文章。">
   <meta property="og:url" content="@@CANONICAL_URL@@">
   <meta property="og:image" content="@@SOCIAL_IMAGE@@">
@@ -42,15 +42,16 @@
     .stat b { display:block; font-size:30px; line-height:1.2; font-weight:550; font-variant-numeric:tabular-nums; }
     .stat span { color:var(--muted); font-size:12px; }
     .map { margin:26px 0 34px; background:var(--paper); border:1px solid var(--line); border-radius:12px; }
-    .map summary { padding:14px 20px; font-weight:600; }
+    .map summary { padding:14px 20px; font-weight:600; transition:color .15s; }
+    .map summary:hover { color:var(--accent); }
     .map summary span { float:right; color:var(--muted); font-size:12px; font-weight:400; }
     .map a { display:block; padding:0 10px 10px; }
     .map img { width:100%; height:auto; display:block; border-radius:8px; }
     .workspace { display:grid; grid-template-columns:218px minmax(0,1fr); gap:34px; padding-bottom:60px; }
     .sidebar h2 { font-size:13px; margin:0 0 14px; color:var(--muted); font-weight:600; }
     .topic-links { display:grid; gap:2px; }
-    .topic-links a { color:var(--muted); font-size:13px; padding:8px 0; display:flex; justify-content:space-between; gap:8px; }
-    .topic-links a:hover { color:var(--accent); }
+    .topic-links a { color:var(--muted); font-size:13px; padding:7px 8px; margin:0 -8px; border-radius:6px; display:flex; justify-content:space-between; gap:8px; transition:background-color .15s, color .15s; }
+    .topic-links a:hover { background:var(--soft); color:var(--accent); text-decoration:none; }
     .topic-links span { color:#95a29c; }
     .sidebar-note { border-top:1px solid var(--line); margin-top:22px; padding-top:18px; font-size:12px; color:var(--muted); }
     .sidebar .reading-title { margin-top:28px; }
@@ -71,8 +72,9 @@
     #results-count { margin:0; }
     .collection-heading { margin:20px 0 16px; font-size:19px; }
     .enhanced .collection-heading { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip-path:inset(50%); }
-    .entries { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; align-items:start; }
-    .entry { min-width:0; padding:20px; border:1px solid var(--line); border-radius:10px; background:var(--paper); }
+    .entries { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .entry { position:relative; min-width:0; padding:20px; border:1px solid var(--line); border-radius:10px; background:var(--paper); display:flex; flex-direction:column; }
+    .entry:has(.entry-details[open]) { z-index:25; border-color:#8fa99d; border-bottom-left-radius:0; border-bottom-right-radius:0; }
     .entry-top { display:flex; justify-content:space-between; gap:10px; align-items:center; margin-bottom:10px; }
     .eyebrow { color:var(--muted); font-size:11px; }
     .kind { background:var(--soft); color:var(--accent); font-size:10px; line-height:1.5; border-radius:4px; padding:2px 6px; white-space:nowrap; }
@@ -80,21 +82,26 @@
     .entry h3 a { color:var(--ink); }
     .entry-meta { font-size:12px; color:var(--muted); margin:0 0 15px; line-height:1.7; overflow-wrap:anywhere; }
     .modality { font-size:13px; margin:0 0 15px; line-height:1.7; }
-    .entry-details { border-top:1px solid #edf0ed; padding-top:11px; font-size:12px; }
-    .entry-details summary { color:var(--muted); }
-    .entry-details dl { margin:12px 0 0; }
-    .entry-details dl div { margin-bottom:12px; }
-    .entry-details dt { color:var(--muted); font-size:11px; margin-bottom:3px; }
-    .entry-details dd { margin:0; overflow-wrap:anywhere; }
-    .resources { display:flex; flex-wrap:wrap; gap:7px 16px; margin-top:15px; font-size:12px; }
+    .entry-foot { margin-top:auto; padding-top:4px; }
+    .resources { display:flex; flex-wrap:wrap; gap:7px 16px; margin:0 0 12px; font-size:12px; }
+    .resources:last-child { margin-bottom:0; }
     .resources a { font-weight:600; }
     .resource-note { color:var(--muted); }
+    .entry-details { border-top:1px solid #edf0ed; padding-top:11px; font-size:12px; }
+    .entry-details summary { color:var(--muted); transition:color .15s; }
+    .entry-details summary:hover { color:var(--accent); }
+    .entry-details dl { margin:12px 0 0; }
+    .entry-details[open] > dl { position:absolute; left:-1px; right:-1px; top:calc(100% - 1px); z-index:30; margin:0; padding:14px 20px 16px; background:var(--paper); border:1px solid #8fa99d; border-top:1px dashed var(--line); border-radius:0 0 10px 10px; box-shadow:0 14px 28px -6px rgba(24,43,42,.14); }
+    .entry-details dl div { margin-bottom:12px; }
+    .entry-details dl div:last-child { margin-bottom:0; }
+    .entry-details dt { color:var(--muted); font-size:11px; margin-bottom:3px; }
+    .entry-details dd { margin:0; overflow-wrap:anywhere; }
     .empty { border:1px dashed #b9c9c0; border-radius:10px; padding:46px 20px; text-align:center; }
     .empty h3 { margin:0 0 8px; font-size:18px; }
     .empty p { color:var(--muted); margin:0 0 18px; font-size:13px; }
     footer { border-top:1px solid var(--line); padding:22px 0 28px; color:var(--muted); font-size:12px; }
     footer .shell { display:flex; justify-content:space-between; gap:18px; flex-wrap:wrap; }
-    @media (max-width:1000px) { .shell { padding:0 26px; } .workspace { grid-template-columns:180px minmax(0,1fr); gap:24px; } .entries { grid-template-columns:1fr; } .stats { gap:22px; } }
+    @media (max-width:1000px) { .shell { padding:0 26px; } .workspace { grid-template-columns:180px minmax(0,1fr); gap:24px; } .entries { grid-template-columns:1fr; } .stats { gap:22px; } .entry:has(.entry-details[open]) { border-radius:10px; } .entry-details[open] > dl { position:static; border:0; box-shadow:none; padding:12px 0 0; } }
     @media (max-width:700px) {
       .shell { padding:0 18px; } .topbar .shell { min-height:62px; gap:12px; } .brand { font-size:10px; letter-spacing:.02em; } .top-links { gap:14px; font-size:11px; } .top-links a:first-child { display:none; }
       .hero { padding:36px 0 20px; } .hero-row { display:block; } .hero-description { font-size:14px; } .stats { margin-top:24px; } .stat b { font-size:25px; }
@@ -106,15 +113,15 @@
   </style>
 </head>
 <body>
-  <a class="skip" href="#catalog">跳到研究索引</a>
+  <a class="skip" href="#catalog">跳到文献与数据集</a>
   <header class="topbar"><div class="shell"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span>WEARABLE · PHYSIOLOGICAL FM</a><nav class="top-links" aria-label="项目导航"><a href="#topics">专题阅读</a><a href="@@REPOSITORY@@">GitHub ↗</a></nav></div></header>
   <main class="shell">
     <section class="hero" aria-labelledby="page-title">
-      <p class="overline">RESEARCH COLLECTION / 研究索引</p>
-      <h1 id="page-title">从生理信号，到健康表征</h1>
-      <div class="hero-row"><p class="hero-description">可穿戴与生理时序基础模型的论文、代码、权重与数据。<br>沿着输入信号与研究问题，找到适合深入阅读的工作。</p><div class="stats"><div class="stat"><b>@@MODEL_COUNT@@</b><span>研究条目</span></div><div class="stat"><b>@@DATASET_COUNT@@</b><span>数据集与队列</span></div></div></div>
+      <p class="overline">WEARABLE &amp; PHYSIOLOGICAL FOUNDATION MODELS</p>
+      <h1 id="page-title">可穿戴生理信号基础模型</h1>
+      <div class="hero-row"><p class="hero-description">从生理信号到健康表征——整理可穿戴与临床生理信号基础模型的论文、代码、权重、数据集与专题综述。</p><div class="stats"><div class="stat"><b>@@MODEL_COUNT@@</b><span>研究条目</span></div><div class="stat"><b>@@DATASET_COUNT@@</b><span>数据集与队列</span></div></div></div>
     </section>
-    <details class="map"><summary>研究地图<span>原始采样 · 分钟级特征 · 长期行为</span></summary><a href="assets/taxonomy_overview.png" aria-label="打开完整研究地图"><img src="assets/taxonomy_overview.png" alt="可穿戴与生理基础模型研究地图，按输入表示列出代表模型、下游能力及跨路线研究" loading="lazy"></a></details>
+    <details class="map"><summary>研究地图<span>原始采样 · 分钟级特征 · 长期行为（点击展开全景图）</span></summary><a href="assets/taxonomy_overview.png" aria-label="打开完整研究地图"><img src="assets/taxonomy_overview.png" alt="可穿戴与生理基础模型研究地图，按输入表示列出代表模型、下游能力及跨路线研究" loading="lazy"></a></details>
     <div class="workspace">
       <aside class="sidebar" id="topics" aria-labelledby="topics-title"><h2 id="topics-title">专题阅读</h2><nav class="topic-links" aria-label="研究专题">@@TOPICS@@</nav><h2 class="reading-title">技术长文</h2><nav class="topic-links" aria-label="技术长文">@@BLOGS@@</nav><p class="sidebar-note">从条目名称进入专题中的条目小节，阅读方法分析、实验结果与论文配图。</p></aside>
       <section id="catalog" aria-label="检索文献与数据集">
@@ -224,6 +231,18 @@
       document.querySelector('#filters').addEventListener('submit', event => { event.preventDefault(); filter(); });
       document.querySelector('#reset').addEventListener('click', reset);
       document.querySelector('#empty-reset').addEventListener('click', reset);
+      const detailBoxes = [...document.querySelectorAll('.entry-details')];
+      detailBoxes.forEach(box => box.addEventListener('toggle', () => {
+        if (!box.open) return;
+        detailBoxes.forEach(other => { if (other !== box && other.open) other.open = false; });
+      }));
+      document.addEventListener('click', event => {
+        if (event.target.closest('.entry-details')) return;
+        detailBoxes.forEach(box => { if (box.open) box.open = false; });
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') detailBoxes.forEach(box => { if (box.open) box.open = false; });
+      });
       window.addEventListener('popstate', readUrl);
       readUrl();
       document.documentElement.classList.add('enhanced');

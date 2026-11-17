@@ -1,4 +1,4 @@
-# Wearable & Physiological Foundation Models | 可穿戴与生理信号基础模型指南
+# Wearable & Physiological Foundation Models | 可穿戴生理信号基础模型
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)

@@ -113,7 +113,7 @@ def model_card(item: dict) -> str:
       <div class="entry-top"><span class="eyebrow">{esc(topic)}</span><span class="kind">{esc(TYPES[kind])}</span></div>
       <h3>{entry_title(item)}</h3><p class="entry-meta">{esc(info)}</p>
       <p class="modality">{esc(item.get('modality'))}</p>
-      {expanded}<div class="resources">{rendered}</div>
+      <div class="entry-foot"><div class="resources">{rendered}</div>{expanded}</div>
     </article>'''
 
 
@@ -133,7 +133,7 @@ def dataset_card(item: dict) -> str:
       <div class="entry-top"><span class="eyebrow">{esc(topic)}</span><span class="kind">数据集</span></div>
       <h3>{entry_title(item)}</h3><p class="entry-meta">{esc(item.get('org'))}</p>
       <p class="modality">{esc(item.get('sensors'))}</p>
-      {expanded}<div class="resources">{''.join(resources)}</div>
+      <div class="entry-foot"><div class="resources">{''.join(resources)}</div>{expanded}</div>
     </article>'''
 
 
@@ -154,7 +154,8 @@ def main() -> None:
     for path in sorted((ROOT / 'blogs').glob('*.md')):
         heading = re.search(r'^#\s+(.+)$', path.read_text(encoding='utf-8'), re.MULTILINE)
         title = heading.group(1).strip() if heading else path.stem
-        blogs.append(f'<a href="{doc_url(path.relative_to(ROOT).as_posix())}">{esc(title)}<span aria-hidden="true">→</span></a>')
+        short_title = title.split("：", 1)[0].strip()
+        blogs.append(f'<a href="{doc_url(path.relative_to(ROOT).as_posix())}" title="{esc(title)}">{esc(short_title)}<span aria-hidden="true">→</span></a>')
     substitutions = {
         "CARDS": cards, "TOPICS": topics, "BLOGS": ''.join(blogs), "MODEL_COUNT": str(len(models)),
         "DATASET_COUNT": str(len(datasets)), "TOTAL_COUNT": str(len(models) + len(datasets)),
