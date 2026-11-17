@@ -43,9 +43,13 @@
     .article p { margin:16px 0; }
     .article li { margin:6px 0; }
     .article ul,.article ol { padding-left:1.6em; }
-    .article img { display:block; max-width:100%; height:auto; margin:22px auto; border-radius:6px; cursor:zoom-in; }
-    .img-lightbox { position:fixed; inset:0; z-index:9999; background:rgba(24,43,42,.82); display:flex; align-items:center; justify-content:center; cursor:zoom-out; padding:18px; }
-    .img-lightbox img { max-width:96vw; max-height:94vh; background:#fff; border-radius:8px; box-shadow:0 20px 48px rgba(0,0,0,.35); }
+    .article img { display:block; max-width:100%; height:auto; margin:22px auto; border-radius:6px; cursor:zoom-in; transition:transform .2s cubic-bezier(0.22, 1, 0.36, 1); }
+    .article img:hover { transform:scale(1.005); }
+    .img-lightbox { position:fixed; inset:0; z-index:9999; background:rgba(24,43,42,.82); display:flex; align-items:center; justify-content:center; cursor:zoom-out; padding:18px; opacity:0; transition:opacity .2s ease; }
+    .img-lightbox.is-open { opacity:1; }
+    .img-lightbox img { max-width:96vw; max-height:94vh; background:#fff; border-radius:8px; box-shadow:0 20px 48px rgba(0,0,0,.35); transform:scale(.96); transition:transform .24s cubic-bezier(0.22, 1, 0.36, 1); }
+    .img-lightbox.is-open img { transform:scale(1); }
+    @media (prefers-reduced-motion:no-preference) { html { scroll-behavior:smooth; } }
     .article blockquote { margin:24px 0; padding:4px 20px; border-left:3px solid #9bbcaf; color:#485d57; background:#f7faf8; }
     .article hr { height:1px; border:0; background:var(--line); margin:32px 0; }
     .article table { display:block; width:max-content; max-width:100%; overflow-x:auto; border-collapse:collapse; font-size:13px; line-height:1.65; margin:22px 0; }
@@ -104,11 +108,16 @@
         big.src = img.currentSrc || img.src;
         big.alt = img.alt || '';
         box.appendChild(big);
-        const close = () => { box.remove(); document.removeEventListener('keydown', onKey); };
+        const close = () => {
+          document.removeEventListener('keydown', onKey);
+          box.classList.remove('is-open');
+          setTimeout(() => box.remove(), 200);
+        };
         const onKey = e => { if (e.key === 'Escape') close(); };
         box.addEventListener('click', close);
         document.addEventListener('keydown', onKey);
         document.body.appendChild(box);
+        requestAnimationFrame(() => box.classList.add('is-open'));
       });
     });
   </script>
